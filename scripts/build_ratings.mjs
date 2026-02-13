@@ -3,7 +3,7 @@ import fs from "node:fs/promises";
 const NCAA_API_BASE = "https://ncaa-api.henrygd.me";
 
 // Set season start (adjust if you want)
-const SEASON_START = "2025-11-01";
+const SEASON_START = "2026-01-01";
 
 // Helper: YYYY-MM-DD -> Date (UTC)
 function toDate(s) {
