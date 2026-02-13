@@ -1,3 +1,5 @@
+import { headers } from "next/headers";
+
 type Row = {
   team: string;
   teamId: string;
@@ -7,14 +9,11 @@ type Row = {
 };
 
 async function getRatings() {
-  // This calls your own API route
-  const res = await fetch("http://localhost:3000/api/ratings", { cache: "no-store" }).catch(() => null);
-
-  // When deployed on Vercel, localhost won't work.
-  // So we fall back to relative fetch:
-  const res2 = await fetch("/api/ratings", { cache: "no-store" });
-
-  return (res && res.ok) ? res.json() : res2.json();
+  const h = await headers();
+  const host = h.get("host");
+  const proto = h.get("x-forwarded-proto") ?? "https";
+  const res = await fetch(`${proto}://${host}/api/ratings`, { cache: "no-store" });
+  return res.json();
 }
 
 export default async function Home() {
@@ -29,9 +28,7 @@ export default async function Home() {
         <thead>
           <tr>
             {["Rk", "Team", "AdjO", "AdjD", "AdjEM"].map((h) => (
-              <th key={h} style={{ textAlign: "left", padding: 10, borderBottom: "1px solid #ddd" }}>
-                {h}
-              </th>
+              <th key={h} style={{ textAlign: "left", padding: 10, borderBottom: "1px solid #ddd" }}>{h}</th>
             ))}
           </tr>
         </thead>
