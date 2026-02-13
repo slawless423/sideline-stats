@@ -15,7 +15,7 @@ async function getRatings() {
   const host = h.get("host");
   const proto = h.get("x-forwarded-proto") ?? "https";
 
-  const res = await fetch(`${proto}://${host}/api/ratings`, { cache: "no-store" });
+const res = await fetch("/data/ratings.json", { cache: "no-store" });
   return res.json();
 }
 
