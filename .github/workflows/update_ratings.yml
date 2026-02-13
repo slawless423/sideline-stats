@@ -1,0 +1,31 @@
+name: Update ratings
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 11 * * *"  # daily ~11:00 UTC
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build ratings json
+        run: node scripts/build_ratings.mjs
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "ratings-bot"
+          git config user.email "ratings-bot@users.noreply.github.com"
+          git add public/data/ratings.json
+          git diff --cached --quiet || (git commit -m "Update ratings" && git push)
