@@ -38,26 +38,28 @@ async function fetchJson(pathOrUrl: string) {
   return res.json();
 }
 
-/**
- * Parses the exact WBB boxscore shape you pasted:
- * - teams[] contains team meta + isHome
- * - teamBoxscore[] contains teamStats totals
- */
-function parseWbbBoxscore(gameJson: any) {
+type TeamLine = {
+  gameId: string;
+  team: string;
+  teamId: string;
+  opp: string;
+  oppId: string;
+  pts: number;
+  fga: number;
+  fta: number;
+  orb: number;
+  tov: number;
+};
+
+function parseWbbBoxscore(gameId: string, gameJson: any): TeamLine[] | null {
   const teamsArr: any[] = Array.isArray(gameJson?.teams) ? gameJson.teams : [];
   const boxArr: any[] = Array.isArray(gameJson?.teamBoxscore) ? gameJson.teamBoxscore : [];
 
   if (teamsArr.length < 2 || boxArr.length < 2) return null;
 
-  const metaById = new Map<string, any>();
-  for (const t of teamsArr) {
-    metaById.set(String(t.teamId), t);
-  }
-
   const totalsById = new Map<string, any>();
   for (const b of boxArr) {
-    const id = String(b.teamId);
-    totalsById.set(id, b.teamStats ?? {});
+    totalsById.set(String(b.teamId), b.teamStats ?? {});
   }
 
   const homeMeta = teamsArr.find(t => t.isHome === true) ?? teamsArr[0];
@@ -69,7 +71,8 @@ function parseWbbBoxscore(gameJson: any) {
   const hStats = totalsById.get(homeId) ?? {};
   const aStats = totalsById.get(awayId) ?? {};
 
-  const home = {
+  const home: TeamLine = {
+    gameId,
     team: String(homeMeta.nameShort ?? homeMeta.nameFull ?? "Home"),
     teamId: homeId,
     opp: String(awayMeta.nameShort ?? awayMeta.nameFull ?? "Away"),
@@ -81,7 +84,8 @@ function parseWbbBoxscore(gameJson: any) {
     tov: toInt(hStats.turnovers, 0),
   };
 
-  const away = {
+  const away: TeamLine = {
+    gameId,
     team: String(awayMeta.nameShort ?? awayMeta.nameFull ?? "Away"),
     teamId: awayId,
     opp: String(homeMeta.nameShort ?? homeMeta.nameFull ?? "Home"),
@@ -102,37 +106,51 @@ export async function GET() {
   const scoreboard = await fetchJson(`${NCAA_API_BASE}${u.pathname}`);
   const gameIds = extractGameIds(scoreboard);
 
-  // 2) Pull each game boxscore, parse totals
-  const teamRows: any[] = [];
+  // 2) Parse each game into two team lines
+  const lines: TeamLine[] = [];
   for (const gid of gameIds) {
     try {
       const box = await fetchJson(`/game/${gid}/boxscore`);
-      const parsed = parseWbbBoxscore(box);
-      if (parsed) teamRows.push(...parsed);
-    } catch (e) {
-      // skip games we can’t parse in MVP
+      const parsed = parseWbbBoxscore(gid, box);
+      if (parsed) lines.push(...parsed);
+    } catch {
+      // skip unparseable games for now
       continue;
     }
   }
 
-  // 3) Compute per-team ORtg for the day (MVP)
-  const byTeam = new Map<string, { team: string; sumOrtg: number; n: number }>();
-
-  for (const r of teamRows) {
-    const p = poss(r.fga, r.orb, r.tov, r.fta);
-    const ortg = (r.pts / p) * 100;
-
-    const cur = byTeam.get(r.teamId) ?? { team: r.team, sumOrtg: 0, n: 0 };
-    cur.team = r.team;
-    cur.sumOrtg += ortg;
-    cur.n += 1;
-    byTeam.set(r.teamId, cur);
+  // Map for quick opponent lookup in same game
+  const byGameTeam = new Map<string, TeamLine>();
+  for (const l of lines) {
+    byGameTeam.set(`${l.gameId}:${l.teamId}`, l);
   }
 
-  const rows = Array.from(byTeam.entries())
+  // 3) Compute ORtg / DRtg per line, aggregate by team
+  const agg = new Map<
+    string,
+    { team: string; oSum: number; dSum: number; n: number }
+  >();
+
+  for (const l of lines) {
+    const opp = byGameTeam.get(`${l.gameId}:${l.oppId}`);
+    if (!opp) continue;
+
+    const p = poss(l.fga, l.orb, l.tov, l.fta);
+    const ortg = (l.pts / p) * 100;
+    const drtg = (opp.pts / p) * 100;
+
+    const cur = agg.get(l.teamId) ?? { team: l.team, oSum: 0, dSum: 0, n: 0 };
+    cur.team = l.team;
+    cur.oSum += ortg;
+    cur.dSum += drtg;
+    cur.n += 1;
+    agg.set(l.teamId, cur);
+  }
+
+  const rows = Array.from(agg.entries())
     .map(([teamId, t]) => {
-      const adjO = t.sumOrtg / Math.max(1, t.n);
-      const adjD = 0; // next step: add defense + opponent adjustment
+      const adjO = t.oSum / Math.max(1, t.n);
+      const adjD = t.dSum / Math.max(1, t.n);
       const adjEM = adjO - adjD;
       return { team: t.team, teamId, adjO, adjD, adjEM };
     })
