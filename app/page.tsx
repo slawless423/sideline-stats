@@ -1,14 +1,14 @@
 import Link from "next/link";
 import { headers } from "next/headers";
-type AnyRow = {
-  team?: string;
-  teamId?: string;
+
+type Row = {
+  team: string;
+  teamId: string;
   games?: number;
   adjO?: number;
   adjD?: number;
   adjEM?: number;
   adjT?: number;
-  // allow other keys
   [k: string]: any;
 };
 
@@ -17,18 +17,17 @@ function num(x: any): number | null {
   return Number.isFinite(n) ? n : null;
 }
 
-async function getRatings() {
+async function getRatings(): Promise<{ updated: string | null; rows: Row[] }> {
   const h = await headers();
   const host = h.get("host");
   const proto = h.get("x-forwarded-proto") ?? "https";
-
   const url = `${proto}://${host}/data/ratings.json`;
 
   const res = await fetch(url, { cache: "no-store" });
   if (!res.ok) throw new Error(`Failed to load ratings.json (${res.status})`);
   const payload = await res.json();
 
-  const rows =
+  const rows: Row[] =
     payload?.rows ??
     payload?.data?.rows ??
     payload?.ratings?.rows ??
@@ -42,35 +41,17 @@ async function getRatings() {
     payload?.last_updated ??
     null;
 
-  return { rows, updated };
+  return { updated, rows };
 }
 
-
 export default async function Home() {
-  let data: { rows: AnyRow[]; updated: string | null };
-
-  try {
-    data = await getRatings();
-  } catch (e: any) {
-    return (
-      <main style={{ padding: 24, fontFamily: "system-ui" }}>
-        <h1 style={{ fontSize: 28, fontWeight: 700 }}>Women’s KenPom</h1>
-        <p style={{ color: "crimson" }}>
-          Error loading ratings: {e?.message ?? "unknown error"}
-        </p>
-        <p>Try again in a minute — Vercel may still be deploying.</p>
-      </main>
-    );
-  }
-
+  const data = await getRatings();
   const rows = (data.rows ?? []).filter((r) => r?.team);
 
   return (
     <main style={{ padding: 24, fontFamily: "system-ui" }}>
       <h1 style={{ fontSize: 28, fontWeight: 700 }}>Women’s KenPom (Season-to-date)</h1>
-      <p style={{ opacity: 0.8 }}>
-        Updated: {data.updated ? String(data.updated) : "—"}
-      </p>
+      <p style={{ opacity: 0.8 }}>Updated: {data.updated ? String(data.updated) : "—"}</p>
 
       <table style={{ borderCollapse: "collapse", width: "100%", marginTop: 12 }}>
         <thead>
@@ -87,17 +68,20 @@ export default async function Home() {
         </thead>
         <tbody>
           {rows.map((r, i) => {
-            const g = r.games ?? r.g ?? "";
             const adjO = num(r.adjO);
             const adjD = num(r.adjD);
             const adjEM = num(r.adjEM);
             const adjT = num(r.adjT);
 
             return (
-              <tr key={r.teamId ?? `$<Link href={`/team/${r.teamId}`}>   {r.team} </Link>-${i}`}>
+              <tr key={r.teamId ?? `${r.team}-${i}`}>
                 <td style={{ padding: 10, borderBottom: "1px solid #f0f0f0" }}>{i + 1}</td>
-                <td style={{ padding: 10, borderBottom: "1px solid #f0f0f0" }}><Link href={`/team/${r.teamId}`}>   {r.team} </Link></td>
-                <td style={{ padding: 10, borderBottom: "1px solid #f0f0f0" }}>{g}</td>
+                <td style={{ padding: 10, borderBottom: "1px solid #f0f0f0" }}>
+                  <Link href={`/team/${r.teamId}`} style={{ color: "inherit", textDecoration: "none" }}>
+                    {r.team}
+                  </Link>
+                </td>
+                <td style={{ padding: 10, borderBottom: "1px solid #f0f0f0" }}>{r.games ?? "—"}</td>
                 <td style={{ padding: 10, borderBottom: "1px solid #f0f0f0" }}>
                   {adjO === null ? "—" : adjO.toFixed(1)}
                 </td>
