@@ -363,7 +363,7 @@ for (const gid of gameIds) {
 
   if (!box) continue;
 
-  const lines = parseWbbBoxscore(gid, box);
+  const lines = parseWbbBoxscoreRobust(gid, box);
   if (!lines) {
     // Write ONE sample failed boxscore for debugging (only once)
     if (!globalThis.__WROTE_FAILED_SAMPLE__) {
