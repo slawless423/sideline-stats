@@ -20,8 +20,8 @@ jobs:
         with:
           node-version: 20
 
-      - name: Build ratings json
-        run: node scripts/build_ratings.mjs
+- name: Build ratings json
+  run: timeout 120s node scripts/build_ratings.mjs
 
       - name: Commit and push if changed
         run: |
