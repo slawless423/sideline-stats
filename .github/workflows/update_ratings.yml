@@ -1,12 +1,16 @@
-name: Update ratings 
+name: Update ratings
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 11 * * *"  # daily ~11:00 UTC
+    - cron: "0 11 * * *" # daily ~11:00 UTC
 
 permissions:
   contents: write
+
+concurrency:
+  group: update-ratings
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -20,8 +24,9 @@ jobs:
         with:
           node-version: 20
 
-- name: Build ratings json
-  run: timeout 120s node scripts/build_ratings.mjs
+      - name: Build ratings json
+        timeout-minutes: 2
+        run: node scripts/build_ratings.mjs
 
       - name: Commit and push if changed
         run: |
