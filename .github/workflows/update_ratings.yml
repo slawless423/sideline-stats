@@ -25,7 +25,7 @@ jobs:
           node-version: 20
 
       - name: Build ratings json
-        timeout-minutes: 2
+        timeout-minutes: 10
         run: node scripts/build_ratings.mjs
 
       - name: Commit and push if changed
