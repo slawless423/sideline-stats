@@ -1,14 +1,15 @@
 import fs from "node:fs/promises";
 
 const NCAA_API_BASE = "https://ncaa-api.henrygd.me";
-
-// Set season start (adjust if you want)
 const SEASON_START = "2025-11-01";
 
 // ---- TUNING ----
-const REQUEST_TIMEOUT_MS = 20000; // 20s per request
-const REQUEST_RETRIES = 2;        // retries after the first attempt
-const BOX_CONCURRENCY = 8;        // how many boxscores to fetch at once
+const REQUEST_TIMEOUT_MS = 20000; // per request
+const REQUEST_RETRIES = 2;
+const BOX_CONCURRENCY = 8;
+
+// Safety: never overwrite your public ratings with a broken run
+const MIN_TEAMS_REQUIRED = 300;
 
 console.log("START build_ratings", new Date().toISOString());
 
@@ -29,29 +30,6 @@ function addDays(dt, days) {
   return x;
 }
 
-function extractGameIds(obj) {
-  const ids = new Set();
-  const walk = (x) => {
-    if (Array.isArray(x)) return x.forEach(walk);
-    if (x && typeof x === "object") return Object.values(x).forEach(walk);
-    if (typeof x === "string") {
-      const matches = x.match(/\/game\/(\d+)/g);
-      if (matches) matches.forEach((m) => ids.add(m.replace("/game/", "")));
-    }
-  };
-  walk(obj);
-  return [...ids];
-}
-
-function toInt(x, d = 0) {
-  const n = parseInt(String(x ?? ""), 10);
-  return Number.isFinite(n) ? n : d;
-}
-
-function poss(fga, orb, tov, fta) {
-  return Math.max(1, fga - orb + tov + 0.475 * fta);
-}
-
 function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
 }
@@ -66,14 +44,13 @@ async function fetchJson(path) {
     try {
       const res = await fetch(url, {
         signal: controller.signal,
-        headers: { "User-Agent": "womens-kenpom-bot" },
+        headers: { "User-Agent": "baseline-analytics-bot" },
       });
 
       if (!res.ok) {
-        // Retry common transient statuses
         const retryable = [429, 500, 502, 503, 504].includes(res.status);
         if (retryable && attempt < REQUEST_RETRIES) {
-          await sleep(300 * (attempt + 1));
+          await sleep(400 * (attempt + 1));
           continue;
         }
         throw new Error(`Fetch failed ${res.status} for ${path}`);
@@ -82,30 +59,25 @@ async function fetchJson(path) {
       return await res.json();
     } catch (e) {
       const msg = String(e?.message ?? e);
-
       const isTimeout =
         msg.includes("AbortError") ||
         msg.toLowerCase().includes("aborted") ||
         msg.toLowerCase().includes("timeout");
 
       if ((isTimeout || msg.includes("ECONNRESET") || msg.includes("ENOTFOUND")) && attempt < REQUEST_RETRIES) {
-        await sleep(400 * (attempt + 1));
+        await sleep(500 * (attempt + 1));
         continue;
       }
-
-      // final failure
       if (isTimeout) throw new Error(`Fetch timed out after ${REQUEST_TIMEOUT_MS}ms for ${path}`);
       throw e;
     } finally {
       clearTimeout(t);
     }
   }
-
-  // should never reach
   throw new Error(`Fetch failed after retries for ${path}`);
 }
 
-// Simple concurrency limiter
+// Concurrency limiter
 async function mapLimit(items, limit, fn) {
   const results = new Array(items.length);
   let i = 0;
@@ -122,48 +94,204 @@ async function mapLimit(items, limit, fn) {
   return results;
 }
 
-// Parse the WBB boxscore
-function parseWbbBoxscore(gameId, gameJson) {
-  const teamsArr = Array.isArray(gameJson?.teams) ? gameJson.teams : [];
-  const boxArr = Array.isArray(gameJson?.teamBoxscore) ? gameJson.teamBoxscore : [];
-  if (teamsArr.length < 2 || boxArr.length < 2) return null;
+// Extract game IDs robustly
+function extractGameIds(obj) {
+  const ids = new Set();
 
-  const totalsById = new Map();
-  for (const b of boxArr) totalsById.set(String(b.teamId), b.teamStats ?? {});
+  const walk = (x) => {
+    if (Array.isArray(x)) return x.forEach(walk);
+    if (x && typeof x === "object") {
+      // common id fields
+      if (typeof x.gameId === "string" || typeof x.gameId === "number") ids.add(String(x.gameId));
+      if (typeof x.id === "string" || typeof x.id === "number") {
+        // sometimes an object in scoreboard is literally a game object w/ numeric id
+        // only add if it "looks" like game content
+        if (x.home || x.away || x.teams || x.boxscore) ids.add(String(x.id));
+      }
+      return Object.values(x).forEach(walk);
+    }
+    if (typeof x === "string") {
+      const matches = x.match(/\/game\/(\d+)/g);
+      if (matches) matches.forEach((m) => ids.add(m.replace("/game/", "")));
+    }
+  };
 
-  const homeMeta = teamsArr.find((t) => t.isHome === true) ?? teamsArr[0];
-  const awayMeta = teamsArr.find((t) => t.isHome === false) ?? teamsArr[1];
+  walk(obj);
+  return [...ids];
+}
 
-  const homeId = String(homeMeta.teamId);
-  const awayId = String(awayMeta.teamId);
+// ---- Stat helpers (robust) ----
+function toInt(x, d = 0) {
+  const n = parseInt(String(x ?? ""), 10);
+  return Number.isFinite(n) ? n : d;
+}
 
-  const hStats = totalsById.get(homeId) ?? {};
-  const aStats = totalsById.get(awayId) ?? {};
+function poss(fga, orb, tov, fta) {
+  return Math.max(1, fga - orb + tov + 0.475 * fta);
+}
+
+function pick(obj, keys) {
+  for (const k of keys) {
+    if (obj && obj[k] != null) return obj[k];
+  }
+  return null;
+}
+
+function normalizeStats(raw) {
+  // handle multiple possible key names
+  const points = toInt(pick(raw, ["points", "pts", "score"]), 0);
+  const fga = toInt(pick(raw, ["fieldGoalsAttempted", "fga", "fgAttempts"]), 0);
+  const fta = toInt(pick(raw, ["freeThrowsAttempted", "fta", "ftAttempts"]), 0);
+  const orb = toInt(pick(raw, ["offensiveRebounds", "oreb", "offReb"]), 0);
+  const tov = toInt(pick(raw, ["turnovers", "tov", "to"]), 0);
+
+  // if this object clearly isn't totals, return null
+  const hasSignal = points || fga || fta || orb || tov;
+  if (!hasSignal) return null;
+
+  return { points, fga, fta, orb, tov };
+}
+
+function deepCollectTeamStatCandidates(root) {
+  // Collect objects that contain a teamId and some stat fields (directly or nested)
+  const out = [];
+
+  const walk = (x) => {
+    if (Array.isArray(x)) return x.forEach(walk);
+    if (!x || typeof x !== "object") return;
+
+    const teamId = pick(x, ["teamId", "team_id", "id"]);
+    if (teamId != null) {
+      // try common places stats live
+      const direct = normalizeStats(x);
+      if (direct) out.push({ teamId: String(teamId), stats: direct });
+
+      const nested = pick(x, ["teamStats", "team_stats", "statistics", "stats", "totals"]);
+      if (nested && typeof nested === "object") {
+        const n = normalizeStats(nested);
+        if (n) out.push({ teamId: String(teamId), stats: n });
+      }
+    }
+
+    Object.values(x).forEach(walk);
+  };
+
+  walk(root);
+  return out;
+}
+
+function findTeamsMeta(gameJson) {
+  // try a few likely locations for team meta
+  const candidates = [
+    gameJson?.teams,
+    gameJson?.game?.teams,
+    gameJson?.meta?.teams,
+    gameJson?.header?.teams,
+  ].filter(Array.isArray);
+
+  for (const arr of candidates) {
+    const filtered = arr.filter((t) => t && (t.teamId != null || t.id != null));
+    if (filtered.length >= 2) return filtered;
+  }
+
+  // fallback: deep search for an array of 2+ objects with teamId
+  let found = null;
+  const walk = (x) => {
+    if (found) return;
+    if (Array.isArray(x)) {
+      const ok = x.filter((t) => t && typeof t === "object" && (t.teamId != null || t.id != null));
+      if (ok.length >= 2) {
+        found = ok;
+        return;
+      }
+      x.forEach(walk);
+      return;
+    }
+    if (x && typeof x === "object") Object.values(x).forEach(walk);
+  };
+  walk(gameJson);
+  return found;
+}
+
+function nameFromMeta(t) {
+  return String(
+    pick(t, ["nameShort", "name_short", "shortName", "nameFull", "name_full", "fullName", "name"]) ?? "Team"
+  );
+}
+
+function isHomeFromMeta(t) {
+  const v = pick(t, ["isHome", "home", "is_home", "homeAway", "home_away"]);
+  if (v === true) return true;
+  if (v === false) return false;
+  if (typeof v === "string") {
+    const s = v.toLowerCase();
+    if (s === "home" || s === "h") return true;
+    if (s === "away" || s === "a") return false;
+  }
+  return null;
+}
+
+// Robust boxscore parser:
+// 1) find team meta (home/away + ids)
+// 2) deep collect stat candidates with teamId
+// 3) pick best stats for each teamId
+function parseWbbBoxscoreRobust(gameId, gameJson) {
+  const teamsArr = findTeamsMeta(gameJson);
+  if (!teamsArr || teamsArr.length < 2) return null;
+
+  // pick two teams (home/away if possible)
+  const withHomeFlag = teamsArr.map((t) => ({
+    t,
+    id: String(pick(t, ["teamId", "team_id", "id"])),
+    home: isHomeFromMeta(t),
+  }));
+
+  let homeMeta = withHomeFlag.find((x) => x.home === true)?.t ?? withHomeFlag[0]?.t;
+  let awayMeta = withHomeFlag.find((x) => x.home === false)?.t ?? withHomeFlag[1]?.t;
+
+  const homeId = String(pick(homeMeta, ["teamId", "team_id", "id"]));
+  const awayId = String(pick(awayMeta, ["teamId", "team_id", "id"]));
+
+  const candidates = deepCollectTeamStatCandidates(gameJson);
+  if (!candidates.length) return null;
+
+  // choose best stats per team: pick the one with largest (fga+fta) as likely totals
+  const bestById = new Map();
+  for (const c of candidates) {
+    const key = String(c.teamId);
+    const score = (c.stats?.fga ?? 0) + (c.stats?.fta ?? 0);
+    const prev = bestById.get(key);
+    if (!prev || score > prev.score) bestById.set(key, { stats: c.stats, score });
+  }
+
+  const h = bestById.get(homeId)?.stats ?? null;
+  const a = bestById.get(awayId)?.stats ?? null;
+  if (!h || !a) return null;
 
   const home = {
     gameId,
-    team: String(homeMeta.nameShort ?? homeMeta.nameFull ?? "Home"),
+    team: nameFromMeta(homeMeta),
     teamId: homeId,
-    opp: String(awayMeta.nameShort ?? awayMeta.nameFull ?? "Away"),
+    opp: nameFromMeta(awayMeta),
     oppId: awayId,
-    pts: toInt(hStats.points, 0),
-    fga: toInt(hStats.fieldGoalsAttempted, 0),
-    fta: toInt(hStats.freeThrowsAttempted, 0),
-    orb: toInt(hStats.offensiveRebounds, 0),
-    tov: toInt(hStats.turnovers, 0),
+    pts: h.points,
+    fga: h.fga,
+    fta: h.fta,
+    orb: h.orb,
+    tov: h.tov,
   };
 
   const away = {
     gameId,
-    team: String(awayMeta.nameShort ?? awayMeta.nameFull ?? "Away"),
+    team: nameFromMeta(awayMeta),
     teamId: awayId,
-    opp: String(homeMeta.nameShort ?? homeMeta.nameFull ?? "Home"),
+    opp: nameFromMeta(homeMeta),
     oppId: homeId,
-    pts: toInt(aStats.points, 0),
-    fga: toInt(aStats.fieldGoalsAttempted, 0),
-    fta: toInt(aStats.freeThrowsAttempted, 0),
-    orb: toInt(aStats.offensiveRebounds, 0),
-    tov: toInt(aStats.turnovers, 0),
+    pts: a.points,
+    fga: a.fga,
+    fta: a.fta,
+    orb: a.orb,
+    tov: a.tov,
   };
 
   return [home, away];
@@ -175,11 +303,13 @@ async function main() {
   const start = toDate(SEASON_START);
 
   const teamAgg = new Map(); // teamId -> {team, ptsFor, ptsAgainst, poss, games}
-  const seenGameIds = new Set(); // safety: avoid double counting
+  const seenGameIds = new Set();
 
   let days = 0;
   let totalGamesFound = 0;
+  let totalBoxesFetched = 0;
   let totalBoxesParsed = 0;
+  let parseFailedSamplesWritten = 0;
 
   for (let dt = start; dt <= end; dt = addDays(dt, 1)) {
     days++;
@@ -187,16 +317,13 @@ async function main() {
     const [Y, M, D] = d.split("-");
     const scoreboardPath = `/scoreboard/basketball-women/d1/${Y}/${M}/${D}/all-conf`;
 
-    // light progress every ~7 days
-    if (days % 7 === 1) {
-      console.log("DATE", d);
-    }
+    // weekly progress line
+    if (days % 7 === 1) console.log("DATE", d);
 
     let scoreboard;
     try {
       scoreboard = await fetchJson(scoreboardPath);
     } catch {
-      // if that day fails, skip it
       continue;
     }
 
@@ -206,35 +333,34 @@ async function main() {
     for (const gid of gameIds) seenGameIds.add(gid);
     totalGamesFound += gameIds.length;
 
-    // Fetch boxscores concurrently (big speed-up)
     const boxes = await mapLimit(gameIds, BOX_CONCURRENCY, async (gid) => {
       try {
-        return await fetchJson(`/game/${gid}/boxscore`);
+        const box = await fetchJson(`/game/${gid}/boxscore`);
+        totalBoxesFetched++;
+        return { gid, box };
       } catch {
-        return null;
+        return { gid, box: null };
       }
     });
 
-    for (let idx = 0; idx < gameIds.length; idx++) {
-      const gid = gameIds[idx];
-      const box = boxes[idx];
+    for (const { gid, box } of boxes) {
       if (!box) continue;
 
-const lines = parseWbbBoxscore(gid, box);
-if (!lines) {
-  // Save ONE sample so we can inspect the real structure
-  if (!(globalThis.__WROTE_SAMPLE__)) {
-    globalThis.__WROTE_SAMPLE__ = true;
-    await fs.writeFile(
-      "public/data/boxscore_sample_failed.json",
-      JSON.stringify(box, null, 2),
-      "utf8"
-    );
-    console.log("WROTE sample failed boxscore: public/data/boxscore_sample_failed.json for game", gid);
-  }
-  continue;
-}
-
+      const lines = parseWbbBoxscoreRobust(gid, box);
+      if (!lines) {
+        // write one sample for debugging (won't spam)
+        if (parseFailedSamplesWritten < 1) {
+          parseFailedSamplesWritten++;
+          await fs.mkdir("public/data", { recursive: true });
+          await fs.writeFile(
+            "public/data/boxscore_failed_sample.json",
+            JSON.stringify(box, null, 2),
+            "utf8"
+          );
+          console.log("WROTE public/data/boxscore_failed_sample.json for game", gid);
+        }
+        continue;
+      }
 
       totalBoxesParsed++;
 
@@ -268,8 +394,6 @@ if (!lines) {
     }
   }
 
-  console.log("DONE fetching. days=", days, "gamesFound=", totalGamesFound, "boxesParsed=", totalBoxesParsed);
-
   const rows = [...teamAgg.entries()].map(([teamId, t]) => {
     const adjO = (t.ptsFor / Math.max(1, t.poss)) * 100;
     const adjD = (t.ptsAgainst / Math.max(1, t.poss)) * 100;
@@ -280,13 +404,33 @@ if (!lines) {
 
   rows.sort((a, b) => b.adjEM - a.adjEM);
 
+  console.log(
+    "DONE",
+    "days=",
+    days,
+    "gamesFound=",
+    totalGamesFound,
+    "boxesFetched=",
+    totalBoxesFetched,
+    "boxesParsed=",
+    totalBoxesParsed,
+    "teams=",
+    rows.length
+  );
+
+  // SAFETY GUARD: do not overwrite if broken
+  if (rows.length < MIN_TEAMS_REQUIRED) {
+    throw new Error(
+      `BAD RUN: only ${rows.length} teams (need >= ${MIN_TEAMS_REQUIRED}). Refusing to overwrite public/data/ratings.json`
+    );
+  }
+
   const out = {
     generated_at_utc: new Date().toISOString(),
     season_start: SEASON_START,
     rows,
   };
 
-  console.log("WRITE public/data/ratings.json");
   await fs.mkdir("public/data", { recursive: true });
   await fs.writeFile("public/data/ratings.json", JSON.stringify(out, null, 2), "utf8");
 
