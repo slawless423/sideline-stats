@@ -346,7 +346,7 @@ async function main() {
     for (const { gid, box } of boxes) {
       if (!box) continue;
 
-      const lines = parseWbbBoxscore(gid, box);
+      const lines = parseWbbBoxscoreRobust(gid, box);
 
       if (!lines) {
         // Write ONE sample failed boxscore for debugging (only once)
