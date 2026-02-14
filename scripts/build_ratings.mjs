@@ -103,24 +103,34 @@ function extractGameIds(obj) {
       for (const v of x) walk(v);
       return;
     }
-
     if (x && typeof x === "object") {
       for (const v of Object.values(x)) walk(v);
       return;
     }
-
     if (typeof x === "string") {
-      // Look for "/game/123456" anywhere in the JSON
-      const matches = x.match(/\/game\/(\d+)/g);
-      if (matches) {
-        for (const m of matches) ids.add(m.replace("/game/", ""));
-      }
+      // Only count IDs when the string looks like an actual game link
+      // (prevents grabbing random "/game/####" references that aren't real game ids)
+      const s = x.toLowerCase();
+
+      const looksLikeGameLink =
+        s.includes("/game/") &&
+        (s.includes("boxscore") ||
+          s.includes("recap") ||
+          s.includes("play-by-play") ||
+          s.includes("pbp") ||
+          s.includes("preview"));
+
+      if (!looksLikeGameLink) return;
+
+      const m = s.match(/\/game\/(\d+)/);
+      if (m && m[1]) ids.add(m[1]);
     }
   };
 
   walk(obj);
   return [...ids];
 }
+
 
 // ---- Stat helpers (robust) ----
 function toInt(x, d = 0) {
