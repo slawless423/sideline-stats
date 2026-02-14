@@ -1,5 +1,8 @@
 import fs from "node:fs/promises";
 
+console.log("START build_ratings", new Date().toISOString());
+
+
 const NCAA_API_BASE = "https://ncaa-api.henrygd.me";
 
 // Set season start (adjust if you want)
