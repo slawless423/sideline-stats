@@ -108,28 +108,22 @@ function extractGameIds(obj) {
       return;
     }
     if (typeof x === "string") {
-      // Only count IDs when the string looks like an actual game link
-      // (prevents grabbing random "/game/####" references that aren't real game ids)
       const s = x.toLowerCase();
 
-      const looksLikeGameLink =
-        s.includes("/game/") &&
-        (s.includes("boxscore") ||
-          s.includes("recap") ||
-          s.includes("play-by-play") ||
-          s.includes("pbp") ||
-          s.includes("preview"));
+      // Only consider links clearly related to women's basketball
+      if (!s.includes("basketball-women")) return;
 
-      if (!looksLikeGameLink) return;
-
-      const m = s.match(/\/game\/(\d+)/);
-      if (m && m[1]) ids.add(m[1]);
+      const matches = s.match(/\/game\/(\d+)/g);
+      if (matches) {
+        for (const m of matches) ids.add(m.replace("/game/", ""));
+      }
     }
   };
 
   walk(obj);
   return [...ids];
 }
+
 
 
 // ---- Stat helpers (robust) ----
