@@ -47,14 +47,21 @@ async function fetchJson(path) {
         headers: { "User-Agent": "baseline-analytics-bot" },
       });
 
-      if (!res.ok) {
-        const retryable = [429, 500, 502, 503, 504].includes(res.status);
-        if (retryable && attempt < REQUEST_RETRIES) {
-          await sleep(400 * (attempt + 1));
-          continue;
-        }
-        throw new Error(`Fetch failed ${res.status} for ${path}`);
-      }
+if (!res.ok) {
+  // DEBUG: show a few boxscore HTTP failures (helps us see if it's 404 vs 403 etc.)
+  if (path.includes("/boxscore") && (globalThis.__BOX_HTTP_FAILS__ ?? 0) < 10) {
+    globalThis.__BOX_HTTP_FAILS__ = (globalThis.__BOX_HTTP_FAILS__ ?? 0) + 1;
+    console.log("BOX HTTP FAIL", res.status, path);
+  }
+
+  const retryable = [429, 500, 502, 503, 504].includes(res.status);
+  if (retryable && attempt < REQUEST_RETRIES) {
+    await sleep(400 * (attempt + 1));
+    continue;
+  }
+  throw new Error(`Fetch failed ${res.status} for ${path}`);
+}
+
 
       return await res.json();
     } catch (e) {
@@ -99,30 +106,18 @@ function extractGameIds(obj) {
   const ids = new Set();
 
   const walk = (x) => {
-    if (Array.isArray(x)) {
-      for (const v of x) walk(v);
-      return;
-    }
-    if (x && typeof x === "object") {
-      for (const v of Object.values(x)) walk(v);
-      return;
-    }
+    if (Array.isArray(x)) return x.forEach(walk);
+    if (x && typeof x === "object") return Object.values(x).forEach(walk);
     if (typeof x === "string") {
-      const s = x.toLowerCase();
-
-      // Only consider links clearly related to women's basketball
-      if (!s.includes("basketball-women")) return;
-
-      const matches = s.match(/\/game\/(\d+)/g);
-      if (matches) {
-        for (const m of matches) ids.add(m.replace("/game/", ""));
-      }
+      const matches = x.match(/\/game\/(\d+)/g);
+      if (matches) matches.forEach((m) => ids.add(m.replace("/game/", "")));
     }
   };
 
   walk(obj);
   return [...ids];
 }
+
 
 
 
