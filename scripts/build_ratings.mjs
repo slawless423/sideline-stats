@@ -99,20 +99,22 @@ function extractGameIds(obj) {
   const ids = new Set();
 
   const walk = (x) => {
-    if (Array.isArray(x)) return x.forEach(walk);
-    if (x && typeof x === "object") {
-      // common id fields
-      if (typeof x.gameId === "string" || typeof x.gameId === "number") ids.add(String(x.gameId));
-      if (typeof x.id === "string" || typeof x.id === "number") {
-        // sometimes an object in scoreboard is literally a game object w/ numeric id
-        // only add if it "looks" like game content
-        if (x.home || x.away || x.teams || x.boxscore) ids.add(String(x.id));
-      }
-      return Object.values(x).forEach(walk);
+    if (Array.isArray(x)) {
+      for (const v of x) walk(v);
+      return;
     }
+
+    if (x && typeof x === "object") {
+      for (const v of Object.values(x)) walk(v);
+      return;
+    }
+
     if (typeof x === "string") {
+      // Look for "/game/123456" anywhere in the JSON
       const matches = x.match(/\/game\/(\d+)/g);
-      if (matches) matches.forEach((m) => ids.add(m.replace("/game/", "")));
+      if (matches) {
+        for (const m of matches) ids.add(m.replace("/game/", ""));
+      }
     }
   };
 
