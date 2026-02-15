@@ -175,7 +175,7 @@ function deepCollectTeamStatCandidates(root) {
 
   const walk = (x) => {
     if (Array.isArray(x)) return x.forEach(walk);
-    if (!x || typeof x === "object") return;
+    if (!x || typeof x !== "object") return;
 
     const teamId = pick(x, ["teamId", "team_id", "id"]);
     if (teamId != null) {
