@@ -3,7 +3,7 @@ import fs from "node:fs/promises";
 const NCAA_API_BASE = "https://ncaa-api.henrygd.me";
 const SEASON_START = "2025-11-01";
 
-console.log("START identify_missing_games (BALANCED)", new Date().toISOString());
+console.log("START find_all_missing_games", new Date().toISOString());
 
 function toDate(s) {
   const [y, m, d] = s.split("-").map(Number);
@@ -25,21 +25,18 @@ function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
 }
 
-async function fetchJson(path, timeout = 15000) {
+async function fetchJson(path) {
   const url = `${NCAA_API_BASE}${path}`;
   
   try {
     const controller = new AbortController();
-    const t = setTimeout(() => controller.abort(), timeout);
+    const t = setTimeout(() => controller.abort(), 10000);
     
     const res = await fetch(url, {
       signal: controller.signal,
       headers: {
         "User-Agent": "baseline-analytics-bot",
         "Accept": "application/json",
-        "Accept-Language": "en-US,en;q=0.9",
-        "Referer": "https://www.ncaa.com/",
-        "Origin": "https://www.ncaa.com/",
       },
     });
     
@@ -66,119 +63,120 @@ function extractGameIds(obj) {
   return [...ids];
 }
 
-async function mapLimit(items, limit, fn) {
-  const results = new Array(items.length);
-  let i = 0;
-
-  const workers = Array.from({ length: Math.min(limit, items.length) }, async () => {
-    while (true) {
-      const idx = i++;
-      if (idx >= items.length) return;
-      results[idx] = await fn(items[idx], idx);
-    }
-  });
-
-  await Promise.all(workers);
-  return results;
-}
-
 async function main() {
   const today = new Date();
   const end = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()));
   const start = toDate(SEASON_START);
 
-  const allGames = new Map(); // gameId -> {date}
+  // Step 1: Get ALL game IDs from scoreboards
+  console.log("Step 1: Collecting ALL game IDs from scoreboards...");
+  const allGames = new Map(); // gameId -> date
 
-  console.log("Step 1: Collecting all game IDs from scoreboards...");
-  
-  // Collect all game IDs
   for (let dt = start; dt <= end; dt = addDays(dt, 1)) {
     const d = fmtDate(dt);
     const [Y, M, D] = d.split("-");
     const scoreboardPath = `/scoreboard/basketball-women/d1/${Y}/${M}/${D}/all-conf`;
 
-    const scoreboard = await fetchJson(scoreboardPath, 10000);
+    const scoreboard = await fetchJson(scoreboardPath);
     if (!scoreboard) continue;
 
     const gameIds = extractGameIds(scoreboard);
     for (const gid of gameIds) {
-      allGames.set(gid, { date: d });
+      allGames.set(gid, d);
     }
     
-    await sleep(50); // Small delay between scoreboard requests
+    await sleep(50);
   }
 
-  console.log(`Found ${allGames.size} total games`);
-  console.log("\nStep 2: Testing boxscores (balanced mode)...");
+  console.log(`Found ${allGames.size} total games from scoreboards`);
 
-  const gameIds = [...allGames.keys()];
-  const availableGames = new Set();
+  // Step 2: Load the successfully parsed games from ratings.json  
+  console.log("\nStep 2: Loading successfully parsed games from your latest ratings.json...");
   
-  // Process in batches
-  const batchSize = 100;
-  for (let i = 0; i < gameIds.length; i += batchSize) {
-    const batch = gameIds.slice(i, i + batchSize);
+  // We need to reconstruct which games were successfully parsed
+  // The ratings.json doesn't store individual game IDs, so we'll need to fetch boxscores
+  // for all games and check which ones work
+  
+  console.log("\nStep 3: Testing each game to find which ones fail...");
+  const successfulGames = new Set();
+  const failedGames = [];
+  
+  let tested = 0;
+  const allGameIds = [...allGames.keys()];
+  
+  for (const gid of allGameIds) {
+    tested++;
+    if (tested % 100 === 0) console.log(`Tested ${tested}/${allGameIds.length} games...`);
     
-    const results = await mapLimit(batch, 6, async (gid) => {
-      const box = await fetchJson(`/game/${gid}/boxscore`, 15000);
-      await sleep(150); // Small delay
-      return { gid, available: box !== null };
-    });
-    
-    for (const { gid, available } of results) {
-      if (available) availableGames.add(gid);
-    }
-    
-    console.log(`Tested ${Math.min(i + batchSize, gameIds.length)}/${gameIds.length} games...`);
-  }
-
-  // Create missing games list
-  const missingGames = [];
-
-  for (const [gid, data] of allGames) {
-    if (!availableGames.has(gid)) {
-      missingGames.push({
+    try {
+      const box = await fetchJson(`/game/${gid}/boxscore`);
+      await sleep(200); // Slower to avoid rate limits
+      
+      if (box) {
+        successfulGames.add(gid);
+      } else {
+        failedGames.push({
+          gameId: gid,
+          date: allGames.get(gid),
+          reason: "No boxscore data"
+        });
+      }
+    } catch (e) {
+      failedGames.push({
         gameId: gid,
-        date: data.date,
-        homeTeam: "Unknown",
-        awayTeam: "Unknown",
-        ncaaUrl: `https://www.ncaa.com/game/${gid}`,
-        status: "NEEDS_MANUAL_ENTRY"
+        date: allGames.get(gid),
+        reason: String(e.message || e)
       });
     }
   }
 
   console.log(`\n=== RESULTS ===`);
   console.log(`Total games: ${allGames.size}`);
-  console.log(`Successful: ${availableGames.size}`);
-  console.log(`Missing: ${missingGames.length}`);
+  console.log(`Successful: ${successfulGames.size}`);
+  console.log(`Failed: ${failedGames.length}`);
 
-  // Save as JSON
+  // Create comprehensive missing games file
+  const missingGames = failedGames.map(game => ({
+    gameId: game.gameId,
+    date: game.date,
+    ncaaUrl: `https://www.ncaa.com/game/${game.gameId}`,
+    espnUrl: `https://www.espn.com/womens-college-basketball/game/_/gameId/${game.gameId}`,
+    homeTeam: "TO_BE_FILLED",
+    awayTeam: "TO_BE_FILLED",
+    status: "NEEDS_MANUAL_ENTRY",
+    reason: game.reason
+  }));
+
+  // Save comprehensive JSON
   await fs.mkdir("public/data", { recursive: true });
   await fs.writeFile(
-    "public/data/missing_games.json",
-    JSON.stringify(missingGames, null, 2),
+    "public/data/all_missing_games.json",
+    JSON.stringify({ 
+      total_missing: missingGames.length,
+      games: missingGames 
+    }, null, 2),
     "utf8"
   );
 
-  // Save as CSV
+  // Save CSV for easy viewing
   const csvLines = [
-    "gameId,date,homeTeam,awayTeam,ncaaUrl,status"
+    "gameId,date,ncaaUrl,espnUrl,status"
   ];
   for (const game of missingGames) {
     csvLines.push(
-      `${game.gameId},${game.date},${game.homeTeam},${game.awayTeam},${game.ncaaUrl},${game.status}`
+      `${game.gameId},${game.date},${game.ncaaUrl},${game.espnUrl},${game.status}`
     );
   }
   await fs.writeFile(
-    "public/data/missing_games.csv",
+    "public/data/all_missing_games.csv",
     csvLines.join("\n"),
     "utf8"
   );
 
-  console.log(`\n✅ Created public/data/missing_games.json`);
-  console.log(`✅ Created public/data/missing_games.csv`);
-  console.log(`\nNext step: Manually fill in box scores for these ${missingGames.length} games`);
+  console.log(`\n✅ Created public/data/all_missing_games.json`);
+  console.log(`✅ Created public/data/all_missing_games.csv`);
+  console.log(`\nAll ${missingGames.length} missing games identified!`);
+  console.log("\nNext: Use these game IDs to create manual_games.json template");
 }
 
 main().catch((e) => {
