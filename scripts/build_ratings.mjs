@@ -2,12 +2,12 @@ import fs from "node:fs/promises";
 
 const NCAA_API_BASE = "https://ncaa-api.henrygd.me";
 const SEASON_START = "2025-11-01";
-const BOX_DELAY_MS = 250; // 4 requests/sec (safe under 5/sec)
+const BOX_DELAY_MS = 150; // Faster: 6.6 requests/sec (was 4/sec)
 
 // ---- TUNING ----
-const REQUEST_TIMEOUT_MS = 20000; // per request
+const REQUEST_TIMEOUT_MS = 15000; // Reduced from 20s
 const REQUEST_RETRIES = 2;
-const BOX_CONCURRENCY = 8;
+const BOX_CONCURRENCY = 12; // Increased from 8
 
 // Safety: never overwrite your public ratings with a broken run
 const MIN_TEAMS_REQUIRED = 300;
@@ -318,7 +318,6 @@ async function main() {
   let totalGamesFound = 0;
   let totalBoxesFetched = 0;
   let totalBoxesParsed = 0;
-  let parseFailedSamplesWritten = 0;
 
   for (let dt = start; dt <= end; dt = addDays(dt, 1)) {
     days++;
@@ -344,48 +343,51 @@ if (!gameIds.length) continue;
     for (const gid of gameIds) seenGameIds.add(gid);
     totalGamesFound += gameIds.length;
 
-for (const gid of gameIds) {
-  let box = null;
+    // OPTIMIZED: Fetch all boxscores for this day in parallel with concurrency limit
+    const boxscoreFetches = await mapLimit(gameIds, BOX_CONCURRENCY, async (gid) => {
+      try {
+        const box = await fetchJson(`/game/${gid}/boxscore`);
+        await sleep(BOX_DELAY_MS);
+        return { gid, box };
+      } catch (e) {
+        if ((globalThis.__BOX_FAILS__ ?? 0) < 10) {
+          globalThis.__BOX_FAILS__ = (globalThis.__BOX_FAILS__ ?? 0) + 1;
+          console.log("boxscore fetch failed for gid:", gid);
+        }
+        await sleep(BOX_DELAY_MS);
+        return { gid, box: null };
+      }
+    });
 
-  try {
-    box = await fetchJson(`/game/${gid}/boxscore`);
-    totalBoxesFetched++;
-  } catch (e) {
-    // show only a few failures so logs don't explode
-    if ((globalThis.__BOX_FAILS__ ?? 0) < 10) {
-      globalThis.__BOX_FAILS__ = (globalThis.__BOX_FAILS__ ?? 0) + 1;
-      console.log("boxscore fetch failed for gid:", gid);
-    }
-  }
+    // Process the fetched boxscores
+    for (const { gid, box } of boxscoreFetches) {
+      if (!box) continue;
+      
+      totalBoxesFetched++;
 
-  // IMPORTANT: throttle no matter what
-  await sleep(BOX_DELAY_MS);
+      const lines = parseWbbBoxscoreRobust(gid, box);
+      if (!lines) {
+        // Write ONE sample failed boxscore for debugging (only once)
+        if (!globalThis.__WROTE_FAILED_SAMPLE__) {
+          globalThis.__WROTE_FAILED_SAMPLE__ = true;
+          await fs.mkdir("public/data", { recursive: true });
+          await fs.writeFile(
+            "public/data/boxscore_failed_sample.json",
+            JSON.stringify(box, null, 2),
+            "utf8"
+          );
+          console.log("WROTE public/data/boxscore_failed_sample.json for game", gid);
+        }
+        continue;
+      }
 
-  if (!box) continue;
+      totalBoxesParsed++;
 
-  const lines = parseWbbBoxscoreRobust(gid, box);
-  if (!lines) {
-    // Write ONE sample failed boxscore for debugging (only once)
-    if (!globalThis.__WROTE_FAILED_SAMPLE__) {
-      globalThis.__WROTE_FAILED_SAMPLE__ = true;
-      await fs.mkdir("public/data", { recursive: true });
-      await fs.writeFile(
-        "public/data/boxscore_failed_sample.json",
-        JSON.stringify(box, null, 2),
-        "utf8"
-      );
-      console.log("WROTE public/data/boxscore_failed_sample.json for game", gid);
-    }
-    continue;
-  }
+      const a = lines[0];
+      const b = lines[1];
 
-  totalBoxesParsed++;
-
-  const a = lines[0];
-  const b = lines[1];
-
-  const aPoss = poss(a.fga, a.orb, a.tov, a.fta);
-  const bPoss = poss(b.fga, b.orb, b.tov, b.fta);
+      const aPoss = poss(a.fga, a.orb, a.tov, a.fta);
+      const bPoss = poss(b.fga, b.orb, b.tov, b.fta);
 
       // Update A
       {
