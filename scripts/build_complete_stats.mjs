@@ -504,8 +504,10 @@ async function main() {
       stats.ftm += team.stats.ftm;
       stats.fta += team.stats.fta;
       stats.orb += team.stats.orb;
-      stats.drb += team.stats.drb;
       stats.trb += team.stats.trb;
+      // Calculate DRB from TRB - ORB
+      const teamDrb = Math.max(0, team.stats.trb - team.stats.orb);
+      stats.drb += teamDrb;
       stats.ast += team.stats.ast;
       stats.stl += team.stats.stl;
       stats.blk += team.stats.blk;
@@ -521,8 +523,10 @@ async function main() {
       stats.opp_ftm += oppStats.ftm;
       stats.opp_fta += oppStats.fta;
       stats.opp_orb += oppStats.orb;
-      stats.opp_drb += oppStats.drb;
       stats.opp_trb += oppStats.trb;
+      // Calculate opponent DRB from TRB - ORB
+      const oppDrb = Math.max(0, oppStats.trb - oppStats.orb);
+      stats.opp_drb += oppDrb;
       stats.opp_ast += oppStats.ast;
       stats.opp_stl += oppStats.stl;
       stats.opp_blk += oppStats.blk;
