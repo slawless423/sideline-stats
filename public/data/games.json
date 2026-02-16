@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-02-16T15:25:24.044Z",
+  "generated_at_utc": "2026-02-16T18:29:22.349Z",
   "games": [
     {
       "gameId": "6515920",
@@ -47980,6 +47980,16 @@
       "awayTeam": "West Virginia",
       "awayId": "304",
       "awayScore": 50
+    },
+    {
+      "gameId": "6516473",
+      "date": "2026-02-16",
+      "homeTeam": "Nebraska",
+      "homeId": "2273",
+      "homeScore": 41,
+      "awayTeam": "Iowa",
+      "awayId": "2165",
+      "awayScore": 59
     }
   ]
 }
