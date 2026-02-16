@@ -3,22 +3,20 @@ import fs from "node:fs/promises";
 const NCAA_API_BASE = "https://ncaa-api.henrygd.me";
 const SEASON_START = "2025-11-01";
 
-// PASS 1: Normal processing
-const BOX_DELAY_MS = 400;
-const REQUEST_TIMEOUT_MS = 20000;
-const REQUEST_RETRIES = 3;
-const BOX_CONCURRENCY = 4;
-const RETRY_428_DELAY_MS = 2000;
+// ANTI-RATE-LIMIT TUNING
+// The 428 errors mean we're going too fast. Let's be more conservative.
+const BOX_DELAY_MS = 400; // Slower: 2.5 requests/sec (was 6.6/sec)
+const REQUEST_TIMEOUT_MS = 20000; // More patient
+const REQUEST_RETRIES = 3; // More retries (was 2)
+const BOX_CONCURRENCY = 4; // Lower concurrency (was 12)
+const RETRY_428_DELAY_MS = 2000; // Wait 2 seconds on rate limit before retry
 
-// PASS 2: Aggressive retry for failures
-const AGGRESSIVE_RETRY_DELAY_MS = 3000; // 3 seconds between attempts
-const AGGRESSIVE_RETRY_COUNT = 15; // Try 15 times
-const AGGRESSIVE_TIMEOUT_MS = 30000; // 30 second timeout
-
+// Safety: never overwrite your public ratings with a broken run
 const MIN_TEAMS_REQUIRED = 300;
 
-console.log("START build_ratings (TWO-PASS)", new Date().toISOString());
+console.log("START build_ratings (RATE-LIMIT-SAFE)", new Date().toISOString());
 
+// Helper: YYYY-MM-DD -> Date (UTC)
 function toDate(s) {
   const [y, m, d] = s.split("-").map(Number);
   return new Date(Date.UTC(y, m - 1, d));
@@ -39,14 +37,12 @@ function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
 }
 
-async function fetchJson(path, isBoxscore = false, useAggressiveRetry = false) {
+async function fetchJson(path, isBoxscore = false) {
   const url = `${NCAA_API_BASE}${path}`;
-  const timeout = useAggressiveRetry ? AGGRESSIVE_TIMEOUT_MS : REQUEST_TIMEOUT_MS;
-  const retries = useAggressiveRetry ? AGGRESSIVE_RETRY_COUNT : REQUEST_RETRIES;
 
-  for (let attempt = 0; attempt <= retries; attempt++) {
+  for (let attempt = 0; attempt <= REQUEST_RETRIES; attempt++) {
     const controller = new AbortController();
-    const t = setTimeout(() => controller.abort(), timeout);
+    const t = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
     try {
       const res = await fetch(url, {
@@ -61,27 +57,28 @@ async function fetchJson(path, isBoxscore = false, useAggressiveRetry = false) {
       });
 
       if (!res.ok) {
-        // Special handling for 502 and 428 errors
-        if (res.status === 502 || res.status === 428) {
-          if (attempt < retries) {
-            const waitTime = useAggressiveRetry ? AGGRESSIVE_RETRY_DELAY_MS : RETRY_428_DELAY_MS;
-            if (useAggressiveRetry && attempt % 3 === 0) {
-              console.log(`  Aggressive retry ${attempt + 1}/${retries} for ${path} (${res.status})`);
+        // Special handling for rate limits (428)
+        if (res.status === 428) {
+          if (attempt < REQUEST_RETRIES) {
+            // Wait longer on rate limits
+            const waitTime = RETRY_428_DELAY_MS * (attempt + 1);
+            if (isBoxscore && (globalThis.__RATE_LIMIT_WARNS__ ?? 0) < 5) {
+              globalThis.__RATE_LIMIT_WARNS__ = (globalThis.__RATE_LIMIT_WARNS__ ?? 0) + 1;
+              console.log(`RATE LIMIT (428) - waiting ${waitTime}ms before retry`);
             }
-            await sleep(waitTime * (attempt + 1)); // Exponential backoff
+            await sleep(waitTime);
             continue;
           }
         }
 
+        // DEBUG: show a few boxscore HTTP failures
         if (isBoxscore && (globalThis.__BOX_HTTP_FAILS__ ?? 0) < 10) {
           globalThis.__BOX_HTTP_FAILS__ = (globalThis.__BOX_HTTP_FAILS__ ?? 0) + 1;
-          if (!useAggressiveRetry) {
-            console.log("BOX HTTP FAIL", res.status, path);
-          }
+          console.log("BOX HTTP FAIL", res.status, path);
         }
 
         const retryable = [429, 500, 502, 503, 504].includes(res.status);
-        if (retryable && attempt < retries) {
+        if (retryable && attempt < REQUEST_RETRIES) {
           await sleep(400 * (attempt + 1));
           continue;
         }
@@ -96,11 +93,11 @@ async function fetchJson(path, isBoxscore = false, useAggressiveRetry = false) {
         msg.toLowerCase().includes("aborted") ||
         msg.toLowerCase().includes("timeout");
 
-      if ((isTimeout || msg.includes("ECONNRESET") || msg.includes("ENOTFOUND")) && attempt < retries) {
+      if ((isTimeout || msg.includes("ECONNRESET") || msg.includes("ENOTFOUND")) && attempt < REQUEST_RETRIES) {
         await sleep(500 * (attempt + 1));
         continue;
       }
-      if (isTimeout) throw new Error(`Fetch timed out after ${timeout}ms for ${path}`);
+      if (isTimeout) throw new Error(`Fetch timed out after ${REQUEST_TIMEOUT_MS}ms for ${path}`);
       throw e;
     } finally {
       clearTimeout(t);
@@ -109,6 +106,7 @@ async function fetchJson(path, isBoxscore = false, useAggressiveRetry = false) {
   throw new Error(`Fetch failed after retries for ${path}`);
 }
 
+// Concurrency limiter
 async function mapLimit(items, limit, fn) {
   const results = new Array(items.length);
   let i = 0;
@@ -125,6 +123,7 @@ async function mapLimit(items, limit, fn) {
   return results;
 }
 
+// Extract game IDs robustly
 function extractGameIds(obj) {
   const ids = new Set();
 
@@ -141,6 +140,7 @@ function extractGameIds(obj) {
   return [...ids];
 }
 
+// ---- Stat helpers (robust) ----
 function toInt(x, d = 0) {
   const n = parseInt(String(x ?? ""), 10);
   return Number.isFinite(n) ? n : d;
@@ -158,12 +158,14 @@ function pick(obj, keys) {
 }
 
 function normalizeStats(raw) {
+  // handle multiple possible key names
   const points = toInt(pick(raw, ["points", "pts", "score"]), 0);
   const fga = toInt(pick(raw, ["fieldGoalsAttempted", "fga", "fgAttempts"]), 0);
   const fta = toInt(pick(raw, ["freeThrowsAttempted", "fta", "ftAttempts"]), 0);
   const orb = toInt(pick(raw, ["offensiveRebounds", "oreb", "offReb"]), 0);
   const tov = toInt(pick(raw, ["turnovers", "tov", "to"]), 0);
 
+  // if this object clearly isn't totals, return null
   const hasSignal = points || fga || fta || orb || tov;
   if (!hasSignal) return null;
 
@@ -171,6 +173,7 @@ function normalizeStats(raw) {
 }
 
 function deepCollectTeamStatCandidates(root) {
+  // Collect objects that contain a teamId and some stat fields (directly or nested)
   const out = [];
 
   const walk = (x) => {
@@ -179,6 +182,7 @@ function deepCollectTeamStatCandidates(root) {
 
     const teamId = pick(x, ["teamId", "team_id", "id"]);
     if (teamId != null) {
+      // try common places stats live
       const direct = normalizeStats(x);
       if (direct) out.push({ teamId: String(teamId), stats: direct });
 
@@ -197,6 +201,7 @@ function deepCollectTeamStatCandidates(root) {
 }
 
 function findTeamsMeta(gameJson) {
+  // try a few likely locations for team meta
   const candidates = [
     gameJson?.teams,
     gameJson?.game?.teams,
@@ -209,6 +214,7 @@ function findTeamsMeta(gameJson) {
     if (filtered.length >= 2) return filtered;
   }
 
+  // fallback: deep search for an array of 2+ objects with teamId
   let found = null;
   const walk = (x) => {
     if (found) return;
@@ -245,10 +251,12 @@ function isHomeFromMeta(t) {
   return null;
 }
 
+// Robust boxscore parser
 function parseWbbBoxscoreRobust(gameId, gameJson) {
   const teamsArr = findTeamsMeta(gameJson);
   if (!teamsArr || teamsArr.length < 2) return null;
 
+  // pick two teams (home/away if possible)
   const withHomeFlag = teamsArr.map((t) => ({
     t,
     id: String(pick(t, ["teamId", "team_id", "id"])),
@@ -264,6 +272,7 @@ function parseWbbBoxscoreRobust(gameId, gameJson) {
   const candidates = deepCollectTeamStatCandidates(gameJson);
   if (!candidates.length) return null;
 
+  // choose best stats per team
   const bestById = new Map();
   for (const c of candidates) {
     const key = String(c.teamId);
@@ -312,7 +321,7 @@ async function main() {
 
   const teamAgg = new Map();
   const seenGameIds = new Set();
-  const failedGameIds = []; // Track failures for Pass 2
+  const allFailedGames = []; // NEW: Track every single failure
 
   let days = 0;
   let totalGamesFound = 0;
@@ -320,20 +329,20 @@ async function main() {
   let totalBoxesParsed = 0;
   let totalBoxesFailed = 0;
 
-  console.log("=== PASS 1: Normal Processing ===");
-
   for (let dt = start; dt <= end; dt = addDays(dt, 1)) {
     days++;
     const d = fmtDate(dt);
     const [Y, M, D] = d.split("-");
     const scoreboardPath = `/scoreboard/basketball-women/d1/${Y}/${M}/${D}/all-conf`;
 
+    // weekly progress
     if (days % 7 === 1) console.log("DATE", d);
 
     let scoreboard;
     try {
       scoreboard = await fetchJson(scoreboardPath, false);
     } catch (e) {
+      // Log scoreboard fetch failures so we can see missing dates
       if ((globalThis.__SCOREBOARD_FAILS__ ?? 0) < 50) {
         globalThis.__SCOREBOARD_FAILS__ = (globalThis.__SCOREBOARD_FAILS__ ?? 0) + 1;
         console.log("SCOREBOARD FETCH FAILED for", d, "-", String(e.message ?? e).substring(0, 60));
@@ -349,25 +358,28 @@ async function main() {
     for (const gid of gameIds) seenGameIds.add(gid);
     totalGamesFound += gameIds.length;
 
+    // Fetch boxscores with lower concurrency and more delays
     const boxscoreFetches = await mapLimit(gameIds, BOX_CONCURRENCY, async (gid) => {
       try {
-        const box = await fetchJson(`/game/${gid}/boxscore`, true, false);
-        await sleep(BOX_DELAY_MS);
-        return { gid, box, success: true };
+        const box = await fetchJson(`/game/${gid}/boxscore`, true);
+        await sleep(BOX_DELAY_MS); // Consistent delay
+        return { gid, box };
       } catch (e) {
         if ((globalThis.__BOX_FAILS__ ?? 0) < 10) {
           globalThis.__BOX_FAILS__ = (globalThis.__BOX_FAILS__ ?? 0) + 1;
           console.log("boxscore fetch failed for gid:", gid, String(e.message ?? e).substring(0, 50));
         }
+        allFailedGames.push({ gameId: gid, date: d, reason: "fetch_failed" }); // NEW: Track failure
         await sleep(BOX_DELAY_MS);
-        failedGameIds.push(gid); // Track for Pass 2
-        return { gid, box: null, success: false };
+        return { gid, box: null };
       }
     });
 
+    // Process fetched boxscores
     for (const { gid, box } of boxscoreFetches) {
       if (!box) {
         totalBoxesFailed++;
+        allFailedGames.push({ gameId: gid, date: d, reason: "no_boxscore_data" }); // NEW: Track no data
         continue;
       }
 
@@ -375,6 +387,7 @@ async function main() {
 
       const lines = parseWbbBoxscoreRobust(gid, box);
       if (!lines) {
+        // Write ONE sample failed boxscore for debugging
         if (!globalThis.__WROTE_FAILED_SAMPLE__) {
           globalThis.__WROTE_FAILED_SAMPLE__ = true;
           await fs.mkdir("public/data", { recursive: true });
@@ -386,7 +399,7 @@ async function main() {
           console.log("WROTE public/data/boxscore_failed_sample.json for game", gid);
         }
         totalBoxesFailed++;
-        failedGameIds.push(gid); // Track parse failures too
+        allFailedGames.push({ gameId: gid, date: d, reason: "parse_failed" }); // NEW: Track parse failure
         continue;
       }
 
@@ -398,6 +411,7 @@ async function main() {
       const aPoss = poss(a.fga, a.orb, a.tov, a.fta);
       const bPoss = poss(b.fga, b.orb, b.tov, b.fta);
 
+      // Update A
       {
         const cur = teamAgg.get(a.teamId) ?? { team: a.team, ptsFor: 0, ptsAgainst: 0, poss: 0, games: 0 };
         cur.team = a.team;
@@ -408,6 +422,7 @@ async function main() {
         teamAgg.set(a.teamId, cur);
       }
 
+      // Update B
       {
         const cur = teamAgg.get(b.teamId) ?? { team: b.team, ptsFor: 0, ptsAgainst: 0, poss: 0, games: 0 };
         cur.team = b.team;
@@ -420,76 +435,6 @@ async function main() {
     }
   }
 
-  const pass1SuccessRate = totalGamesFound > 0 ? ((totalBoxesParsed / totalGamesFound) * 100).toFixed(1) : 0;
-  console.log(
-    "\nPASS 1 DONE:",
-    "gamesFound=", totalGamesFound,
-    "boxesParsed=", totalBoxesParsed,
-    "failed=", failedGameIds.length,
-    "successRate=", pass1SuccessRate + "%"
-  );
-
-  // ===== PASS 2: Aggressive Retry for Failures =====
-  if (failedGameIds.length > 0) {
-    console.log(`\n=== PASS 2: Aggressive Retry (${failedGameIds.length} games) ===`);
-    
-    let pass2Recovered = 0;
-    
-    for (let i = 0; i < failedGameIds.length; i++) {
-      const gid = failedGameIds[i];
-      console.log(`Retrying ${i + 1}/${failedGameIds.length}: game ${gid}`);
-      
-      try {
-        const box = await fetchJson(`/game/${gid}/boxscore`, true, true); // Use aggressive retry
-        await sleep(AGGRESSIVE_RETRY_DELAY_MS);
-        
-        const lines = parseWbbBoxscoreRobust(gid, box);
-        if (!lines) {
-          console.log(`  ❌ Parse failed for ${gid}`);
-          continue;
-        }
-        
-        // Successfully recovered! Update team data
-        pass2Recovered++;
-        totalBoxesParsed++;
-        totalBoxesFailed--;
-        
-        const a = lines[0];
-        const b = lines[1];
-        
-        const aPoss = poss(a.fga, a.orb, a.tov, a.fta);
-        const bPoss = poss(b.fga, b.orb, b.tov, b.fta);
-        
-        {
-          const cur = teamAgg.get(a.teamId) ?? { team: a.team, ptsFor: 0, ptsAgainst: 0, poss: 0, games: 0 };
-          cur.team = a.team;
-          cur.ptsFor += a.pts;
-          cur.ptsAgainst += b.pts;
-          cur.poss += aPoss;
-          cur.games += 1;
-          teamAgg.set(a.teamId, cur);
-        }
-        
-        {
-          const cur = teamAgg.get(b.teamId) ?? { team: b.team, ptsFor: 0, ptsAgainst: 0, poss: 0, games: 0 };
-          cur.team = b.team;
-          cur.ptsFor += b.pts;
-          cur.ptsAgainst += a.pts;
-          cur.poss += bPoss;
-          cur.games += 1;
-          teamAgg.set(b.teamId, cur);
-        }
-        
-        console.log(`  ✅ Recovered game ${gid}`);
-      } catch (e) {
-        console.log(`  ❌ Still failed: ${gid}`);
-      }
-    }
-    
-    console.log(`\nPASS 2 DONE: Recovered ${pass2Recovered} out of ${failedGameIds.length} failed games`);
-  }
-
-  // Final calculations
   const rows = [...teamAgg.entries()].map(([teamId, t]) => {
     const adjO = (t.ptsFor / Math.max(1, t.poss)) * 100;
     const adjD = (t.ptsAgainst / Math.max(1, t.poss)) * 100;
@@ -500,21 +445,20 @@ async function main() {
 
   rows.sort((a, b) => b.adjEM - a.adjEM);
 
-  const finalSuccessRate = totalGamesFound > 0 ? ((totalBoxesParsed / totalGamesFound) * 100).toFixed(1) : 0;
-  const stillFailed = failedGameIds.length - (pass2Recovered ?? 0);
+  const successRate = totalGamesFound > 0 ? ((totalBoxesParsed / totalGamesFound) * 100).toFixed(1) : 0;
 
   console.log(
-    "\n=== FINAL RESULTS ===",
-    "\ndays=", days,
-    "\ngamesFound=", totalGamesFound,
-    "\nboxesFetched=", totalBoxesFetched,
-    "\nboxesParsed=", totalBoxesParsed,
-    "\nboxesFailed=", totalBoxesFailed,
-    "\nsuccessRate=", finalSuccessRate + "%",
-    "\nteams=", rows.length,
-    "\nstill failed after Pass 2=", stillFailed
+    "DONE",
+    "days=", days,
+    "gamesFound=", totalGamesFound,
+    "boxesFetched=", totalBoxesFetched,
+    "boxesParsed=", totalBoxesParsed,
+    "boxesFailed=", totalBoxesFailed,
+    "successRate=", successRate + "%",
+    "teams=", rows.length
   );
 
+  // SAFETY GUARD
   if (rows.length < MIN_TEAMS_REQUIRED) {
     throw new Error(
       `BAD RUN: only ${rows.length} teams (need >= ${MIN_TEAMS_REQUIRED}). Refusing to overwrite public/data/ratings.json`
@@ -527,15 +471,30 @@ async function main() {
     rows,
   };
 
-  await fs.mkdir("public/data", { recursive: true});
+  await fs.mkdir("public/data", { recursive: true });
   await fs.writeFile("public/data/ratings.json", JSON.stringify(out, null, 2), "utf8");
 
-  console.log(`\n✅ WROTE public/data/ratings.json with ${rows.length} teams`);
+  console.log(`WROTE public/data/ratings.json with ${rows.length} teams`);
   
-  if (stillFailed > 0) {
-    console.log(`\n⚠️  WARNING: ${stillFailed} games still failed after aggressive retry`);
-    console.log("These games may have no data available in the NCAA API");
-  }
+  // NEW: Save all failed games to a file
+  const failedGamesOutput = {
+    total_failed: allFailedGames.length,
+    games: allFailedGames.map(f => ({
+      gameId: f.gameId,
+      date: f.date,
+      reason: f.reason,
+      ncaaUrl: `https://www.ncaa.com/game/${f.gameId}`
+    }))
+  };
+  
+  await fs.writeFile(
+    "public/data/failed_games_complete.json",
+    JSON.stringify(failedGamesOutput, null, 2),
+    "utf8"
+  );
+  
+  console.log(`\n✅ WROTE public/data/failed_games_complete.json with ALL ${allFailedGames.length} failed games!`);
+  console.log("Use this file to create your manual_games.json template");
 }
 
 main().catch((e) => {
