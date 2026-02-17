@@ -481,7 +481,7 @@ export default async function TeamPage({
     );
   }
 
-  const conf = row.conference ?? teamStats?.conference ?? "—";
+  const confName = row.conference ?? teamStats?.conference ?? "—";
 
   // Filter games for this team
   const teamGames = allGames
@@ -525,7 +525,7 @@ export default async function TeamPage({
       <div style={S.header}>
         <div style={S.teamName}>{row.team}</div>
         <div style={S.teamMeta}>
-          {conf !== "—" ? `${conf.toUpperCase()} • ` : ""}
+          {confName !== "—" ? `${confName.toUpperCase()} • ` : ""}
           #{emRank} of {rows.length} teams
           {updatedDate ? ` • Data through ${updatedDate}` : ""}
         </div>
@@ -536,8 +536,8 @@ export default async function TeamPage({
           {row.games > 0 && (
             <span style={S.badge}>{row.games} games</span>
           )}
-          {conf !== "—" && (
-            <span style={S.badge}>{conf.toUpperCase()}</span>
+          {confName !== "—" && (
+            <span style={S.badge}>{confName.toUpperCase()}</span>
           )}
         </div>
       </div>
