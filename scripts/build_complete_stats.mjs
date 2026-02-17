@@ -608,7 +608,30 @@ async function main() {
   );
   console.log(`✅ WROTE public/data/player_stats.json (placeholder)`);
 
+  // 5. Games cache - ONLY contains IDs of games we SUCCESSFULLY PARSED
+  // This is critical: we never add game IDs from scoreboards alone,
+  // only games where we got and parsed actual boxscore data.
+  // This prevents the incremental script from skipping evening games
+  // that appeared in the scoreboard before they were played.
+  const successfullyParsedIds = allGames.map(g => g.gameId);
+  await fs.writeFile(
+    "public/data/games_cache.json",
+    JSON.stringify({
+      generated_at_utc: new Date().toISOString(),
+      note: "Contains ONLY successfully parsed game IDs - not scheduled games",
+      total_games: successfullyParsedIds.length,
+      game_ids: successfullyParsedIds,
+    }, null, 2),
+    "utf8"
+  );
+  console.log(`✅ WROTE public/data/games_cache.json (${successfullyParsedIds.length} successfully parsed games)`);
+
   console.log("\n🎉 ALL DATA FILES CREATED!");
+  console.log(`📊 Summary:`);
+  console.log(`   - ${ratingsRows.length} teams rated`);
+  console.log(`   - ${successfullyParsedIds.length} games with full boxscore data`);
+  console.log(`   - ${totalBoxesFailed} games failed (no boxscore available)`);
+  console.log(`\n✅ Incremental script will correctly pick up new games from here!`);
 }
 
 main().catch((e) => {
