@@ -128,6 +128,30 @@ function extractGameIds(obj) {
   return [...ids];
 }
 
+function extractConferenceFromGame(gameObj) {
+  // Extract conference from scoreboard game object
+  // Structure: gameObj.game.home.conferences[0].conferenceSeo
+  try {
+    const game = gameObj?.game;
+    if (!game) return {};
+
+    const homeConf = game.home?.conferences?.[0]?.conferenceSeo || null;
+    const awayConf = game.away?.conferences?.[0]?.conferenceSeo || null;
+    const homeId = String(pick(game.home, ["teamId", "team_id", "id"]) || "");
+    const awayId = String(pick(game.away, ["teamId", "team_id", "id"]) || "");
+
+    return {
+      homeId,
+      awayId,
+      homeConf,
+      awayConf,
+      isConferenceGame: homeConf && awayConf && homeConf === awayConf,
+    };
+  } catch {
+    return {};
+  }
+}
+
 function toInt(x, d = 0) {
   const n = parseInt(String(x ?? ""), 10);
   return Number.isFinite(n) ? n : d;
@@ -384,6 +408,18 @@ async function main() {
 
     const gameIds = extractGameIds(scoreboard).filter((gid) => !seenGameIds.has(gid));
 
+    // Also extract conference info from scoreboard
+    const conferenceMap = new Map(); // gameId -> {homeConf, awayConf, isConfGame}
+    if (scoreboard.games && Array.isArray(scoreboard.games)) {
+      for (const gameObj of scoreboard.games) {
+        const confInfo = extractConferenceFromGame(gameObj);
+        const gid = gameObj?.game?.gameID;
+        if (gid && confInfo.homeId && confInfo.awayId) {
+          conferenceMap.set(String(gid), confInfo);
+        }
+      }
+    }
+
     if (gameIds.length) console.log("games on", d, "=", gameIds.length);
     if (!gameIds.length) continue;
 
@@ -430,6 +466,14 @@ async function main() {
         continue;
       }
 
+      // Add conference info from scoreboard
+      const confInfo = conferenceMap.get(gid);
+      if (confInfo) {
+        gameData.home.conference = confInfo.homeConf;
+        gameData.away.conference = confInfo.awayConf;
+        gameData.isConferenceGame = confInfo.isConferenceGame;
+      }
+
       totalBoxesParsed++;
       allGames.push(gameData);
     }
@@ -461,9 +505,12 @@ async function main() {
       homeTeam: home.teamName,
       homeId: home.teamId,
       homeScore: home.stats.points,
+      homeConf: home.conference,
       awayTeam: away.teamName,
       awayId: away.teamId,
       awayScore: away.stats.points,
+      awayConf: away.conference,
+      isConferenceGame: game.isConferenceGame,
     });
 
     // Aggregate team stats
@@ -474,6 +521,7 @@ async function main() {
         teamSeasonStats.set(team.teamId, {
           teamId: team.teamId,
           teamName: team.teamName,
+          conference: team.conference,
           games: 0,
           wins: 0,
           losses: 0,
@@ -570,6 +618,7 @@ async function main() {
     ratingsRows.push({
       teamId,
       team: stats.teamName,
+      conference: stats.conference,
       games: stats.games,
       adjO,
       adjD,
