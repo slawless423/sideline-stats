@@ -498,7 +498,7 @@ async function main() {
   for (const game of allGames) {
     const { home, away } = game;
 
-    // Add to games log
+    // Add to games log with FULL stats (not just scores)
     gamesLog.push({
       gameId: game.gameId,
       date: game.date,
@@ -506,10 +506,42 @@ async function main() {
       homeId: home.teamId,
       homeScore: home.stats.points,
       homeConf: home.conference,
+      homeStats: {
+        fgm: home.stats.fgm,
+        fga: home.stats.fga,
+        tpm: home.stats.tpm,
+        tpa: home.stats.tpa,
+        ftm: home.stats.ftm,
+        fta: home.stats.fta,
+        orb: home.stats.orb,
+        drb: home.stats.drb,
+        trb: home.stats.trb,
+        ast: home.stats.ast,
+        stl: home.stats.stl,
+        blk: home.stats.blk,
+        tov: home.stats.tov,
+        pf: home.stats.pf,
+      },
       awayTeam: away.teamName,
       awayId: away.teamId,
       awayScore: away.stats.points,
       awayConf: away.conference,
+      awayStats: {
+        fgm: away.stats.fgm,
+        fga: away.stats.fga,
+        tpm: away.stats.tpm,
+        tpa: away.stats.tpa,
+        ftm: away.stats.ftm,
+        fta: away.stats.fta,
+        orb: away.stats.orb,
+        drb: away.stats.drb,
+        trb: away.stats.trb,
+        ast: away.stats.ast,
+        stl: away.stats.stl,
+        blk: away.stats.blk,
+        tov: away.stats.tov,
+        pf: away.stats.pf,
+      },
       isConferenceGame: game.isConferenceGame,
     });
 
