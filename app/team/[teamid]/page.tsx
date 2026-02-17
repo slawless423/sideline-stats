@@ -710,7 +710,7 @@ export default async function TeamPage({
               <thead style={{ position: "sticky", top: 0, background: ACCENT_LIGHT, zIndex: 1 }}>
                 <tr>
                   <th style={S.th}>Date</th>
-                  <th style={S.th}>Opponent Rank</th>
+                  <th style={S.th}>Opponent <span style={{ fontWeight: 600, fontSize: 12 }}>Rank</span></th>
                   <th style={S.th}>Loc</th>
                   <th style={S.th}>Result</th>
                   <th style={S.thRight}>Score</th>
@@ -732,7 +732,7 @@ export default async function TeamPage({
                       <td style={S.td}>{new Date(g.date).toLocaleDateString("en-US", { month: "numeric", day: "numeric" })}</td>
                       <td style={S.td}>
                         {isHome ? "vs" : "@"} {opp}
-                        {oppRank && <span style={{ ...S.rank, marginLeft: 4 }}>{oppRank}</span>}
+                        {oppRank && <span style={{ marginLeft: 4, fontWeight: 600, color: "#111" }}>{oppRank}</span>}
                       </td>
                       <td style={S.td}>{loc}</td>
                       <td style={{ ...S.td, fontWeight: 700, color: won ? "#16a34a" : "#dc2626" }}>{won ? "W" : "L"}</td>
