@@ -748,6 +748,74 @@ export default async function TeamPage({
         </div>
       </div>
 
+      {/* SEASON TOTALS */}
+      {teamStats && (
+        <>
+          <div style={{ ...S.sectionTitle, marginTop: 32 }}>Season Totals</div>
+          <table style={S.table}>
+            <thead>
+              <tr>
+                <th style={S.th}>Stat</th>
+                <th style={S.thRight}>Team</th>
+                <th style={S.thRight}>Opponent</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style={S.td}>Points</td>
+                <td style={S.tdRight}>{teamStats.points.toLocaleString()}</td>
+                <td style={S.tdRight}>{teamStats.opp_points.toLocaleString()}</td>
+              </tr>
+              <tr>
+                <td style={S.td}>Field Goals (M-A)</td>
+                <td style={S.tdRight}>{teamStats.fgm}-{teamStats.fga}</td>
+                <td style={S.tdRight}>{teamStats.opp_fgm}-{teamStats.opp_fga}</td>
+              </tr>
+              <tr>
+                <td style={S.td}>3-Pointers (M-A)</td>
+                <td style={S.tdRight}>{teamStats.tpm}-{teamStats.tpa}</td>
+                <td style={S.tdRight}>{teamStats.opp_tpm}-{teamStats.opp_tpa}</td>
+              </tr>
+              <tr>
+                <td style={S.td}>Free Throws (M-A)</td>
+                <td style={S.tdRight}>{teamStats.ftm}-{teamStats.fta}</td>
+                <td style={S.tdRight}>{teamStats.opp_ftm}-{teamStats.opp_fta}</td>
+              </tr>
+              <tr>
+                <td style={S.td}>Rebounds</td>
+                <td style={S.tdRight}>{teamStats.trb}</td>
+                <td style={S.tdRight}>{teamStats.opp_trb}</td>
+              </tr>
+              <tr>
+                <td style={S.td}>Assists</td>
+                <td style={S.tdRight}>{teamStats.ast}</td>
+                <td style={S.tdRight}>{teamStats.opp_ast}</td>
+              </tr>
+              <tr>
+                <td style={S.td}>Steals</td>
+                <td style={S.tdRight}>{teamStats.stl}</td>
+                <td style={S.tdRight}>{teamStats.opp_stl}</td>
+              </tr>
+              <tr>
+                <td style={S.td}>Blocks</td>
+                <td style={S.tdRight}>{teamStats.blk}</td>
+                <td style={S.tdRight}>{teamStats.opp_blk}</td>
+              </tr>
+              <tr>
+                <td style={S.td}>Turnovers</td>
+                <td style={S.tdRight}>{teamStats.tov}</td>
+                <td style={S.tdRight}>{teamStats.opp_tov}</td>
+              </tr>
+              <tr>
+                <td style={S.td}>Personal Fouls</td>
+                <td style={S.tdRight}>{teamStats.pf}</td>
+                <td style={S.tdRight}>{teamStats.opp_pf}</td>
+              </tr>
+            </tbody>
+          </table>
+        </>
+      )}
+
       <div style={{ marginTop: 24, fontSize: 11, color: "#aaa", textAlign: "center" }}>
         womens-kenpom • {updatedDate ?? ""}
       </div>
