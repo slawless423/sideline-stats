@@ -304,64 +304,80 @@ async function loadKnownGameIds() {
   }
 }
 
-// Save updated game IDs cache
-async function saveKnownGameIds(gameIds) {
+// Save successfully parsed game IDs to cache
+// IMPORTANT: Only call this with games we actually parsed successfully
+// Never add game IDs just from scoreboards - only add after successful boxscore parse
+async function saveKnownGameIds(newlyParsedIds) {
   try {
     const data = await fs.readFile("public/data/games_cache.json", "utf8");
     const parsed = JSON.parse(data);
     const existingIds = Array.isArray(parsed.game_ids) ? parsed.game_ids : [];
-    const updatedIds = [...new Set([...existingIds, ...gameIds])];
-    
+    const updatedIds = [...new Set([...existingIds, ...newlyParsedIds])];
+
     await fs.writeFile(
       "public/data/games_cache.json",
-      JSON.stringify({ ...parsed, game_ids: updatedIds }, null, 2),
+      JSON.stringify({ ...parsed, game_ids: updatedIds, total_games: updatedIds.length }, null, 2),
       "utf8"
     );
+    console.log(`Cache updated: ${updatedIds.length} total parsed games`);
   } catch {
     await fs.writeFile(
       "public/data/games_cache.json",
-      JSON.stringify({ game_ids: [...gameIds] }, null, 2),
+      JSON.stringify({ game_ids: [...newlyParsedIds], total_games: newlyParsedIds.length }, null, 2),
       "utf8"
     );
   }
 }
 
 async function main() {
-  // Figure out which date(s) to fetch
-  // Fetch yesterday AND the day before to catch any late updates
   const today = new Date();
-  const yesterday = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate() - 1));
-  const yesterdayStr = fmtDate(yesterday);
 
-  console.log(`Fetching games from ${yesterdayStr}...`);
+  // IMPORTANT: Check YESTERDAY and TWO DAYS AGO
+  // Why? Games are listed in the morning scoreboard BEFORE they're played.
+  // If our script runs at 6 AM EST and games tip off at 7 PM EST,
+  // the game IDs appear in yesterday's scoreboard but boxscores aren't ready yet.
+  // By checking 2 days back, we always catch evening games from the day before.
+  const datesToCheck = [
+    fmtDate(new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate() - 1))),
+    fmtDate(new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate() - 2))),
+  ];
 
-  // Load existing team data and known game IDs
+  console.log(`Checking dates: ${datesToCheck.join(", ")}`);
+
+  // Load existing team data
   const teamAgg = await loadExistingTeamAgg();
+
+  // CRITICAL: knownGameIds = games we SUCCESSFULLY PARSED (not just scheduled)
+  // This prevents us from skipping evening games that appeared in the scoreboard
+  // before they were actually played
   const knownGameIds = await loadKnownGameIds();
+  console.log(`Already have ${knownGameIds.size} successfully parsed games in cache`);
 
-  console.log(`Already have ${knownGameIds.size} games in cache`);
+  // Collect all game IDs from both dates
+  const allGameIds = new Set();
 
-  // Fetch yesterday's scoreboard
-  const [Y, M, D] = yesterdayStr.split("-");
-  const scoreboardPath = `/scoreboard/basketball-women/d1/${Y}/${M}/${D}/all-conf`;
+  for (const dateStr of datesToCheck) {
+    const [Y, M, D] = dateStr.split("-");
+    const scoreboardPath = `/scoreboard/basketball-women/d1/${Y}/${M}/${D}/all-conf`;
 
-  let scoreboard;
-  try {
-    scoreboard = await fetchJson(scoreboardPath);
-  } catch (e) {
-    console.error("Failed to fetch scoreboard:", e.message);
-    process.exit(1);
+    try {
+      const scoreboard = await fetchJson(scoreboardPath);
+      const gameIds = extractGameIds(scoreboard);
+      console.log(`Found ${gameIds.length} games on ${dateStr}`);
+      gameIds.forEach(gid => allGameIds.add(gid));
+    } catch (e) {
+      console.error(`Failed to fetch scoreboard for ${dateStr}:`, e.message);
+    }
   }
 
-  const allGameIds = extractGameIds(scoreboard);
-  // Only process games we haven't seen before
-  const newGameIds = allGameIds.filter(gid => !knownGameIds.has(gid));
+  // Only process games we haven't successfully parsed yet
+  const newGameIds = [...allGameIds].filter(gid => !knownGameIds.has(gid));
 
-  console.log(`Found ${allGameIds.length} games on ${yesterdayStr}`);
+  console.log(`Total unique games found: ${allGameIds.size}`);
   console.log(`New games to process: ${newGameIds.length}`);
 
   if (newGameIds.length === 0) {
-    console.log("No new games to process - ratings already up to date!");
+    console.log("No new games found - ratings already up to date!");
     process.exit(0);
   }
 
