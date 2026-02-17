@@ -587,7 +587,7 @@ export default async function TeamPage({
         <div>
           {ff ? (
             <>
-              <div style={S.sectionTitle}>Scouting Report</div>
+              <div style={S.sectionTitle}>Team Scouting Report</div>
               <table style={S.table}>
                 <thead>
                   <tr>
@@ -658,7 +658,7 @@ export default async function TeamPage({
                     defRank={rankOf(allTeamStats, ff.def.ft, (s) => calcFourFactors(s).def.ft, false)}
                   />
 
-                  <SectionHeader title="Style" />
+                  <SectionHeader title="Other Stats" />
                   <StatRow
                     label="3PA/FGA"
                     offVal={ff.off.threePaRate}
@@ -667,8 +667,6 @@ export default async function TeamPage({
                     offRank={rankOf(allTeamStats, ff.off.threePaRate, (s) => calcFourFactors(s).off.threePaRate, true)}
                     defRank={rankOf(allTeamStats, ff.def.threePaRate, (s) => calcFourFactors(s).def.threePaRate, false)}
                   />
-
-                  <SectionHeader title="Misc" />
                   <StatRow
                     label="Block%"
                     offVal={ff.off.blk}
@@ -712,7 +710,7 @@ export default async function TeamPage({
               <thead style={{ position: "sticky", top: 0, background: ACCENT_LIGHT, zIndex: 1 }}>
                 <tr>
                   <th style={S.th}>Date</th>
-                  <th style={S.th}>Opponent</th>
+                  <th style={S.th}>Opponent Rank</th>
                   <th style={S.th}>Loc</th>
                   <th style={S.th}>Result</th>
                   <th style={S.thRight}>Score</th>
@@ -782,9 +780,14 @@ export default async function TeamPage({
                 <td style={S.tdRight}>{teamStats.opp_ftm}-{teamStats.opp_fta}</td>
               </tr>
               <tr>
-                <td style={S.td}>Rebounds</td>
-                <td style={S.tdRight}>{teamStats.trb}</td>
-                <td style={S.tdRight}>{teamStats.opp_trb}</td>
+                <td style={S.td}>Offensive Rebounds</td>
+                <td style={S.tdRight}>{teamStats.orb}</td>
+                <td style={S.tdRight}>{teamStats.opp_orb}</td>
+              </tr>
+              <tr>
+                <td style={S.td}>Defensive Rebounds</td>
+                <td style={S.tdRight}>{teamStats.drb}</td>
+                <td style={S.tdRight}>{teamStats.opp_drb}</td>
               </tr>
               <tr>
                 <td style={S.td}>Assists</td>
