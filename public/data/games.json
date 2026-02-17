@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-02-16T18:29:22.349Z",
+  "generated_at_utc": "2026-02-17T13:56:54.465Z",
   "games": [
     {
       "gameId": "6515920",
@@ -47986,10 +47986,70 @@
       "date": "2026-02-16",
       "homeTeam": "Nebraska",
       "homeId": "2273",
-      "homeScore": 41,
+      "homeScore": 67,
       "awayTeam": "Iowa",
       "awayId": "2165",
+      "awayScore": 80
+    },
+    {
+      "gameId": "6519445",
+      "date": "2026-02-16",
+      "homeTeam": "Oklahoma St.",
+      "homeId": "222",
+      "homeScore": 73,
+      "awayTeam": "Utah",
+      "awayId": "2025",
+      "awayScore": 55
+    },
+    {
+      "gameId": "6589909",
+      "date": "2026-02-16",
+      "homeTeam": "South Carolina St.",
+      "homeId": "271",
+      "homeScore": 47,
+      "awayTeam": "Morgan St.",
+      "awayId": "2596",
+      "awayScore": 73
+    },
+    {
+      "gameId": "6519727",
+      "date": "2026-02-16",
+      "homeTeam": "Saint Mary's (CA)",
+      "homeId": "1992",
+      "homeScore": 86,
+      "awayTeam": "Seattle U",
+      "awayId": "1935",
       "awayScore": 59
+    },
+    {
+      "gameId": "6533046",
+      "date": "2026-02-16",
+      "homeTeam": "George Mason",
+      "homeId": "2142",
+      "homeScore": 46,
+      "awayTeam": "Richmond",
+      "awayId": "938",
+      "awayScore": 37
+    },
+    {
+      "gameId": "6519137",
+      "date": "2026-02-16",
+      "homeTeam": "Northwestern St.",
+      "homeId": "2613",
+      "homeScore": 60,
+      "awayTeam": "East Texas A&M",
+      "awayId": "1097",
+      "awayScore": 51
+    },
+    {
+      "gameId": "6516345",
+      "date": "2026-02-16",
+      "homeTeam": "Arkansas",
+      "homeId": "1183",
+      "homeScore": 66,
+      "awayTeam": "Mississippi St.",
+      "awayId": "2199",
+      "awayScore": 75
     }
   ]
 }
