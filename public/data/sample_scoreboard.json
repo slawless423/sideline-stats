@@ -1,0 +1,2072 @@
+{
+  "inputMD5Sum": "4877d001727f461bfe76dea1de5aabb6",
+  "instanceId": "d41d8cd98f00b204e9800998ecf8427e",
+  "updated_at": "2026-02-17 18:07:29",
+  "games": [
+    {
+      "game": {
+        "gameID": "6517114",
+        "away": {
+          "score": "78",
+          "names": {
+            "char6": "PITT",
+            "short": "Pittsburgh",
+            "seo": "pittsburgh",
+            "full": ""
+          },
+          "winner": false,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "acc"
+            }
+          ]
+        },
+        "finalMessage": "FINAL",
+        "bracketRound": "",
+        "title": "Pittsburgh SMU",
+        "contestName": "",
+        "url": "/game/6517114",
+        "network": "",
+        "home": {
+          "score": "79",
+          "names": {
+            "char6": "SMU",
+            "short": "SMU",
+            "seo": "smu",
+            "full": ""
+          },
+          "winner": true,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "acc"
+            }
+          ]
+        },
+        "liveVideoEnabled": false,
+        "startTime": "12:00 PM ET",
+        "startTimeEpoch": "1771174800",
+        "bracketId": "",
+        "gameState": "final",
+        "startDate": "02/15/2026",
+        "currentPeriod": "FINAL",
+        "videoState": "",
+        "bracketRegion": "",
+        "contestClock": "0:00"
+      }
+    },
+    {
+      "game": {
+        "gameID": "6518029",
+        "away": {
+          "score": "74",
+          "names": {
+            "char6": "VANDY",
+            "short": "Vanderbilt",
+            "seo": "vanderbilt",
+            "full": ""
+          },
+          "winner": false,
+          "seed": "",
+          "description": "",
+          "rank": "5",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "sec"
+            }
+          ]
+        },
+        "finalMessage": "FINAL",
+        "bracketRound": "",
+        "title": "Vanderbilt Georgia",
+        "contestName": "",
+        "url": "/game/6518029",
+        "network": "",
+        "home": {
+          "score": "76",
+          "names": {
+            "char6": "UGA",
+            "short": "Georgia",
+            "seo": "georgia",
+            "full": ""
+          },
+          "winner": true,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "sec"
+            }
+          ]
+        },
+        "liveVideoEnabled": false,
+        "startTime": "12:00 PM ET",
+        "startTimeEpoch": "1771174800",
+        "bracketId": "",
+        "gameState": "final",
+        "startDate": "02/15/2026",
+        "currentPeriod": "FINAL",
+        "videoState": "",
+        "bracketRegion": "",
+        "contestClock": "0:00"
+      }
+    },
+    {
+      "game": {
+        "gameID": "6519163",
+        "away": {
+          "score": "82",
+          "names": {
+            "char6": "MIAMI",
+            "short": "Miami (FL)",
+            "seo": "miami-fl",
+            "full": ""
+          },
+          "winner": true,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "acc"
+            }
+          ]
+        },
+        "finalMessage": "FINAL",
+        "bracketRound": "",
+        "title": "Miami (FL) Boston College",
+        "contestName": "",
+        "url": "/game/6519163",
+        "network": "",
+        "home": {
+          "score": "70",
+          "names": {
+            "char6": "BC",
+            "short": "Boston College",
+            "seo": "boston-college",
+            "full": ""
+          },
+          "winner": false,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "acc"
+            }
+          ]
+        },
+        "liveVideoEnabled": false,
+        "startTime": "12:00 PM ET",
+        "startTimeEpoch": "1771174800",
+        "bracketId": "",
+        "gameState": "final",
+        "startDate": "02/15/2026",
+        "currentPeriod": "FINAL",
+        "videoState": "",
+        "bracketRegion": "",
+        "contestClock": "0:00"
+      }
+    },
+    {
+      "game": {
+        "gameID": "6515960",
+        "away": {
+          "score": "68",
+          "names": {
+            "char6": "UNC",
+            "short": "North Carolina",
+            "seo": "north-carolina",
+            "full": ""
+          },
+          "winner": false,
+          "seed": "",
+          "description": "",
+          "rank": "21",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "acc"
+            }
+          ]
+        },
+        "finalMessage": "FINAL",
+        "bracketRound": "",
+        "title": "North Carolina Duke",
+        "contestName": "",
+        "url": "/game/6515960",
+        "network": "",
+        "home": {
+          "score": "72",
+          "names": {
+            "char6": "DUKE",
+            "short": "Duke",
+            "seo": "duke",
+            "full": ""
+          },
+          "winner": true,
+          "seed": "",
+          "description": "",
+          "rank": "11",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "acc"
+            }
+          ]
+        },
+        "liveVideoEnabled": false,
+        "startTime": "1:00 PM ET",
+        "startTimeEpoch": "1771178400",
+        "bracketId": "",
+        "gameState": "final",
+        "startDate": "02/15/2026",
+        "currentPeriod": "FINAL",
+        "videoState": "",
+        "bracketRegion": "",
+        "contestClock": "0:00"
+      }
+    },
+    {
+      "game": {
+        "gameID": "6515987",
+        "away": {
+          "score": "69",
+          "names": {
+            "char6": "YSU",
+            "short": "Youngstown St.",
+            "seo": "youngstown-st",
+            "full": ""
+          },
+          "winner": true,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "horizon"
+            }
+          ]
+        },
+        "finalMessage": "FINAL",
+        "bracketRound": "",
+        "title": "Youngstown St. IU Indy",
+        "contestName": "",
+        "url": "/game/6515987",
+        "network": "",
+        "home": {
+          "score": "65",
+          "names": {
+            "char6": "IUINDY",
+            "short": "IU Indy",
+            "seo": "iu-indy",
+            "full": ""
+          },
+          "winner": false,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "horizon"
+            }
+          ]
+        },
+        "liveVideoEnabled": false,
+        "startTime": "1:00 PM ET",
+        "startTimeEpoch": "1771178400",
+        "bracketId": "",
+        "gameState": "final",
+        "startDate": "02/15/2026",
+        "currentPeriod": "FINAL",
+        "videoState": "",
+        "bracketRegion": "",
+        "contestClock": "0:00"
+      }
+    },
+    {
+      "game": {
+        "gameID": "6516764",
+        "away": {
+          "score": "60",
+          "names": {
+            "char6": "STONY",
+            "short": "Stony Brook",
+            "seo": "stony-brook",
+            "full": ""
+          },
+          "winner": false,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "caa"
+            }
+          ]
+        },
+        "finalMessage": "FINAL",
+        "bracketRound": "",
+        "title": "Stony Brook Northeastern",
+        "contestName": "",
+        "url": "/game/6516764",
+        "network": "",
+        "home": {
+          "score": "73",
+          "names": {
+            "char6": "NOEAST",
+            "short": "Northeastern",
+            "seo": "northeastern",
+            "full": ""
+          },
+          "winner": true,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "caa"
+            }
+          ]
+        },
+        "liveVideoEnabled": false,
+        "startTime": "1:00 PM ET",
+        "startTimeEpoch": "1771178400",
+        "bracketId": "",
+        "gameState": "final",
+        "startDate": "02/15/2026",
+        "currentPeriod": "FINAL",
+        "videoState": "",
+        "bracketRegion": "",
+        "contestClock": "0:00"
+      }
+    },
+    {
+      "game": {
+        "gameID": "6516853",
+        "away": {
+          "score": "54",
+          "names": {
+            "char6": "CAMPBL",
+            "short": "Campbell",
+            "seo": "campbell",
+            "full": ""
+          },
+          "winner": true,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "caa"
+            }
+          ]
+        },
+        "finalMessage": "FINAL",
+        "bracketRound": "",
+        "title": "Campbell UNCW",
+        "contestName": "",
+        "url": "/game/6516853",
+        "network": "",
+        "home": {
+          "score": "52",
+          "names": {
+            "char6": "UNCW",
+            "short": "UNCW",
+            "seo": "unc-wilmington",
+            "full": ""
+          },
+          "winner": false,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "caa"
+            }
+          ]
+        },
+        "liveVideoEnabled": false,
+        "startTime": "1:00 PM ET",
+        "startTimeEpoch": "1771178400",
+        "bracketId": "",
+        "gameState": "final",
+        "startDate": "02/15/2026",
+        "currentPeriod": "FINAL",
+        "videoState": "",
+        "bracketRegion": "",
+        "contestClock": "0:00"
+      }
+    },
+    {
+      "game": {
+        "gameID": "6518971",
+        "away": {
+          "score": "60",
+          "names": {
+            "char6": "HOFSTR",
+            "short": "Hofstra",
+            "seo": "hofstra",
+            "full": ""
+          },
+          "winner": true,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "caa"
+            }
+          ]
+        },
+        "finalMessage": "FINAL",
+        "bracketRound": "",
+        "title": "Hofstra N.C. A&T",
+        "contestName": "",
+        "url": "/game/6518971",
+        "network": "",
+        "home": {
+          "score": "51",
+          "names": {
+            "char6": "NC A&T",
+            "short": "N.C. A&T",
+            "seo": "nc-at",
+            "full": ""
+          },
+          "winner": false,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "caa"
+            }
+          ]
+        },
+        "liveVideoEnabled": false,
+        "startTime": "1:00 PM ET",
+        "startTimeEpoch": "1771178400",
+        "bracketId": "",
+        "gameState": "final",
+        "startDate": "02/15/2026",
+        "currentPeriod": "FINAL",
+        "videoState": "",
+        "bracketRegion": "",
+        "contestClock": "0:00"
+      }
+    },
+    {
+      "game": {
+        "gameID": "6519973",
+        "away": {
+          "score": "70",
+          "names": {
+            "char6": "TOWSON",
+            "short": "Towson",
+            "seo": "towson",
+            "full": ""
+          },
+          "winner": false,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "caa"
+            }
+          ]
+        },
+        "finalMessage": "FINAL",
+        "bracketRound": "",
+        "title": "Towson William & Mary",
+        "contestName": "",
+        "url": "/game/6519973",
+        "network": "",
+        "home": {
+          "score": "75",
+          "names": {
+            "char6": "WM&MRY",
+            "short": "William & Mary",
+            "seo": "william-mary",
+            "full": ""
+          },
+          "winner": true,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "caa"
+            }
+          ]
+        },
+        "liveVideoEnabled": false,
+        "startTime": "1:00 PM ET",
+        "startTimeEpoch": "1771178400",
+        "bracketId": "",
+        "gameState": "final",
+        "startDate": "02/15/2026",
+        "currentPeriod": "FINAL",
+        "videoState": "",
+        "bracketRegion": "",
+        "contestClock": "0:00"
+      }
+    },
+    {
+      "game": {
+        "gameID": "6516813",
+        "away": {
+          "score": "75",
+          "names": {
+            "char6": "UVA",
+            "short": "Virginia",
+            "seo": "virginia",
+            "full": ""
+          },
+          "winner": true,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "acc"
+            }
+          ]
+        },
+        "finalMessage": "FINAL",
+        "bracketRound": "",
+        "title": "Virginia Stanford",
+        "contestName": "",
+        "url": "/game/6516813",
+        "network": "",
+        "home": {
+          "score": "69",
+          "names": {
+            "char6": "STAN",
+            "short": "Stanford",
+            "seo": "stanford",
+            "full": ""
+          },
+          "winner": false,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "acc"
+            }
+          ]
+        },
+        "liveVideoEnabled": false,
+        "startTime": "2:00 PM ET",
+        "startTimeEpoch": "1771182000",
+        "bracketId": "",
+        "gameState": "final",
+        "startDate": "02/15/2026",
+        "currentPeriod": "FINAL",
+        "videoState": "",
+        "bracketRegion": "",
+        "contestClock": "0:00"
+      }
+    },
+    {
+      "game": {
+        "gameID": "6516905",
+        "away": {
+          "score": "57",
+          "names": {
+            "char6": "MISS",
+            "short": "Ole Miss",
+            "seo": "ole-miss",
+            "full": ""
+          },
+          "winner": false,
+          "seed": "",
+          "description": "",
+          "rank": "14",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "sec"
+            }
+          ]
+        },
+        "finalMessage": "FINAL",
+        "bracketRound": "",
+        "title": "Ole Miss Kentucky",
+        "contestName": "",
+        "url": "/game/6516905",
+        "network": "",
+        "home": {
+          "score": "74",
+          "names": {
+            "char6": "UK",
+            "short": "Kentucky",
+            "seo": "kentucky",
+            "full": ""
+          },
+          "winner": true,
+          "seed": "",
+          "description": "",
+          "rank": "18",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "sec"
+            }
+          ]
+        },
+        "liveVideoEnabled": false,
+        "startTime": "2:00 PM ET",
+        "startTimeEpoch": "1771182000",
+        "bracketId": "",
+        "gameState": "final",
+        "startDate": "02/15/2026",
+        "currentPeriod": "FINAL",
+        "videoState": "",
+        "bracketRegion": "",
+        "contestClock": "0:00"
+      }
+    },
+    {
+      "game": {
+        "gameID": "6516977",
+        "away": {
+          "score": "76",
+          "names": {
+            "char6": "MD",
+            "short": "Maryland",
+            "seo": "maryland",
+            "full": ""
+          },
+          "winner": true,
+          "seed": "",
+          "description": "",
+          "rank": "20",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "big-ten"
+            }
+          ]
+        },
+        "finalMessage": "FINAL",
+        "bracketRound": "",
+        "title": "Maryland Ohio St.",
+        "contestName": "",
+        "url": "/game/6516977",
+        "network": "",
+        "home": {
+          "score": "75",
+          "names": {
+            "char6": "OHIOST",
+            "short": "Ohio St.",
+            "seo": "ohio-st",
+            "full": ""
+          },
+          "winner": false,
+          "seed": "",
+          "description": "",
+          "rank": "8",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "big-ten"
+            }
+          ]
+        },
+        "liveVideoEnabled": false,
+        "startTime": "2:00 PM ET",
+        "startTimeEpoch": "1771182000",
+        "bracketId": "",
+        "gameState": "final",
+        "startDate": "02/15/2026",
+        "currentPeriod": "FINAL",
+        "videoState": "",
+        "bracketRegion": "",
+        "contestClock": "0:00"
+      }
+    },
+    {
+      "game": {
+        "gameID": "6517648",
+        "away": {
+          "score": "57",
+          "names": {
+            "char6": "C OF C",
+            "short": "Col. of Charleston",
+            "seo": "col-of-charleston",
+            "full": ""
+          },
+          "winner": false,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "caa"
+            }
+          ]
+        },
+        "finalMessage": "FINAL",
+        "bracketRound": "",
+        "title": "Col. of Charleston Monmouth",
+        "contestName": "",
+        "url": "/game/6517648",
+        "network": "",
+        "home": {
+          "score": "69",
+          "names": {
+            "char6": "MONMTH",
+            "short": "Monmouth",
+            "seo": "monmouth",
+            "full": ""
+          },
+          "winner": true,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "caa"
+            }
+          ]
+        },
+        "liveVideoEnabled": false,
+        "startTime": "2:00 PM ET",
+        "startTimeEpoch": "1771182000",
+        "bracketId": "",
+        "gameState": "final",
+        "startDate": "02/15/2026",
+        "currentPeriod": "FINAL",
+        "videoState": "",
+        "bracketRegion": "",
+        "contestClock": "0:00"
+      }
+    },
+    {
+      "game": {
+        "gameID": "6517722",
+        "away": {
+          "score": "72",
+          "names": {
+            "char6": "KAN ST",
+            "short": "Kansas St.",
+            "seo": "kansas-st",
+            "full": ""
+          },
+          "winner": false,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "big-12"
+            }
+          ]
+        },
+        "finalMessage": "FINAL",
+        "bracketRound": "",
+        "title": "Kansas St. Iowa St.",
+        "contestName": "",
+        "url": "/game/6517722",
+        "network": "",
+        "home": {
+          "score": "76",
+          "names": {
+            "char6": "IOWAST",
+            "short": "Iowa St.",
+            "seo": "iowa-st",
+            "full": ""
+          },
+          "winner": true,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "big-12"
+            }
+          ]
+        },
+        "liveVideoEnabled": false,
+        "startTime": "2:00 PM ET",
+        "startTimeEpoch": "1771182000",
+        "bracketId": "",
+        "gameState": "final",
+        "startDate": "02/15/2026",
+        "currentPeriod": "FINAL",
+        "videoState": "",
+        "bracketRegion": "",
+        "contestClock": "0:00"
+      }
+    },
+    {
+      "game": {
+        "gameID": "6518601",
+        "away": {
+          "score": "87",
+          "names": {
+            "char6": "ND ST",
+            "short": "North Dakota St.",
+            "seo": "north-dakota-st",
+            "full": ""
+          },
+          "winner": true,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "summit-league"
+            }
+          ]
+        },
+        "finalMessage": "FINAL",
+        "bracketRound": "",
+        "title": "North Dakota St. North Dakota",
+        "contestName": "",
+        "url": "/game/6518601",
+        "network": "",
+        "home": {
+          "score": "51",
+          "names": {
+            "char6": "NO DAK",
+            "short": "North Dakota",
+            "seo": "north-dakota",
+            "full": ""
+          },
+          "winner": false,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "summit-league"
+            }
+          ]
+        },
+        "liveVideoEnabled": false,
+        "startTime": "2:00 PM ET",
+        "startTimeEpoch": "1771182000",
+        "bracketId": "",
+        "gameState": "final",
+        "startDate": "02/15/2026",
+        "currentPeriod": "FINAL",
+        "videoState": "",
+        "bracketRegion": "",
+        "contestClock": "0:00"
+      }
+    },
+    {
+      "game": {
+        "gameID": "6519398",
+        "away": {
+          "score": "64",
+          "names": {
+            "char6": "CLEM",
+            "short": "Clemson",
+            "seo": "clemson",
+            "full": ""
+          },
+          "winner": false,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "acc"
+            }
+          ]
+        },
+        "finalMessage": "FINAL",
+        "bracketRound": "",
+        "title": "Clemson Syracuse",
+        "contestName": "",
+        "url": "/game/6519398",
+        "network": "",
+        "home": {
+          "score": "68",
+          "names": {
+            "char6": "SYR",
+            "short": "Syracuse",
+            "seo": "syracuse",
+            "full": ""
+          },
+          "winner": true,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "acc"
+            }
+          ]
+        },
+        "liveVideoEnabled": false,
+        "startTime": "2:00 PM ET",
+        "startTimeEpoch": "1771182000",
+        "bracketId": "",
+        "gameState": "final",
+        "startDate": "02/15/2026",
+        "currentPeriod": "FINAL",
+        "videoState": "",
+        "bracketRegion": "",
+        "contestClock": "0:00"
+      }
+    },
+    {
+      "game": {
+        "gameID": "6529297",
+        "away": {
+          "score": "93",
+          "names": {
+            "char6": "BAYLOR",
+            "short": "Baylor",
+            "seo": "baylor",
+            "full": ""
+          },
+          "winner": true,
+          "seed": "",
+          "description": "",
+          "rank": "12",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "big-12"
+            }
+          ]
+        },
+        "finalMessage": "FINAL",
+        "bracketRound": "",
+        "title": "Baylor UCF",
+        "contestName": "",
+        "url": "/game/6529297",
+        "network": "",
+        "home": {
+          "score": "63",
+          "names": {
+            "char6": "UCF",
+            "short": "UCF",
+            "seo": "ucf",
+            "full": ""
+          },
+          "winner": false,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "big-12"
+            }
+          ]
+        },
+        "liveVideoEnabled": false,
+        "startTime": "2:00 PM ET",
+        "startTimeEpoch": "1771182000",
+        "bracketId": "",
+        "gameState": "final",
+        "startDate": "02/15/2026",
+        "currentPeriod": "FINAL",
+        "videoState": "",
+        "bracketRegion": "",
+        "contestClock": "0:00"
+      }
+    },
+    {
+      "game": {
+        "gameID": "6531952",
+        "away": {
+          "score": "77",
+          "names": {
+            "char6": "UIC",
+            "short": "UIC",
+            "seo": "ill-chicago",
+            "full": ""
+          },
+          "winner": false,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "mvc"
+            }
+          ]
+        },
+        "finalMessage": "FINAL",
+        "bracketRound": "",
+        "title": "UIC Murray St.",
+        "contestName": "",
+        "url": "/game/6531952",
+        "network": "",
+        "home": {
+          "score": "79",
+          "names": {
+            "char6": "MURRAY",
+            "short": "Murray St.",
+            "seo": "murray-st",
+            "full": ""
+          },
+          "winner": true,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "mvc"
+            }
+          ]
+        },
+        "liveVideoEnabled": false,
+        "startTime": "2:00 PM ET",
+        "startTimeEpoch": "1771182000",
+        "bracketId": "",
+        "gameState": "final",
+        "startDate": "02/15/2026",
+        "currentPeriod": "FINAL",
+        "videoState": "",
+        "bracketRegion": "",
+        "contestClock": "0:00"
+      }
+    },
+    {
+      "game": {
+        "gameID": "6516660",
+        "away": {
+          "score": "65",
+          "names": {
+            "char6": "TEXAS",
+            "short": "Texas",
+            "seo": "texas",
+            "full": ""
+          },
+          "winner": true,
+          "seed": "",
+          "description": "",
+          "rank": "4",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "sec"
+            }
+          ]
+        },
+        "finalMessage": "FINAL",
+        "bracketRound": "",
+        "title": "Texas Tennessee",
+        "contestName": "",
+        "url": "/game/6516660",
+        "network": "",
+        "home": {
+          "score": "63",
+          "names": {
+            "char6": "TENN",
+            "short": "Tennessee",
+            "seo": "tennessee",
+            "full": ""
+          },
+          "winner": false,
+          "seed": "",
+          "description": "",
+          "rank": "22",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "sec"
+            }
+          ]
+        },
+        "liveVideoEnabled": false,
+        "startTime": "3:00 PM ET",
+        "startTimeEpoch": "1771185600",
+        "bracketId": "",
+        "gameState": "final",
+        "startDate": "02/15/2026",
+        "currentPeriod": "FINAL",
+        "videoState": "",
+        "bracketRegion": "",
+        "contestClock": "0:00"
+      }
+    },
+    {
+      "game": {
+        "gameID": "6517465",
+        "away": {
+          "score": "48",
+          "names": {
+            "char6": "IND",
+            "short": "Indiana",
+            "seo": "indiana",
+            "full": ""
+          },
+          "winner": false,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "big-ten"
+            }
+          ]
+        },
+        "finalMessage": "FINAL",
+        "bracketRound": "",
+        "title": "Indiana UCLA",
+        "contestName": "",
+        "url": "/game/6517465",
+        "network": "",
+        "home": {
+          "score": "92",
+          "names": {
+            "char6": "UCLA",
+            "short": "UCLA",
+            "seo": "ucla",
+            "full": ""
+          },
+          "winner": true,
+          "seed": "",
+          "description": "",
+          "rank": "2",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "big-ten"
+            }
+          ]
+        },
+        "liveVideoEnabled": false,
+        "startTime": "3:00 PM ET",
+        "startTimeEpoch": "1771185600",
+        "bracketId": "",
+        "gameState": "final",
+        "startDate": "02/15/2026",
+        "currentPeriod": "FINAL",
+        "videoState": "",
+        "bracketRegion": "",
+        "contestClock": "0:00"
+      }
+    },
+    {
+      "game": {
+        "gameID": "6529525",
+        "away": {
+          "score": "37",
+          "names": {
+            "char6": "VALPO",
+            "short": "Valparaiso",
+            "seo": "valparaiso",
+            "full": ""
+          },
+          "winner": false,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "mvc"
+            }
+          ]
+        },
+        "finalMessage": "FINAL",
+        "bracketRound": "",
+        "title": "Valparaiso Belmont",
+        "contestName": "",
+        "url": "/game/6529525",
+        "network": "",
+        "home": {
+          "score": "77",
+          "names": {
+            "char6": "BELMNT",
+            "short": "Belmont",
+            "seo": "belmont",
+            "full": ""
+          },
+          "winner": true,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "mvc"
+            }
+          ]
+        },
+        "liveVideoEnabled": false,
+        "startTime": "3:00 PM ET",
+        "startTimeEpoch": "1771185600",
+        "bracketId": "",
+        "gameState": "final",
+        "startDate": "02/15/2026",
+        "currentPeriod": "FINAL",
+        "videoState": "",
+        "bracketRegion": "",
+        "contestClock": "0:00"
+      }
+    },
+    {
+      "game": {
+        "gameID": "6530963",
+        "away": {
+          "score": "73",
+          "names": {
+            "char6": "FRESNO",
+            "short": "Fresno St.",
+            "seo": "fresno-st",
+            "full": ""
+          },
+          "winner": true,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "mountain-west"
+            }
+          ]
+        },
+        "finalMessage": "FINAL",
+        "bracketRound": "",
+        "title": "Fresno St. Utah St.",
+        "contestName": "",
+        "url": "/game/6530963",
+        "network": "",
+        "home": {
+          "score": "59",
+          "names": {
+            "char6": "UT ST",
+            "short": "Utah St.",
+            "seo": "utah-st",
+            "full": ""
+          },
+          "winner": false,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "mountain-west"
+            }
+          ]
+        },
+        "liveVideoEnabled": false,
+        "startTime": "3:00 PM ET",
+        "startTimeEpoch": "1771185600",
+        "bracketId": "",
+        "gameState": "final",
+        "startDate": "02/15/2026",
+        "currentPeriod": "FINAL",
+        "videoState": "",
+        "bracketRegion": "",
+        "contestClock": "0:00"
+      }
+    },
+    {
+      "game": {
+        "gameID": "6515793",
+        "away": {
+          "score": "79",
+          "names": {
+            "char6": "OKLA",
+            "short": "Oklahoma",
+            "seo": "oklahoma",
+            "full": ""
+          },
+          "winner": true,
+          "seed": "",
+          "description": "",
+          "rank": "10",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "sec"
+            }
+          ]
+        },
+        "finalMessage": "FINAL",
+        "bracketRound": "",
+        "title": "Oklahoma Alabama",
+        "contestName": "",
+        "url": "/game/6515793",
+        "network": "",
+        "home": {
+          "score": "71",
+          "names": {
+            "char6": "ALA",
+            "short": "Alabama",
+            "seo": "alabama",
+            "full": ""
+          },
+          "winner": false,
+          "seed": "",
+          "description": "",
+          "rank": "23",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "sec"
+            }
+          ]
+        },
+        "liveVideoEnabled": false,
+        "startTime": "4:00 PM ET",
+        "startTimeEpoch": "1771189200",
+        "bracketId": "",
+        "gameState": "final",
+        "startDate": "02/15/2026",
+        "currentPeriod": "FINAL",
+        "videoState": "",
+        "bracketRegion": "",
+        "contestClock": "0:00"
+      }
+    },
+    {
+      "game": {
+        "gameID": "6516388",
+        "away": {
+          "score": "67",
+          "names": {
+            "char6": "NC ST",
+            "short": "NC State",
+            "seo": "north-carolina-st",
+            "full": ""
+          },
+          "winner": false,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "acc"
+            }
+          ]
+        },
+        "finalMessage": "FINAL",
+        "bracketRound": "",
+        "title": "NC State Notre Dame",
+        "contestName": "",
+        "url": "/game/6516388",
+        "network": "",
+        "home": {
+          "score": "79",
+          "names": {
+            "char6": "N DAME",
+            "short": "Notre Dame",
+            "seo": "notre-dame",
+            "full": ""
+          },
+          "winner": true,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "acc"
+            }
+          ]
+        },
+        "liveVideoEnabled": false,
+        "startTime": "4:00 PM ET",
+        "startTimeEpoch": "1771189200",
+        "bracketId": "",
+        "gameState": "final",
+        "startDate": "02/15/2026",
+        "currentPeriod": "FINAL",
+        "videoState": "",
+        "bracketRegion": "",
+        "contestClock": "0:00"
+      }
+    },
+    {
+      "game": {
+        "gameID": "6517611",
+        "away": {
+          "score": "65",
+          "names": {
+            "char6": "MICHST",
+            "short": "Michigan St.",
+            "seo": "michigan-st",
+            "full": ""
+          },
+          "winner": false,
+          "seed": "",
+          "description": "",
+          "rank": "13",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "big-ten"
+            }
+          ]
+        },
+        "finalMessage": "FINAL",
+        "bracketRound": "",
+        "title": "Michigan St. Michigan",
+        "contestName": "",
+        "url": "/game/6517611",
+        "network": "",
+        "home": {
+          "score": "86",
+          "names": {
+            "char6": "MICH",
+            "short": "Michigan",
+            "seo": "michigan",
+            "full": ""
+          },
+          "winner": true,
+          "seed": "",
+          "description": "",
+          "rank": "7",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "big-ten"
+            }
+          ]
+        },
+        "liveVideoEnabled": false,
+        "startTime": "4:00 PM ET",
+        "startTimeEpoch": "1771189200",
+        "bracketId": "",
+        "gameState": "final",
+        "startDate": "02/15/2026",
+        "currentPeriod": "FINAL",
+        "videoState": "",
+        "bracketRegion": "",
+        "contestClock": "0:00"
+      }
+    },
+    {
+      "game": {
+        "gameID": "6517886",
+        "away": {
+          "score": "71",
+          "names": {
+            "char6": "NW",
+            "short": "Northwestern",
+            "seo": "northwestern",
+            "full": ""
+          },
+          "winner": false,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "big-ten"
+            }
+          ]
+        },
+        "finalMessage": "FINAL",
+        "bracketRound": "",
+        "title": "Northwestern Penn St.",
+        "contestName": "",
+        "url": "/game/6517886",
+        "network": "",
+        "home": {
+          "score": "81",
+          "names": {
+            "char6": "PENNST",
+            "short": "Penn St.",
+            "seo": "penn-st",
+            "full": ""
+          },
+          "winner": true,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "big-ten"
+            }
+          ]
+        },
+        "liveVideoEnabled": false,
+        "startTime": "4:00 PM ET",
+        "startTimeEpoch": "1771189200",
+        "bracketId": "",
+        "gameState": "final",
+        "startDate": "02/15/2026",
+        "currentPeriod": "FINAL",
+        "videoState": "",
+        "bracketRegion": "",
+        "contestClock": "0:00"
+      }
+    },
+    {
+      "game": {
+        "gameID": "6529039",
+        "away": {
+          "score": "88",
+          "names": {
+            "char6": "ILL ST",
+            "short": "Illinois St.",
+            "seo": "illinois-st",
+            "full": ""
+          },
+          "winner": true,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "mvc"
+            }
+          ]
+        },
+        "finalMessage": "FINAL",
+        "bracketRound": "",
+        "title": "Illinois St. Evansville",
+        "contestName": "",
+        "url": "/game/6529039",
+        "network": "",
+        "home": {
+          "score": "75",
+          "names": {
+            "char6": "EVANS",
+            "short": "Evansville",
+            "seo": "evansville",
+            "full": ""
+          },
+          "winner": false,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "mvc"
+            }
+          ]
+        },
+        "liveVideoEnabled": false,
+        "startTime": "4:00 PM ET",
+        "startTimeEpoch": "1771189200",
+        "bracketId": "",
+        "gameState": "final",
+        "startDate": "02/15/2026",
+        "currentPeriod": "FINAL",
+        "videoState": "",
+        "bracketRegion": "",
+        "contestClock": "0:00"
+      }
+    },
+    {
+      "game": {
+        "gameID": "6517396",
+        "away": {
+          "score": "68",
+          "names": {
+            "char6": "VT",
+            "short": "Virginia Tech",
+            "seo": "virginia-tech",
+            "full": ""
+          },
+          "winner": true,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "acc"
+            }
+          ]
+        },
+        "finalMessage": "FINAL",
+        "bracketRound": "",
+        "title": "Virginia Tech California",
+        "contestName": "",
+        "url": "/game/6517396",
+        "network": "",
+        "home": {
+          "score": "58",
+          "names": {
+            "char6": "CAL",
+            "short": "California",
+            "seo": "california",
+            "full": ""
+          },
+          "winner": false,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "acc"
+            }
+          ]
+        },
+        "liveVideoEnabled": false,
+        "startTime": "5:00 PM ET",
+        "startTimeEpoch": "1771192800",
+        "bracketId": "",
+        "gameState": "final",
+        "startDate": "02/15/2026",
+        "currentPeriod": "FINAL",
+        "videoState": "",
+        "bracketRegion": "",
+        "contestClock": "0:00"
+      }
+    },
+    {
+      "game": {
+        "gameID": "6517565",
+        "away": {
+          "score": "74",
+          "names": {
+            "char6": "NOVA",
+            "short": "Villanova",
+            "seo": "villanova",
+            "full": ""
+          },
+          "winner": true,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "big-east"
+            }
+          ]
+        },
+        "finalMessage": "FINAL",
+        "bracketRound": "",
+        "title": "Villanova Creighton",
+        "contestName": "",
+        "url": "/game/6517565",
+        "network": "",
+        "home": {
+          "score": "64",
+          "names": {
+            "char6": "CREIGH",
+            "short": "Creighton",
+            "seo": "creighton",
+            "full": ""
+          },
+          "winner": false,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "big-east"
+            }
+          ]
+        },
+        "liveVideoEnabled": false,
+        "startTime": "5:00 PM ET",
+        "startTimeEpoch": "1771192800",
+        "bracketId": "",
+        "gameState": "final",
+        "startDate": "02/15/2026",
+        "currentPeriod": "FINAL",
+        "videoState": "",
+        "bracketRegion": "",
+        "contestClock": "0:00"
+      }
+    },
+    {
+      "game": {
+        "gameID": "6520163",
+        "away": {
+          "score": "56",
+          "names": {
+            "char6": "BRAD",
+            "short": "Bradley",
+            "seo": "bradley",
+            "full": ""
+          },
+          "winner": true,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "mvc"
+            }
+          ]
+        },
+        "finalMessage": "FINAL",
+        "bracketRound": "",
+        "title": "Bradley Southern Ill.",
+        "contestName": "",
+        "url": "/game/6520163",
+        "network": "",
+        "home": {
+          "score": "53",
+          "names": {
+            "char6": "SIU",
+            "short": "Southern Ill.",
+            "seo": "southern-ill",
+            "full": ""
+          },
+          "winner": false,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "mvc"
+            }
+          ]
+        },
+        "liveVideoEnabled": false,
+        "startTime": "5:00 PM ET",
+        "startTimeEpoch": "1771192800",
+        "bracketId": "",
+        "gameState": "final",
+        "startDate": "02/15/2026",
+        "currentPeriod": "FINAL",
+        "videoState": "",
+        "bracketRegion": "",
+        "contestClock": "0:00"
+      }
+    },
+    {
+      "game": {
+        "gameID": "6516180",
+        "away": {
+          "score": "65",
+          "names": {
+            "char6": "FSU",
+            "short": "Florida St.",
+            "seo": "florida-st",
+            "full": ""
+          },
+          "winner": false,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "acc"
+            }
+          ]
+        },
+        "finalMessage": "FINAL",
+        "bracketRound": "",
+        "title": "Florida St. Louisville",
+        "contestName": "",
+        "url": "/game/6516180",
+        "network": "",
+        "home": {
+          "score": "88",
+          "names": {
+            "char6": "LOUIS",
+            "short": "Louisville",
+            "seo": "louisville",
+            "full": ""
+          },
+          "winner": true,
+          "seed": "",
+          "description": "",
+          "rank": "9",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "acc"
+            }
+          ]
+        },
+        "liveVideoEnabled": false,
+        "startTime": "6:00 PM ET",
+        "startTimeEpoch": "1771196400",
+        "bracketId": "",
+        "gameState": "final",
+        "startDate": "02/15/2026",
+        "currentPeriod": "FINAL",
+        "videoState": "",
+        "bracketRegion": "",
+        "contestClock": "0:00"
+      }
+    },
+    {
+      "game": {
+        "gameID": "6518122",
+        "away": {
+          "score": "63",
+          "names": {
+            "char6": "AUBURN",
+            "short": "Auburn",
+            "seo": "auburn",
+            "full": ""
+          },
+          "winner": false,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "sec"
+            }
+          ]
+        },
+        "finalMessage": "FINAL",
+        "bracketRound": "",
+        "title": "Auburn Texas A&M",
+        "contestName": "",
+        "url": "/game/6518122",
+        "network": "",
+        "home": {
+          "score": "81",
+          "names": {
+            "char6": "TX A&M",
+            "short": "Texas A&M",
+            "seo": "texas-am",
+            "full": ""
+          },
+          "winner": true,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "sec"
+            }
+          ]
+        },
+        "liveVideoEnabled": false,
+        "startTime": "6:00 PM ET",
+        "startTimeEpoch": "1771196400",
+        "bracketId": "",
+        "gameState": "final",
+        "startDate": "02/15/2026",
+        "currentPeriod": "FINAL",
+        "videoState": "",
+        "bracketRegion": "",
+        "contestClock": "0:00"
+      }
+    },
+    {
+      "game": {
+        "gameID": "6518639",
+        "away": {
+          "score": "83",
+          "names": {
+            "char6": "MINN",
+            "short": "Minnesota",
+            "seo": "minnesota",
+            "full": ""
+          },
+          "winner": true,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "big-ten"
+            }
+          ]
+        },
+        "finalMessage": "FINAL",
+        "bracketRound": "",
+        "title": "Minnesota Wisconsin",
+        "contestName": "",
+        "url": "/game/6518639",
+        "network": "",
+        "home": {
+          "score": "60",
+          "names": {
+            "char6": "WISC",
+            "short": "Wisconsin",
+            "seo": "wisconsin",
+            "full": ""
+          },
+          "winner": false,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "big-ten"
+            }
+          ]
+        },
+        "liveVideoEnabled": false,
+        "startTime": "6:00 PM ET",
+        "startTimeEpoch": "1771196400",
+        "bracketId": "",
+        "gameState": "final",
+        "startDate": "02/15/2026",
+        "currentPeriod": "FINAL",
+        "videoState": "",
+        "bracketRegion": "",
+        "contestClock": "0:00"
+      }
+    },
+    {
+      "game": {
+        "gameID": "6517293",
+        "away": {
+          "score": "43",
+          "names": {
+            "char6": "OREGN",
+            "short": "Oregon",
+            "seo": "oregon",
+            "full": ""
+          },
+          "winner": false,
+          "seed": "",
+          "description": "",
+          "rank": "",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "big-ten"
+            }
+          ]
+        },
+        "finalMessage": "FINAL",
+        "bracketRound": "",
+        "title": "Oregon Washington",
+        "contestName": "",
+        "url": "/game/6517293",
+        "network": "",
+        "home": {
+          "score": "51",
+          "names": {
+            "char6": "WASH",
+            "short": "Washington",
+            "seo": "washington",
+            "full": ""
+          },
+          "winner": true,
+          "seed": "",
+          "description": "",
+          "rank": "25",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "big-ten"
+            }
+          ]
+        },
+        "liveVideoEnabled": false,
+        "startTime": "8:00 PM ET",
+        "startTimeEpoch": "1771203600",
+        "bracketId": "",
+        "gameState": "final",
+        "startDate": "02/15/2026",
+        "currentPeriod": "FINAL",
+        "videoState": "",
+        "bracketRegion": "",
+        "contestClock": "0:00"
+      }
+    },
+    {
+      "game": {
+        "gameID": "6517878",
+        "away": {
+          "score": "50",
+          "names": {
+            "char6": "WVU",
+            "short": "West Virginia",
+            "seo": "west-virginia",
+            "full": ""
+          },
+          "winner": false,
+          "seed": "",
+          "description": "",
+          "rank": "19",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "big-12"
+            }
+          ]
+        },
+        "finalMessage": "FINAL",
+        "bracketRound": "",
+        "title": "West Virginia TCU",
+        "contestName": "",
+        "url": "/game/6517878",
+        "network": "",
+        "home": {
+          "score": "59",
+          "names": {
+            "char6": "TCU",
+            "short": "TCU",
+            "seo": "tcu",
+            "full": ""
+          },
+          "winner": true,
+          "seed": "",
+          "description": "",
+          "rank": "17",
+          "conferences": [
+            {
+              "conferenceName": "",
+              "conferenceSeo": "big-12"
+            }
+          ]
+        },
+        "liveVideoEnabled": false,
+        "startTime": "8:00 PM ET",
+        "startTimeEpoch": "1771203600",
+        "bracketId": "",
+        "gameState": "final",
+        "startDate": "02/15/2026",
+        "currentPeriod": "FINAL",
+        "videoState": "",
+        "bracketRegion": "",
+        "contestClock": "0:00"
+      }
+    }
+  ]
+}
