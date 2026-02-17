@@ -601,7 +601,7 @@ export default async function TeamPage({
   // Filter games for this team
   const allTeamGames = allGames
     .filter((g) => g.homeId === teamId || g.awayId === teamId)
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()); // Oldest first
 
   // Build set of D1 team IDs (teams with conferences)
   const d1TeamIds = new Set(
