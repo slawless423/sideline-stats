@@ -137,12 +137,10 @@ function extractConferenceFromGame(gameObj) {
 
     const homeConf = game.home?.conferences?.[0]?.conferenceSeo || null;
     const awayConf = game.away?.conferences?.[0]?.conferenceSeo || null;
-    const homeId = String(pick(game.home, ["teamId", "team_id", "id"]) || "");
-    const awayId = String(pick(game.away, ["teamId", "team_id", "id"]) || "");
+    const gameId = game.gameID || game.gameId;
 
     return {
-      homeId,
-      awayId,
+      gameId: String(gameId),
       homeConf,
       awayConf,
       isConferenceGame: homeConf && awayConf && homeConf === awayConf,
@@ -413,10 +411,12 @@ async function main() {
     if (scoreboard.games && Array.isArray(scoreboard.games)) {
       for (const gameObj of scoreboard.games) {
         const confInfo = extractConferenceFromGame(gameObj);
-        const gid = gameObj?.game?.gameID;
-        if (gid && confInfo.homeId && confInfo.awayId) {
-          conferenceMap.set(String(gid), confInfo);
+        if (confInfo.gameId) {
+          conferenceMap.set(confInfo.gameId, confInfo);
         }
+      }
+      if (days % 7 === 1 && conferenceMap.size > 0) {
+        console.log(`Extracted conference for ${conferenceMap.size} games on ${d}`);
       }
     }
 
@@ -629,14 +629,12 @@ async function main() {
 
   ratingsRows.sort((a, b) => b.adjEM - a.adjEM);
 
-  // Filter to D1 teams only for the ratings page
-  // D1 teams have conference data; non-D1 teams don't
-  // This filters which teams GET A PAGE, not which games count in stats
-  const d1Rows = ratingsRows.filter(r => r.conference && r.conference !== "—" && r.conference !== null);
+  // TODO: Re-enable D1 filter once conference data is working
+  // const d1Rows = ratingsRows.filter(r => r.conference && r.conference !== "—" && r.conference !== null);
+  const d1Rows = ratingsRows; // Use all teams for now
   
   console.log(`Total teams in database: ${ratingsRows.length}`);
-  console.log(`D1 teams (with conference): ${d1Rows.length}`);
-  console.log(`Non-D1 teams filtered out: ${ratingsRows.length - d1Rows.length}`);
+  console.log(`D1 filter temporarily disabled - showing all teams`);
 
   // Save all the data files
   await fs.mkdir("public/data", { recursive: true });
