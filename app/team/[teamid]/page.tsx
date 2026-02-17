@@ -457,11 +457,12 @@ export default async function TeamPage({
   searchParams,
 }: {
   params: Promise<{ teamid: string }>;
-  searchParams: Promise<{ conf?: string }>;
+  searchParams: Promise<{ conf?: string; d1?: string }>;
 }) {
   const { teamid: teamId } = await params;
-  const { conf } = await searchParams;
+  const { conf, d1 } = await searchParams;
   const confOnly = conf === "true";
+  const d1Only = d1 === "true";
 
   const [{ updated, rows }, allTeamStats, allGames] = await Promise.all([
     loadRatings(),
@@ -489,10 +490,26 @@ export default async function TeamPage({
     .filter((g) => g.homeId === teamId || g.awayId === teamId)
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-  // Apply conference filter to game log if toggle is on
-  const teamGames = confOnly 
-    ? allTeamGames.filter(g => g.isConferenceGame === true)
-    : allTeamGames;
+  // Build set of D1 team IDs (teams with conferences)
+  const d1TeamIds = new Set(
+    allTeamStats
+      .filter(t => t.conference && t.conference !== "—")
+      .map(t => t.teamId)
+  );
+
+  // Apply filters
+  let teamGames = allTeamGames;
+  
+  if (confOnly) {
+    teamGames = teamGames.filter(g => g.isConferenceGame === true);
+  }
+  
+  if (d1Only) {
+    teamGames = teamGames.filter(g => {
+      const oppId = g.homeId === teamId ? g.awayId : g.homeId;
+      return d1TeamIds.has(oppId);
+    });
+  }
 
   // Build EM rank map
   const emRankMap = new Map(rows.map((r, i) => [r.teamId, i + 1]));
@@ -521,7 +538,13 @@ export default async function TeamPage({
       })
     : null;
 
-  const confOnlyUrl = confOnly ? `/team/${teamId}` : `/team/${teamId}?conf=true`;
+  const confOnlyUrl = confOnly 
+    ? (d1Only ? `/team/${teamId}?d1=true` : `/team/${teamId}`)
+    : (d1Only ? `/team/${teamId}?conf=true&d1=true` : `/team/${teamId}?conf=true`);
+  
+  const d1OnlyUrl = d1Only
+    ? (confOnly ? `/team/${teamId}?conf=true` : `/team/${teamId}`)
+    : (confOnly ? `/team/${teamId}?conf=true&d1=true` : `/team/${teamId}?d1=true`);
 
   return (
     <main style={S.page}>
@@ -572,20 +595,42 @@ export default async function TeamPage({
         </div>
       </div>
 
-      {/* CONFERENCE TOGGLE */}
-      <Link href={confOnlyUrl} style={{ textDecoration: "none" }}>
-        <div style={S.toggle}>
-          <input
-            type="checkbox"
-            checked={confOnly}
-            readOnly
-            style={S.toggleInput}
-          />
-          <span style={S.toggleLabel}>
-            Conference games only {confOnly && `(${teamGames.length} games)`}
-          </span>
+      {/* CONFERENCE AND D1 TOGGLES */}
+      <div style={{ display: "flex", gap: 12, marginBottom: 16 }}>
+        <Link href={confOnlyUrl} style={{ textDecoration: "none", flex: 1 }}>
+          <div style={S.toggle}>
+            <input
+              type="checkbox"
+              checked={confOnly}
+              readOnly
+              style={S.toggleInput}
+            />
+            <span style={S.toggleLabel}>
+              Conference games only
+            </span>
+          </div>
+        </Link>
+        
+        <Link href={d1OnlyUrl} style={{ textDecoration: "none", flex: 1 }}>
+          <div style={S.toggle}>
+            <input
+              type="checkbox"
+              checked={d1Only}
+              readOnly
+              style={S.toggleInput}
+            />
+            <span style={S.toggleLabel}>
+              D1 opponents only
+            </span>
+          </div>
+        </Link>
+      </div>
+      
+      {(confOnly || d1Only) && (
+        <div style={{ fontSize: 13, color: "#666", marginBottom: 16, marginTop: -8 }}>
+          Showing {teamGames.length} of {allTeamGames.length} games
         </div>
-      </Link>
+      )}
 
       {/* TWO COLUMN LAYOUT */}
       <div style={S.twoCol}>
