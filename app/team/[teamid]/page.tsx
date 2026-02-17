@@ -5,18 +5,19 @@ import { headers } from "next/headers";
 type RatingRow = {
   teamId: string;
   team: string;
+  conference?: string;
   games: number;
   adjO: number;
   adjD: number;
   adjEM: number;
   adjT: number;
-  conf?: string;
   [k: string]: any;
 };
 
 type TeamStats = {
   teamId: string;
   teamName: string;
+  conference?: string;
   games: number;
   wins: number;
   losses: number;
@@ -52,6 +53,20 @@ type TeamStats = {
   opp_pf: number;
 };
 
+type Game = {
+  gameId: string;
+  date: string;
+  homeTeam: string;
+  homeId: string;
+  homeScore: number;
+  homeConf?: string;
+  awayTeam: string;
+  awayId: string;
+  awayScore: number;
+  awayConf?: string;
+  isConferenceGame?: boolean;
+};
+
 // ===== DATA LOADING =====
 async function loadRatings(): Promise<{ updated: string | null; rows: RatingRow[] }> {
   const h = await headers();
@@ -76,6 +91,21 @@ async function loadTeamStats(): Promise<TeamStats[]> {
     if (!res.ok) return [];
     const payload = await res.json();
     return payload?.teams ?? [];
+  } catch {
+    return [];
+  }
+}
+
+async function loadGames(): Promise<Game[]> {
+  try {
+    const h = await headers();
+    const host = h.get("host");
+    const proto = h.get("x-forwarded-proto") ?? "https";
+    const url = `${proto}://${host}/data/games.json`;
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) return [];
+    const payload = await res.json();
+    return payload?.games ?? [];
   } catch {
     return [];
   }
@@ -113,10 +143,10 @@ function calcFourFactors(s: TeamStats) {
       two: (s.fga - s.tpa) > 0 ? ((s.fgm - s.tpm) / (s.fga - s.tpa)) * 100 : null,
       three: pct(s.tpm, s.tpa),
       ft: pct(s.ftm, s.fta),
-      // Block% = our blocks / opponent's 2PA
       blk: (s.opp_fga - s.opp_tpa) > 0 ? (s.blk / (s.opp_fga - s.opp_tpa)) * 100 : null,
       stl: offPoss > 0 ? (s.opp_stl / offPoss) * 100 : null,
       ast: s.fgm > 0 ? (s.ast / s.fgm) * 100 : null,
+      threePaRate: s.fga > 0 ? (s.tpa / s.fga) * 100 : null,
     },
     // DEFENSE (opponent's offense against us)
     def: {
@@ -127,25 +157,25 @@ function calcFourFactors(s: TeamStats) {
       two: (s.opp_fga - s.opp_tpa) > 0 ? ((s.opp_fgm - s.opp_tpm) / (s.opp_fga - s.opp_tpa)) * 100 : null,
       three: pct(s.opp_tpm, s.opp_tpa),
       ft: pct(s.opp_ftm, s.opp_fta),
-      // Defensive Block% = opponent's blocks / our 2PA
       blk: (s.fga - s.tpa) > 0 ? (s.opp_blk / (s.fga - s.tpa)) * 100 : null,
       stl: defPoss > 0 ? (s.stl / defPoss) * 100 : null,
       ast: s.opp_fgm > 0 ? (s.opp_ast / s.opp_fgm) * 100 : null,
+      threePaRate: s.opp_fga > 0 ? (s.opp_tpa / s.opp_fga) * 100 : null,
     },
   };
 }
 
 function rankOf(
-  rows: RatingRow[],
+  allStats: TeamStats[],
   value: number | null,
-  key: string,
+  statExtractor: (s: TeamStats) => number | null,
   higherIsBetter: boolean
 ): { rank: number; of: number } | null {
   if (value === null) return null;
-  const vals = rows.map((r) => n(r[key])).filter((v): v is number => v !== null);
+  const vals = allStats.map(statExtractor).filter((v): v is number => v !== null);
   if (!vals.length) return null;
   const sorted = [...vals].sort((a, b) => (higherIsBetter ? b - a : a - b));
-  const idx = sorted.findIndex((v) => v === value);
+  const idx = sorted.findIndex((v) => Math.abs(v - value) < 0.001);
   return idx === -1 ? null : { rank: idx + 1, of: sorted.length };
 }
 
@@ -158,7 +188,7 @@ const S = {
   page: {
     padding: "24px 20px",
     fontFamily: "system-ui, -apple-system, sans-serif",
-    maxWidth: 960,
+    maxWidth: 1200,
     margin: "0 auto",
     color: "#111",
   } as React.CSSProperties,
@@ -202,66 +232,6 @@ const S = {
     color: ACCENT,
     fontWeight: 600,
   } as React.CSSProperties,
-  sectionTitle: {
-    fontSize: 12,
-    fontWeight: 800,
-    textTransform: "uppercase" as const,
-    letterSpacing: 0.5,
-    color: "#fff",
-    background: ACCENT,
-    padding: "6px 10px",
-    marginTop: 20,
-    marginBottom: 0,
-  } as React.CSSProperties,
-  table: {
-    width: "100%",
-    borderCollapse: "collapse" as const,
-    fontSize: 13,
-  } as React.CSSProperties,
-  th: {
-    textAlign: "left" as const,
-    padding: "7px 10px",
-    fontSize: 11,
-    fontWeight: 700,
-    color: ACCENT,
-    borderBottom: `2px solid ${ACCENT}`,
-    background: ACCENT_LIGHT,
-  } as React.CSSProperties,
-  thRight: {
-    textAlign: "right" as const,
-    padding: "7px 10px",
-    fontSize: 11,
-    fontWeight: 700,
-    color: ACCENT,
-    borderBottom: `2px solid ${ACCENT}`,
-    background: ACCENT_LIGHT,
-  } as React.CSSProperties,
-  td: {
-    padding: "7px 10px",
-    borderBottom: "1px solid #f0f0f0",
-    color: "#333",
-  } as React.CSSProperties,
-  tdRight: {
-    padding: "7px 10px",
-    borderBottom: "1px solid #f0f0f0",
-    textAlign: "right" as const,
-    fontWeight: 600,
-    color: "#111",
-  } as React.CSSProperties,
-  tdAvg: {
-    padding: "7px 10px",
-    borderBottom: "1px solid #f0f0f0",
-    textAlign: "right" as const,
-    color: "#999",
-    fontSize: 12,
-  } as React.CSSProperties,
-  rank: {
-    fontSize: 10,
-    color: ACCENT,
-    fontWeight: 700,
-    marginLeft: 3,
-    opacity: 0.8,
-  } as React.CSSProperties,
   coreGrid: {
     display: "grid",
     gridTemplateColumns: "repeat(4, 1fr)",
@@ -294,13 +264,94 @@ const S = {
     fontWeight: 700,
     marginTop: 4,
   } as React.CSSProperties,
-  noData: {
-    padding: "40px 20px",
-    textAlign: "center" as const,
-    color: "#888",
-    background: ACCENT_LIGHT,
-    borderRadius: 8,
+  twoCol: {
+    display: "grid",
+    gridTemplateColumns: "1fr 1.2fr",
+    gap: 24,
     marginTop: 20,
+  } as React.CSSProperties,
+  sectionTitle: {
+    fontSize: 12,
+    fontWeight: 800,
+    textTransform: "uppercase" as const,
+    letterSpacing: 0.5,
+    color: "#fff",
+    background: ACCENT,
+    padding: "6px 10px",
+    marginBottom: 0,
+  } as React.CSSProperties,
+  table: {
+    width: "100%",
+    borderCollapse: "collapse" as const,
+    fontSize: 12.5,
+  } as React.CSSProperties,
+  th: {
+    textAlign: "left" as const,
+    padding: "6px 8px",
+    fontSize: 10,
+    fontWeight: 700,
+    color: ACCENT,
+    borderBottom: `2px solid ${ACCENT}`,
+    background: ACCENT_LIGHT,
+  } as React.CSSProperties,
+  thRight: {
+    textAlign: "right" as const,
+    padding: "6px 8px",
+    fontSize: 10,
+    fontWeight: 700,
+    color: ACCENT,
+    borderBottom: `2px solid ${ACCENT}`,
+    background: ACCENT_LIGHT,
+  } as React.CSSProperties,
+  td: {
+    padding: "6px 8px",
+    borderBottom: "1px solid #f5f5f5",
+    color: "#444",
+    fontSize: 12,
+  } as React.CSSProperties,
+  tdRight: {
+    padding: "6px 8px",
+    borderBottom: "1px solid #f5f5f5",
+    textAlign: "right" as const,
+    fontWeight: 600,
+    color: "#111",
+    fontSize: 12,
+  } as React.CSSProperties,
+  tdAvg: {
+    padding: "6px 8px",
+    borderBottom: "1px solid #f5f5f5",
+    textAlign: "right" as const,
+    color: "#999",
+    fontSize: 11,
+  } as React.CSSProperties,
+  rank: {
+    fontSize: 9,
+    color: ACCENT,
+    fontWeight: 700,
+    marginLeft: 3,
+    opacity: 0.8,
+  } as React.CSSProperties,
+  toggle: {
+    display: "flex",
+    alignItems: "center",
+    gap: 8,
+    padding: "10px 12px",
+    background: ACCENT_LIGHT,
+    border: `1px solid ${ACCENT_BORDER}`,
+    borderRadius: 6,
+    marginBottom: 16,
+  } as React.CSSProperties,
+  toggleInput: {
+    accentColor: ACCENT,
+    width: 16,
+    height: 16,
+    cursor: "pointer",
+  } as React.CSSProperties,
+  toggleLabel: {
+    fontSize: 13,
+    color: "#333",
+    fontWeight: 600,
+    cursor: "pointer",
   } as React.CSSProperties,
 };
 
@@ -354,15 +405,15 @@ function SectionHeader({ title }: { title: string }) {
       <td
         colSpan={4}
         style={{
-          padding: "8px 10px",
-          fontSize: 11,
+          padding: "6px 8px",
+          fontSize: 10,
           fontWeight: 800,
           textTransform: "uppercase",
           letterSpacing: 0.8,
           color: "#888",
           background: "#fafafa",
           borderBottom: "1px solid #eee",
-          borderTop: "2px solid #eee",
+          borderTop: "1px solid #eee",
         }}
       >
         {title}
@@ -371,14 +422,9 @@ function SectionHeader({ title }: { title: string }) {
   );
 }
 
-// ===== AVERAGES (D-I average calculations) =====
+// Calculate league averages
 function calcLeagueAverages(allTeamStats: TeamStats[]) {
   if (!allTeamStats.length) return null;
-
-  const sum = (fn: (t: TeamStats) => number | null) => {
-    const vals = allTeamStats.map(fn).filter((v): v is number => v !== null);
-    return vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : null;
-  };
 
   const avgStats: TeamStats = allTeamStats.reduce(
     (acc, t) => {
@@ -407,13 +453,19 @@ function calcLeagueAverages(allTeamStats: TeamStats[]) {
 // ===== MAIN PAGE =====
 export default async function TeamPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ teamid: string }>;
+  searchParams: Promise<{ conf?: string }>;
 }) {
   const { teamid: teamId } = await params;
-  const [{ updated, rows }, allTeamStats] = await Promise.all([
+  const { conf } = await searchParams;
+  const confOnly = conf === "true";
+
+  const [{ updated, rows }, allTeamStats, allGames] = await Promise.all([
     loadRatings(),
     loadTeamStats(),
+    loadGames(),
   ]);
 
   const row = rows.find((r) => String(r.teamId) === String(teamId));
@@ -429,16 +481,25 @@ export default async function TeamPage({
     );
   }
 
+  const conf = row.conference ?? teamStats?.conference ?? "—";
+
+  // Filter games for this team
+  const teamGames = allGames
+    .filter((g) => g.homeId === teamId || g.awayId === teamId)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+  // Build EM rank map
+  const emRankMap = new Map(rows.map((r, i) => [r.teamId, i + 1]));
+
   const adjO = n(row.adjO);
   const adjD = n(row.adjD);
   const adjEM = n(row.adjEM);
   const adjT = n(row.adjT);
-  const conf = row.conf ?? row.conference ?? "—";
 
-  const emRank = rankOf(rows, adjEM, "adjEM", true);
-  const oRank = rankOf(rows, adjO, "adjO", true);
-  const dRank = rankOf(rows, adjD, "adjD", false);
-  const tRank = rankOf(rows, adjT, "adjT", true);
+  const emRank = rows.findIndex(r => r.teamId === teamId) + 1;
+  const oRank = [...rows].sort((a, b) => (b.adjO ?? 0) - (a.adjO ?? 0)).findIndex(r => r.teamId === teamId) + 1;
+  const dRank = [...rows].sort((a, b) => (a.adjD ?? 0) - (b.adjD ?? 0)).findIndex(r => r.teamId === teamId) + 1;
+  const tRank = [...rows].sort((a, b) => (b.adjT ?? 0) - (a.adjT ?? 0)).findIndex(r => r.teamId === teamId) + 1;
 
   const ff = teamStats ? calcFourFactors(teamStats) : null;
   const leagueAvg = calcLeagueAverages(allTeamStats);
@@ -446,7 +507,6 @@ export default async function TeamPage({
   const wins = teamStats?.wins ?? 0;
   const losses = teamStats?.losses ?? 0;
 
-  // Format update date nicely
   const updatedDate = updated
     ? new Date(updated).toLocaleDateString("en-US", {
         month: "long",
@@ -454,6 +514,8 @@ export default async function TeamPage({
         year: "numeric",
       })
     : null;
+
+  const confOnlyUrl = confOnly ? `/team/${teamId}` : `/team/${teamId}?conf=true`;
 
   return (
     <main style={S.page}>
@@ -463,8 +525,8 @@ export default async function TeamPage({
       <div style={S.header}>
         <div style={S.teamName}>{row.team}</div>
         <div style={S.teamMeta}>
-          {conf !== "—" ? `${conf} • ` : ""}
-          {emRank ? `#${emRank.rank} of ${emRank.of} teams` : ""}
+          {conf !== "—" ? `${conf.toUpperCase()} • ` : ""}
+          #{emRank} of {rows.length} teams
           {updatedDate ? ` • Data through ${updatedDate}` : ""}
         </div>
         <div style={S.badges}>
@@ -475,200 +537,219 @@ export default async function TeamPage({
             <span style={S.badge}>{row.games} games</span>
           )}
           {conf !== "—" && (
-            <span style={S.badge}>{conf}</span>
+            <span style={S.badge}>{conf.toUpperCase()}</span>
           )}
         </div>
       </div>
 
       {/* CORE RATINGS */}
-      <div style={S.sectionTitle}>Core Ratings</div>
       <div style={S.coreGrid}>
         <div style={S.coreCard}>
-          <div style={S.cardLabel}>Adj. Offense</div>
+          <div style={S.cardLabel}>Off. Efficiency</div>
           <div style={S.cardValue}>{fmt(adjO)}</div>
-          {oRank && <div style={S.cardRank}>#{oRank.rank} of {oRank.of}</div>}
+          <div style={S.cardRank}>#{oRank} of {rows.length}</div>
         </div>
         <div style={S.coreCard}>
-          <div style={S.cardLabel}>Adj. Defense</div>
+          <div style={S.cardLabel}>Def. Efficiency</div>
           <div style={S.cardValue}>{fmt(adjD)}</div>
-          {dRank && <div style={S.cardRank}>#{dRank.rank} of {dRank.of}</div>}
+          <div style={S.cardRank}>#{dRank} of {rows.length}</div>
         </div>
         <div style={S.coreCard}>
-          <div style={S.cardLabel}>Efficiency Margin</div>
+          <div style={S.cardLabel}>Raw Margin</div>
           <div style={S.cardValue}>{adjEM !== null ? (adjEM > 0 ? "+" : "") + fmt(adjEM) : "—"}</div>
-          {emRank && <div style={S.cardRank}>#{emRank.rank} of {emRank.of}</div>}
+          <div style={S.cardRank}>#{emRank} of {rows.length}</div>
         </div>
         <div style={S.coreCard}>
-          <div style={S.cardLabel}>Adj. Tempo</div>
+          <div style={S.cardLabel}>Tempo</div>
           <div style={S.cardValue}>{fmt(adjT)}</div>
-          {tRank && <div style={S.cardRank}>#{tRank.rank} of {tRank.of}</div>}
+          <div style={S.cardRank}>#{tRank} of {rows.length}</div>
         </div>
       </div>
 
-      {/* SCOUTING REPORT TABLE */}
-      {ff ? (
-        <>
-          <div style={S.sectionTitle}>Scouting Report</div>
-          <table style={S.table}>
-            <thead>
-              <tr>
-                <th style={S.th}>Category</th>
-                <th style={S.thRight}>Offense</th>
-                <th style={S.thRight}>Defense</th>
-                <th style={{ ...S.thRight, color: "#999", fontWeight: 600 }}>D-I Avg</th>
-              </tr>
-            </thead>
-            <tbody>
-              {/* FOUR FACTORS */}
-              <SectionHeader title="Four Factors" />
-              <StatRow
-                label="Effective FG%"
-                offVal={ff.off.efg}
-                defVal={ff.def.efg}
-                avgVal={leagueAvg?.off.efg ?? null}
-              />
-              <StatRow
-                label="Turnover %"
-                offVal={ff.off.tov}
-                defVal={ff.def.tov}
-                avgVal={leagueAvg?.off.tov ?? null}
-              />
-              <StatRow
-                label="Off. Reb. %"
-                offVal={ff.off.orb}
-                defVal={ff.def.orb}
-                avgVal={leagueAvg?.off.orb ?? null}
-              />
-              <StatRow
-                label="FTA / FGA"
-                offVal={ff.off.ftrate}
-                defVal={ff.def.ftrate}
-                avgVal={leagueAvg?.off.ftrate ?? null}
-              />
+      {/* CONFERENCE TOGGLE */}
+      <div style={S.toggle}>
+        <input
+          type="checkbox"
+          id="conf-toggle"
+          checked={confOnly}
+          style={S.toggleInput}
+        />
+        <label htmlFor="conf-toggle" style={S.toggleLabel}>
+          <a href={confOnlyUrl} style={{ color: "inherit", textDecoration: "none" }}>
+            Conference games only
+          </a>
+        </label>
+      </div>
 
-              {/* SHOOTING */}
-              <SectionHeader title="Shooting" />
-              <StatRow
-                label="2P%"
-                offVal={ff.off.two}
-                defVal={ff.def.two}
-                avgVal={leagueAvg?.off.two ?? null}
-              />
-              <StatRow
-                label="3P%"
-                offVal={ff.off.three}
-                defVal={ff.def.three}
-                avgVal={leagueAvg?.off.three ?? null}
-              />
-              <StatRow
-                label="FT%"
-                offVal={ff.off.ft}
-                defVal={ff.def.ft}
-                avgVal={leagueAvg?.off.ft ?? null}
-              />
+      {/* TWO COLUMN LAYOUT */}
+      <div style={S.twoCol}>
+        {/* LEFT: SCOUTING REPORT */}
+        <div>
+          {ff ? (
+            <>
+              <div style={S.sectionTitle}>Scouting Report</div>
+              <table style={S.table}>
+                <thead>
+                  <tr>
+                    <th style={S.th}>Category</th>
+                    <th style={S.thRight}>Off</th>
+                    <th style={S.thRight}>Def</th>
+                    <th style={{ ...S.thRight, color: "#999", fontWeight: 600 }}>Avg</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <SectionHeader title="Four Factors" />
+                  <StatRow
+                    label="Eff. FG%"
+                    offVal={ff.off.efg}
+                    defVal={ff.def.efg}
+                    avgVal={leagueAvg?.off.efg ?? null}
+                    offRank={rankOf(allTeamStats, ff.off.efg, (s) => calcFourFactors(s).off.efg, true)}
+                    defRank={rankOf(allTeamStats, ff.def.efg, (s) => calcFourFactors(s).def.efg, false)}
+                  />
+                  <StatRow
+                    label="TO%"
+                    offVal={ff.off.tov}
+                    defVal={ff.def.tov}
+                    avgVal={leagueAvg?.off.tov ?? null}
+                    offRank={rankOf(allTeamStats, ff.off.tov, (s) => calcFourFactors(s).off.tov, false)}
+                    defRank={rankOf(allTeamStats, ff.def.tov, (s) => calcFourFactors(s).def.tov, true)}
+                  />
+                  <StatRow
+                    label="OR%"
+                    offVal={ff.off.orb}
+                    defVal={ff.def.orb}
+                    avgVal={leagueAvg?.off.orb ?? null}
+                    offRank={rankOf(allTeamStats, ff.off.orb, (s) => calcFourFactors(s).off.orb, true)}
+                    defRank={rankOf(allTeamStats, ff.def.orb, (s) => calcFourFactors(s).def.orb, false)}
+                  />
+                  <StatRow
+                    label="FTA/FGA"
+                    offVal={ff.off.ftrate}
+                    defVal={ff.def.ftrate}
+                    avgVal={leagueAvg?.off.ftrate ?? null}
+                    offRank={rankOf(allTeamStats, ff.off.ftrate, (s) => calcFourFactors(s).off.ftrate, true)}
+                    defRank={rankOf(allTeamStats, ff.def.ftrate, (s) => calcFourFactors(s).def.ftrate, false)}
+                  />
 
-              {/* MISCELLANEOUS */}
-              <SectionHeader title="Miscellaneous" />
-              <StatRow
-                label="Block %"
-                offVal={ff.off.blk}
-                defVal={ff.def.blk}
-                avgVal={leagueAvg?.off.blk ?? null}
-              />
-              <StatRow
-                label="Steal %"
-                offVal={ff.off.stl}
-                defVal={ff.def.stl}
-                avgVal={leagueAvg?.off.stl ?? null}
-              />
-              <StatRow
-                label="Assist %"
-                offVal={ff.off.ast}
-                defVal={ff.def.ast}
-                avgVal={leagueAvg?.off.ast ?? null}
-              />
-            </tbody>
-          </table>
-        </>
-      ) : (
-        <div style={S.noData}>
-          <div style={{ fontWeight: 700, marginBottom: 6 }}>Detailed stats not yet available</div>
-          <div style={{ fontSize: 13 }}>
-            Run <code>build_complete_stats.mjs</code> to generate team_stats.json
+                  <SectionHeader title="Shooting" />
+                  <StatRow
+                    label="2P%"
+                    offVal={ff.off.two}
+                    defVal={ff.def.two}
+                    avgVal={leagueAvg?.off.two ?? null}
+                    offRank={rankOf(allTeamStats, ff.off.two, (s) => calcFourFactors(s).off.two, true)}
+                    defRank={rankOf(allTeamStats, ff.def.two, (s) => calcFourFactors(s).def.two, false)}
+                  />
+                  <StatRow
+                    label="3P%"
+                    offVal={ff.off.three}
+                    defVal={ff.def.three}
+                    avgVal={leagueAvg?.off.three ?? null}
+                    offRank={rankOf(allTeamStats, ff.off.three, (s) => calcFourFactors(s).off.three, true)}
+                    defRank={rankOf(allTeamStats, ff.def.three, (s) => calcFourFactors(s).def.three, false)}
+                  />
+                  <StatRow
+                    label="FT%"
+                    offVal={ff.off.ft}
+                    defVal={ff.def.ft}
+                    avgVal={leagueAvg?.off.ft ?? null}
+                    offRank={rankOf(allTeamStats, ff.off.ft, (s) => calcFourFactors(s).off.ft, true)}
+                    defRank={rankOf(allTeamStats, ff.def.ft, (s) => calcFourFactors(s).def.ft, false)}
+                  />
+
+                  <SectionHeader title="Style" />
+                  <StatRow
+                    label="3PA/FGA"
+                    offVal={ff.off.threePaRate}
+                    defVal={ff.def.threePaRate}
+                    avgVal={leagueAvg?.off.threePaRate ?? null}
+                    offRank={rankOf(allTeamStats, ff.off.threePaRate, (s) => calcFourFactors(s).off.threePaRate, true)}
+                    defRank={rankOf(allTeamStats, ff.def.threePaRate, (s) => calcFourFactors(s).def.threePaRate, false)}
+                  />
+
+                  <SectionHeader title="Misc" />
+                  <StatRow
+                    label="Block%"
+                    offVal={ff.off.blk}
+                    defVal={ff.def.blk}
+                    avgVal={leagueAvg?.off.blk ?? null}
+                    offRank={rankOf(allTeamStats, ff.off.blk, (s) => calcFourFactors(s).off.blk, true)}
+                    defRank={rankOf(allTeamStats, ff.def.blk, (s) => calcFourFactors(s).def.blk, true)}
+                  />
+                  <StatRow
+                    label="Steal%"
+                    offVal={ff.off.stl}
+                    defVal={ff.def.stl}
+                    avgVal={leagueAvg?.off.stl ?? null}
+                    offRank={rankOf(allTeamStats, ff.off.stl, (s) => calcFourFactors(s).off.stl, false)}
+                    defRank={rankOf(allTeamStats, ff.def.stl, (s) => calcFourFactors(s).def.stl, true)}
+                  />
+                  <StatRow
+                    label="Assist%"
+                    offVal={ff.off.ast}
+                    defVal={ff.def.ast}
+                    avgVal={leagueAvg?.off.ast ?? null}
+                    offRank={rankOf(allTeamStats, ff.off.ast, (s) => calcFourFactors(s).off.ast, true)}
+                    defRank={rankOf(allTeamStats, ff.def.ast, (s) => calcFourFactors(s).def.ast, false)}
+                  />
+                </tbody>
+              </table>
+            </>
+          ) : (
+            <div style={{ padding: 20, background: ACCENT_LIGHT, borderRadius: 8, textAlign: "center" }}>
+              <div style={{ fontWeight: 700, marginBottom: 6 }}>Stats unavailable</div>
+              <div style={{ fontSize: 12, color: "#666" }}>Run build_complete_stats.mjs</div>
+            </div>
+          )}
+        </div>
+
+        {/* RIGHT: GAME LOG */}
+        <div>
+          <div style={S.sectionTitle}>Game Log</div>
+          <div style={{ maxHeight: 600, overflowY: "auto", border: `1px solid ${ACCENT_BORDER}`, borderRadius: "0 0 6px 6px" }}>
+            <table style={S.table}>
+              <thead style={{ position: "sticky", top: 0, background: ACCENT_LIGHT, zIndex: 1 }}>
+                <tr>
+                  <th style={S.th}>Date</th>
+                  <th style={S.th}>Opponent</th>
+                  <th style={S.th}>Loc</th>
+                  <th style={S.th}>Result</th>
+                  <th style={S.thRight}>Score</th>
+                </tr>
+              </thead>
+              <tbody>
+                {teamGames.map((g) => {
+                  const isHome = g.homeId === teamId;
+                  const opp = isHome ? g.awayTeam : g.homeTeam;
+                  const oppId = isHome ? g.awayId : g.homeId;
+                  const oppRank = emRankMap.get(oppId);
+                  const ourScore = isHome ? g.homeScore : g.awayScore;
+                  const oppScore = isHome ? g.awayScore : g.homeScore;
+                  const won = ourScore > oppScore;
+                  const loc = isHome ? "H" : "A";
+
+                  return (
+                    <tr key={g.gameId}>
+                      <td style={S.td}>{new Date(g.date).toLocaleDateString("en-US", { month: "numeric", day: "numeric" })}</td>
+                      <td style={S.td}>
+                        {isHome ? "vs" : "@"} {opp}
+                        {oppRank && <span style={{ ...S.rank, marginLeft: 4 }}>{oppRank}</span>}
+                      </td>
+                      <td style={S.td}>{loc}</td>
+                      <td style={{ ...S.td, fontWeight: 700, color: won ? "#16a34a" : "#dc2626" }}>{won ? "W" : "L"}</td>
+                      <td style={S.tdRight}>{ourScore}-{oppScore}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
         </div>
-      )}
+      </div>
 
-      {/* RECORD BREAKDOWN */}
-      {teamStats && (
-        <>
-          <div style={S.sectionTitle}>Season Totals</div>
-          <table style={S.table}>
-            <thead>
-              <tr>
-                <th style={S.th}>Stat</th>
-                <th style={S.thRight}>Team</th>
-                <th style={S.thRight}>Opponent</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td style={S.td}>Points</td>
-                <td style={S.tdRight}>{teamStats.points.toLocaleString()}</td>
-                <td style={S.tdRight}>{teamStats.opp_points.toLocaleString()}</td>
-              </tr>
-              <tr>
-                <td style={S.td}>Field Goals (M-A)</td>
-                <td style={S.tdRight}>{teamStats.fgm}-{teamStats.fga}</td>
-                <td style={S.tdRight}>{teamStats.opp_fgm}-{teamStats.opp_fga}</td>
-              </tr>
-              <tr>
-                <td style={S.td}>3-Pointers (M-A)</td>
-                <td style={S.tdRight}>{teamStats.tpm}-{teamStats.tpa}</td>
-                <td style={S.tdRight}>{teamStats.opp_tpm}-{teamStats.opp_tpa}</td>
-              </tr>
-              <tr>
-                <td style={S.td}>Free Throws (M-A)</td>
-                <td style={S.tdRight}>{teamStats.ftm}-{teamStats.fta}</td>
-                <td style={S.tdRight}>{teamStats.opp_ftm}-{teamStats.opp_fta}</td>
-              </tr>
-              <tr>
-                <td style={S.td}>Rebounds</td>
-                <td style={S.tdRight}>{teamStats.trb}</td>
-                <td style={S.tdRight}>{teamStats.opp_trb}</td>
-              </tr>
-              <tr>
-                <td style={S.td}>Assists</td>
-                <td style={S.tdRight}>{teamStats.ast}</td>
-                <td style={S.tdRight}>{teamStats.opp_ast}</td>
-              </tr>
-              <tr>
-                <td style={S.td}>Steals</td>
-                <td style={S.tdRight}>{teamStats.stl}</td>
-                <td style={S.tdRight}>{teamStats.opp_stl}</td>
-              </tr>
-              <tr>
-                <td style={S.td}>Blocks</td>
-                <td style={S.tdRight}>{teamStats.blk}</td>
-                <td style={S.tdRight}>{teamStats.opp_blk}</td>
-              </tr>
-              <tr>
-                <td style={S.td}>Turnovers</td>
-                <td style={S.tdRight}>{teamStats.tov}</td>
-                <td style={S.tdRight}>{teamStats.opp_tov}</td>
-              </tr>
-              <tr>
-                <td style={S.td}>Personal Fouls</td>
-                <td style={S.tdRight}>{teamStats.pf}</td>
-                <td style={S.tdRight}>{teamStats.opp_pf}</td>
-              </tr>
-            </tbody>
-          </table>
-        </>
-      )}
-
-      <div style={{ marginTop: 24, fontSize: 12, color: "#aaa", textAlign: "center" }}>
-        womens-kenpom • Data from NCAA API • {updatedDate ?? ""}
+      <div style={{ marginTop: 24, fontSize: 11, color: "#aaa", textAlign: "center" }}>
+        womens-kenpom • {updatedDate ?? ""}
       </div>
     </main>
   );
