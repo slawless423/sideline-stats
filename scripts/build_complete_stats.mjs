@@ -228,31 +228,34 @@ function deepCollectTeamStats(root) {
 }
 
 function extractPlayers(gameJson) {
-  // Find player stats in the boxscore JSON
-  // Common locations: gameJson.players, gameJson.teams[].players, gameJson.boxscore.players
+  // Extract player stats from NCAA API boxscore structure
+  // Structure: gameJson has teams, each team has teamBoxscore.playerStats array
   
-  const playerArrays = [];
+  const result = [];
   
-  const walk = (x, path = "") => {
+  // Look for teamBoxscore.playerStats pattern
+  const walk = (x) => {
     if (Array.isArray(x)) {
-      // Check if this looks like a player array
-      if (x.length > 0 && x[0] && typeof x[0] === 'object') {
-        const first = x[0];
-        // Player arrays typically have name/jersey/stats
-        if (first.name || first.player || first.jersey || first.number) {
-          playerArrays.push({ path, players: x });
+      x.forEach(walk);
+    } else if (x && typeof x === 'object') {
+      // Check if this object has playerStats array
+      if (x.playerStats && Array.isArray(x.playerStats) && x.playerStats.length > 0) {
+        // Also need teamId to know which team these players belong to
+        const teamId = pick(x, ["teamId", "team_id", "id"]);
+        if (teamId) {
+          result.push({
+            teamId: String(teamId),
+            players: x.playerStats
+          });
         }
       }
-      x.forEach((item, i) => walk(item, `${path}[${i}]`));
-    } else if (x && typeof x === 'object') {
-      Object.entries(x).forEach(([key, val]) => walk(val, path ? `${path}.${key}` : key));
+      // Continue walking the tree
+      Object.values(x).forEach(walk);
     }
   };
   
   walk(gameJson);
-  
-  // Return all found player arrays
-  return playerArrays;
+  return result;
 }
 
 function findTeamsMeta(gameJson) {
