@@ -892,11 +892,11 @@ async function main() {
       // Clear existing data for fresh rebuild
       await db.clearAllData();
       
-      // Write teams
+      // Write teams (ALL teams, not just D1 - needed for foreign key constraints)
       console.log("Writing teams...");
-      for (const row of d1Rows) {
-        const teamStat = teamSeasonStats.get(row.teamId);
-        if (teamStat) {
+      for (const [teamId, teamStat] of teamSeasonStats) {
+        const row = ratingsRows.find(r => r.teamId === teamId);
+        if (row && teamStat) {
           await db.upsertTeam({
             teamId: row.teamId,
             teamName: row.team,
@@ -941,7 +941,7 @@ async function main() {
           });
         }
       }
-      console.log(`✅ Wrote ${d1Rows.length} teams to database`);
+      console.log(`✅ Wrote ${teamSeasonStats.size} teams to database (includes non-D1 for foreign keys)`);
       
       // Write games
       console.log("Writing games...");
