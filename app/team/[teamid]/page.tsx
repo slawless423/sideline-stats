@@ -1,1055 +1,197 @@
 import Link from "next/link";
-import { headers } from "next/headers";
+import { headers } from 'next/headers';
 
-// ===== TYPES =====
-type RatingRow = {
-  teamId: string;
-  team: string;
-  conference?: string;
-  games: number;
-  adjO: number;
-  adjD: number;
-  adjEM: number;
-  adjT: number;
-  [k: string]: any;
-};
-
-type TeamStats = {
-  teamId: string;
-  teamName: string;
-  conference?: string;
-  games: number;
-  wins: number;
-  losses: number;
-  points: number;
-  opp_points: number;
-  fgm: number;
-  fga: number;
-  tpm: number;
-  tpa: number;
-  ftm: number;
-  fta: number;
-  orb: number;
-  drb: number;
-  trb: number;
-  ast: number;
-  stl: number;
-  blk: number;
-  tov: number;
-  pf: number;
-  opp_fgm: number;
-  opp_fga: number;
-  opp_tpm: number;
-  opp_tpa: number;
-  opp_ftm: number;
-  opp_fta: number;
-  opp_orb: number;
-  opp_drb: number;
-  opp_trb: number;
-  opp_ast: number;
-  opp_stl: number;
-  opp_blk: number;
-  opp_tov: number;
-  opp_pf: number;
-};
-
-type GameStats = {
-  fgm: number;
-  fga: number;
-  tpm: number;
-  tpa: number;
-  ftm: number;
-  fta: number;
-  orb: number;
-  drb: number;
-  trb: number;
-  ast: number;
-  stl: number;
-  blk: number;
-  tov: number;
-  pf: number;
-};
-
-type Game = {
-  gameId: string;
-  date: string;
-  homeTeam: string;
-  homeId: string;
-  homeScore: number;
-  homeConf?: string;
-  homeStats: GameStats;
-  awayTeam: string;
-  awayId: string;
-  awayScore: number;
-  awayConf?: string;
-  awayStats: GameStats;
-  isConferenceGame?: boolean;
-  players?: Array<{
-    teamId: string;
-    players: Array<{
-      playerId: string;
-      firstName: string;
-      lastName: string;
-      number: string;
-      minutes: number;
-      fgm: number;
-      fga: number;
-      tpm: number;
-      tpa: number;
-      ftm: number;
-      fta: number;
-      orb: number;
-      drb: number;
-      trb: number;
-      ast: number;
-      stl: number;
-      blk: number;
-      tov: number;
-      pf: number;
-      points: number;
-    }>;
-  }>;
-};
-
-// ===== DATA LOADING =====
-async function loadRatings(): Promise<{ updated: string | null; rows: RatingRow[] }> {
-  const h = await headers();
-  const host = h.get("host");
-  const proto = h.get("x-forwarded-proto") ?? "https";
-  const url = `${proto}://${host}/data/ratings.json`;
-  const res = await fetch(url, { cache: "no-store" });
-  if (!res.ok) throw new Error(`Failed to load ratings.json (${res.status})`);
-  const payload = await res.json();
-  const rows: RatingRow[] = payload?.rows ?? [];
-  const updated = payload?.generated_at_utc ?? null;
-  return { updated, rows };
+// Fetch functions using API routes
+async function fetchAllTeams() {
+  const headersList = await headers();
+  const host = headersList.get('host');
+  const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
+  
+  const res = await fetch(`${protocol}://${host}/api/teams`, { cache: 'no-store' });
+  if (!res.ok) throw new Error('Failed to fetch teams');
+  return res.json();
 }
 
-async function loadTeamStats(): Promise<TeamStats[]> {
-  try {
-    const h = await headers();
-    const host = h.get("host");
-    const proto = h.get("x-forwarded-proto") ?? "https";
-    const url = `${proto}://${host}/data/team_stats.json`;
-    const res = await fetch(url, { cache: "no-store" });
-    if (!res.ok) return [];
-    const payload = await res.json();
-    return payload?.teams ?? [];
-  } catch {
-    return [];
-  }
+async function fetchTeam(teamId: string) {
+  const headersList = await headers();
+  const host = headersList.get('host');
+  const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
+  
+  const res = await fetch(`${protocol}://${host}/api/teams/${teamId}`, { cache: 'no-store' });
+  if (!res.ok) return null;
+  return res.json();
 }
 
-async function loadGames(): Promise<Game[]> {
-  try {
-    const h = await headers();
-    const host = h.get("host");
-    const proto = h.get("x-forwarded-proto") ?? "https";
-    const url = `${proto}://${host}/data/games.json`;
-    const res = await fetch(url, { cache: "no-store" });
-    if (!res.ok) return [];
-    const payload = await res.json();
-    return payload?.games ?? [];
-  } catch {
-    return [];
-  }
+async function fetchTeamGames(teamId: string) {
+  const headersList = await headers();
+  const host = headersList.get('host');
+  const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
+  
+  const res = await fetch(`${protocol}://${host}/api/teams/${teamId}/games`, { cache: 'no-store' });
+  if (!res.ok) return { games: [] };
+  return res.json();
 }
 
-type PlayerStat = {
-  playerId: string;
-  teamId: string;
-  teamName: string;
-  firstName: string;
-  lastName: string;
-  number: number;
-  position: string;
-  year: string;
-  games: number;
-  starts: number;
-  minutes: number;
-  fgm: number;
-  fga: number;
-  tpm: number;
-  tpa: number;
-  ftm: number;
-  fta: number;
-  orb: number;
-  drb: number;
-  trb: number;
-  ast: number;
-  stl: number;
-  blk: number;
-  tov: number;
-  pf: number;
-  points: number;
-};
-
-async function loadPlayerStats(): Promise<PlayerStat[]> {
-  try {
-    const h = await headers();
-    const host = h.get("host");
-    const proto = h.get("x-forwarded-proto") ?? "https";
-    const url = `${proto}://${host}/data/player_stats.json`;
-    const res = await fetch(url, { cache: "no-store" });
-    if (!res.ok) return [];
-    const payload = await res.json();
-    return payload?.players ?? [];
-  } catch {
-    return [];
-  }
+async function fetchTeamPlayers(teamId: string) {
+  const headersList = await headers();
+  const host = headersList.get('host');
+  const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
+  
+  const res = await fetch(`${protocol}://${host}/api/teams/${teamId}/players`, { cache: 'no-store' });
+  if (!res.ok) return { players: [] };
+  return res.json();
 }
 
-// ===== MATH HELPERS =====
-function n(x: any): number | null {
-  const v = Number(x);
-  return Number.isFinite(v) ? v : null;
-}
-
-function pct(num: number, den: number): number | null {
-  if (!den) return null;
-  return (num / den) * 100;
-}
-
-function poss(fga: number, orb: number, tov: number, fta: number): number {
-  return Math.max(1, fga - orb + tov + 0.475 * fta);
-}
-
-// Four Factors calculations
-function calcFourFactors(s: TeamStats) {
-  const offPoss = poss(s.fga, s.orb, s.tov, s.fta);
-  const defPoss = poss(s.opp_fga, s.opp_orb, s.opp_tov, s.opp_fta);
-
-  return {
-    // OFFENSE
-    off: {
-      efg: s.fga > 0 ? ((s.fgm - s.tpm + 1.5 * s.tpm) / s.fga) * 100 : null,
-      tov: offPoss > 0 ? (s.tov / offPoss) * 100 : null,
-      orb: (s.orb + s.opp_drb) > 0 ? (s.orb / (s.orb + s.opp_drb)) * 100 : null,
-      ftrate: s.fga > 0 ? (s.fta / s.fga) * 100 : null,
-      twopm: s.fgm - s.tpm,
-      twopa: s.fga - s.tpa,
-      two: (s.fga - s.tpa) > 0 ? ((s.fgm - s.tpm) / (s.fga - s.tpa)) * 100 : null,
-      three: pct(s.tpm, s.tpa),
-      ft: pct(s.ftm, s.fta),
-      blk: (s.opp_fga - s.opp_tpa) > 0 ? (s.blk / (s.opp_fga - s.opp_tpa)) * 100 : null,
-      stl: offPoss > 0 ? (s.opp_stl / offPoss) * 100 : null,
-      ast: s.fgm > 0 ? (s.ast / s.fgm) * 100 : null,
-      threePaRate: s.fga > 0 ? (s.tpa / s.fga) * 100 : null,
-    },
-    // DEFENSE (opponent's offense against us)
-    def: {
-      efg: s.opp_fga > 0 ? ((s.opp_fgm - s.opp_tpm + 1.5 * s.opp_tpm) / s.opp_fga) * 100 : null,
-      tov: defPoss > 0 ? (s.opp_tov / defPoss) * 100 : null,
-      orb: (s.opp_orb + s.drb) > 0 ? (s.opp_orb / (s.opp_orb + s.drb)) * 100 : null,
-      ftrate: s.opp_fga > 0 ? (s.opp_fta / s.opp_fga) * 100 : null,
-      two: (s.opp_fga - s.opp_tpa) > 0 ? ((s.opp_fgm - s.opp_tpm) / (s.opp_fga - s.opp_tpa)) * 100 : null,
-      three: pct(s.opp_tpm, s.opp_tpa),
-      ft: pct(s.opp_ftm, s.opp_fta),
-      blk: (s.fga - s.tpa) > 0 ? (s.opp_blk / (s.fga - s.tpa)) * 100 : null,
-      stl: defPoss > 0 ? (s.stl / defPoss) * 100 : null,
-      ast: s.opp_fgm > 0 ? (s.opp_ast / s.opp_fgm) * 100 : null,
-      threePaRate: s.opp_fga > 0 ? (s.opp_tpa / s.opp_fga) * 100 : null,
-    },
-  };
-}
-
-function rankOf(
-  allStats: TeamStats[],
-  value: number | null,
-  statExtractor: (s: TeamStats) => number | null,
-  higherIsBetter: boolean
-): { rank: number; of: number } | null {
-  if (value === null) return null;
-  const vals = allStats.map(statExtractor).filter((v): v is number => v !== null);
-  if (!vals.length) return null;
-  const sorted = [...vals].sort((a, b) => (higherIsBetter ? b - a : a - b));
-  const idx = sorted.findIndex((v) => Math.abs(v - value) < 0.001);
-  return idx === -1 ? null : { rank: idx + 1, of: sorted.length };
-}
-
-// ===== STYLES =====
-const ACCENT = "#2d3748";
-const ACCENT_LIGHT = "#f7f8fa";
-const ACCENT_BORDER = "#d0d5de";
-
-const S = {
-  page: {
-    padding: "24px 20px",
-    fontFamily: "system-ui, -apple-system, sans-serif",
-    maxWidth: 1200,
-    margin: "0 auto",
-    color: "#111",
-  } as React.CSSProperties,
-  back: {
-    fontSize: 13,
-    color: ACCENT,
-    textDecoration: "none",
-    fontWeight: 600,
-    opacity: 0.8,
-  } as React.CSSProperties,
-  header: {
-    borderTop: `4px solid ${ACCENT}`,
-    paddingTop: 16,
-    marginTop: 12,
-    marginBottom: 20,
-  } as React.CSSProperties,
-  teamName: {
-    fontSize: 32,
-    fontWeight: 900,
-    letterSpacing: -0.5,
-    color: "#111",
-    marginBottom: 4,
-  } as React.CSSProperties,
-  teamMeta: {
-    fontSize: 13,
-    color: "#666",
-    marginBottom: 10,
-  } as React.CSSProperties,
-  badges: {
-    display: "flex",
-    gap: 8,
-    flexWrap: "wrap" as const,
-    marginBottom: 16,
-  } as React.CSSProperties,
-  badge: {
-    background: ACCENT_LIGHT,
-    border: `1px solid ${ACCENT_BORDER}`,
-    padding: "3px 10px",
-    borderRadius: 4,
-    fontSize: 12,
-    color: ACCENT,
-    fontWeight: 600,
-  } as React.CSSProperties,
-  coreGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(4, 1fr)",
-    gap: 10,
-    margin: "16px 0",
-  } as React.CSSProperties,
-  coreCard: {
-    background: ACCENT_LIGHT,
-    border: `1px solid ${ACCENT_BORDER}`,
-    borderRadius: 8,
-    padding: "12px 14px",
-  } as React.CSSProperties,
-  cardLabel: {
-    fontSize: 11,
-    color: "#666",
-    fontWeight: 600,
-    marginBottom: 4,
-    textTransform: "uppercase" as const,
-    letterSpacing: 0.3,
-  } as React.CSSProperties,
-  cardValue: {
-    fontSize: 22,
-    fontWeight: 800,
-    color: "#111",
-    lineHeight: 1.1,
-  } as React.CSSProperties,
-  cardRank: {
-    fontSize: 11,
-    color: ACCENT,
-    fontWeight: 700,
-    marginTop: 4,
-  } as React.CSSProperties,
-  twoCol: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1.2fr",
-    gap: 24,
-    marginTop: 20,
-  } as React.CSSProperties,
-  sectionTitle: {
-    fontSize: 12,
-    fontWeight: 800,
-    textTransform: "uppercase" as const,
-    letterSpacing: 0.5,
-    color: "#fff",
-    background: ACCENT,
-    padding: "6px 10px",
-    marginBottom: 0,
-  } as React.CSSProperties,
-  table: {
-    width: "100%",
-    borderCollapse: "collapse" as const,
-    fontSize: 12.5,
-  } as React.CSSProperties,
-  th: {
-    textAlign: "left" as const,
-    padding: "6px 8px",
-    fontSize: 10,
-    fontWeight: 700,
-    color: ACCENT,
-    borderBottom: `2px solid ${ACCENT}`,
-    background: ACCENT_LIGHT,
-  } as React.CSSProperties,
-  thRight: {
-    textAlign: "right" as const,
-    padding: "6px 8px",
-    fontSize: 10,
-    fontWeight: 700,
-    color: ACCENT,
-    borderBottom: `2px solid ${ACCENT}`,
-    background: ACCENT_LIGHT,
-  } as React.CSSProperties,
-  td: {
-    padding: "6px 8px",
-    borderBottom: "1px solid #f5f5f5",
-    color: "#444",
-    fontSize: 12,
-  } as React.CSSProperties,
-  tdRight: {
-    padding: "6px 8px",
-    borderBottom: "1px solid #f5f5f5",
-    textAlign: "right" as const,
-    fontWeight: 600,
-    color: "#111",
-    fontSize: 12,
-  } as React.CSSProperties,
-  tdAvg: {
-    padding: "6px 8px",
-    borderBottom: "1px solid #f5f5f5",
-    textAlign: "right" as const,
-    color: "#999",
-    fontSize: 11,
-  } as React.CSSProperties,
-  rank: {
-    fontSize: 9,
-    color: ACCENT,
-    fontWeight: 700,
-    marginLeft: 3,
-    opacity: 0.8,
-  } as React.CSSProperties,
-  toggle: {
-    display: "flex",
-    alignItems: "center",
-    gap: 8,
-    padding: "10px 12px",
-    background: ACCENT_LIGHT,
-    border: `1px solid ${ACCENT_BORDER}`,
-    borderRadius: 6,
-    marginBottom: 16,
-    cursor: "pointer",
-  } as React.CSSProperties,
-  toggleInput: {
-    accentColor: ACCENT,
-    width: 16,
-    height: 16,
-    cursor: "pointer",
-  } as React.CSSProperties,
-  toggleLabel: {
-    fontSize: 13,
-    color: "#333",
-    fontWeight: 600,
-    cursor: "pointer",
-  } as React.CSSProperties,
-};
-
-// ===== COMPONENTS =====
-function fmt(v: number | null, decimals = 1): string {
-  if (v === null) return "—";
-  return v.toFixed(decimals);
-}
-
-function RankSpan({ r }: { r: { rank: number; of: number } | null }) {
-  if (!r) return null;
-  return <span style={S.rank}>#{r.rank}</span>;
-}
-
-function StatRow({
-  label,
-  offVal,
-  defVal,
-  avgVal,
-  offRank,
-  defRank,
-  decimals = 1,
-}: {
-  label: string;
-  offVal: number | null;
-  defVal: number | null;
-  avgVal: number | null;
-  offRank?: { rank: number; of: number } | null;
-  defRank?: { rank: number; of: number } | null;
-  decimals?: number;
-}) {
-  return (
-    <tr>
-      <td style={S.td}>{label}</td>
-      <td style={S.tdRight}>
-        {fmt(offVal, decimals)}
-        {offRank && <RankSpan r={offRank} />}
-      </td>
-      <td style={S.tdRight}>
-        {fmt(defVal, decimals)}
-        {defRank && <RankSpan r={defRank} />}
-      </td>
-      <td style={S.tdAvg}>{fmt(avgVal, decimals)}</td>
-    </tr>
-  );
-}
-
-function SectionHeader({ title }: { title: string }) {
-  return (
-    <tr>
-      <td
-        colSpan={4}
-        style={{
-          padding: "6px 8px",
-          fontSize: 10,
-          fontWeight: 800,
-          textTransform: "uppercase",
-          letterSpacing: 0.8,
-          color: "#888",
-          background: "#fafafa",
-          borderBottom: "1px solid #eee",
-          borderTop: "1px solid #eee",
-        }}
-      >
-        {title}
-      </td>
-    </tr>
-  );
-}
-
-// Recalculate player stats from a filtered set of games
-function recalcPlayerStatsFromGames(
-  teamId: string,
-  games: Game[]
-): PlayerStat[] {
-  const playerMap = new Map<string, PlayerStat>();
-
-  for (const game of games) {
-    if (!game.players) continue;
-
-    for (const teamData of game.players) {
-      if (teamData.teamId !== teamId) continue;
-
-      for (const p of teamData.players) {
-        if (!playerMap.has(p.playerId)) {
-          playerMap.set(p.playerId, {
-            playerId: p.playerId,
-            teamId: teamId,
-            teamName: game.homeId === teamId ? game.homeTeam : game.awayTeam,
-            firstName: p.firstName,
-            lastName: p.lastName,
-            number: Number(p.number) || 0,
-            position: "",
-            year: "",
-            games: 0,
-            starts: 0,
-            minutes: 0,
-            fgm: 0,
-            fga: 0,
-            tpm: 0,
-            tpa: 0,
-            ftm: 0,
-            fta: 0,
-            orb: 0,
-            drb: 0,
-            trb: 0,
-            ast: 0,
-            stl: 0,
-            blk: 0,
-            tov: 0,
-            pf: 0,
-            points: 0,
-          });
-        }
-
-        const pStats = playerMap.get(p.playerId)!;
-        
-        // Only count if player played
-        if (p.minutes > 0 || p.points > 0) {
-          pStats.games++;
-          pStats.minutes += p.minutes;
-          pStats.fgm += p.fgm;
-          pStats.fga += p.fga;
-          pStats.tpm += p.tpm;
-          pStats.tpa += p.tpa;
-          pStats.ftm += p.ftm;
-          pStats.fta += p.fta;
-          pStats.orb += p.orb;
-          pStats.drb += p.drb;
-          pStats.trb += p.trb;
-          pStats.ast += p.ast;
-          pStats.stl += p.stl;
-          pStats.blk += p.blk;
-          pStats.tov += p.tov;
-          pStats.pf += p.pf;
-          pStats.points += p.points;
-        }
-      }
-    }
-  }
-
-  return Array.from(playerMap.values());
-}
-
-// Calculate league averages
-function calcLeagueAverages(allTeamStats: TeamStats[]) {
-  if (!allTeamStats.length) return null;
-
-  const avgStats: TeamStats = allTeamStats.reduce(
-    (acc, t) => {
-      const keys = Object.keys(t) as (keyof TeamStats)[];
-      keys.forEach((k) => {
-        if (typeof t[k] === "number" && k !== "teamId") {
-          (acc as any)[k] = ((acc as any)[k] ?? 0) + (t[k] as number);
-        }
-      });
-      return acc;
-    },
-    { teamId: "avg", teamName: "Average" } as any
-  );
-
-  const count = allTeamStats.length;
-  const keys = Object.keys(avgStats) as (keyof TeamStats)[];
-  keys.forEach((k) => {
-    if (typeof (avgStats as any)[k] === "number" && k !== "teamId") {
-      (avgStats as any)[k] = (avgStats as any)[k] / count;
-    }
-  });
-
-  return calcFourFactors(avgStats);
-}
-
-// Recalculate team stats from a filtered set of games
-function recalcStatsFromGames(
-  teamId: string,
-  games: Game[],
-  teamName: string,
-  conference?: string
-): TeamStats {
-  const stats: TeamStats = {
-    teamId,
-    teamName,
-    conference,
-    games: 0,
-    wins: 0,
-    losses: 0,
-    points: 0,
-    opp_points: 0,
-    fgm: 0,
-    fga: 0,
-    tpm: 0,
-    tpa: 0,
-    ftm: 0,
-    fta: 0,
-    orb: 0,
-    drb: 0,
-    trb: 0,
-    ast: 0,
-    stl: 0,
-    blk: 0,
-    tov: 0,
-    pf: 0,
-    opp_fgm: 0,
-    opp_fga: 0,
-    opp_tpm: 0,
-    opp_tpa: 0,
-    opp_ftm: 0,
-    opp_fta: 0,
-    opp_orb: 0,
-    opp_drb: 0,
-    opp_trb: 0,
-    opp_ast: 0,
-    opp_stl: 0,
-    opp_blk: 0,
-    opp_tov: 0,
-    opp_pf: 0,
-  };
-
-  for (const g of games) {
-    const isHome = g.homeId === teamId;
-    const ourStats = isHome ? g.homeStats : g.awayStats;
-    const oppStats = isHome ? g.awayStats : g.homeStats;
-    const ourScore = isHome ? g.homeScore : g.awayScore;
-    const oppScore = isHome ? g.awayScore : g.homeScore;
-
-    stats.games++;
-    if (ourScore > oppScore) stats.wins++;
-    else stats.losses++;
-
-    stats.points += ourScore;
-    stats.opp_points += oppScore;
-    
-    stats.fgm += ourStats.fgm;
-    stats.fga += ourStats.fga;
-    stats.tpm += ourStats.tpm;
-    stats.tpa += ourStats.tpa;
-    stats.ftm += ourStats.ftm;
-    stats.fta += ourStats.fta;
-    stats.orb += ourStats.orb;
-    stats.drb += ourStats.drb;
-    stats.trb += ourStats.trb;
-    stats.ast += ourStats.ast;
-    stats.stl += ourStats.stl;
-    stats.blk += ourStats.blk;
-    stats.tov += ourStats.tov;
-    stats.pf += ourStats.pf;
-
-    stats.opp_fgm += oppStats.fgm;
-    stats.opp_fga += oppStats.fga;
-    stats.opp_tpm += oppStats.tpm;
-    stats.opp_tpa += oppStats.tpa;
-    stats.opp_ftm += oppStats.ftm;
-    stats.opp_fta += oppStats.fta;
-    stats.opp_orb += oppStats.orb;
-    stats.opp_drb += oppStats.drb;
-    stats.opp_trb += oppStats.trb;
-    stats.opp_ast += oppStats.ast;
-    stats.opp_stl += oppStats.stl;
-    stats.opp_blk += oppStats.blk;
-    stats.opp_tov += oppStats.tov;
-    stats.opp_pf += oppStats.pf;
-  }
-
-  return stats;
-}
-
-// ===== MAIN PAGE =====
 export default async function TeamPage({
   params,
-  searchParams,
 }: {
   params: Promise<{ teamid: string }>;
-  searchParams: Promise<{ conf?: string; d1?: string }>;
 }) {
   const { teamid: teamId } = await params;
-  const { conf, d1 } = await searchParams;
-  const confOnly = conf === "true";
-  const d1Only = d1 === "true";
-
-  const [{ updated, rows }, allTeamStats, allGames, allPlayers] = await Promise.all([
-    loadRatings(),
-    loadTeamStats(),
-    loadGames(),
-    loadPlayerStats(),
+  
+  const [teamsData, team, gamesData, playersData] = await Promise.all([
+    fetchAllTeams(),
+    fetchTeam(teamId),
+    fetchTeamGames(teamId),
+    fetchTeamPlayers(teamId),
   ]);
 
-  const row = rows.find((r) => String(r.teamId) === String(teamId));
-  const teamStats = allTeamStats.find((t) => String(t.teamId) === String(teamId));
-
-  if (!row) {
+  if (!team) {
     return (
-      <main style={S.page}>
-        <Link href="/" style={S.back}>← Back to ratings</Link>
+      <main style={{ maxWidth: 1200, margin: "0 auto", padding: 20 }}>
+        <Link href="/" style={{ color: "#2563eb", textDecoration: "none" }}>← Back to rankings</Link>
         <h1 style={{ fontSize: 28, fontWeight: 800, marginTop: 12 }}>Team not found</h1>
-        <p style={{ opacity: 0.8, marginTop: 8 }}>TeamId: {teamId}</p>
       </main>
     );
   }
 
-  const confName = row.conference ?? teamStats?.conference ?? "—";
-
-  // Filter games for this team
-  const allTeamGames = allGames
-    .filter((g) => g.homeId === teamId || g.awayId === teamId)
-    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()); // Oldest first
-
-  // Build set of D1 team IDs (teams with conferences)
-  const d1TeamIds = new Set(
-    allTeamStats
-      .filter(t => t.conference && t.conference !== "—")
-      .map(t => t.teamId)
-  );
-
-  // Apply filters
-  let teamGames = allTeamGames;
-  
-  if (confOnly) {
-    teamGames = teamGames.filter(g => g.isConferenceGame === true);
-  }
-  
-  if (d1Only) {
-    teamGames = teamGames.filter(g => {
-      const oppId = g.homeId === teamId ? g.awayId : g.homeId;
-      return d1TeamIds.has(oppId);
-    });
-  }
-
-  // Build EM rank map
-  const emRankMap = new Map(rows.map((r, i) => [r.teamId, i + 1]));
-
-  const adjO = n(row.adjO);
-  const adjD = n(row.adjD);
-  const adjEM = n(row.adjEM);
-  const adjT = n(row.adjT);
-
-  const emRank = rows.findIndex(r => r.teamId === teamId) + 1;
-  const oRank = [...rows].sort((a, b) => (b.adjO ?? 0) - (a.adjO ?? 0)).findIndex(r => r.teamId === teamId) + 1;
-  const dRank = [...rows].sort((a, b) => (a.adjD ?? 0) - (b.adjD ?? 0)).findIndex(r => r.teamId === teamId) + 1;
-  const tRank = [...rows].sort((a, b) => (b.adjT ?? 0) - (a.adjT ?? 0)).findIndex(r => r.teamId === teamId) + 1;
-
-  // Recalculate stats from filtered games if filters are active
-  const displayStats = (confOnly || d1Only) && teamGames.length > 0
-    ? recalcStatsFromGames(teamId, teamGames, row.team, confName !== "—" ? confName : undefined)
-    : teamStats;
-
-  const ff = displayStats ? calcFourFactors(displayStats) : null;
-  const leagueAvg = calcLeagueAverages(allTeamStats);
-
-  const wins = displayStats?.wins ?? 0;
-  const losses = displayStats?.losses ?? 0;
-
-  const updatedDate = updated
-    ? new Date(updated).toLocaleDateString("en-US", {
-        month: "long",
-        day: "numeric",
-        year: "numeric",
-      })
-    : null;
-
-  const confOnlyUrl = confOnly 
-    ? (d1Only ? `/team/${teamId}?d1=true` : `/team/${teamId}`)
-    : (d1Only ? `/team/${teamId}?conf=true&d1=true` : `/team/${teamId}?conf=true`);
-  
-  const d1OnlyUrl = d1Only
-    ? (confOnly ? `/team/${teamId}?conf=true` : `/team/${teamId}`)
-    : (confOnly ? `/team/${teamId}?conf=true&d1=true` : `/team/${teamId}?d1=true`);
+  const rank = teamsData.rows.findIndex((r: any) => r.teamId === teamId) + 1;
 
   return (
-    <main style={S.page}>
-      <Link href="/" style={S.back}>← Back to ratings</Link>
+    <main style={{ maxWidth: 1200, margin: "0 auto", padding: 20 }}>
+      <Link href="/" style={{ color: "#2563eb", textDecoration: "none", marginBottom: 16, display: "inline-block" }}>
+        ← Back to rankings
+      </Link>
 
       {/* HEADER */}
-      <div style={S.header}>
-        <div style={S.teamName}>{row.team}</div>
-        <div style={S.teamMeta}>
-          {confName !== "—" ? `${confName.toUpperCase()} • ` : ""}
-          #{emRank} of {rows.length} teams
-          {updatedDate ? ` • Data through ${updatedDate}` : ""}
+      <div style={{ marginBottom: 24 }}>
+        <h1 style={{ fontSize: 32, fontWeight: 800, marginBottom: 8 }}>
+          {team.teamName}
+        </h1>
+        <div style={{ color: "#666", fontSize: 14 }}>
+          {team.conference?.toUpperCase()} • #{rank} of {teamsData.rows.length} teams
         </div>
-        <div style={S.badges}>
-          {wins + losses > 0 && (
-            <span style={S.badge}>{wins}-{losses}</span>
-          )}
-          {row.games > 0 && (
-            <span style={S.badge}>{row.games} games</span>
-          )}
-          {confName !== "—" && (
-            <span style={S.badge}>{confName.toUpperCase()}</span>
-          )}
+        <div style={{ marginTop: 12, fontSize: 14 }}>
+          <span style={{ background: "#e5e7eb", padding: "4px 12px", borderRadius: 4, marginRight: 8 }}>
+            {team.wins}-{team.losses}
+          </span>
         </div>
       </div>
 
-      {/* CORE RATINGS */}
-      <div style={S.coreGrid}>
-        <div style={S.coreCard}>
-          <div style={S.cardLabel}>Off. Efficiency</div>
-          <div style={S.cardValue}>{fmt(adjO)}</div>
-          <div style={S.cardRank}>#{oRank} of {rows.length}</div>
+      {/* STATS CARDS */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16, marginBottom: 32 }}>
+        <div style={{ background: "#f9fafb", padding: 20, borderRadius: 8, border: "1px solid #e5e7eb" }}>
+          <div style={{ fontSize: 12, color: "#666", marginBottom: 4, textTransform: "uppercase" }}>Off. Efficiency</div>
+          <div style={{ fontSize: 32, fontWeight: 800 }}>{team.adjO?.toFixed(1) || "—"}</div>
         </div>
-        <div style={S.coreCard}>
-          <div style={S.cardLabel}>Def. Efficiency</div>
-          <div style={S.cardValue}>{fmt(adjD)}</div>
-          <div style={S.cardRank}>#{dRank} of {rows.length}</div>
+        <div style={{ background: "#f9fafb", padding: 20, borderRadius: 8, border: "1px solid #e5e7eb" }}>
+          <div style={{ fontSize: 12, color: "#666", marginBottom: 4, textTransform: "uppercase" }}>Def. Efficiency</div>
+          <div style={{ fontSize: 32, fontWeight: 800 }}>{team.adjD?.toFixed(1) || "—"}</div>
         </div>
-        <div style={S.coreCard}>
-          <div style={S.cardLabel}>Raw Margin</div>
-          <div style={S.cardValue}>{adjEM !== null ? (adjEM > 0 ? "+" : "") + fmt(adjEM) : "—"}</div>
-          <div style={S.cardRank}>#{emRank} of {rows.length}</div>
+        <div style={{ background: "#f9fafb", padding: 20, borderRadius: 8, border: "1px solid #e5e7eb" }}>
+          <div style={{ fontSize: 12, color: "#666", marginBottom: 4, textTransform: "uppercase" }}>Raw Margin</div>
+          <div style={{ fontSize: 32, fontWeight: 800 }}>+{team.adjEM?.toFixed(1) || "—"}</div>
         </div>
-        <div style={S.coreCard}>
-          <div style={S.cardLabel}>Tempo</div>
-          <div style={S.cardValue}>{fmt(adjT)}</div>
-          <div style={S.cardRank}>#{tRank} of {rows.length}</div>
+        <div style={{ background: "#f9fafb", padding: 20, borderRadius: 8, border: "1px solid #e5e7eb" }}>
+          <div style={{ fontSize: 12, color: "#666", marginBottom: 4, textTransform: "uppercase" }}>Tempo</div>
+          <div style={{ fontSize: 32, fontWeight: 800 }}>{team.adjT?.toFixed(1) || "—"}</div>
         </div>
       </div>
 
-      {/* CONFERENCE AND D1 TOGGLES */}
-      <div style={{ display: "flex", gap: 12, marginBottom: 16 }}>
-        <Link href={confOnlyUrl} style={{ textDecoration: "none", flex: 1 }}>
-          <div style={S.toggle}>
-            <input
-              type="checkbox"
-              checked={confOnly}
-              readOnly
-              style={S.toggleInput}
-            />
-            <span style={S.toggleLabel}>
-              Conference games only
-            </span>
-          </div>
-        </Link>
-        
-        <Link href={d1OnlyUrl} style={{ textDecoration: "none", flex: 1 }}>
-          <div style={S.toggle}>
-            <input
-              type="checkbox"
-              checked={d1Only}
-              readOnly
-              style={S.toggleInput}
-            />
-            <span style={S.toggleLabel}>
-              D1 opponents only
-            </span>
-          </div>
-        </Link>
-      </div>
-      
-      {(confOnly || d1Only) && (
-        <div style={{ fontSize: 13, color: "#666", marginBottom: 16, marginTop: -8 }}>
-          Showing {teamGames.length} of {allTeamGames.length} games
-        </div>
-      )}
-
-      {/* TWO COLUMN LAYOUT */}
-      <div style={S.twoCol}>
-        {/* LEFT: SCOUTING REPORT */}
-        <div>
-          {ff ? (
-            <>
-              <div style={S.sectionTitle}>Team Scouting Report</div>
-              <table style={S.table}>
-                <thead>
-                  <tr>
-                    <th style={S.th}>Category</th>
-                    <th style={S.thRight}>Off</th>
-                    <th style={S.thRight}>Def</th>
-                    <th style={{ ...S.thRight, color: "#999", fontWeight: 600 }}>Avg</th>
+      {/* GAME LOG */}
+      <div style={{ marginBottom: 32 }}>
+        <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 16, background: "#2d3748", color: "#fff", padding: "8px 12px" }}>
+          Game Log
+        </h2>
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14 }}>
+            <thead>
+              <tr style={{ borderBottom: "2px solid #2d3748" }}>
+                <th style={{ padding: "8px 12px", textAlign: "left" }}>Date</th>
+                <th style={{ padding: "8px 12px", textAlign: "left" }}>Opponent</th>
+                <th style={{ padding: "8px 12px", textAlign: "center" }}>Location</th>
+                <th style={{ padding: "8px 12px", textAlign: "center" }}>Result</th>
+                <th style={{ padding: "8px 12px", textAlign: "right" }}>Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              {gamesData.games.map((game: any) => {
+                const isHome = game.homeId === teamId;
+                const opponent = isHome ? game.awayTeam : game.homeTeam;
+                const ourScore = isHome ? game.homeScore : game.awayScore;
+                const theirScore = isHome ? game.awayScore : game.homeScore;
+                const won = ourScore > theirScore;
+                
+                return (
+                  <tr key={game.gameId} style={{ borderBottom: "1px solid #e5e7eb" }}>
+                    <td style={{ padding: "8px 12px" }}>
+                      {new Date(game.date).toLocaleDateString('en-US', { month: 'numeric', day: 'numeric' })}
+                    </td>
+                    <td style={{ padding: "8px 12px" }}>{opponent}</td>
+                    <td style={{ padding: "8px 12px", textAlign: "center" }}>
+                      {isHome ? "vs" : "@"}
+                    </td>
+                    <td style={{ padding: "8px 12px", textAlign: "center", fontWeight: 600, color: won ? "#16a34a" : "#dc2626" }}>
+                      {won ? "W" : "L"}
+                    </td>
+                    <td style={{ padding: "8px 12px", textAlign: "right" }}>
+                      {ourScore}-{theirScore}
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  <SectionHeader title="Four Factors" />
-                  <StatRow
-                    label="Eff. FG%"
-                    offVal={ff.off.efg}
-                    defVal={ff.def.efg}
-                    avgVal={leagueAvg?.off.efg ?? null}
-                    offRank={rankOf(allTeamStats, ff.off.efg, (s) => calcFourFactors(s).off.efg, true)}
-                    defRank={rankOf(allTeamStats, ff.def.efg, (s) => calcFourFactors(s).def.efg, false)}
-                  />
-                  <StatRow
-                    label="TO%"
-                    offVal={ff.off.tov}
-                    defVal={ff.def.tov}
-                    avgVal={leagueAvg?.off.tov ?? null}
-                    offRank={rankOf(allTeamStats, ff.off.tov, (s) => calcFourFactors(s).off.tov, false)}
-                    defRank={rankOf(allTeamStats, ff.def.tov, (s) => calcFourFactors(s).def.tov, true)}
-                  />
-                  <StatRow
-                    label="OR%"
-                    offVal={ff.off.orb}
-                    defVal={ff.def.orb}
-                    avgVal={leagueAvg?.off.orb ?? null}
-                    offRank={rankOf(allTeamStats, ff.off.orb, (s) => calcFourFactors(s).off.orb, true)}
-                    defRank={rankOf(allTeamStats, ff.def.orb, (s) => calcFourFactors(s).def.orb, false)}
-                  />
-                  <StatRow
-                    label="FTA/FGA"
-                    offVal={ff.off.ftrate}
-                    defVal={ff.def.ftrate}
-                    avgVal={leagueAvg?.off.ftrate ?? null}
-                    offRank={rankOf(allTeamStats, ff.off.ftrate, (s) => calcFourFactors(s).off.ftrate, true)}
-                    defRank={rankOf(allTeamStats, ff.def.ftrate, (s) => calcFourFactors(s).def.ftrate, false)}
-                  />
-
-                  <SectionHeader title="Shooting" />
-                  <StatRow
-                    label="2P%"
-                    offVal={ff.off.two}
-                    defVal={ff.def.two}
-                    avgVal={leagueAvg?.off.two ?? null}
-                    offRank={rankOf(allTeamStats, ff.off.two, (s) => calcFourFactors(s).off.two, true)}
-                    defRank={rankOf(allTeamStats, ff.def.two, (s) => calcFourFactors(s).def.two, false)}
-                  />
-                  <StatRow
-                    label="3P%"
-                    offVal={ff.off.three}
-                    defVal={ff.def.three}
-                    avgVal={leagueAvg?.off.three ?? null}
-                    offRank={rankOf(allTeamStats, ff.off.three, (s) => calcFourFactors(s).off.three, true)}
-                    defRank={rankOf(allTeamStats, ff.def.three, (s) => calcFourFactors(s).def.three, false)}
-                  />
-                  <StatRow
-                    label="FT%"
-                    offVal={ff.off.ft}
-                    defVal={ff.def.ft}
-                    avgVal={leagueAvg?.off.ft ?? null}
-                    offRank={rankOf(allTeamStats, ff.off.ft, (s) => calcFourFactors(s).off.ft, true)}
-                    defRank={rankOf(allTeamStats, ff.def.ft, (s) => calcFourFactors(s).def.ft, false)}
-                  />
-
-                  <SectionHeader title="Other Stats" />
-                  <StatRow
-                    label="3PA/FGA"
-                    offVal={ff.off.threePaRate}
-                    defVal={ff.def.threePaRate}
-                    avgVal={leagueAvg?.off.threePaRate ?? null}
-                    offRank={rankOf(allTeamStats, ff.off.threePaRate, (s) => calcFourFactors(s).off.threePaRate, true)}
-                    defRank={rankOf(allTeamStats, ff.def.threePaRate, (s) => calcFourFactors(s).def.threePaRate, false)}
-                  />
-                  <StatRow
-                    label="Block%"
-                    offVal={ff.off.blk}
-                    defVal={ff.def.blk}
-                    avgVal={leagueAvg?.off.blk ?? null}
-                    offRank={rankOf(allTeamStats, ff.off.blk, (s) => calcFourFactors(s).off.blk, true)}
-                    defRank={rankOf(allTeamStats, ff.def.blk, (s) => calcFourFactors(s).def.blk, true)}
-                  />
-                  <StatRow
-                    label="Steal%"
-                    offVal={ff.off.stl}
-                    defVal={ff.def.stl}
-                    avgVal={leagueAvg?.off.stl ?? null}
-                    offRank={rankOf(allTeamStats, ff.off.stl, (s) => calcFourFactors(s).off.stl, false)}
-                    defRank={rankOf(allTeamStats, ff.def.stl, (s) => calcFourFactors(s).def.stl, true)}
-                  />
-                  <StatRow
-                    label="Assist%"
-                    offVal={ff.off.ast}
-                    defVal={ff.def.ast}
-                    avgVal={leagueAvg?.off.ast ?? null}
-                    offRank={rankOf(allTeamStats, ff.off.ast, (s) => calcFourFactors(s).off.ast, true)}
-                    defRank={rankOf(allTeamStats, ff.def.ast, (s) => calcFourFactors(s).def.ast, false)}
-                  />
-                </tbody>
-              </table>
-            </>
-          ) : (
-            <div style={{ padding: 20, background: ACCENT_LIGHT, borderRadius: 8, textAlign: "center" }}>
-              <div style={{ fontWeight: 700, marginBottom: 6 }}>Stats unavailable</div>
-              <div style={{ fontSize: 12, color: "#666" }}>Run build_complete_stats.mjs</div>
-            </div>
-          )}
+                );
+              })}
+            </tbody>
+          </table>
         </div>
+      </div>
 
-        {/* RIGHT: GAME LOG */}
+      {/* PLAYER STATS */}
+      {playersData.players.length > 0 && (
         <div>
-          <div style={S.sectionTitle}>Game Log</div>
-          <div style={{ maxHeight: 600, overflowY: "auto", border: `1px solid ${ACCENT_BORDER}`, borderRadius: "0 0 6px 6px" }}>
-            <table style={S.table}>
-              <thead style={{ position: "sticky", top: 0, background: ACCENT_LIGHT, zIndex: 1 }}>
-                <tr>
-                  <th style={S.th}>Date</th>
-                  <th style={S.th}>Opponent <span style={{ fontWeight: 600, fontSize: 12 }}>Rank</span></th>
-                  <th style={S.th}>Loc</th>
-                  <th style={S.th}>Result</th>
-                  <th style={S.thRight}>Score</th>
+          <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 16, background: "#2d3748", color: "#fff", padding: "8px 12px" }}>
+            Player Stats
+          </h2>
+          <div style={{ overflowX: "auto" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14 }}>
+              <thead>
+                <tr style={{ borderBottom: "2px solid #2d3748" }}>
+                  <th style={{ padding: "8px 12px", textAlign: "left" }}>Player</th>
+                  <th style={{ padding: "8px 12px", textAlign: "right" }}>G</th>
+                  <th style={{ padding: "8px 12px", textAlign: "right" }}>Min</th>
+                  <th style={{ padding: "8px 12px", textAlign: "right" }}>Pts</th>
+                  <th style={{ padding: "8px 12px", textAlign: "right" }}>FG%</th>
+                  <th style={{ padding: "8px 12px", textAlign: "right" }}>3P%</th>
+                  <th style={{ padding: "8px 12px", textAlign: "right" }}>Reb</th>
+                  <th style={{ padding: "8px 12px", textAlign: "right" }}>Ast</th>
                 </tr>
               </thead>
               <tbody>
-                {teamGames.map((g) => {
-                  const isHome = g.homeId === teamId;
-                  const opp = isHome ? g.awayTeam : g.homeTeam;
-                  const oppId = isHome ? g.awayId : g.homeId;
-                  const oppRank = emRankMap.get(oppId);
-                  const ourScore = isHome ? g.homeScore : g.awayScore;
-                  const oppScore = isHome ? g.awayScore : g.homeScore;
-                  const won = ourScore > oppScore;
-                  const loc = isHome ? "H" : "A";
-
+                {playersData.players.map((p: any) => {
+                  const fgPct = p.fga > 0 ? ((p.fgm / p.fga) * 100).toFixed(1) : "—";
+                  const tpPct = p.tpa > 0 ? ((p.tpm / p.tpa) * 100).toFixed(1) : "—";
+                  
                   return (
-                    <tr key={g.gameId}>
-                      <td style={S.td}>{new Date(g.date).toLocaleDateString("en-US", { month: "numeric", day: "numeric" })}</td>
-                      <td style={S.td}>
-                        {isHome ? "vs" : "@"} {opp}
-                        {oppRank && <span style={{ marginLeft: 4, fontWeight: 600, color: "#111" }}>{oppRank}</span>}
+                    <tr key={p.playerId} style={{ borderBottom: "1px solid #e5e7eb" }}>
+                      <td style={{ padding: "8px 12px", fontWeight: 600 }}>
+                        {p.firstName} {p.lastName}
                       </td>
-                      <td style={S.td}>{loc}</td>
-                      <td style={{ ...S.td, fontWeight: 700, color: won ? "#16a34a" : "#dc2626" }}>{won ? "W" : "L"}</td>
-                      <td style={S.tdRight}>{ourScore}-{oppScore}</td>
+                      <td style={{ padding: "8px 12px", textAlign: "right" }}>{p.games}</td>
+                      <td style={{ padding: "8px 12px", textAlign: "right" }}>{p.minutes.toFixed(1)}</td>
+                      <td style={{ padding: "8px 12px", textAlign: "right" }}>{p.points}</td>
+                      <td style={{ padding: "8px 12px", textAlign: "right" }}>{fgPct}</td>
+                      <td style={{ padding: "8px 12px", textAlign: "right" }}>{tpPct}</td>
+                      <td style={{ padding: "8px 12px", textAlign: "right" }}>{p.trb}</td>
+                      <td style={{ padding: "8px 12px", textAlign: "right" }}>{p.ast}</td>
                     </tr>
                   );
                 })}
@@ -1057,166 +199,7 @@ export default async function TeamPage({
             </table>
           </div>
         </div>
-      </div>
-
-      {/* PLAYER STATS */}
-      {(() => {
-        // If filters are active, recalculate player stats from filtered games
-        const displayPlayers = (confOnly || d1Only)
-          ? recalcPlayerStatsFromGames(teamId, teamGames)
-          : allPlayers.filter(p => p.teamId === teamId);
-        
-        if (displayPlayers.length === 0) return null;
-
-        return (
-          <div style={{ marginTop: 32 }}>
-            <div style={S.sectionTitle}>
-              {(confOnly || d1Only) ? "Filtered Player Stats" : "Player Stats"}
-            </div>
-            <div style={{ overflowX: "auto", border: `1px solid ${ACCENT_BORDER}`, borderTop: "none" }}>
-              <table style={{ ...S.table, fontSize: 11 }}>
-                <thead>
-                  <tr>
-                    <th style={{ ...S.th, position: "sticky", left: 0, background: ACCENT_LIGHT, zIndex: 2 }}>Player</th>
-                    <th style={S.th}>G</th>
-                    <th style={S.th}>GS</th>
-                    <th style={S.thRight}>Min</th>
-                    <th style={S.thRight}>Pts</th>
-                    <th style={S.thRight}>FGM-A</th>
-                    <th style={S.thRight}>FG%</th>
-                    <th style={S.thRight}>3PM-A</th>
-                    <th style={S.thRight}>3P%</th>
-                    <th style={S.thRight}>FTM-A</th>
-                    <th style={S.thRight}>FT%</th>
-                    <th style={S.thRight}>ORB</th>
-                    <th style={S.thRight}>DRB</th>
-                    <th style={S.thRight}>TRB</th>
-                    <th style={S.thRight}>AST</th>
-                    <th style={S.thRight}>STL</th>
-                    <th style={S.thRight}>BLK</th>
-                    <th style={S.thRight}>TOV</th>
-                    <th style={S.thRight}>PF</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {displayPlayers
-                    .sort((a, b) => b.minutes - a.minutes)
-                    .map(p => {
-                      const fgPct = p.fga > 0 ? (p.fgm / p.fga) * 100 : 0;
-                      const tpPct = p.tpa > 0 ? (p.tpm / p.tpa) * 100 : 0;
-                      const ftPct = p.fta > 0 ? (p.ftm / p.fta) * 100 : 0;
-                      return (
-                        <tr key={p.playerId}>
-                          <td style={{ ...S.td, position: "sticky", left: 0, background: "#fff", whiteSpace: "nowrap", fontWeight: 600 }}>
-                            {p.firstName.charAt(0)}. {p.lastName}
-                            {p.number > 0 && <span style={{ color: "#999", fontSize: 10, marginLeft: 4 }}>#{p.number}</span>}
-                          </td>
-                          <td style={S.td}>{p.games}</td>
-                          <td style={S.td}>{p.starts}</td>
-                          <td style={S.tdRight}>{p.minutes.toFixed(1)}</td>
-                          <td style={S.tdRight}>{p.points}</td>
-                          <td style={{ ...S.tdRight, fontSize: 10 }}>{p.fgm}-{p.fga}</td>
-                          <td style={S.tdRight}>{fgPct > 0 ? fgPct.toFixed(1) : "—"}</td>
-                          <td style={{ ...S.tdRight, fontSize: 10 }}>{p.tpm}-{p.tpa}</td>
-                          <td style={S.tdRight}>{tpPct > 0 ? tpPct.toFixed(1) : "—"}</td>
-                          <td style={{ ...S.tdRight, fontSize: 10 }}>{p.ftm}-{p.fta}</td>
-                          <td style={S.tdRight}>{ftPct > 0 ? ftPct.toFixed(1) : "—"}</td>
-                          <td style={S.tdRight}>{p.orb}</td>
-                          <td style={S.tdRight}>{p.drb}</td>
-                          <td style={S.tdRight}>{p.trb}</td>
-                          <td style={S.tdRight}>{p.ast}</td>
-                          <td style={S.tdRight}>{p.stl}</td>
-                          <td style={S.tdRight}>{p.blk}</td>
-                          <td style={S.tdRight}>{p.tov}</td>
-                          <td style={S.tdRight}>{p.pf}</td>
-                        </tr>
-                      );
-                    })}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        );
-      })()}
-
-      {/* SEASON TOTALS */}
-      {displayStats && (
-        <>
-          <div style={{ ...S.sectionTitle, marginTop: 32 }}>
-            {(confOnly || d1Only) ? "Filtered Totals" : "Season Totals"}
-          </div>
-          <table style={S.table}>
-            <thead>
-              <tr>
-                <th style={S.th}>Stat</th>
-                <th style={S.thRight}>Team</th>
-                <th style={S.thRight}>Opponent</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td style={S.td}>Points</td>
-                <td style={S.tdRight}>{displayStats.points.toLocaleString()}</td>
-                <td style={S.tdRight}>{displayStats.opp_points.toLocaleString()}</td>
-              </tr>
-              <tr>
-                <td style={S.td}>Field Goals (M-A)</td>
-                <td style={S.tdRight}>{displayStats.fgm}-{displayStats.fga}</td>
-                <td style={S.tdRight}>{displayStats.opp_fgm}-{displayStats.opp_fga}</td>
-              </tr>
-              <tr>
-                <td style={S.td}>3-Pointers (M-A)</td>
-                <td style={S.tdRight}>{displayStats.tpm}-{displayStats.tpa}</td>
-                <td style={S.tdRight}>{displayStats.opp_tpm}-{displayStats.opp_tpa}</td>
-              </tr>
-              <tr>
-                <td style={S.td}>Free Throws (M-A)</td>
-                <td style={S.tdRight}>{displayStats.ftm}-{displayStats.fta}</td>
-                <td style={S.tdRight}>{displayStats.opp_ftm}-{displayStats.opp_fta}</td>
-              </tr>
-              <tr>
-                <td style={S.td}>Offensive Rebounds</td>
-                <td style={S.tdRight}>{displayStats.orb}</td>
-                <td style={S.tdRight}>{displayStats.opp_orb}</td>
-              </tr>
-              <tr>
-                <td style={S.td}>Defensive Rebounds</td>
-                <td style={S.tdRight}>{displayStats.drb}</td>
-                <td style={S.tdRight}>{displayStats.opp_drb}</td>
-              </tr>
-              <tr>
-                <td style={S.td}>Assists</td>
-                <td style={S.tdRight}>{displayStats.ast}</td>
-                <td style={S.tdRight}>{displayStats.opp_ast}</td>
-              </tr>
-              <tr>
-                <td style={S.td}>Steals</td>
-                <td style={S.tdRight}>{displayStats.stl}</td>
-                <td style={S.tdRight}>{displayStats.opp_stl}</td>
-              </tr>
-              <tr>
-                <td style={S.td}>Blocks</td>
-                <td style={S.tdRight}>{displayStats.blk}</td>
-                <td style={S.tdRight}>{displayStats.opp_blk}</td>
-              </tr>
-              <tr>
-                <td style={S.td}>Turnovers</td>
-                <td style={S.tdRight}>{displayStats.tov}</td>
-                <td style={S.tdRight}>{displayStats.opp_tov}</td>
-              </tr>
-              <tr>
-                <td style={S.td}>Personal Fouls</td>
-                <td style={S.tdRight}>{displayStats.pf}</td>
-                <td style={S.tdRight}>{displayStats.opp_pf}</td>
-              </tr>
-            </tbody>
-          </table>
-        </>
       )}
-
-      <div style={{ marginTop: 24, fontSize: 11, color: "#aaa", textAlign: "center" }}>
-        womens-kenpom • {updatedDate ?? ""}
-      </div>
     </main>
   );
 }
