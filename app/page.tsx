@@ -1,7 +1,12 @@
 import Link from "next/link";
+import { headers } from 'next/headers';
 
 async function fetchTeams() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/teams`, {
+  const headersList = await headers();
+  const host = headersList.get('host');
+  const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
+  
+  const res = await fetch(`${protocol}://${host}/api/teams`, {
     cache: 'no-store'
   });
   
