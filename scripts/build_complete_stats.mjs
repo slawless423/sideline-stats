@@ -555,7 +555,7 @@ async function main() {
         if (!playerData.teamId || !playerData.players) continue;
         
         const teamId = String(playerData.teamId);
-        const simplifiedPlayers = playerData.players.map((p: any) => ({
+        const simplifiedPlayers = playerData.players.map((p) => ({
           playerId: `${teamId}_${p.number || 0}_${p.firstName}_${p.lastName}`,
           firstName: p.firstName || "",
           lastName: p.lastName || "",
