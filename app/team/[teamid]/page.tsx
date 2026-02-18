@@ -84,6 +84,31 @@ type Game = {
   awayConf?: string;
   awayStats: GameStats;
   isConferenceGame?: boolean;
+  players?: Array<{
+    teamId: string;
+    players: Array<{
+      playerId: string;
+      firstName: string;
+      lastName: string;
+      number: string;
+      minutes: number;
+      fgm: number;
+      fga: number;
+      tpm: number;
+      tpa: number;
+      ftm: number;
+      fta: number;
+      orb: number;
+      drb: number;
+      trb: number;
+      ast: number;
+      stl: number;
+      blk: number;
+      tov: number;
+      pf: number;
+      points: number;
+    }>;
+  }>;
 };
 
 // ===== DATA LOADING =====
@@ -125,6 +150,50 @@ async function loadGames(): Promise<Game[]> {
     if (!res.ok) return [];
     const payload = await res.json();
     return payload?.games ?? [];
+  } catch {
+    return [];
+  }
+}
+
+type PlayerStat = {
+  playerId: string;
+  teamId: string;
+  teamName: string;
+  firstName: string;
+  lastName: string;
+  number: number;
+  position: string;
+  year: string;
+  games: number;
+  starts: number;
+  minutes: number;
+  fgm: number;
+  fga: number;
+  tpm: number;
+  tpa: number;
+  ftm: number;
+  fta: number;
+  orb: number;
+  drb: number;
+  trb: number;
+  ast: number;
+  stl: number;
+  blk: number;
+  tov: number;
+  pf: number;
+  points: number;
+};
+
+async function loadPlayerStats(): Promise<PlayerStat[]> {
+  try {
+    const h = await headers();
+    const host = h.get("host");
+    const proto = h.get("x-forwarded-proto") ?? "https";
+    const url = `${proto}://${host}/data/player_stats.json`;
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) return [];
+    const payload = await res.json();
+    return payload?.players ?? [];
   } catch {
     return [];
   }
@@ -442,6 +511,80 @@ function SectionHeader({ title }: { title: string }) {
   );
 }
 
+// Recalculate player stats from a filtered set of games
+function recalcPlayerStatsFromGames(
+  teamId: string,
+  games: Game[]
+): PlayerStat[] {
+  const playerMap = new Map<string, PlayerStat>();
+
+  for (const game of games) {
+    if (!game.players) continue;
+
+    for (const teamData of game.players) {
+      if (teamData.teamId !== teamId) continue;
+
+      for (const p of teamData.players) {
+        if (!playerMap.has(p.playerId)) {
+          playerMap.set(p.playerId, {
+            playerId: p.playerId,
+            teamId: teamId,
+            teamName: game.homeId === teamId ? game.homeTeam : game.awayTeam,
+            firstName: p.firstName,
+            lastName: p.lastName,
+            number: Number(p.number) || 0,
+            position: "",
+            year: "",
+            games: 0,
+            starts: 0,
+            minutes: 0,
+            fgm: 0,
+            fga: 0,
+            tpm: 0,
+            tpa: 0,
+            ftm: 0,
+            fta: 0,
+            orb: 0,
+            drb: 0,
+            trb: 0,
+            ast: 0,
+            stl: 0,
+            blk: 0,
+            tov: 0,
+            pf: 0,
+            points: 0,
+          });
+        }
+
+        const pStats = playerMap.get(p.playerId)!;
+        
+        // Only count if player played
+        if (p.minutes > 0 || p.points > 0) {
+          pStats.games++;
+          pStats.minutes += p.minutes;
+          pStats.fgm += p.fgm;
+          pStats.fga += p.fga;
+          pStats.tpm += p.tpm;
+          pStats.tpa += p.tpa;
+          pStats.ftm += p.ftm;
+          pStats.fta += p.fta;
+          pStats.orb += p.orb;
+          pStats.drb += p.drb;
+          pStats.trb += p.trb;
+          pStats.ast += p.ast;
+          pStats.stl += p.stl;
+          pStats.blk += p.blk;
+          pStats.tov += p.tov;
+          pStats.pf += p.pf;
+          pStats.points += p.points;
+        }
+      }
+    }
+  }
+
+  return Array.from(playerMap.values());
+}
+
 // Calculate league averages
 function calcLeagueAverages(allTeamStats: TeamStats[]) {
   if (!allTeamStats.length) return null;
@@ -577,10 +720,11 @@ export default async function TeamPage({
   const confOnly = conf === "true";
   const d1Only = d1 === "true";
 
-  const [{ updated, rows }, allTeamStats, allGames] = await Promise.all([
+  const [{ updated, rows }, allTeamStats, allGames, allPlayers] = await Promise.all([
     loadRatings(),
     loadTeamStats(),
     loadGames(),
+    loadPlayerStats(),
   ]);
 
   const row = rows.find((r) => String(r.teamId) === String(teamId));
@@ -914,6 +1058,86 @@ export default async function TeamPage({
           </div>
         </div>
       </div>
+
+      {/* PLAYER STATS */}
+      {(() => {
+        // If filters are active, recalculate player stats from filtered games
+        const displayPlayers = (confOnly || d1Only)
+          ? recalcPlayerStatsFromGames(teamId, teamGames)
+          : allPlayers.filter(p => p.teamId === teamId);
+        
+        if (displayPlayers.length === 0) return null;
+
+        return (
+          <div style={{ marginTop: 32 }}>
+            <div style={S.sectionTitle}>
+              {(confOnly || d1Only) ? "Filtered Player Stats" : "Player Stats"}
+            </div>
+            <div style={{ overflowX: "auto", border: `1px solid ${ACCENT_BORDER}`, borderTop: "none" }}>
+              <table style={{ ...S.table, fontSize: 11 }}>
+                <thead>
+                  <tr>
+                    <th style={{ ...S.th, position: "sticky", left: 0, background: ACCENT_LIGHT, zIndex: 2 }}>Player</th>
+                    <th style={S.th}>G</th>
+                    <th style={S.th}>GS</th>
+                    <th style={S.thRight}>Min</th>
+                    <th style={S.thRight}>Pts</th>
+                    <th style={S.thRight}>FGM-A</th>
+                    <th style={S.thRight}>FG%</th>
+                    <th style={S.thRight}>3PM-A</th>
+                    <th style={S.thRight}>3P%</th>
+                    <th style={S.thRight}>FTM-A</th>
+                    <th style={S.thRight}>FT%</th>
+                    <th style={S.thRight}>ORB</th>
+                    <th style={S.thRight}>DRB</th>
+                    <th style={S.thRight}>TRB</th>
+                    <th style={S.thRight}>AST</th>
+                    <th style={S.thRight}>STL</th>
+                    <th style={S.thRight}>BLK</th>
+                    <th style={S.thRight}>TOV</th>
+                    <th style={S.thRight}>PF</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {displayPlayers
+                    .sort((a, b) => b.minutes - a.minutes)
+                    .map(p => {
+                      const fgPct = p.fga > 0 ? (p.fgm / p.fga) * 100 : 0;
+                      const tpPct = p.tpa > 0 ? (p.tpm / p.tpa) * 100 : 0;
+                      const ftPct = p.fta > 0 ? (p.ftm / p.fta) * 100 : 0;
+                      return (
+                        <tr key={p.playerId}>
+                          <td style={{ ...S.td, position: "sticky", left: 0, background: "#fff", whiteSpace: "nowrap", fontWeight: 600 }}>
+                            {p.firstName.charAt(0)}. {p.lastName}
+                            {p.number > 0 && <span style={{ color: "#999", fontSize: 10, marginLeft: 4 }}>#{p.number}</span>}
+                          </td>
+                          <td style={S.td}>{p.games}</td>
+                          <td style={S.td}>{p.starts}</td>
+                          <td style={S.tdRight}>{p.minutes.toFixed(1)}</td>
+                          <td style={S.tdRight}>{p.points}</td>
+                          <td style={{ ...S.tdRight, fontSize: 10 }}>{p.fgm}-{p.fga}</td>
+                          <td style={S.tdRight}>{fgPct > 0 ? fgPct.toFixed(1) : "—"}</td>
+                          <td style={{ ...S.tdRight, fontSize: 10 }}>{p.tpm}-{p.tpa}</td>
+                          <td style={S.tdRight}>{tpPct > 0 ? tpPct.toFixed(1) : "—"}</td>
+                          <td style={{ ...S.tdRight, fontSize: 10 }}>{p.ftm}-{p.fta}</td>
+                          <td style={S.tdRight}>{ftPct > 0 ? ftPct.toFixed(1) : "—"}</td>
+                          <td style={S.tdRight}>{p.orb}</td>
+                          <td style={S.tdRight}>{p.drb}</td>
+                          <td style={S.tdRight}>{p.trb}</td>
+                          <td style={S.tdRight}>{p.ast}</td>
+                          <td style={S.tdRight}>{p.stl}</td>
+                          <td style={S.tdRight}>{p.blk}</td>
+                          <td style={S.tdRight}>{p.tov}</td>
+                          <td style={S.tdRight}>{p.pf}</td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* SEASON TOTALS */}
       {displayStats && (
