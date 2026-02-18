@@ -1,19 +1,12 @@
 {
-  "name": "womens-kenpom",
-  "private": true,
+  "name": "sideline-stats",
+  "version": "1.0.0",
+  "type": "module",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "build-stats": "node scripts/build_complete_stats.mjs",
+    "update-ratings": "node scripts/build_ratings.mjs"
   },
   "dependencies": {
-    "next": "15.1.11",
-    "react": "19.0.1",
-    "react-dom": "19.0.1"
-  },
-  "devDependencies": {
-    "typescript": "^5.7.3",
-    "@types/node": "^22.10.2",
-    "@types/react": "^19.0.1"
+    "pg": "^8.11.3"
   }
 }
