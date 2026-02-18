@@ -1,7 +1,7 @@
 {
   "generated_at_utc": "2026-02-18T00:36:43.724Z",
   "note": "Contains ONLY successfully parsed game IDs - not scheduled games",
-  "total_games": 4810,
+  "total_games": 4815,
   "game_ids": [
     "6515920",
     "6516194",
@@ -4812,6 +4812,11 @@
     "6515912",
     "6519344",
     "6516901",
-    "6517827"
+    "6517827",
+    "6518397",
+    "6518567",
+    "6518835",
+    "6519594",
+    "6518544"
   ]
 }
