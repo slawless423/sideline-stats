@@ -19,12 +19,22 @@ export async function GET(
     let whereClause = 'WHERE home_team_id = $1 OR away_team_id = $1';
     
     if (confOnly) {
-      whereClause += ' AND is_conference_game = true';
+      // Get team's conference and filter by opponents in same conference
+      const teamConf = await pool.query('SELECT conference FROM teams WHERE team_id = $1', [teamId]);
+      const conference = teamConf.rows[0]?.conference;
+      
+      if (conference) {
+        whereClause += ` AND (
+          (home_team_id = $1 AND away_team_id IN (SELECT team_id FROM teams WHERE conference = '${conference}'))
+          OR
+          (away_team_id = $1 AND home_team_id IN (SELECT team_id FROM teams WHERE conference = '${conference}'))
+        )`;
+      }
     }
     
     if (d1Only) {
       whereClause += ` AND (
-        home_conference IN (
+        home_team_id IN (SELECT team_id FROM teams WHERE conference IN (
           'acc', 'big-12', 'big-ten', 'sec', 'pac-12', 'big-east',
           'american', 'aac', 'wcc', 'mwc', 'mountain-west', 'atlantic-10', 'a-10',
           'mvc', 'mac', 'cusa', 'sun-belt', 'sunbelt', 'colonial', 'caa',
@@ -32,8 +42,8 @@ export async function GET(
           'wac', 'big-sky', 'big-south', 'southern', 'socon',
           'big-west', 'ivy-league', 'meac', 'nec', 'northeast', 'swac',
           'asun', 'america-east', 'americaeast'
-        )
-        AND away_conference IN (
+        ))
+        AND away_team_id IN (SELECT team_id FROM teams WHERE conference IN (
           'acc', 'big-12', 'big-ten', 'sec', 'pac-12', 'big-east',
           'american', 'aac', 'wcc', 'mwc', 'mountain-west', 'atlantic-10', 'a-10',
           'mvc', 'mac', 'cusa', 'sun-belt', 'sunbelt', 'colonial', 'caa',
@@ -41,7 +51,7 @@ export async function GET(
           'wac', 'big-sky', 'big-south', 'southern', 'socon',
           'big-west', 'ivy-league', 'meac', 'nec', 'northeast', 'swac',
           'asun', 'america-east', 'americaeast'
-        )
+        ))
       )`;
     }
 
