@@ -48,9 +48,11 @@ export async function GET() {
         )
     `);
 
-    return NextResponse.json({ teams: result.rows });
+return NextResponse.json({ teams: result.rows });
   } catch (error) {
     console.error('Database error:', error);
     return NextResponse.json({ error: 'Failed to fetch team stats' }, { status: 500 });
   }
 }
+
+export {};
