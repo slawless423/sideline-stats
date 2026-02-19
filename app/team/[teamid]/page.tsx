@@ -121,7 +121,20 @@ export default async function TeamPage({
     fetchAPI('/api/teams/stats'),
   ]);
   
-  const team = teamData;
+  const team = {
+    ...teamData,
+    // Calculate simple efficiency ratings for filtered stats
+    adjO: (confOnly || d1Only) && teamData.games > 0
+      ? (teamData.points / teamData.games) * 100 / ((teamData.fga - teamData.orb + teamData.tov + 0.475 * teamData.fta) / teamData.games)
+      : teamData.adjO,
+    adjD: (confOnly || d1Only) && teamData.games > 0  
+      ? (teamData.opp_points / teamData.games) * 100 / ((teamData.opp_fga - teamData.opp_orb + teamData.opp_tov + 0.475 * teamData.opp_fta) / teamData.games)
+      : teamData.adjD,
+  };
+  
+  if (team.adjO && team.adjD) {
+    team.adjEM = team.adjO - team.adjD;
+  }
 
   if (!team) {
     return (
