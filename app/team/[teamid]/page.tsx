@@ -1,169 +1,396 @@
-import { NextResponse } from 'next/server';
-import { Pool } from 'pg';
+import Link from "next/link";
+import { headers } from 'next/headers';
 
-const pool = new Pool({
-  connectionString: process.env.POSTGRES_URL,
-  ssl: { rejectUnauthorized: false }
-});
+const ACCENT = "#2d3748";
+const ACCENT_LIGHT = "#f7f8fa";
+const ACCENT_BORDER = "#d0d5de";
 
-const D1_CONFERENCES = [
-  'acc', 'big-12', 'big-ten', 'sec', 'pac-12', 'big-east',
-  'american', 'aac', 'wcc', 'mwc', 'mountain-west', 'atlantic-10', 'a-10',
-  'mvc', 'mac', 'cusa', 'sun-belt', 'sunbelt', 'colonial', 'caa',
-  'horizon', 'maac', 'ovc', 'patriot', 'southland', 'summit-league',
-  'wac', 'big-sky', 'big-south', 'southern', 'socon',
-  'big-west', 'ivy-league', 'meac', 'nec', 'northeast', 'swac',
-  'asun', 'america-east', 'americaeast'
-];
+// Types
+type TeamStats = {
+  teamId: string;
+  teamName: string;
+  conference?: string;
+  games: number;
+  wins: number;
+  losses: number;
+  points: number;
+  opp_points: number;
+  fgm: number;
+  fga: number;
+  tpm: number;
+  tpa: number;
+  ftm: number;
+  fta: number;
+  orb: number;
+  drb: number;
+  trb: number;
+  ast: number;
+  stl: number;
+  blk: number;
+  tov: number;
+  pf: number;
+  opp_fgm: number;
+  opp_fga: number;
+  opp_tpm: number;
+  opp_tpa: number;
+  opp_ftm: number;
+  opp_fta: number;
+  opp_orb: number;
+  opp_drb: number;
+  opp_trb: number;
+  opp_ast: number;
+  opp_stl: number;
+  opp_blk: number;
+  opp_tov: number;
+  opp_pf: number;
+};
 
-export async function GET(
-  request: Request,
-  { params }: { params: Promise<{ teamId: string }> }
-) {
-  const { teamId } = await params;
-  const { searchParams } = new URL(request.url);
-  const confOnly = searchParams.get('conf') === 'true';
-  const d1Only = searchParams.get('d1') === 'true';
-
-  try {
-    // Get team info and conference
-    const teamInfo = await pool.query('SELECT team_name, conference FROM teams WHERE team_id = $1', [teamId]);
-    const teamName = teamInfo.rows[0]?.team_name || '';
-    const conference = teamInfo.rows[0]?.conference || '';
-    
-    // Build subquery to get list of game IDs that match filters
-    let gameFilterSubquery = `
-      SELECT game_id FROM games 
-      WHERE (home_team_id = '${teamId}' OR away_team_id = '${teamId}')
-    `;
-    
-    if (confOnly && conference) {
-      gameFilterSubquery += `
-        AND (
-          (home_team_id = '${teamId}' AND away_team_id IN (SELECT team_id FROM teams WHERE conference = '${conference}'))
-          OR
-          (away_team_id = '${teamId}' AND home_team_id IN (SELECT team_id FROM teams WHERE conference = '${conference}'))
-        )
-      `;
-    }
-    
-    if (d1Only) {
-      const confList = D1_CONFERENCES.map(c => `'${c}'`).join(',');
-      gameFilterSubquery += `
-        AND home_team_id IN (SELECT team_id FROM teams WHERE conference IN (${confList}))
-        AND away_team_id IN (SELECT team_id FROM teams WHERE conference IN (${confList}))
-      `;
-    }
-
-    // Aggregate stats from filtered games
-    const result = await pool.query(`
-      SELECT
-        COUNT(*) as games,
-        SUM(CASE 
-          WHEN home_team_id = '${teamId}' AND home_score > away_score THEN 1
-          WHEN away_team_id = '${teamId}' AND away_score > home_score THEN 1
-          ELSE 0
-        END) as wins,
-        SUM(CASE 
-          WHEN home_team_id = '${teamId}' AND home_score < away_score THEN 1
-          WHEN away_team_id = '${teamId}' AND away_score < home_score THEN 1
-          ELSE 0
-        END) as losses,
-        
-        SUM(CASE WHEN home_team_id = '${teamId}' THEN home_score ELSE away_score END) as points,
-        SUM(CASE WHEN home_team_id = '${teamId}' THEN away_score ELSE home_score END) as opp_points,
-        
-        SUM(CASE WHEN home_team_id = '${teamId}' THEN home_fgm ELSE away_fgm END) as fgm,
-        SUM(CASE WHEN home_team_id = '${teamId}' THEN home_fga ELSE away_fga END) as fga,
-        SUM(CASE WHEN home_team_id = '${teamId}' THEN home_tpm ELSE away_tpm END) as tpm,
-        SUM(CASE WHEN home_team_id = '${teamId}' THEN home_tpa ELSE away_tpa END) as tpa,
-        SUM(CASE WHEN home_team_id = '${teamId}' THEN home_ftm ELSE away_ftm END) as ftm,
-        SUM(CASE WHEN home_team_id = '${teamId}' THEN home_fta ELSE away_fta END) as fta,
-        SUM(CASE WHEN home_team_id = '${teamId}' THEN home_orb ELSE away_orb END) as orb,
-        SUM(CASE WHEN home_team_id = '${teamId}' THEN home_drb ELSE away_drb END) as drb,
-        SUM(CASE WHEN home_team_id = '${teamId}' THEN home_trb ELSE away_trb END) as trb,
-        SUM(CASE WHEN home_team_id = '${teamId}' THEN home_ast ELSE away_ast END) as ast,
-        SUM(CASE WHEN home_team_id = '${teamId}' THEN home_stl ELSE away_stl END) as stl,
-        SUM(CASE WHEN home_team_id = '${teamId}' THEN home_blk ELSE away_blk END) as blk,
-        SUM(CASE WHEN home_team_id = '${teamId}' THEN home_tov ELSE away_tov END) as tov,
-        SUM(CASE WHEN home_team_id = '${teamId}' THEN home_pf ELSE away_pf END) as pf,
-        
-        SUM(CASE WHEN home_team_id = '${teamId}' THEN away_fgm ELSE home_fgm END) as opp_fgm,
-        SUM(CASE WHEN home_team_id = '${teamId}' THEN away_fga ELSE home_fga END) as opp_fga,
-        SUM(CASE WHEN home_team_id = '${teamId}' THEN away_tpm ELSE home_tpm END) as opp_tpm,
-        SUM(CASE WHEN home_team_id = '${teamId}' THEN away_tpa ELSE home_tpa END) as opp_tpa,
-        SUM(CASE WHEN home_team_id = '${teamId}' THEN away_ftm ELSE home_ftm END) as opp_ftm,
-        SUM(CASE WHEN home_team_id = '${teamId}' THEN away_fta ELSE home_fta END) as opp_fta,
-        SUM(CASE WHEN home_team_id = '${teamId}' THEN away_orb ELSE home_orb END) as opp_orb,
-        SUM(CASE WHEN home_team_id = '${teamId}' THEN away_drb ELSE home_drb END) as opp_drb,
-        SUM(CASE WHEN home_team_id = '${teamId}' THEN away_trb ELSE home_trb END) as opp_trb,
-        SUM(CASE WHEN home_team_id = '${teamId}' THEN away_ast ELSE home_ast END) as opp_ast,
-        SUM(CASE WHEN home_team_id = '${teamId}' THEN away_stl ELSE home_stl END) as opp_stl,
-        SUM(CASE WHEN home_team_id = '${teamId}' THEN away_blk ELSE home_blk END) as opp_blk,
-        SUM(CASE WHEN home_team_id = '${teamId}' THEN away_tov ELSE home_tov END) as opp_tov,
-        SUM(CASE WHEN home_team_id = '${teamId}' THEN away_pf ELSE home_pf END) as opp_pf
-      FROM games
-      WHERE game_id IN (${gameFilterSubquery})
-    `);
-
-    if (!result.rows[0] || result.rows[0].games === 0 || result.rows[0].games === '0') {
-      return NextResponse.json({ 
-        error: 'No games found',
-        teamId,
-        teamName,
-        conference,
-        games: 0
-      }, { status: 404 });
-    }
-
-    const row = result.rows[0];
-    
-    return NextResponse.json({
-      teamId,
-      teamName,
-      conference,
-      games: parseInt(row.games) || 0,
-      wins: parseInt(row.wins) || 0,
-      losses: parseInt(row.losses) || 0,
-      points: parseInt(row.points) || 0,
-      opp_points: parseInt(row.opp_points) || 0,
-      fgm: parseInt(row.fgm) || 0,
-      fga: parseInt(row.fga) || 0,
-      tpm: parseInt(row.tpm) || 0,
-      tpa: parseInt(row.tpa) || 0,
-      ftm: parseInt(row.ftm) || 0,
-      fta: parseInt(row.fta) || 0,
-      orb: parseInt(row.orb) || 0,
-      drb: parseInt(row.drb) || 0,
-      trb: parseInt(row.trb) || 0,
-      ast: parseInt(row.ast) || 0,
-      stl: parseInt(row.stl) || 0,
-      blk: parseInt(row.blk) || 0,
-      tov: parseInt(row.tov) || 0,
-      pf: parseInt(row.pf) || 0,
-      opp_fgm: parseInt(row.opp_fgm) || 0,
-      opp_fga: parseInt(row.opp_fga) || 0,
-      opp_tpm: parseInt(row.opp_tpm) || 0,
-      opp_tpa: parseInt(row.opp_tpa) || 0,
-      opp_ftm: parseInt(row.opp_ftm) || 0,
-      opp_fta: parseInt(row.opp_fta) || 0,
-      opp_orb: parseInt(row.opp_orb) || 0,
-      opp_drb: parseInt(row.opp_drb) || 0,
-      opp_trb: parseInt(row.opp_trb) || 0,
-      opp_ast: parseInt(row.opp_ast) || 0,
-      opp_stl: parseInt(row.opp_stl) || 0,
-      opp_blk: parseInt(row.opp_blk) || 0,
-      opp_tov: parseInt(row.opp_tov) || 0,
-      opp_pf: parseInt(row.opp_pf) || 0,
-      adjO: null,
-      adjD: null,
-      adjEM: null,
-      adjT: null,
-    });
-  } catch (error) {
-    console.error('Database error:', error);
-    return NextResponse.json({ error: 'Failed to fetch filtered stats', details: String(error) }, { status: 500 });
-  }
+// API fetch functions
+async function fetchAPI(path: string) {
+  const headersList = await headers();
+  const host = headersList.get('host');
+  const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
+  const res = await fetch(`${protocol}://${host}${path}`, { cache: 'no-store' });
+  if (!res.ok) throw new Error(`Failed to fetch ${path}`);
+  return res.json();
 }
 
-export {};
+// Calculate Four Factors
+function calcFourFactors(stats: TeamStats) {
+  const poss = Math.max(1, stats.fga - stats.orb + stats.tov + 0.475 * stats.fta);
+  const oppPoss = Math.max(1, stats.opp_fga - stats.opp_orb + stats.opp_tov + 0.475 * stats.opp_fta);
+
+  return {
+    off: {
+      efg: stats.fga > 0 ? ((stats.fgm + 0.5 * stats.tpm) / stats.fga) * 100 : 0,
+      tov: poss > 0 ? (stats.tov / poss) * 100 : 0,
+      orb: (stats.orb + stats.opp_drb) > 0 ? (stats.orb / (stats.orb + stats.opp_drb)) * 100 : 0,
+      ftr: stats.fga > 0 ? (stats.fta / stats.fga) * 100 : 0,
+      two: (stats.fga - stats.tpa) > 0 ? ((stats.fgm - stats.tpm) / (stats.fga - stats.tpa)) * 100 : 0,
+      three: stats.tpa > 0 ? (stats.tpm / stats.tpa) * 100 : 0,
+      ft: stats.fta > 0 ? (stats.ftm / stats.fta) * 100 : 0,
+      threePaRate: stats.fga > 0 ? (stats.tpa / stats.fga) * 100 : 0,
+      blk: (stats.opp_fga - stats.opp_tpa) > 0 ? (stats.blk / (stats.opp_fga - stats.opp_tpa)) * 100 : 0,
+      stl: oppPoss > 0 ? (stats.stl / oppPoss) * 100 : 0,
+      ast: poss > 0 ? (stats.ast / poss) * 100 : 0,
+    },
+    def: {
+      efg: stats.opp_fga > 0 ? ((stats.opp_fgm + 0.5 * stats.opp_tpm) / stats.opp_fga) * 100 : 0,
+      tov: oppPoss > 0 ? (stats.opp_tov / oppPoss) * 100 : 0,
+      orb: (stats.opp_orb + stats.drb) > 0 ? (stats.opp_orb / (stats.opp_orb + stats.drb)) * 100 : 0,
+      ftr: stats.opp_fga > 0 ? (stats.opp_fta / stats.opp_fga) * 100 : 0,
+      two: (stats.opp_fga - stats.opp_tpa) > 0 ? ((stats.opp_fgm - stats.opp_tpm) / (stats.opp_fga - stats.opp_tpa)) * 100 : 0,
+      three: stats.opp_tpa > 0 ? (stats.opp_tpm / stats.opp_tpa) * 100 : 0,
+      ft: stats.opp_fta > 0 ? (stats.opp_ftm / stats.opp_fta) * 100 : 0,
+      threePaRate: stats.opp_fga > 0 ? (stats.opp_tpa / stats.opp_fga) * 100 : 0,
+      blk: (stats.fga - stats.tpa) > 0 ? (stats.opp_blk / (stats.fga - stats.tpa)) * 100 : 0,
+      stl: poss > 0 ? (stats.opp_stl / poss) * 100 : 0,
+      ast: oppPoss > 0 ? (stats.opp_ast / oppPoss) * 100 : 0,
+    },
+  };
+}
+
+// Ranking helper
+function rankOf(allStats: TeamStats[], value: number | null, statExtractor: (s: TeamStats) => number | null, higherIsBetter: boolean) {
+  if (value === null) return null;
+  const vals = allStats.map(statExtractor).filter(v => v !== null) as number[];
+  const sorted = [...vals].sort((a, b) => higherIsBetter ? b - a : a - b);
+  const idx = sorted.findIndex(v => Math.abs(v - value) < 0.001);
+  return { rank: idx + 1, of: sorted.length };
+}
+
+export default async function TeamPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ teamid: string }>;
+  searchParams: Promise<{ conf?: string; d1?: string }>;
+}) {
+  const { teamid: teamId } = await params;
+  const { conf, d1 } = await searchParams;
+  const confOnly = conf === "true";
+  const d1Only = d1 === "true";
+
+  const [teamsData, teamData, gamesData, playersData, allTeamStatsData] = await Promise.all([
+    fetchAPI('/api/teams'),
+    (confOnly || d1Only) 
+      ? fetchAPI(`/api/teams/${teamId}/filtered?conf=${confOnly}&d1=${d1Only}`)
+      : fetchAPI(`/api/teams/${teamId}`),
+    fetchAPI(`/api/teams/${teamId}/games?conf=${confOnly}&d1=${d1Only}`),
+    fetchAPI(`/api/teams/${teamId}/players`),
+    fetchAPI('/api/teams/stats'),
+  ]);
+  
+  const team = {
+    ...teamData,
+    // Calculate simple efficiency ratings for filtered stats
+    adjO: (confOnly || d1Only) && teamData.games > 0
+      ? (teamData.points / teamData.games) * 100 / ((teamData.fga - teamData.orb + teamData.tov + 0.475 * teamData.fta) / teamData.games)
+      : teamData.adjO,
+    adjD: (confOnly || d1Only) && teamData.games > 0  
+      ? (teamData.opp_points / teamData.games) * 100 / ((teamData.opp_fga - teamData.opp_orb + teamData.opp_tov + 0.475 * teamData.opp_fta) / teamData.games)
+      : teamData.adjD,
+  };
+  
+  if (team.adjO && team.adjD) {
+    team.adjEM = team.adjO - team.adjD;
+  }
+
+  if (!team) {
+    return (
+      <main style={{ maxWidth: 1200, margin: "0 auto", padding: 20 }}>
+        <Link href="/" style={{ color: "#2563eb" }}>← Back</Link>
+        <h1>Team not found</h1>
+      </main>
+    );
+  }
+
+  const rank = teamsData.rows.findIndex((r: any) => r.teamId === teamId) + 1;
+  const allTeamStats: TeamStats[] = allTeamStatsData.teams;
+  const ff = calcFourFactors(team);
+
+  // Calculate league averages
+  const leagueAvg = allTeamStats.length > 0 ? calcFourFactors(
+    allTeamStats.reduce((acc, t) => {
+      Object.keys(t).forEach(k => {
+        if (typeof (t as any)[k] === 'number' && k !== 'teamId') {
+          (acc as any)[k] = ((acc as any)[k] || 0) + (t as any)[k];
+        }
+      });
+      return acc;
+    }, {} as any)
+  ) : null;
+
+  if (leagueAvg) {
+    const count = allTeamStats.length;
+    Object.keys(leagueAvg.off).forEach(k => {
+      (leagueAvg.off as any)[k] = (leagueAvg.off as any)[k] / count;
+      (leagueAvg.def as any)[k] = (leagueAvg.def as any)[k] / count;
+    });
+  }
+
+  const fmt = (val: number | null) => (val !== null && isFinite(val) ? val.toFixed(1) : "—");
+
+  const confOnlyUrl = confOnly 
+    ? (d1Only ? `/team/${teamId}?d1=true` : `/team/${teamId}`)
+    : (d1Only ? `/team/${teamId}?conf=true&d1=true` : `/team/${teamId}?conf=true`);
+  
+  const d1OnlyUrl = d1Only
+    ? (confOnly ? `/team/${teamId}?conf=true` : `/team/${teamId}`)
+    : (confOnly ? `/team/${teamId}?conf=true&d1=true` : `/team/${teamId}?d1=true`);
+
+  return (
+    <main style={{ maxWidth: 1200, margin: "0 auto", padding: 20 }}>
+      <Link href="/" style={{ color: "#2563eb", marginBottom: 16, display: "inline-block" }}>← Back to rankings</Link>
+
+      {/* HEADER */}
+      <div style={{ marginBottom: 24 }}>
+        <h1 style={{ fontSize: 32, fontWeight: 800 }}>{team.teamName}</h1>
+        <div style={{ color: "#666" }}>
+          {team.conference?.toUpperCase()} • #{rank} of {teamsData.rows.length}
+        </div>
+        <div style={{ marginTop: 8 }}>
+          <span style={{ background: "#e5e7eb", padding: "4px 12px", borderRadius: 4 }}>
+            {team.wins}-{team.losses}
+          </span>
+        </div>
+      </div>
+
+      {/* STATS CARDS */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16, marginBottom: 24 }}>
+        <StatCard title="Off. Efficiency" value={team.adjO} />
+        <StatCard title="Def. Efficiency" value={team.adjD} />
+        <StatCard title="Raw Margin" value={team.adjEM} prefix="+" />
+        <StatCard title="Tempo" value={team.adjT} />
+      </div>
+
+      {/* TOGGLES */}
+      <div style={{ display: "flex", gap: 12, marginBottom: 24 }}>
+        <ToggleLink href={confOnlyUrl} checked={confOnly} label="Conference games only" />
+        <ToggleLink href={d1OnlyUrl} checked={d1Only} label="D1 opponents only" />
+      </div>
+
+      {/* TWO COLUMN LAYOUT */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, marginBottom: 32 }}>
+        {/* SCOUTING REPORT */}
+        <div>
+          <SectionTitle title="Team Scouting Report" />
+          <StatsTable
+            title="Four Factors"
+            rows={[
+              { label: "Eff. FG%", off: ff.off.efg, def: ff.def.efg, avg: leagueAvg?.off.efg },
+              { label: "TO%", off: ff.off.tov, def: ff.def.tov, avg: leagueAvg?.off.tov },
+              { label: "OR%", off: ff.off.orb, def: ff.def.orb, avg: leagueAvg?.off.orb },
+              { label: "FTA/FGA", off: ff.off.ftr, def: ff.def.ftr, avg: leagueAvg?.off.ftr },
+            ]}
+          />
+          <StatsTable
+            title="Shooting"
+            rows={[
+              { label: "2P%", off: ff.off.two, def: ff.def.two, avg: leagueAvg?.off.two },
+              { label: "3P%", off: ff.off.three, def: ff.def.three, avg: leagueAvg?.off.three },
+              { label: "FT%", off: ff.off.ft, def: ff.def.ft, avg: leagueAvg?.off.ft },
+            ]}
+          />
+          <StatsTable
+            title="Other Stats"
+            rows={[
+              { label: "3PA/FGA", off: ff.off.threePaRate, def: ff.def.threePaRate, avg: leagueAvg?.off.threePaRate },
+              { label: "Block%", off: ff.off.blk, def: ff.def.blk, avg: leagueAvg?.off.blk },
+              { label: "Steal%", off: ff.off.stl, def: ff.def.stl, avg: leagueAvg?.off.stl },
+              { label: "Assist%", off: ff.off.ast, def: ff.def.ast, avg: leagueAvg?.off.ast },
+            ]}
+          />
+        </div>
+
+        {/* GAME LOG */}
+        <div>
+          <SectionTitle title="Game Log" />
+          <div style={{ maxHeight: 600, overflowY: "auto", border: `1px solid ${ACCENT_BORDER}`, borderTop: "none" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 11 }}>
+              <thead style={{ position: "sticky", top: 0, background: ACCENT_LIGHT, zIndex: 1 }}>
+                <tr>
+                  <th style={{ padding: "6px 8px", textAlign: "left", borderBottom: `2px solid ${ACCENT}` }}>Date</th>
+                  <th style={{ padding: "6px 8px", textAlign: "left", borderBottom: `2px solid ${ACCENT}` }}>Opponent</th>
+                  <th style={{ padding: "6px 8px", textAlign: "center", borderBottom: `2px solid ${ACCENT}` }}>Loc</th>
+                  <th style={{ padding: "6px 8px", textAlign: "center", borderBottom: `2px solid ${ACCENT}` }}>Result</th>
+                  <th style={{ padding: "6px 8px", textAlign: "right", borderBottom: `2px solid ${ACCENT}` }}>Score</th>
+                </tr>
+              </thead>
+              <tbody>
+                {gamesData.games.map((game: any) => {
+                  const isHome = game.homeId === teamId;
+                  const opponent = isHome ? game.awayTeam : game.homeTeam;
+                  const ourScore = isHome ? game.homeScore : game.awayScore;
+                  const theirScore = isHome ? game.awayScore : game.homeScore;
+                  const won = ourScore > theirScore;
+                  
+                  return (
+                    <tr key={game.gameId} style={{ borderBottom: "1px solid #f0f0f0" }}>
+                      <td style={{ padding: "6px 8px" }}>
+                        {new Date(game.date).toLocaleDateString('en-US', { month: 'numeric', day: 'numeric' })}
+                      </td>
+                      <td style={{ padding: "6px 8px" }}>{opponent}</td>
+                      <td style={{ padding: "6px 8px", textAlign: "center" }}>{isHome ? "vs" : "@"}</td>
+                      <td style={{ padding: "6px 8px", textAlign: "center", fontWeight: 600, color: won ? "#16a34a" : "#dc2626" }}>
+                        {won ? "W" : "L"}
+                      </td>
+                      <td style={{ padding: "6px 8px", textAlign: "right" }}>{ourScore}-{theirScore}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      {/* PLAYER STATS */}
+      {playersData.players.length > 0 && (
+        <div style={{ marginBottom: 32 }}>
+          <SectionTitle title="Player Stats" />
+          <div style={{ overflowX: "auto" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 11 }}>
+              <thead>
+                <tr style={{ borderBottom: `2px solid ${ACCENT}` }}>
+                  <th style={{ padding: "6px 8px", textAlign: "left" }}>Player</th>
+                  <th style={{ padding: "6px 8px", textAlign: "right" }}>G</th>
+                  <th style={{ padding: "6px 8px", textAlign: "right" }}>Min</th>
+                  <th style={{ padding: "6px 8px", textAlign: "right" }}>Pts</th>
+                  <th style={{ padding: "6px 8px", textAlign: "right" }}>FG%</th>
+                  <th style={{ padding: "6px 8px", textAlign: "right" }}>3P%</th>
+                  <th style={{ padding: "6px 8px", textAlign: "right" }}>FT%</th>
+                  <th style={{ padding: "6px 8px", textAlign: "right" }}>Reb</th>
+                  <th style={{ padding: "6px 8px", textAlign: "right" }}>Ast</th>
+                  <th style={{ padding: "6px 8px", textAlign: "right" }}>Stl</th>
+                  <th style={{ padding: "6px 8px", textAlign: "right" }}>Blk</th>
+                </tr>
+              </thead>
+              <tbody>
+                {playersData.players.map((p: any) => (
+                  <tr key={p.playerId} style={{ borderBottom: "1px solid #f0f0f0" }}>
+                    <td style={{ padding: "6px 8px", fontWeight: 600 }}>{p.firstName} {p.lastName}</td>
+                    <td style={{ padding: "6px 8px", textAlign: "right" }}>{p.games}</td>
+                    <td style={{ padding: "6px 8px", textAlign: "right" }}>{parseFloat(p.minutes).toFixed(1)}</td>
+                    <td style={{ padding: "6px 8px", textAlign: "right" }}>{p.points}</td>
+                    <td style={{ padding: "6px 8px", textAlign: "right" }}>{p.fga > 0 ? ((p.fgm / p.fga) * 100).toFixed(1) : "—"}</td>
+                    <td style={{ padding: "6px 8px", textAlign: "right" }}>{p.tpa > 0 ? ((p.tpm / p.tpa) * 100).toFixed(1) : "—"}</td>
+                    <td style={{ padding: "6px 8px", textAlign: "right" }}>{p.fta > 0 ? ((p.ftm / p.fta) * 100).toFixed(1) : "—"}</td>
+                    <td style={{ padding: "6px 8px", textAlign: "right" }}>{p.trb}</td>
+                    <td style={{ padding: "6px 8px", textAlign: "right" }}>{p.ast}</td>
+                    <td style={{ padding: "6px 8px", textAlign: "right" }}>{p.stl}</td>
+                    <td style={{ padding: "6px 8px", textAlign: "right" }}>{p.blk}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+    </main>
+  );
+}
+
+// Helper components
+function StatCard({ title, value, prefix = "" }: { title: string; value: number | null; prefix?: string }) {
+  return (
+    <div style={{ background: ACCENT_LIGHT, padding: 20, borderRadius: 8, border: `1px solid ${ACCENT_BORDER}` }}>
+      <div style={{ fontSize: 12, color: "#666", marginBottom: 4, textTransform: "uppercase" }}>{title}</div>
+      <div style={{ fontSize: 32, fontWeight: 800 }}>
+        {value !== null && isFinite(value) ? `${prefix}${value.toFixed(1)}` : "—"}
+      </div>
+    </div>
+  );
+}
+
+function ToggleLink({ href, checked, label }: { href: string; checked: boolean; label: string }) {
+  return (
+    <Link href={href} style={{ textDecoration: "none", flex: 1 }}>
+      <div style={{
+        display: "flex", alignItems: "center", gap: 8, padding: "10px 12px",
+        background: ACCENT_LIGHT, border: `1px solid ${ACCENT_BORDER}`,
+        borderRadius: 6, cursor: "pointer"
+      }}>
+        <input type="checkbox" checked={checked} readOnly style={{ marginRight: 4 }} />
+        <span>{label}</span>
+      </div>
+    </Link>
+  );
+}
+
+function SectionTitle({ title }: { title: string }) {
+  return (
+    <div style={{
+      fontSize: 12, fontWeight: 800, textTransform: "uppercase",
+      letterSpacing: 0.5, color: "#fff", background: ACCENT,
+      padding: "6px 10px", marginBottom: 0
+    }}>
+      {title}
+    </div>
+  );
+}
+
+function StatsTable({ title, rows }: { title: string; rows: Array<{ label: string; off: number; def: number; avg?: number | null }> }) {
+  return (
+    <div style={{ marginBottom: 16, border: "1px solid #e0e0e0" }}>
+      <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 11 }}>
+        <thead>
+          <tr style={{ background: "#f0f0f0" }}>
+            <th style={{ fontSize: 11, fontWeight: 700, padding: "8px 10px", textAlign: "left", width: "50%" }}>{title}</th>
+            <th style={{ fontSize: 11, fontWeight: 700, padding: "8px 10px", textAlign: "right", width: "25%" }}>Off</th>
+            <th style={{ fontSize: 11, fontWeight: 700, padding: "8px 10px", textAlign: "right", width: "25%" }}>Def</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, i) => (
+            <tr key={i} style={{ borderBottom: i === rows.length - 1 ? "none" : "1px solid #f0f0f0" }}>
+              <td style={{ padding: "6px 10px" }}>{row.label}</td>
+              <td style={{ padding: "6px 10px", textAlign: "right" }}>{isFinite(row.off) ? row.off.toFixed(1) : "—"}</td>
+              <td style={{ padding: "6px 10px", textAlign: "right" }}>{isFinite(row.def) ? row.def.toFixed(1) : "—"}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
