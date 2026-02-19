@@ -375,6 +375,13 @@ function StatsTable({ title, rows }: { title: string; rows: Array<{ label: strin
     <div style={{ marginBottom: 16 }}>
       <div style={{ fontSize: 11, fontWeight: 700, padding: "8px 10px", background: "#f0f0f0" }}>{title}</div>
       <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 11 }}>
+        <thead>
+          <tr style={{ borderBottom: "2px solid #e0e0e0" }}>
+            <th style={{ padding: "6px 10px", textAlign: "left" }}></th>
+            <th style={{ padding: "6px 10px", textAlign: "right", fontWeight: 600 }}>Off</th>
+            <th style={{ padding: "6px 10px", textAlign: "right", fontWeight: 600 }}>Def</th>
+          </tr>
+        </thead>
         <tbody>
           {rows.map((row, i) => (
             <tr key={i} style={{ borderBottom: "1px solid #f0f0f0" }}>
