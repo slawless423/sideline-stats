@@ -111,13 +111,17 @@ export default async function TeamPage({
   const confOnly = conf === "true";
   const d1Only = d1 === "true";
 
-  const [teamsData, team, gamesData, playersData, allTeamStatsData] = await Promise.all([
+  const [teamsData, teamData, gamesData, playersData, allTeamStatsData] = await Promise.all([
     fetchAPI('/api/teams'),
-    fetchAPI(`/api/teams/${teamId}`),
-    fetchAPI(`/api/teams/${teamId}/games`),
+    (confOnly || d1Only) 
+      ? fetchAPI(`/api/teams/${teamId}/filtered?conf=${confOnly}&d1=${d1Only}`)
+      : fetchAPI(`/api/teams/${teamId}`),
+    fetchAPI(`/api/teams/${teamId}/games?conf=${confOnly}&d1=${d1Only}`),
     fetchAPI(`/api/teams/${teamId}/players`),
     fetchAPI('/api/teams/stats'),
   ]);
+  
+  const team = teamData;
 
   if (!team) {
     return (
