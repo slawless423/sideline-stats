@@ -11,8 +11,40 @@ export async function GET(
   { params }: { params: Promise<{ teamId: string }> }
 ) {
   const { teamId } = await params;
+  const { searchParams } = new URL(request.url);
+  const confOnly = searchParams.get('conf') === 'true';
+  const d1Only = searchParams.get('d1') === 'true';
 
   try {
+    let whereClause = 'WHERE home_team_id = $1 OR away_team_id = $1';
+    
+    if (confOnly) {
+      whereClause += ' AND is_conference_game = true';
+    }
+    
+    if (d1Only) {
+      whereClause += ` AND (
+        home_conference IN (
+          'acc', 'big-12', 'big-ten', 'sec', 'pac-12', 'big-east',
+          'american', 'aac', 'wcc', 'mwc', 'mountain-west', 'atlantic-10', 'a-10',
+          'mvc', 'mac', 'cusa', 'sun-belt', 'sunbelt', 'colonial', 'caa',
+          'horizon', 'maac', 'ovc', 'patriot', 'southland', 'summit-league',
+          'wac', 'big-sky', 'big-south', 'southern', 'socon',
+          'big-west', 'ivy-league', 'meac', 'nec', 'northeast', 'swac',
+          'asun', 'america-east', 'americaeast'
+        )
+        AND away_conference IN (
+          'acc', 'big-12', 'big-ten', 'sec', 'pac-12', 'big-east',
+          'american', 'aac', 'wcc', 'mwc', 'mountain-west', 'atlantic-10', 'a-10',
+          'mvc', 'mac', 'cusa', 'sun-belt', 'sunbelt', 'colonial', 'caa',
+          'horizon', 'maac', 'ovc', 'patriot', 'southland', 'summit-league',
+          'wac', 'big-sky', 'big-south', 'southern', 'socon',
+          'big-west', 'ivy-league', 'meac', 'nec', 'northeast', 'swac',
+          'asun', 'america-east', 'americaeast'
+        )
+      )`;
+    }
+
     const result = await pool.query(`
       SELECT 
         game_id as "gameId",
@@ -31,7 +63,7 @@ export async function GET(
         away_fgm, away_fga, away_tpm, away_tpa, away_ftm, away_fta,
         away_orb, away_drb, away_trb, away_ast, away_stl, away_blk, away_tov, away_pf
       FROM games
-      WHERE home_team_id = $1 OR away_team_id = $1
+      ${whereClause}
       ORDER BY game_date ASC
     `, [teamId]);
 
