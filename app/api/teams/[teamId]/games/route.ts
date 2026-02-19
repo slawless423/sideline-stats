@@ -23,13 +23,13 @@ export async function GET(
       teamConference = teamConf.rows[0]?.conference;
     }
     
-    let whereClause = 'WHERE home_team_id = $1 OR away_team_id = $1';
+    let whereClause = `WHERE (home_team_id = '${teamId}' OR away_team_id = '${teamId}')`;
     
     if (confOnly && teamConference) {
       whereClause += ` AND (
-        (home_team_id = $1 AND away_team_id IN (SELECT team_id FROM teams WHERE conference = '${teamConference}'))
+        (home_team_id = '${teamId}' AND away_team_id IN (SELECT team_id FROM teams WHERE conference = '${teamConference}'))
         OR
-        (away_team_id = $1 AND home_team_id IN (SELECT team_id FROM teams WHERE conference = '${teamConference}'))
+        (away_team_id = '${teamId}' AND home_team_id IN (SELECT team_id FROM teams WHERE conference = '${teamConference}'))
       )`;
     }
     
@@ -76,7 +76,7 @@ export async function GET(
       FROM games
       ${whereClause}
       ORDER BY game_date ASC
-    `, [teamId]);
+    `);
 
     // Transform to match expected format
     const games = result.rows.map(row => ({
