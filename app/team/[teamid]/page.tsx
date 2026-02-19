@@ -59,12 +59,16 @@ async function fetchAPI(path: string) {
 function calcFourFactors(stats: TeamStats) {
   const poss = Math.max(1, stats.fga - stats.orb + stats.tov + 0.475 * stats.fta);
   const oppPoss = Math.max(1, stats.opp_fga - stats.opp_orb + stats.opp_tov + 0.475 * stats.opp_fta);
+  
+  // Calculate DRB from TRB - ORB since database has drb=0
+  const drb = stats.trb - stats.orb;
+  const opp_drb = stats.opp_trb - stats.opp_orb;
 
   return {
     off: {
       efg: stats.fga > 0 ? ((stats.fgm + 0.5 * stats.tpm) / stats.fga) * 100 : 0,
       tov: poss > 0 ? (stats.tov / poss) * 100 : 0,
-      orb: (stats.orb + stats.opp_drb) > 0 ? (stats.orb / (stats.orb + stats.opp_drb)) * 100 : 0,
+      orb: (stats.orb + opp_drb) > 0 ? (stats.orb / (stats.orb + opp_drb)) * 100 : 0,
       ftr: stats.fga > 0 ? (stats.fta / stats.fga) * 100 : 0,
       two: (stats.fga - stats.tpa) > 0 ? ((stats.fgm - stats.tpm) / (stats.fga - stats.tpa)) * 100 : 0,
       three: stats.tpa > 0 ? (stats.tpm / stats.tpa) * 100 : 0,
@@ -77,7 +81,7 @@ function calcFourFactors(stats: TeamStats) {
     def: {
       efg: stats.opp_fga > 0 ? ((stats.opp_fgm + 0.5 * stats.opp_tpm) / stats.opp_fga) * 100 : 0,
       tov: oppPoss > 0 ? (stats.opp_tov / oppPoss) * 100 : 0,
-      orb: (stats.opp_orb + stats.drb) > 0 ? (stats.opp_orb / (stats.opp_orb + stats.drb)) * 100 : 0,
+      orb: (stats.opp_orb + drb) > 0 ? (stats.opp_orb / (stats.opp_orb + drb)) * 100 : 0,
       ftr: stats.opp_fga > 0 ? (stats.opp_fta / stats.opp_fga) * 100 : 0,
       two: (stats.opp_fga - stats.opp_tpa) > 0 ? ((stats.opp_fgm - stats.opp_tpm) / (stats.opp_fga - stats.opp_tpa)) * 100 : 0,
       three: stats.opp_tpa > 0 ? (stats.opp_tpm / stats.opp_tpa) * 100 : 0,
@@ -123,13 +127,16 @@ export default async function TeamPage({
   
   const team = {
     ...teamData,
-    // Calculate simple efficiency ratings for filtered stats
+    // Calculate simple efficiency ratings and tempo for filtered stats
     adjO: (confOnly || d1Only) && teamData.games > 0
       ? (teamData.points / teamData.games) * 100 / ((teamData.fga - teamData.orb + teamData.tov + 0.475 * teamData.fta) / teamData.games)
       : teamData.adjO,
     adjD: (confOnly || d1Only) && teamData.games > 0  
       ? (teamData.opp_points / teamData.games) * 100 / ((teamData.opp_fga - teamData.opp_orb + teamData.opp_tov + 0.475 * teamData.opp_fta) / teamData.games)
       : teamData.adjD,
+    adjT: (confOnly || d1Only) && teamData.games > 0
+      ? ((teamData.fga - teamData.orb + teamData.tov + 0.475 * teamData.fta) + (teamData.opp_fga - teamData.opp_orb + teamData.opp_tov + 0.475 * teamData.opp_fta)) / (2 * teamData.games)
+      : teamData.adjT,
   };
   
   if (team.adjO && team.adjD) {
