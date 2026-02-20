@@ -199,6 +199,36 @@ export default async function TeamPage({
     }
   };
 
+  // Calculate D1 averages
+  const d1Avg = {
+    off: {
+      efg: allTeamFactors.reduce((sum, t) => sum + t.ff.off.efg, 0) / allTeamFactors.length,
+      tov: allTeamFactors.reduce((sum, t) => sum + t.ff.off.tov, 0) / allTeamFactors.length,
+      orb: allTeamFactors.reduce((sum, t) => sum + t.ff.off.orb, 0) / allTeamFactors.length,
+      ftr: allTeamFactors.reduce((sum, t) => sum + t.ff.off.ftr, 0) / allTeamFactors.length,
+      two: allTeamFactors.reduce((sum, t) => sum + t.ff.off.two, 0) / allTeamFactors.length,
+      three: allTeamFactors.reduce((sum, t) => sum + t.ff.off.three, 0) / allTeamFactors.length,
+      ft: allTeamFactors.reduce((sum, t) => sum + t.ff.off.ft, 0) / allTeamFactors.length,
+      threePaRate: allTeamFactors.reduce((sum, t) => sum + t.ff.off.threePaRate, 0) / allTeamFactors.length,
+      blk: allTeamFactors.reduce((sum, t) => sum + t.ff.off.blk, 0) / allTeamFactors.length,
+      stl: allTeamFactors.reduce((sum, t) => sum + t.ff.off.stl, 0) / allTeamFactors.length,
+      ast: allTeamFactors.reduce((sum, t) => sum + t.ff.off.ast, 0) / allTeamFactors.length,
+    },
+    def: {
+      efg: allTeamFactors.reduce((sum, t) => sum + t.ff.def.efg, 0) / allTeamFactors.length,
+      tov: allTeamFactors.reduce((sum, t) => sum + t.ff.def.tov, 0) / allTeamFactors.length,
+      orb: allTeamFactors.reduce((sum, t) => sum + t.ff.def.orb, 0) / allTeamFactors.length,
+      ftr: allTeamFactors.reduce((sum, t) => sum + t.ff.def.ftr, 0) / allTeamFactors.length,
+      two: allTeamFactors.reduce((sum, t) => sum + t.ff.def.two, 0) / allTeamFactors.length,
+      three: allTeamFactors.reduce((sum, t) => sum + t.ff.def.three, 0) / allTeamFactors.length,
+      ft: allTeamFactors.reduce((sum, t) => sum + t.ff.def.ft, 0) / allTeamFactors.length,
+      threePaRate: allTeamFactors.reduce((sum, t) => sum + t.ff.def.threePaRate, 0) / allTeamFactors.length,
+      blk: allTeamFactors.reduce((sum, t) => sum + t.ff.def.blk, 0) / allTeamFactors.length,
+      stl: allTeamFactors.reduce((sum, t) => sum + t.ff.def.stl, 0) / allTeamFactors.length,
+      ast: allTeamFactors.reduce((sum, t) => sum + t.ff.def.ast, 0) / allTeamFactors.length,
+    }
+  };
+
   // Calculate league averages
   const leagueAvg = allTeamStats.length > 0 ? calcFourFactors(
     allTeamStats.reduce((acc, t) => {
@@ -268,27 +298,27 @@ export default async function TeamPage({
           <StatsTable
             title="Four Factors"
             rows={[
-              { label: "Eff. FG%", off: ff.off.efg, def: ff.def.efg, offRank: rankings.off.efg, defRank: rankings.def.efg },
-              { label: "TO%", off: ff.off.tov, def: ff.def.tov, offRank: rankings.off.tov, defRank: rankings.def.tov },
-              { label: "OR%", off: ff.off.orb, def: ff.def.orb, offRank: rankings.off.orb, defRank: rankings.def.orb },
-              { label: "FTA/FGA", off: ff.off.ftr, def: ff.def.ftr, offRank: rankings.off.ftr, defRank: rankings.def.ftr },
+              { label: "Eff. FG%", off: ff.off.efg, def: ff.def.efg, offRank: rankings.off.efg, defRank: rankings.def.efg, offAvg: d1Avg.off.efg, defAvg: d1Avg.def.efg },
+              { label: "TO%", off: ff.off.tov, def: ff.def.tov, offRank: rankings.off.tov, defRank: rankings.def.tov, offAvg: d1Avg.off.tov, defAvg: d1Avg.def.tov },
+              { label: "OR%", off: ff.off.orb, def: ff.def.orb, offRank: rankings.off.orb, defRank: rankings.def.orb, offAvg: d1Avg.off.orb, defAvg: d1Avg.def.orb },
+              { label: "FTA/FGA", off: ff.off.ftr, def: ff.def.ftr, offRank: rankings.off.ftr, defRank: rankings.def.ftr, offAvg: d1Avg.off.ftr, defAvg: d1Avg.def.ftr },
             ]}
           />
           <StatsTable
             title="Shooting"
             rows={[
-              { label: "2P%", off: ff.off.two, def: ff.def.two, offRank: rankings.off.two, defRank: rankings.def.two },
-              { label: "3P%", off: ff.off.three, def: ff.def.three, offRank: rankings.off.three, defRank: rankings.def.three },
-              { label: "FT%", off: ff.off.ft, def: ff.def.ft, offRank: rankings.off.ft, defRank: rankings.def.ft },
+              { label: "2P%", off: ff.off.two, def: ff.def.two, offRank: rankings.off.two, defRank: rankings.def.two, offAvg: d1Avg.off.two, defAvg: d1Avg.def.two },
+              { label: "3P%", off: ff.off.three, def: ff.def.three, offRank: rankings.off.three, defRank: rankings.def.three, offAvg: d1Avg.off.three, defAvg: d1Avg.def.three },
+              { label: "FT%", off: ff.off.ft, def: ff.def.ft, offRank: rankings.off.ft, defRank: rankings.def.ft, offAvg: d1Avg.off.ft, defAvg: d1Avg.def.ft },
             ]}
           />
           <StatsTable
             title="Other Stats"
             rows={[
-              { label: "3PA/FGA", off: ff.off.threePaRate, def: ff.def.threePaRate, offRank: rankings.off.threePaRate, defRank: rankings.def.threePaRate },
-              { label: "Block%", off: ff.off.blk, def: ff.def.blk, offRank: rankings.off.blk, defRank: rankings.def.blk },
-              { label: "Steal%", off: ff.off.stl, def: ff.def.stl, offRank: rankings.off.stl, defRank: rankings.def.stl },
-              { label: "Assist%", off: ff.off.ast, def: ff.def.ast, offRank: rankings.off.ast, defRank: rankings.def.ast },
+              { label: "3PA/FGA", off: ff.off.threePaRate, def: ff.def.threePaRate, offRank: rankings.off.threePaRate, defRank: rankings.def.threePaRate, offAvg: d1Avg.off.threePaRate, defAvg: d1Avg.def.threePaRate },
+              { label: "Block%", off: ff.off.blk, def: ff.def.blk, offRank: rankings.off.blk, defRank: rankings.def.blk, offAvg: d1Avg.off.blk, defAvg: d1Avg.def.blk },
+              { label: "Steal%", off: ff.off.stl, def: ff.def.stl, offRank: rankings.off.stl, defRank: rankings.def.stl, offAvg: d1Avg.off.stl, defAvg: d1Avg.def.stl },
+              { label: "Assist%", off: ff.off.ast, def: ff.def.ast, offRank: rankings.off.ast, defRank: rankings.def.ast, offAvg: d1Avg.off.ast, defAvg: d1Avg.def.ast },
             ]}
           />
         </div>
@@ -421,15 +451,27 @@ function SectionTitle({ title }: { title: string }) {
   );
 }
 
-function StatsTable({ title, rows }: { title: string; rows: Array<{ label: string; off: number; def: number; offRank?: number; defRank?: number }> }) {
+function StatsTable({ title, rows }: { 
+  title: string; 
+  rows: Array<{ 
+    label: string; 
+    off: number; 
+    def: number; 
+    offRank?: number; 
+    defRank?: number;
+    offAvg?: number;
+    defAvg?: number;
+  }> 
+}) {
   return (
     <div style={{ marginBottom: 16, border: "1px solid #e0e0e0" }}>
       <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 11 }}>
         <thead>
           <tr style={{ background: "#f0f0f0" }}>
-            <th style={{ fontSize: 11, fontWeight: 700, padding: "8px 10px", textAlign: "left", width: "50%" }}>{title}</th>
-            <th style={{ fontSize: 11, fontWeight: 700, padding: "8px 10px", textAlign: "right", width: "25%" }}>Off</th>
-            <th style={{ fontSize: 11, fontWeight: 700, padding: "8px 10px", textAlign: "right", width: "25%" }}>Def</th>
+            <th style={{ fontSize: 11, fontWeight: 700, padding: "8px 10px", textAlign: "left", width: "40%" }}>{title}</th>
+            <th style={{ fontSize: 11, fontWeight: 700, padding: "8px 10px", textAlign: "right", width: "20%" }}>Off</th>
+            <th style={{ fontSize: 11, fontWeight: 700, padding: "8px 10px", textAlign: "right", width: "20%" }}>Def</th>
+            <th style={{ fontSize: 11, fontWeight: 700, padding: "8px 10px", textAlign: "right", width: "20%" }}>D1 Avg</th>
           </tr>
         </thead>
         <tbody>
@@ -443,6 +485,9 @@ function StatsTable({ title, rows }: { title: string; rows: Array<{ label: strin
               <td style={{ padding: "6px 10px", textAlign: "right" }}>
                 {isFinite(row.def) ? row.def.toFixed(1) : "—"}
                 {row.defRank && <span style={{ color: "#666", fontSize: 10, marginLeft: 4 }}>#{row.defRank}</span>}
+              </td>
+              <td style={{ padding: "6px 10px", textAlign: "right", color: "#666" }}>
+                {row.offAvg && row.defAvg ? ((row.offAvg + row.defAvg) / 2).toFixed(1) : "—"}
               </td>
             </tr>
           ))}
