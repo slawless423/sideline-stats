@@ -32,7 +32,7 @@ export default async function HomePage() {
     <main style={{ maxWidth: 1200, margin: "0 auto", padding: 20 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
         <h1 style={{ fontSize: 32, fontWeight: 800, marginBottom: 0 }}>
-          Sideline Stats - Women's College Basketball
+          Sideline Stats - Beta
         </h1>
         <Link 
           href="/players" 
