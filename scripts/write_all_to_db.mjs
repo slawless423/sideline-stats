@@ -38,6 +38,8 @@ async function main() {
   
   // Write teams
   console.log('\nWriting teams...');
+  console.log('First team sample:', JSON.stringify(teams[0]).substring(0, 300));
+  
   for (const team of teams) {
     await upsertTeam(team);
   }
