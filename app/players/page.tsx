@@ -231,7 +231,13 @@ export default function PlayersPage() {
   return (
     <main style={{ maxWidth: "100%", margin: "0 auto", padding: 20 }}>
       <div style={{ marginBottom: 24 }}>
-        <h1 style={{ fontSize: 32, fontWeight: 800, marginBottom: 8 }}>Player Database</h1>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+          <h1 style={{ fontSize: 32, fontWeight: 800, marginBottom: 0 }}>Sideline Stats - Beta</h1>
+          <Link href="/" style={{ color: "#4f46e5", textDecoration: "none", fontWeight: 600 }}>
+            ← Home
+          </Link>
+        </div>
+        <h2 style={{ fontSize: 24, fontWeight: 700, marginTop: 8, marginBottom: 8 }}>Player Database</h2>
         <p style={{ color: "#666", marginBottom: 16 }}>{players.length} players</p>
         
         <div style={{ display: "flex", gap: 12, marginBottom: 16, flexWrap: "wrap" }}>
