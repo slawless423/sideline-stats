@@ -76,7 +76,7 @@ function calcFourFactors(stats: TeamStats) {
       threePaRate: stats.fga > 0 ? (stats.tpa / stats.fga) * 100 : 0,
       blk: (stats.opp_fga - stats.opp_tpa) > 0 ? (stats.blk / (stats.opp_fga - stats.opp_tpa)) * 100 : 0,
       stl: oppPoss > 0 ? (stats.stl / oppPoss) * 100 : 0,
-      ast: poss > 0 ? (stats.ast / poss) * 100 : 0,
+      ast: stats.fgm > 0 ? (stats.ast / stats.fgm) * 100 : 0,
     },
     def: {
       efg: stats.opp_fga > 0 ? ((stats.opp_fgm + 0.5 * stats.opp_tpm) / stats.opp_fga) * 100 : 0,
@@ -89,7 +89,7 @@ function calcFourFactors(stats: TeamStats) {
       threePaRate: stats.opp_fga > 0 ? (stats.opp_tpa / stats.opp_fga) * 100 : 0,
       blk: (stats.fga - stats.tpa) > 0 ? (stats.opp_blk / (stats.fga - stats.tpa)) * 100 : 0,
       stl: poss > 0 ? (stats.opp_stl / poss) * 100 : 0,
-      ast: oppPoss > 0 ? (stats.opp_ast / oppPoss) * 100 : 0,
+      ast: stats.opp_fgm > 0 ? (stats.opp_ast / stats.opp_fgm) * 100 : 0,
     },
   };
 }
