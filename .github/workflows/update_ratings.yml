@@ -21,13 +21,10 @@ jobs:
       - name: Install dependencies
         run: npm install pg
       
-      - name: Run incremental update
-        run: node scripts/build_ratings.mjs
-      
-      - name: Write to Database
+      - name: Run incremental update and write to database
         env:
           POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
-        run: node scripts/write_all_to_db.mjs
+        run: node scripts/build_ratings.mjs
       
       - name: Clean up installation artifacts
         run: |
