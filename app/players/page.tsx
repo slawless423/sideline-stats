@@ -137,8 +137,10 @@ export default function PlayersPage() {
       ? (p.drb / p.minutes) * (teamMinutes / 5) / (drb + team.opp_orb) * 100 : 0;
 
     // Assist/TO Rate
+    const teamFGMWhileOnFloor = (team.fgm - p.fgm) * (p.minutes / teamMinutes) * 5;
+    const aRate = teamFGMWhileOnFloor > 0 ? (p.ast / teamFGMWhileOnFloor) * 100 : 0;
+    
     const playerPoss100 = p.minutes > 0 ? (teamPoss / teamMinutes) * p.minutes : 0;
-    const aRate = playerPoss100 > 0 ? (p.ast / playerPoss100) * 100 : 0;
     const toRate = playerPoss100 > 0 ? (p.tov / playerPoss100) * 100 : 0;
 
     // Block/Steal %
