@@ -63,10 +63,10 @@ export default async function HomePage() {
               <th style={{ padding: "10px 12px", textAlign: "left" }}>Team</th>
               <th style={{ padding: "10px 12px", textAlign: "left" }}>Conference</th>
               <th style={{ padding: "10px 12px", textAlign: "right" }}>Record</th>
-              <th style={{ padding: "10px 12px", textAlign: "right" }}>AdjEM</th>
-              <th style={{ padding: "10px 12px", textAlign: "right" }}>AdjO</th>
-              <th style={{ padding: "10px 12px", textAlign: "right" }}>AdjD</th>
-              <th style={{ padding: "10px 12px", textAlign: "right" }}>AdjT</th>
+              <th style={{ padding: "10px 12px", textAlign: "right" }}>EM</th>
+              <th style={{ padding: "10px 12px", textAlign: "right" }}>O</th>
+              <th style={{ padding: "10px 12px", textAlign: "right" }}>D</th>
+              <th style={{ padding: "10px 12px", textAlign: "right" }}>T</th>
             </tr>
           </thead>
           <tbody>
@@ -91,19 +91,19 @@ export default async function HomePage() {
                   {row.conference || "—"}
                 </td>
                 <td style={{ padding: "10px 12px", textAlign: "right" }}>
-                  {row.games > 0 ? `${row.games}` : "—"}
+                  {row.wins != null && row.losses != null ? `${row.wins}-${row.losses}` : "—"}
                 </td>
                 <td style={{ padding: "10px 12px", textAlign: "right", fontWeight: 600 }}>
-                  {row.adjEM != null ? row.adjEM.toFixed(1) : "—"}
+                  {row.rawEM != null ? row.rawEM.toFixed(1) : "—"}
                 </td>
                 <td style={{ padding: "10px 12px", textAlign: "right" }}>
-                  {row.adjO != null ? row.adjO.toFixed(1) : "—"}
+                  {row.rawO != null ? row.rawO.toFixed(1) : "—"}
                 </td>
                 <td style={{ padding: "10px 12px", textAlign: "right" }}>
-                  {row.adjD != null ? row.adjD.toFixed(1) : "—"}
+                  {row.rawD != null ? row.rawD.toFixed(1) : "—"}
                 </td>
                 <td style={{ padding: "10px 12px", textAlign: "right" }}>
-                  {row.adjT != null ? row.adjT.toFixed(1) : "—"}
+                  {row.rawT != null ? row.rawT.toFixed(1) : "—"}
                 </td>
               </tr>
             ))}
