@@ -31,8 +31,8 @@ jobs:
       
       - name: Clean up installation artifacts
         run: |
-          git checkout -- package.json package-lock.json
-          rm -rf node_modules
+          git checkout -- package.json 2>/dev/null || true
+          git clean -fd
       
       - name: Commit and push
         run: |
