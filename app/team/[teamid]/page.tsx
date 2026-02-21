@@ -261,7 +261,7 @@ export default async function TeamPage({
 
   return (
     <main style={{ maxWidth: 1200, margin: "0 auto", padding: 20 }}>
-      <Link href="/" style={{ color: "#2563eb", marginBottom: 16, display: "inline-block" }}>← Back to rankings</Link>
+      <Link href="/" style={{ color: "#2563eb", marginBottom: 16, display: "inline-block" }}>← Sideline Stats - Beta</Link>
 
       {/* HEADER */}
       <div style={{ marginBottom: 24 }}>
