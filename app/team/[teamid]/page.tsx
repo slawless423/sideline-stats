@@ -180,8 +180,8 @@ export default async function TeamPage({
       three: getRank(ff.off.three, allTeamFactors.map(t => t.ff.off.three), true),
       ft: getRank(ff.off.ft, allTeamFactors.map(t => t.ff.off.ft), true),
       threePaRate: getRank(ff.off.threePaRate, allTeamFactors.map(t => t.ff.off.threePaRate), true),
-      blk: getRank(ff.off.blk, allTeamFactors.map(t => t.ff.off.blk), true),
-      stl: getRank(ff.off.stl, allTeamFactors.map(t => t.ff.off.stl), true),
+      blk: getRank(ff.off.blk, allTeamFactors.map(t => t.ff.off.blk), false), // Lower is better - fewer opp blocks
+      stl: getRank(ff.off.stl, allTeamFactors.map(t => t.ff.off.stl), false), // Lower is better - fewer opp steals
       ast: getRank(ff.off.ast, allTeamFactors.map(t => t.ff.off.ast), true),
     },
     def: {
@@ -303,27 +303,27 @@ export default async function TeamPage({
           <StatsTable
             title="Four Factors"
             rows={[
-              { label: "Eff. FG%", off: ff.off.efg, def: ff.def.efg, offRank: rankings.off.efg, defRank: rankings.def.efg, offAvg: d1Avg.off.efg, defAvg: d1Avg.def.efg },
-              { label: "TO%", off: ff.off.tov, def: ff.def.tov, offRank: rankings.off.tov, defRank: rankings.def.tov, offAvg: d1Avg.off.tov, defAvg: d1Avg.def.tov },
-              { label: "OR%", off: ff.off.orb, def: ff.def.orb, offRank: rankings.off.orb, defRank: rankings.def.orb, offAvg: d1Avg.off.orb, defAvg: d1Avg.def.orb },
-              { label: "FTA/FGA", off: ff.off.ftr, def: ff.def.ftr, offRank: rankings.off.ftr, defRank: rankings.def.ftr, offAvg: d1Avg.off.ftr, defAvg: d1Avg.def.ftr },
+              { label: "Eff. FG%", off: ff.off.efg, def: ff.def.efg, offRank: (confOnly || d1Only) ? undefined : rankings.off.efg, defRank: (confOnly || d1Only) ? undefined : rankings.def.efg, offAvg: d1Avg.off.efg, defAvg: d1Avg.def.efg },
+              { label: "TO%", off: ff.off.tov, def: ff.def.tov, offRank: (confOnly || d1Only) ? undefined : rankings.off.tov, defRank: (confOnly || d1Only) ? undefined : rankings.def.tov, offAvg: d1Avg.off.tov, defAvg: d1Avg.def.tov },
+              { label: "OR%", off: ff.off.orb, def: ff.def.orb, offRank: (confOnly || d1Only) ? undefined : rankings.off.orb, defRank: (confOnly || d1Only) ? undefined : rankings.def.orb, offAvg: d1Avg.off.orb, defAvg: d1Avg.def.orb },
+              { label: "FTA/FGA", off: ff.off.ftr, def: ff.def.ftr, offRank: (confOnly || d1Only) ? undefined : rankings.off.ftr, defRank: (confOnly || d1Only) ? undefined : rankings.def.ftr, offAvg: d1Avg.off.ftr, defAvg: d1Avg.def.ftr },
             ]}
           />
           <StatsTable
             title="Shooting"
             rows={[
-              { label: "2P%", off: ff.off.two, def: ff.def.two, offRank: rankings.off.two, defRank: rankings.def.two, offAvg: d1Avg.off.two, defAvg: d1Avg.def.two },
-              { label: "3P%", off: ff.off.three, def: ff.def.three, offRank: rankings.off.three, defRank: rankings.def.three, offAvg: d1Avg.off.three, defAvg: d1Avg.def.three },
-              { label: "FT%", off: ff.off.ft, def: ff.def.ft, offRank: rankings.off.ft, defRank: rankings.def.ft, offAvg: d1Avg.off.ft, defAvg: d1Avg.def.ft },
+              { label: "2P%", off: ff.off.two, def: ff.def.two, offRank: (confOnly || d1Only) ? undefined : rankings.off.two, defRank: (confOnly || d1Only) ? undefined : rankings.def.two, offAvg: d1Avg.off.two, defAvg: d1Avg.def.two },
+              { label: "3P%", off: ff.off.three, def: ff.def.three, offRank: (confOnly || d1Only) ? undefined : rankings.off.three, defRank: (confOnly || d1Only) ? undefined : rankings.def.three, offAvg: d1Avg.off.three, defAvg: d1Avg.def.three },
+              { label: "FT%", off: ff.off.ft, def: ff.def.ft, offRank: (confOnly || d1Only) ? undefined : rankings.off.ft, defRank: (confOnly || d1Only) ? undefined : rankings.def.ft, offAvg: d1Avg.off.ft, defAvg: d1Avg.def.ft },
             ]}
           />
           <StatsTable
             title="Other Stats"
             rows={[
-              { label: "3PA/FGA", off: ff.off.threePaRate, def: ff.def.threePaRate, offRank: rankings.off.threePaRate, defRank: rankings.def.threePaRate, offAvg: d1Avg.off.threePaRate, defAvg: d1Avg.def.threePaRate },
-              { label: "Block%", off: ff.off.blk, def: ff.def.blk, offRank: rankings.off.blk, defRank: rankings.def.blk, offAvg: d1Avg.off.blk, defAvg: d1Avg.def.blk },
-              { label: "Steal%", off: ff.off.stl, def: ff.def.stl, offRank: rankings.off.stl, defRank: rankings.def.stl, offAvg: d1Avg.off.stl, defAvg: d1Avg.def.stl },
-              { label: "Assist%", off: ff.off.ast, def: ff.def.ast, offRank: rankings.off.ast, defRank: rankings.def.ast, offAvg: d1Avg.off.ast, defAvg: d1Avg.def.ast },
+              { label: "3PA/FGA", off: ff.off.threePaRate, def: ff.def.threePaRate, offRank: (confOnly || d1Only) ? undefined : rankings.off.threePaRate, defRank: (confOnly || d1Only) ? undefined : rankings.def.threePaRate, offAvg: d1Avg.off.threePaRate, defAvg: d1Avg.def.threePaRate },
+              { label: "Block%", off: ff.off.blk, def: ff.def.blk, offRank: (confOnly || d1Only) ? undefined : rankings.off.blk, defRank: (confOnly || d1Only) ? undefined : rankings.def.blk, offAvg: d1Avg.off.blk, defAvg: d1Avg.def.blk },
+              { label: "Steal%", off: ff.off.stl, def: ff.def.stl, offRank: (confOnly || d1Only) ? undefined : rankings.off.stl, defRank: (confOnly || d1Only) ? undefined : rankings.def.stl, offAvg: d1Avg.off.stl, defAvg: d1Avg.def.stl },
+              { label: "Assist%", off: ff.off.ast, def: ff.def.ast, offRank: (confOnly || d1Only) ? undefined : rankings.off.ast, defRank: (confOnly || d1Only) ? undefined : rankings.def.ast, offAvg: d1Avg.off.ast, defAvg: d1Avg.def.ast },
             ]}
           />
         </div>
@@ -491,9 +491,14 @@ function PlayerStatsKenPom({ players, team }: { players: any[]; team: any }) {
     const drPct = p.minutes > 0 && (drb + team.opp_orb) > 0
       ? (p.drb / p.minutes) * (teamMinutes / 5) / (drb + team.opp_orb) * 100 : 0;
     
-    // Assist/TO Rate (per 100 possessions)
+    // Assist/TO Rate
+    // Assist Rate = assists / (team FGM - player FGM) when player is on floor
+    // Approximation: (assists * team games) / (team FGM - player FGM)
+    const teamFGMWhileOnFloor = (team.fgm - p.fgm) * (p.minutes / teamMinutes) * 5;
+    const aRate = teamFGMWhileOnFloor > 0 ? (p.ast / teamFGMWhileOnFloor) * 100 : 0;
+    
+    // TO Rate = turnovers per 100 possessions
     const playerPoss100 = p.minutes > 0 ? (teamPoss / teamMinutes) * p.minutes : 0;
-    const aRate = playerPoss100 > 0 ? (p.ast / playerPoss100) * 100 : 0;
     const toRate = playerPoss100 > 0 ? (p.tov / playerPoss100) * 100 : 0;
     
     // Block/Steal % (actual KenPom formulas)
