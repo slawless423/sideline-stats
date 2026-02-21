@@ -394,9 +394,9 @@ export default async function TeamPage({
                 <td style={{ padding: "6px 8px", textAlign: "right" }}>{team.opp_points}</td>
               </tr>
               <tr style={{ borderBottom: "1px solid #f0f0f0" }}>
-                <td style={{ padding: "6px 8px" }}>FGM-FGA</td>
-                <td style={{ padding: "6px 8px", textAlign: "right" }}>{team.fgm}-{team.fga}</td>
-                <td style={{ padding: "6px 8px", textAlign: "right" }}>{team.opp_fgm}-{team.opp_fga}</td>
+                <td style={{ padding: "6px 8px" }}>2PM-2PA</td>
+                <td style={{ padding: "6px 8px", textAlign: "right" }}>{team.fgm - team.tpm}-{team.fga - team.tpa}</td>
+                <td style={{ padding: "6px 8px", textAlign: "right" }}>{team.opp_fgm - team.opp_tpm}-{team.opp_fga - team.opp_tpa}</td>
               </tr>
               <tr style={{ borderBottom: "1px solid #f0f0f0" }}>
                 <td style={{ padding: "6px 8px" }}>3PM-3PA</td>
