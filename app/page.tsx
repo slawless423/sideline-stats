@@ -131,9 +131,12 @@ export default function HomePage() {
   return (
     <main style={{ maxWidth: 1200, margin: "0 auto", padding: 20 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-        <h1 style={{ fontSize: 32, fontWeight: 800, marginBottom: 0 }}>
-          Sideline Stats - Beta
-        </h1>
+        <div>
+          <h1 style={{ fontSize: 32, fontWeight: 800, marginBottom: 4 }}>
+            Sideline Stats - Beta
+          </h1>
+          <p style={{ fontSize: 16, color: "#666", margin: 0 }}>Women's D1 College Basketball</p>
+        </div>
         <Link 
           href="/players" 
           style={{ 
