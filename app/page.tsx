@@ -1,32 +1,139 @@
+'use client';
+
 import Link from "next/link";
-import { headers } from 'next/headers';
+import { useEffect, useState } from "react";
 
-async function fetchTeams() {
-  const headersList = await headers();
-  const host = headersList.get('host');
-  const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
-  
-  const res = await fetch(`${protocol}://${host}/api/teams`, {
-    cache: 'no-store'
-  });
-  
-  if (!res.ok) {
-    throw new Error('Failed to fetch teams');
+type Team = {
+  teamId: string;
+  team: string;
+  conference: string;
+  games: number;
+  wins: number;
+  losses: number;
+  adjO: number;
+  adjD: number;
+  adjEM: number;
+  adjT: number;
+  rawO: number;
+  rawD: number;
+  rawEM: number;
+  rawT: number;
+};
+
+type SortKey = 'rank' | 'team' | 'conference' | 'rawEM' | 'rawO' | 'rawD' | 'rawT';
+type SortOrder = 'asc' | 'desc';
+
+export default function HomePage() {
+  const [teams, setTeams] = useState<Team[]>([]);
+  const [sortedTeams, setSortedTeams] = useState<Team[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [updatedDate, setUpdatedDate] = useState<string | null>(null);
+  const [sortKey, setSortKey] = useState<SortKey>('rawEM');
+  const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
+
+  useEffect(() => {
+    fetch('/api/teams')
+      .then(res => res.json())
+      .then(data => {
+        setTeams(data.rows);
+        setSortedTeams(data.rows);
+        setUpdatedDate(data.updated 
+          ? new Date(data.updated).toLocaleDateString("en-US", {
+              month: "long",
+              day: "numeric",
+              year: "numeric",
+            })
+          : null
+        );
+        setLoading(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    const sorted = [...teams].sort((a, b) => {
+      let aVal: any, bVal: any;
+
+      switch (sortKey) {
+        case 'team':
+          aVal = a.team;
+          bVal = b.team;
+          return sortOrder === 'asc' 
+            ? aVal.localeCompare(bVal) 
+            : bVal.localeCompare(aVal);
+        case 'conference':
+          aVal = a.conference || '';
+          bVal = b.conference || '';
+          return sortOrder === 'asc' 
+            ? aVal.localeCompare(bVal) 
+            : bVal.localeCompare(aVal);
+        case 'rawEM':
+          aVal = a.rawEM;
+          bVal = b.rawEM;
+          break;
+        case 'rawO':
+          aVal = a.rawO;
+          bVal = b.rawO;
+          break;
+        case 'rawD':
+          aVal = a.rawD;
+          bVal = b.rawD;
+          break;
+        case 'rawT':
+          aVal = a.rawT;
+          bVal = b.rawT;
+          break;
+        default:
+          return 0;
+      }
+
+      // For numeric sorts
+      if (sortKey !== 'team' && sortKey !== 'conference') {
+        // Def Efficiency - lower is better
+        if (sortKey === 'rawD') {
+          return sortOrder === 'asc' ? aVal - bVal : bVal - aVal;
+        }
+        // All others - higher is better
+        return sortOrder === 'asc' ? aVal - bVal : bVal - aVal;
+      }
+      return 0;
+    });
+
+    setSortedTeams(sorted);
+  }, [teams, sortKey, sortOrder]);
+
+  const handleSort = (key: SortKey) => {
+    if (sortKey === key) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortKey(key);
+      // Default sort order for each column
+      if (key === 'rawD') {
+        setSortOrder('asc'); // Lower is better for defense
+      } else {
+        setSortOrder('desc'); // Higher is better for everything else
+      }
+    }
+  };
+
+  const SortableHeader = ({ label, sortKey: key }: { label: string; sortKey: SortKey }) => (
+    <th 
+      onClick={() => handleSort(key)}
+      style={{ 
+        padding: "10px 12px", 
+        textAlign: "right",
+        cursor: "pointer",
+        userSelect: "none",
+        background: sortKey === key ? "#1e293b" : "#2d3748",
+        fontWeight: 700,
+      }}
+    >
+      {label} {sortKey === key && (sortOrder === 'desc' ? '↓' : '↑')}
+    </th>
+  );
+
+  if (loading) {
+    return <div style={{ padding: 40, textAlign: "center" }}>Loading...</div>;
   }
-  
-  return res.json();
-}
-
-export default async function HomePage() {
-  const { rows, updated } = await fetchTeams();
-
-  const updatedDate = updated
-    ? new Date(updated).toLocaleDateString("en-US", {
-        month: "long",
-        day: "numeric",
-        year: "numeric",
-      })
-    : null;
 
   return (
     <main style={{ maxWidth: 1200, margin: "0 auto", padding: 20 }}>
@@ -63,14 +170,14 @@ export default async function HomePage() {
               <th style={{ padding: "10px 12px", textAlign: "left" }}>Team</th>
               <th style={{ padding: "10px 12px", textAlign: "left" }}>Conference</th>
               <th style={{ padding: "10px 12px", textAlign: "right" }}>Record</th>
-              <th style={{ padding: "10px 12px", textAlign: "right" }}>EM</th>
-              <th style={{ padding: "10px 12px", textAlign: "right" }}>O</th>
-              <th style={{ padding: "10px 12px", textAlign: "right" }}>D</th>
-              <th style={{ padding: "10px 12px", textAlign: "right" }}>T</th>
+              <SortableHeader label="Efficiency Margin" sortKey="rawEM" />
+              <SortableHeader label="Off Efficiency" sortKey="rawO" />
+              <SortableHeader label="Def Efficiency" sortKey="rawD" />
+              <SortableHeader label="Tempo" sortKey="rawT" />
             </tr>
           </thead>
           <tbody>
-            {rows.map((row: any, idx: number) => (
+            {sortedTeams.map((row, idx) => (
               <tr
                 key={row.teamId}
                 style={{
