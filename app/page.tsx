@@ -77,7 +77,8 @@ export default function HomePage() {
         case 'rawD':
           aVal = a.rawD;
           bVal = b.rawD;
-          break;
+          // Def Efficiency - lower is better
+          return sortOrder === 'asc' ? aVal - bVal : bVal - aVal;
         case 'rawT':
           aVal = a.rawT;
           bVal = b.rawT;
@@ -86,16 +87,8 @@ export default function HomePage() {
           return 0;
       }
 
-      // For numeric sorts
-      if (sortKey !== 'team' && sortKey !== 'conference') {
-        // Def Efficiency - lower is better
-        if (sortKey === 'rawD') {
-          return sortOrder === 'asc' ? aVal - bVal : bVal - aVal;
-        }
-        // All others - higher is better
-        return sortOrder === 'asc' ? aVal - bVal : bVal - aVal;
-      }
-      return 0;
+      // All others - higher is better
+      return sortOrder === 'asc' ? aVal - bVal : bVal - aVal;
     });
 
     setSortedTeams(sorted);
