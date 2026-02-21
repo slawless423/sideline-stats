@@ -1,4 +1,5 @@
 import fs from "node:fs/promises";
+import { initDb, insertGame, upsertTeam, closeDb } from './db_writer.mjs';
 
 const NCAA_API_BASE = "https://ncaa-api.henrygd.me";
 const SEASON_START = "2025-11-01";
@@ -7,6 +8,15 @@ const REQUEST_TIMEOUT_MS = 20000;
 const REQUEST_RETRIES = 3;
 const BOX_CONCURRENCY = 4;
 const MIN_TEAMS_REQUIRED = 300;
+
+// Initialize database connection if POSTGRES_URL is available
+const dbEnabled = !!process.env.POSTGRES_URL;
+if (dbEnabled) {
+  console.log("Database connection enabled");
+  initDb();
+} else {
+  console.log("No POSTGRES_URL - skipping database writes");
+}
 
 console.log("START incremental_update", new Date().toISOString());
 
@@ -235,6 +245,57 @@ function parseWbbBoxscoreRobust(gameId, gameJson) {
   ];
 }
 
+// Convert parsed game lines to database format
+function linesToDbGame(lines, gameDate) {
+  const [home, away] = lines;
+  
+  return {
+    gameId: home.gameId,
+    date: gameDate,
+    homeId: home.teamId,
+    homeTeam: home.team,
+    homeScore: home.pts,
+    homeConf: null, // Not available in this data
+    awayId: away.teamId,
+    awayTeam: away.team,
+    awayScore: away.pts,
+    awayConf: null,
+    isConferenceGame: false,
+    homeStats: {
+      fgm: 0, // Not available
+      fga: home.fga,
+      tpm: 0,
+      tpa: 0,
+      ftm: 0,
+      fta: home.fta,
+      orb: home.orb,
+      drb: 0,
+      trb: 0,
+      ast: 0,
+      stl: 0,
+      blk: 0,
+      tov: home.tov,
+      pf: 0,
+    },
+    awayStats: {
+      fgm: 0,
+      fga: away.fga,
+      tpm: 0,
+      tpa: 0,
+      ftm: 0,
+      fta: away.fta,
+      orb: away.orb,
+      drb: 0,
+      trb: 0,
+      ast: 0,
+      stl: 0,
+      blk: 0,
+      tov: away.tov,
+      pf: 0,
+    }
+  };
+}
+
 // Load existing team aggregates from ratings.json
 async function loadExistingTeamAgg() {
   try {
@@ -333,10 +394,6 @@ async function main() {
   const today = new Date();
 
   // IMPORTANT: Check YESTERDAY and TWO DAYS AGO
-  // Why? Games are listed in the morning scoreboard BEFORE they're played.
-  // If our script runs at 6 AM EST and games tip off at 7 PM EST,
-  // the game IDs appear in yesterday's scoreboard but boxscores aren't ready yet.
-  // By checking 2 days back, we always catch evening games from the day before.
   const datesToCheck = [
     fmtDate(new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate() - 1))),
     fmtDate(new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate() - 2))),
@@ -348,13 +405,12 @@ async function main() {
   const teamAgg = await loadExistingTeamAgg();
 
   // CRITICAL: knownGameIds = games we SUCCESSFULLY PARSED (not just scheduled)
-  // This prevents us from skipping evening games that appeared in the scoreboard
-  // before they were actually played
   const knownGameIds = await loadKnownGameIds();
   console.log(`Already have ${knownGameIds.size} successfully parsed games in cache`);
 
   // Collect all game IDs from both dates
   const allGameIds = new Set();
+  const gameIdToDate = new Map(); // Track which date each game came from
 
   for (const dateStr of datesToCheck) {
     const [Y, M, D] = dateStr.split("-");
@@ -364,7 +420,10 @@ async function main() {
       const scoreboard = await fetchJson(scoreboardPath);
       const gameIds = extractGameIds(scoreboard);
       console.log(`Found ${gameIds.length} games on ${dateStr}`);
-      gameIds.forEach(gid => allGameIds.add(gid));
+      gameIds.forEach(gid => {
+        allGameIds.add(gid);
+        gameIdToDate.set(gid, dateStr);
+      });
     } catch (e) {
       console.error(`Failed to fetch scoreboard for ${dateStr}:`, e.message);
     }
@@ -378,6 +437,7 @@ async function main() {
 
   if (newGameIds.length === 0) {
     console.log("No new games found - ratings already up to date!");
+    if (dbEnabled) await closeDb();
     process.exit(0);
   }
 
@@ -385,6 +445,7 @@ async function main() {
   let newGamesProcessed = 0;
   let failed = 0;
   const processedGameIds = [];
+  let dbWrites = 0;
 
   const boxscoreFetches = await mapLimit(newGameIds, BOX_CONCURRENCY, async (gid) => {
     try {
@@ -433,11 +494,26 @@ async function main() {
       teamAgg.set(line.teamId, cur);
     }
 
+    // Write to database if enabled
+    if (dbEnabled) {
+      try {
+        const gameDate = gameIdToDate.get(gid) || fmtDate(today);
+        const dbGame = linesToDbGame(lines, gameDate);
+        await insertGame(dbGame);
+        dbWrites++;
+      } catch (err) {
+        // Game might already exist (ON CONFLICT DO NOTHING) - that's fine
+      }
+    }
+
     processedGameIds.push(gid);
     newGamesProcessed++;
   }
 
   console.log(`Successfully processed ${newGamesProcessed} new games, ${failed} failed`);
+  if (dbEnabled) {
+    console.log(`Wrote ${dbWrites} games to database`);
+  }
 
   // Calculate final ratings
   const rows = [...teamAgg.entries()].map(([teamId, t]) => {
@@ -466,6 +542,37 @@ async function main() {
     }, null, 2),
     "utf8"
   );
+
+  // Update teams in database if enabled
+  if (dbEnabled) {
+    console.log("Updating team ratings in database...");
+    for (const row of rows) {
+      try {
+        await upsertTeam({
+          teamId: row.teamId,
+          teamName: row.team,
+          conference: null, // Not available in this data
+          games: row.games,
+          wins: null,
+          losses: null,
+          adjO: row.adjO,
+          adjD: row.adjD,
+          adjEM: row.adjEM,
+          adjT: row.adjT,
+          points: null,
+          opp_points: null,
+          fgm: null, fga: null, tpm: null, tpa: null, ftm: null, fta: null,
+          orb: null, drb: null, trb: null, ast: null, stl: null, blk: null, tov: null, pf: null,
+          opp_fgm: null, opp_fga: null, opp_tpm: null, opp_tpa: null, opp_ftm: null, opp_fta: null,
+          opp_orb: null, opp_drb: null, opp_trb: null, opp_ast: null, opp_stl: null, opp_blk: null, opp_tov: null, opp_pf: null,
+        });
+      } catch (err) {
+        console.error(`Failed to update team ${row.teamId}:`, err.message);
+      }
+    }
+    await closeDb();
+    console.log("✅ Database updates complete");
+  }
 
   // Update known game IDs cache
   await saveKnownGameIds(processedGameIds);
