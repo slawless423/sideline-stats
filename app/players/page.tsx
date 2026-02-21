@@ -171,7 +171,7 @@ export default function PlayersPage() {
     const apg = p.games > 0 ? p.ast / p.games : 0;
 
     return {
-      minPct, ortg, usagePct, shotPct, efg, ts, orPct: orbPct, drbPct,
+      minPct, ortg, usagePct, shotPct, efg, ts, orbPct: orPct, drbPct,
       aRate, toRate, blkPct, stlPct, fc40, ftRate, ftPct, twoPct, threePct,
       ppg, rpg, apg
     };
