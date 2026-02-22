@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { headers } from 'next/headers';
+import TeamPageWithNav from '@/components/TeamPageWithNav';
 
 const ACCENT = "#2d3748";
 const ACCENT_LIGHT = "#f7f8fa";
@@ -260,13 +261,8 @@ export default async function TeamPage({
     : (confOnly ? `/team/${teamId}?conf=true&d1=true` : `/team/${teamId}?d1=true`);
 
   return (
-    <main style={{ maxWidth: 1200, margin: "0 auto", padding: 20 }}>
-      <div style={{ marginBottom: 16 }}>
-        <Link href="/" style={{ color: "#2563eb", textDecoration: "none", fontWeight: 600 }}>
-          ← Sideline Stats - Beta
-        </Link>
-        <p style={{ fontSize: 14, color: "#666", marginTop: 4, marginBottom: 0 }}>Women's D1 College Basketball</p>
-      </div>
+    <TeamPageWithNav>
+      <main style={{ maxWidth: 1200, margin: "0 auto", padding: 20 }}>
 
       {/* HEADER */}
       <div style={{ marginBottom: 24 }}>
@@ -458,6 +454,7 @@ export default async function TeamPage({
         </div>
       </div>
     </main>
+    </TeamPageWithNav>
   );
 }
 
