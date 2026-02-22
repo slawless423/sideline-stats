@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import SiteNavigation from "@/components/SiteNavigation";
 
 type Team = {
   teamId: string;
@@ -10,17 +11,13 @@ type Team = {
   games: number;
   wins: number;
   losses: number;
-  adjO: number;
-  adjD: number;
-  adjEM: number;
-  adjT: number;
   rawO: number;
   rawD: number;
   rawEM: number;
   rawT: number;
 };
 
-type SortKey = 'rank' | 'team' | 'conference' | 'rawEM' | 'rawO' | 'rawD' | 'rawT';
+type SortKey = 'rawEM' | 'rawO' | 'rawD' | 'rawT';
 type SortOrder = 'asc' | 'desc';
 
 export default function HomePage() {
@@ -51,42 +48,13 @@ export default function HomePage() {
 
   useEffect(() => {
     const sorted = [...teams].sort((a, b) => {
-      let aVal: any, bVal: any;
-
-      switch (sortKey) {
-        case 'team':
-          aVal = a.team;
-          bVal = b.team;
-          return sortOrder === 'asc' 
-            ? aVal.localeCompare(bVal) 
-            : bVal.localeCompare(aVal);
-        case 'conference':
-          aVal = a.conference || '';
-          bVal = b.conference || '';
-          return sortOrder === 'asc' 
-            ? aVal.localeCompare(bVal) 
-            : bVal.localeCompare(aVal);
-        case 'rawEM':
-          aVal = a.rawEM;
-          bVal = b.rawEM;
-          break;
-        case 'rawO':
-          aVal = a.rawO;
-          bVal = b.rawO;
-          break;
-        case 'rawD':
-          aVal = a.rawD;
-          bVal = b.rawD;
-          // Def Efficiency - lower is better
-          return sortOrder === 'asc' ? aVal - bVal : bVal - aVal;
-        case 'rawT':
-          aVal = a.rawT;
-          bVal = b.rawT;
-          break;
-        default:
-          return 0;
+      const aVal = a[sortKey];
+      const bVal = b[sortKey];
+      
+      // Def Efficiency - lower is better
+      if (sortKey === 'rawD') {
+        return sortOrder === 'asc' ? aVal - bVal : bVal - aVal;
       }
-
       // All others - higher is better
       return sortOrder === 'asc' ? aVal - bVal : bVal - aVal;
     });
@@ -99,11 +67,11 @@ export default function HomePage() {
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     } else {
       setSortKey(key);
-      // Default sort order for each column
+      // Default sort order
       if (key === 'rawD') {
-        setSortOrder('asc'); // Lower is better for defense
+        setSortOrder('asc'); // Lower is better
       } else {
-        setSortOrder('desc'); // Higher is better for everything else
+        setSortOrder('desc'); // Higher is better
       }
     }
   };
@@ -125,94 +93,89 @@ export default function HomePage() {
   );
 
   if (loading) {
-    return <div style={{ padding: 40, textAlign: "center" }}>Loading...</div>;
+    return (
+      <>
+        <SiteNavigation 
+          currentDivision="womens-d1"
+          currentPage="rankings"
+          divisionPath="/"
+        />
+        <div style={{ padding: 40, textAlign: "center" }}>Loading...</div>
+      </>
+    );
   }
 
   return (
-    <main style={{ maxWidth: 1200, margin: "0 auto", padding: 20 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-        <div>
-          <h1 style={{ fontSize: 32, fontWeight: 800, marginBottom: 4 }}>
-            Sideline Stats - Beta
-          </h1>
-          <p style={{ fontSize: 16, color: "#666", margin: 0 }}>Women's D1 College Basketball</p>
-        </div>
-        <Link 
-          href="/players" 
-          style={{ 
-            padding: "10px 20px", 
-            background: "#4f46e5", 
-            color: "#fff", 
-            textDecoration: "none", 
-            borderRadius: 6,
-            fontWeight: 600,
-            fontSize: 14,
-          }}
-        >
-          Player Database
-        </Link>
-      </div>
-      {updatedDate && (
-        <p style={{ color: "#666", marginBottom: 24 }}>
-          Data through {updatedDate}
-        </p>
-      )}
+    <>
+      <SiteNavigation 
+        currentDivision="womens-d1"
+        currentPage="rankings"
+        divisionPath="/"
+      />
+      
+      <main style={{ maxWidth: 1200, margin: "0 auto", padding: 20 }}>
+        {updatedDate && (
+          <p style={{ color: "#666", marginBottom: 24 }}>
+            Data through {updatedDate}
+          </p>
+        )}
 
-      <div style={{ overflowX: "auto" }}>
-        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14 }}>
-          <thead>
-            <tr style={{ background: "#2d3748", color: "#fff" }}>
-              <th style={{ padding: "10px 12px", textAlign: "left" }}>Rank</th>
-              <th style={{ padding: "10px 12px", textAlign: "left" }}>Team</th>
-              <th style={{ padding: "10px 12px", textAlign: "left" }}>Conference</th>
-              <th style={{ padding: "10px 12px", textAlign: "right" }}>Record</th>
-              <SortableHeader label="Efficiency Margin" sortKey="rawEM" />
-              <SortableHeader label="Off Efficiency" sortKey="rawO" />
-              <SortableHeader label="Def Efficiency" sortKey="rawD" />
-              <SortableHeader label="Tempo" sortKey="rawT" />
-            </tr>
-          </thead>
-          <tbody>
-            {sortedTeams.map((row, idx) => (
-              <tr
-                key={row.teamId}
-                style={{
-                  borderBottom: "1px solid #e5e7eb",
-                  background: idx % 2 === 0 ? "#fff" : "#f9fafb",
-                }}
-              >
-                <td style={{ padding: "10px 12px" }}>{idx + 1}</td>
-                <td style={{ padding: "10px 12px" }}>
-                  <Link
-                    href={`/team/${row.teamId}`}
-                    style={{ color: "#2563eb", textDecoration: "none", fontWeight: 600 }}
-                  >
-                    {row.team}
-                  </Link>
-                </td>
-                <td style={{ padding: "10px 12px", textTransform: "uppercase", fontSize: 12, color: "#666" }}>
-                  {row.conference || "—"}
-                </td>
-                <td style={{ padding: "10px 12px", textAlign: "right" }}>
-                  {row.wins != null && row.losses != null ? `${row.wins}-${row.losses}` : "—"}
-                </td>
-                <td style={{ padding: "10px 12px", textAlign: "right", fontWeight: 600 }}>
-                  {row.rawEM != null ? row.rawEM.toFixed(1) : "—"}
-                </td>
-                <td style={{ padding: "10px 12px", textAlign: "right" }}>
-                  {row.rawO != null ? row.rawO.toFixed(1) : "—"}
-                </td>
-                <td style={{ padding: "10px 12px", textAlign: "right" }}>
-                  {row.rawD != null ? row.rawD.toFixed(1) : "—"}
-                </td>
-                <td style={{ padding: "10px 12px", textAlign: "right" }}>
-                  {row.rawT != null ? row.rawT.toFixed(1) : "—"}
-                </td>
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14 }}>
+            <thead>
+              <tr style={{ background: "#2d3748", color: "#fff" }}>
+                <th style={{ padding: "10px 12px", textAlign: "left" }}>Rank</th>
+                <th style={{ padding: "10px 12px", textAlign: "left" }}>Team</th>
+                <th style={{ padding: "10px 12px", textAlign: "left" }}>Conference</th>
+                <th style={{ padding: "10px 12px", textAlign: "right" }}>Record</th>
+                <SortableHeader label="Efficiency Margin" sortKey="rawEM" />
+                <SortableHeader label="Off Efficiency" sortKey="rawO" />
+                <SortableHeader label="Def Efficiency" sortKey="rawD" />
+                <SortableHeader label="Tempo" sortKey="rawT" />
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </main>
+            </thead>
+            <tbody>
+              {sortedTeams.map((row, idx) => (
+                <tr
+                  key={row.teamId}
+                  style={{
+                    borderBottom: "1px solid #e5e7eb",
+                    background: idx % 2 === 0 ? "#fff" : "#f9fafb",
+                  }}
+                >
+                  <td style={{ padding: "10px 12px" }}>{idx + 1}</td>
+                  <td style={{ padding: "10px 12px" }}>
+                    <Link
+                      href={`/team/${row.teamId}`}
+                      style={{ color: "#2563eb", textDecoration: "none", fontWeight: 600 }}
+                    >
+                      {row.team}
+                    </Link>
+                  </td>
+                  <td style={{ padding: "10px 12px", textTransform: "uppercase", fontSize: 12, color: "#666" }}>
+                    {row.conference || "—"}
+                  </td>
+                  <td style={{ padding: "10px 12px", textAlign: "right" }}>
+                    {row.wins != null && row.losses != null ? `${row.wins}-${row.losses}` : "—"}
+                  </td>
+                  <td style={{ padding: "10px 12px", textAlign: "right", fontWeight: 600 }}>
+                    {row.rawEM != null ? row.rawEM.toFixed(1) : "—"}
+                  </td>
+                  <td style={{ padding: "10px 12px", textAlign: "right" }}>
+                    {row.rawO != null ? row.rawO.toFixed(1) : "—"}
+                  </td>
+                  <td style={{ padding: "10px 12px", textAlign: "right" }}>
+                    {row.rawD != null ? row.rawD.toFixed(1) : "—"}
+                  </td>
+                  <td style={{ padding: "10px 12px", textAlign: "right" }}>
+                    {row.rawT != null ? row.rawT.toFixed(1) : "—"}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </main>
+    </>
   );
 }
