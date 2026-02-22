@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import SiteNavigation from '@/components/SiteNavigation';
 
 const ACCENT = "#4f46e5";
 const ACCENT_LIGHT = "#f5f5ff";
@@ -233,18 +234,16 @@ export default function PlayersPage() {
   }
 
   return (
-    <main style={{ maxWidth: "100%", margin: "0 auto", padding: 20 }}>
+    <>
+      <SiteNavigation 
+        currentDivision="womens-d1"
+        currentPage="players"
+        divisionPath="/"
+      />
+      
+      <main style={{ maxWidth: "100%", margin: "0 auto", padding: 20 }}>
       <div style={{ marginBottom: 24 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-          <div>
-            <h1 style={{ fontSize: 32, fontWeight: 800, marginBottom: 4 }}>Sideline Stats - Beta</h1>
-            <p style={{ fontSize: 16, color: "#666", margin: 0 }}>Women's D1 College Basketball</p>
-          </div>
-          <Link href="/" style={{ color: "#4f46e5", textDecoration: "none", fontWeight: 600 }}>
-            ← Home
-          </Link>
-        </div>
-        <h2 style={{ fontSize: 24, fontWeight: 700, marginTop: 16, marginBottom: 8 }}>Player Database</h2>
+        <h2 style={{ fontSize: 24, fontWeight: 700, marginBottom: 8 }}>Player Database</h2>
         <p style={{ color: "#666", marginBottom: 16 }}>{players.length} players</p>
         
         <div style={{ display: "flex", gap: 12, marginBottom: 16, flexWrap: "wrap" }}>
@@ -369,5 +368,6 @@ export default function PlayersPage() {
         </table>
       </div>
     </main>
+    </>
   );
 }
