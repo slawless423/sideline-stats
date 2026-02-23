@@ -34,28 +34,19 @@ export async function GET() {
       ORDER BY adj_em DESC
     `);
 
-    // Parse numeric values and calculate raw stats
-    const rows = result.rows.map(row => {
-      const poss = Math.max(1, row.fga - row.orb + row.tov + 0.475 * row.fta);
-      const oppPoss = Math.max(1, row.opp_fga - row.opp_orb + row.opp_tov + 0.475 * row.opp_fta);
-      
-      const rawO = row.games > 0 && poss > 0 ? (row.points / poss) * 100 : null;
-      const rawD = row.games > 0 && oppPoss > 0 ? (row.opp_points / oppPoss) * 100 : null;
-      const rawEM = rawO !== null && rawD !== null ? rawO - rawD : null;
-      const rawT = row.games > 0 ? (poss + oppPoss) / (2 * row.games) : null;
-      
-      return {
-        ...row,
-        adjO: row.adjO ? parseFloat(row.adjO) : null,
-        adjD: row.adjD ? parseFloat(row.adjD) : null,
-        adjEM: row.adjEM ? parseFloat(row.adjEM) : null,
-        adjT: row.adjT ? parseFloat(row.adjT) : null,
-        rawO,
-        rawD,
-        rawEM,
-        rawT,
-      };
-    });
+    // Parse numeric values - use adj stats since raw calculations need more data
+    const rows = result.rows.map(row => ({
+      ...row,
+      adjO: row.adj_o ? parseFloat(row.adj_o) : null,
+      adjD: row.adj_d ? parseFloat(row.adj_d) : null,
+      adjEM: row.adj_em ? parseFloat(row.adj_em) : null,
+      adjT: row.adj_t ? parseFloat(row.adj_t) : null,
+      // Use adj stats for display
+      rawO: row.adj_o ? parseFloat(row.adj_o) : null,
+      rawD: row.adj_d ? parseFloat(row.adj_d) : null,
+      rawEM: row.adj_em ? parseFloat(row.adj_em) : null,
+      rawT: row.adj_t ? parseFloat(row.adj_t) : null,
+    }));
 
     return NextResponse.json({
       updated: new Date().toISOString(),
