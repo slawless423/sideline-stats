@@ -31,21 +31,22 @@ export async function GET() {
         opp_tov,
         opp_fta
       FROM teams
+      WHERE games > 0
       ORDER BY adj_em DESC
     `);
 
-    // Parse numeric values - use adj stats since raw calculations need more data
+    // Parse numeric values - use adj stats
     const rows = result.rows.map(row => ({
       ...row,
-      adjO: row.adj_o ? parseFloat(row.adj_o) : null,
-      adjD: row.adj_d ? parseFloat(row.adj_d) : null,
-      adjEM: row.adj_em ? parseFloat(row.adj_em) : null,
-      adjT: row.adj_t ? parseFloat(row.adj_t) : null,
-      // Use adj stats for display
-      rawO: row.adj_o ? parseFloat(row.adj_o) : null,
-      rawD: row.adj_d ? parseFloat(row.adj_d) : null,
-      rawEM: row.adj_em ? parseFloat(row.adj_em) : null,
-      rawT: row.adj_t ? parseFloat(row.adj_t) : null,
+      adjO: row.adjO ? parseFloat(row.adjO) : null,
+      adjD: row.adjD ? parseFloat(row.adjD) : null,
+      adjEM: row.adjEM ? parseFloat(row.adjEM) : null,
+      adjT: row.adjT ? parseFloat(row.adjT) : null,
+      // Use adj stats for display (they're the same as raw for now)
+      rawO: row.adjO ? parseFloat(row.adjO) : null,
+      rawD: row.adjD ? parseFloat(row.adjD) : null,
+      rawEM: row.adjEM ? parseFloat(row.adjEM) : null,
+      rawT: row.adjT ? parseFloat(row.adjT) : null,
     }));
 
     return NextResponse.json({
