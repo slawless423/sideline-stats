@@ -31,8 +31,6 @@ export async function GET() {
         opp_tov,
         opp_fta
       FROM teams
-      WHERE conference IS NOT NULL 
-        AND conference != ''
       ORDER BY adj_em DESC
     `);
 
