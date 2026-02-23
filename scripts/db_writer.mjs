@@ -34,6 +34,18 @@ export async function clearAllData() {
   console.log('✅ Cleared all existing data');
 }
 
+// Clear data for specific division only
+export async function clearDivisionData(division) {
+  const db = initDb();
+  
+  await db.query('DELETE FROM player_games WHERE division = $1', [division]);
+  await db.query('DELETE FROM players WHERE division = $1', [division]);
+  await db.query('DELETE FROM games WHERE division = $1', [division]);
+  await db.query('DELETE FROM teams WHERE division = $1', [division]);
+  
+  console.log(`✅ Cleared existing data for division: ${division}`);
+}
+
 // Insert or update team
 export async function upsertTeam(team) {
   const db = initDb();
