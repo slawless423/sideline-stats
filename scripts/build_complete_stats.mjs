@@ -506,6 +506,7 @@ async function main() {
     const gameLogEntry = {
       gameId: game.gameId,
       date: game.date,
+      division: 'womens-d1',
       homeTeam: home.teamName,
       homeId: home.teamId,
       homeScore: home.stats.points,
@@ -558,6 +559,7 @@ async function main() {
         const teamId = String(playerData.teamId);
         const simplifiedPlayers = playerData.players.map((p) => ({
           playerId: `${teamId}_${p.number || 0}_${p.firstName}_${p.lastName}`,
+          division: 'womens-d1',
           firstName: p.firstName || "",
           lastName: p.lastName || "",
           number: p.number || "",
@@ -695,6 +697,7 @@ async function main() {
               playerId,
               teamId,
               teamName,
+              division: 'womens-d1',
               firstName: p.firstName || "",
               lastName: p.lastName || "",
               number: p.number || "",
@@ -901,6 +904,7 @@ async function main() {
             teamId: row.teamId,
             teamName: row.team,
             conference: row.conference,
+            division: 'womens-d1',
             games: row.games,
             wins: teamStat.wins,
             losses: teamStat.losses,
