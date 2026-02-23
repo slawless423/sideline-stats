@@ -36,7 +36,8 @@ export async function GET() {
           'cacc', 'ciaa', 'conference-carolinas', 'ecc', 'gliac', 'glvc',
           'g-mac', 'gac', 'gulf-south', 'lone-star', 'mec',
           'ne10', 'nsic', 'peach-belt', 'psac', 'rmac',
-          'sac', 'siac', 'sunshine-state'
+          'sac', 'siac', 'sunshine-state',
+          'mid-america-intercollegiate', 'pacwest', 'ccaa', 'great-northwest'
         )
       ORDER BY adj_em DESC
     `);
