@@ -145,9 +145,12 @@ export default function MensD2Page() {
                 >
                   <td style={{ padding: "10px 12px" }}>{idx + 1}</td>
                   <td style={{ padding: "10px 12px" }}>
-                    <span style={{ fontWeight: 600 }}>
+                    <Link
+                      href={`/mens-d2/team/${row.teamId}`}
+                      style={{ color: "#2563eb", textDecoration: "none", fontWeight: 600 }}
+                    >
                       {row.team}
-                    </span>
+                    </Link>
                   </td>
                   <td style={{ padding: "10px 12px", textTransform: "uppercase", fontSize: 12, color: "#666" }}>
                     {row.conference || "—"}
