@@ -8,9 +8,10 @@ const pool = new Pool({
 
 export async function GET(
   request: Request,
-  { params }: { params: { teamid: string } }
+  { params }: { params: Promise<{ teamid: string }> }
 ) {
-  const teamId = params.teamid;
+  const { teamid } = await params;
+  const teamId = teamid;
 
   try {
     // Get team info
