@@ -31,16 +31,7 @@ export async function GET() {
         opp_tov,
         opp_fta
       FROM teams
-      WHERE games > 0
-        AND division = 'womens-d1'
-        AND conference IN (
-          'acc', 'america-east', 'american', 'asun', 'atlantic-10',
-          'big-12', 'big-east', 'big-sky', 'big-south', 'big-ten', 'big-west',
-          'caa', 'cusa', 'horizon', 'ivy-league', 'maac', 'mac',
-          'meac', 'mvc', 'mountain-west', 'mwc', 'nec', 'ovc',
-          'pac', 'patriot', 'sac', 'socon', 'southland', 'summit-league',
-          'sun-belt', 'swac', 'wac', 'wcc'
-        )
+      WHERE division = 'womens-d1'
       ORDER BY adj_em DESC
     `);
 
