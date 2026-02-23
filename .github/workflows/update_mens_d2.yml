@@ -1,0 +1,33 @@
+name: Build Men's D2 Stats
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+      POSTGRES_PRISMA_URL: ${{ secrets.POSTGRES_PRISMA_URL }}
+      POSTGRES_URL_NON_POOLING: ${{ secrets.POSTGRES_URL_NON_POOLING }}
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Run Men's D2 stats collection
+        run: node scripts/build_mens_d2_complete.mjs
+      
+      - name: Commit and push results
+        run: |
+          git config user.name "stats-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add public/data/*.json
+          git commit -m "Update Men's D2 stats" || echo "No changes"
+          git push origin main || echo "Nothing to push"
