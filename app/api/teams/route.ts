@@ -33,15 +33,6 @@ export async function GET() {
       FROM teams
       WHERE conference IS NOT NULL 
         AND conference != ''
-        AND conference IN (
-          'acc', 'big-12', 'big-ten', 'sec', 'pac-12', 'big-east',
-          'american', 'aac', 'wcc', 'mwc', 'mountain-west', 'atlantic-10', 'a-10',
-          'mvc', 'mac', 'cusa', 'sun-belt', 'sunbelt', 'colonial', 'caa',
-          'horizon', 'maac', 'ovc', 'patriot', 'southland', 'summit-league',
-          'wac', 'big-sky', 'big-south', 'southern', 'socon',
-          'big-west', 'ivy-league', 'meac', 'nec', 'northeast', 'swac',
-          'asun', 'america-east', 'americaeast'
-        )
       ORDER BY adj_em DESC
     `);
 
