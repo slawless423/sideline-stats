@@ -37,7 +37,7 @@ export async function GET() {
           'big-12', 'big-east', 'big-sky', 'big-south', 'big-ten', 'big-west',
           'caa', 'cusa', 'horizon', 'ivy-league', 'maac', 'mac',
           'meac', 'mvc', 'mountain-west', 'nec', 'ovc',
-          'patriot', 'socon', 'southland', 'summit-league',
+          'patriot', 'sec', 'socon', 'southland', 'summit-league',
           'sun-belt', 'swac', 'wac', 'wcc'
         )
       ORDER BY adj_em DESC
