@@ -190,11 +190,11 @@ function SectionNav({
 }) {
   const pages = [
     { id: 'rankings', label: 'Rankings', path: divisionPath === '/' ? '/' : divisionPath },
-    { id: 'players', label: 'Players', path: `${divisionPath}/players` },
+    { id: 'players', label: 'Players', path: divisionPath === '/' ? '/players' : `${divisionPath}/players` },
     // Future pages - uncomment as you build them:
-    // { id: 'teams', label: 'Teams', path: `${divisionPath}/teams` },
-    // { id: 'conferences', label: 'Conferences', path: `${divisionPath}/conferences` },
-    // { id: 'stats', label: 'Stats', path: `${divisionPath}/stats` },
+    // { id: 'teams', label: 'Teams', path: divisionPath === '/' ? '/teams' : `${divisionPath}/teams` },
+    // { id: 'conferences', label: 'Conferences', path: divisionPath === '/' ? '/conferences' : `${divisionPath}/conferences` },
+    // { id: 'stats', label: 'Stats', path: divisionPath === '/' ? '/stats' : `${divisionPath}/stats` },
   ];
 
   return (
