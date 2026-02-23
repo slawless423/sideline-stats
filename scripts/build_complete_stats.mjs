@@ -892,8 +892,8 @@ async function main() {
     try {
       db.initDb();
       
-      // Clear existing data for fresh rebuild
-      await db.clearAllData();
+      // Clear existing data for this division only
+      await db.clearDivisionData('womens-d1');
       
       // Write teams (ALL teams, not just D1 - needed for foreign key constraints)
       console.log("Writing teams...");
