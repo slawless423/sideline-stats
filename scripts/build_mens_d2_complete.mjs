@@ -393,7 +393,7 @@ async function main() {
     days++;
     const d = fmtDate(dt);
     const [Y, M, D] = d.split("-");
-    const scoreboardPath = `/scoreboard/basketball-men/d2/${Y}/${M}/${D}/all-conf`;
+    const scoreboardPath = `/scoreboard/basketball-women/d1/${Y}/${M}/${D}/all-conf`;
 
     if (days % 7 === 1) console.log("DATE", d);
 
@@ -506,6 +506,7 @@ async function main() {
     const gameLogEntry = {
       gameId: game.gameId,
       date: game.date,
+      division: 'womens-d1',
       homeTeam: home.teamName,
       homeId: home.teamId,
       homeScore: home.stats.points,
@@ -558,6 +559,7 @@ async function main() {
         const teamId = String(playerData.teamId);
         const simplifiedPlayers = playerData.players.map((p) => ({
           playerId: `${teamId}_${p.number || 0}_${p.firstName}_${p.lastName}`,
+          division: 'womens-d1',
           firstName: p.firstName || "",
           lastName: p.lastName || "",
           number: p.number || "",
@@ -695,6 +697,7 @@ async function main() {
               playerId,
               teamId,
               teamName,
+              division: 'womens-d1',
               firstName: p.firstName || "",
               lastName: p.lastName || "",
               number: p.number || "",
@@ -778,24 +781,30 @@ async function main() {
 
   ratingsRows.sort((a, b) => b.adjEM - a.adjEM);
 
-  // Men's D2 Basketball Conferences
-  const D2_CONFERENCES = new Set([
-    'cacc', 'ciaa', 'conference-carolinas', 'ecc', 'gliac', 'glvc', 
-    'gmac', 'g-mac', 'gac', 'gulf-south', 'lone-star', 'mec', 
-    'ne10', 'nsic', 'pac', 'peach-belt', 'psac', 'rmac',
-    'sac', 'siac', 'ssc', 'sunshine-state'
+  // D1 Women's Basketball Conferences (exact codes from NCAA API)
+  const D1_CONFERENCES = new Set([
+    // Power conferences
+    'acc', 'big-12', 'big-ten', 'sec', 'pac-12', 'big-east',
+    // Other major conferences
+    'american', 'aac', 'wcc', 'mwc', 'mountain-west', 'atlantic-10', 'a-10',
+    // Mid-major conferences
+    'mvc', 'mac', 'cusa', 'sun-belt', 'sunbelt', 'colonial', 'caa',
+    'horizon', 'maac', 'ovc', 'patriot', 'southland', 'summit-league',
+    'wac', 'big-sky', 'big-south', 'southern', 'socon',
+    'big-west', 'ivy-league', 'meac', 'nec', 'northeast', 'swac',
+    'asun', 'america-east', 'americaeast'
   ]);
 
-  // Filter to D2 teams only - teams in D2 conferences
-  const d2Rows = ratingsRows.filter(r => {
+  // Filter to D1 teams only - teams in D1 conferences
+  const d1Rows = ratingsRows.filter(r => {
     if (!r.conference) return false;
     const conf = String(r.conference).toLowerCase().trim();
-    return D2_CONFERENCES.has(conf);
+    return D1_CONFERENCES.has(conf);
   });
   
   console.log(`Total teams in database: ${ratingsRows.length}`);
-  console.log(`D2 teams (in D2 conferences): ${d2Rows.length}`);
-  console.log(`Non-D2 teams filtered out: ${ratingsRows.length - d2Rows.length}`);
+  console.log(`D1 teams (in D1 conferences): ${d1Rows.length}`);
+  console.log(`Non-D1 teams filtered out: ${ratingsRows.length - d1Rows.length}`);
 
   // Save all the data files
   await fs.mkdir("public/data", { recursive: true });
@@ -806,23 +815,23 @@ async function main() {
     JSON.stringify({
       generated_at_utc: new Date().toISOString(),
       season_start: SEASON_START,
-      rows: d2Rows,
+      rows: d1Rows,
     }, null, 2),
     "utf8"
   );
-  console.log(`✅ WROTE public/data/ratings.json (${d2Rows.length} D1 teams)`);
+  console.log(`✅ WROTE public/data/ratings.json (${d1Rows.length} D1 teams)`);
 
   // 2. Complete team stats (D1 only)
-  const d2TeamStats = Array.from(teamSeasonStats.values()).filter(t => t.conference && t.conference !== "—");
+  const d1TeamStats = Array.from(teamSeasonStats.values()).filter(t => t.conference && t.conference !== "—");
   await fs.writeFile(
     "public/data/team_stats.json",
     JSON.stringify({
       generated_at_utc: new Date().toISOString(),
-      teams: d2TeamStats,
+      teams: d1TeamStats,
     }, null, 2),
     "utf8"
   );
-  console.log(`✅ WROTE public/data/team_stats.json (${d2TeamStats.length} D1 teams)`);
+  console.log(`✅ WROTE public/data/team_stats.json (${d1TeamStats.length} D1 teams)`);
 
   // 3. Games log
   await fs.writeFile(
@@ -836,20 +845,20 @@ async function main() {
   console.log(`✅ WROTE public/data/games.json (${gamesLog.length} games)`);
 
   // 4. Player stats - filter to D1 teams' players only
-  const d2TeamIds = new Set(d2Rows.map(r => r.teamId));
-  const d2Players = Array.from(playerSeasonStats.values())
-    .filter(p => d2TeamIds.has(p.teamId))
+  const d1TeamIds = new Set(d1Rows.map(r => r.teamId));
+  const d1Players = Array.from(playerSeasonStats.values())
+    .filter(p => d1TeamIds.has(p.teamId))
     .filter(p => p.games > 0); // Only include players who actually played
   
   await fs.writeFile(
     "public/data/player_stats.json",
     JSON.stringify({
       generated_at_utc: new Date().toISOString(),
-      players: d2Players,
+      players: d1Players,
     }, null, 2),
     "utf8"
   );
-  console.log(`✅ WROTE public/data/player_stats.json (${d2Players.length} D1 players)`);
+  console.log(`✅ WROTE public/data/player_stats.json (${d1Players.length} D1 players)`);
 
   // 5. Games cache - ONLY contains IDs of games we SUCCESSFULLY PARSED
   // This is critical: we never add game IDs from scoreboards alone,
@@ -883,8 +892,8 @@ async function main() {
     try {
       db.initDb();
       
-      // Clear existing data for fresh rebuild
-      await db.clearAllData();
+      // Clear existing data for this division only
+      await db.clearDivisionData('womens-d1');
       
       // Write teams (ALL teams, not just D1 - needed for foreign key constraints)
       console.log("Writing teams...");
@@ -895,7 +904,7 @@ async function main() {
             teamId: row.teamId,
             teamName: row.team,
             conference: row.conference,
-            division: 'mens-d2',
+            division: 'womens-d1',
             games: row.games,
             wins: teamStat.wins,
             losses: teamStat.losses,
@@ -947,10 +956,10 @@ async function main() {
       
       // Write players
       console.log("Writing players...");
-      for (const player of d2Players) {
+      for (const player of d1Players) {
         await db.upsertPlayer(player);
       }
-      console.log(`✅ Wrote ${d2Players.length} players to database`);
+      console.log(`✅ Wrote ${d1Players.length} players to database`);
       
       // Write player game stats
       console.log("Writing player game stats...");
