@@ -429,6 +429,7 @@ function PlayerStatsKenPom({ players, team }: { players: any[]; team: any }) {
     // Approximate team poss while on floor via minutes share
     const minShare = teamMinutes > 0 ? pg.minutes / teamMinutes : 0;
     const teamPossOnFloor = Math.max(1, teamPoss * minShare * 5);
+    const playerPossOnFloor = teamPossOnFloor;
     const playerPoss = pg.fga + 0.44 * pg.fta + pg.tov;
     const usagePct = teamPossOnFloor > 0 ? (playerPoss / teamPossOnFloor) * 100 : 0;
     const shotPct = team.fga > 0 ? (pg.fga / team.fga) * 100 : 0;
