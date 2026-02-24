@@ -16,7 +16,25 @@ export async function GET(
   try {
     // Get team info
     const teamResult = await pool.query(`
-      SELECT * FROM teams WHERE team_id = $1 AND division = 'mens-d2'
+      SELECT 
+        team_id as "teamId",
+        team_name as "teamName",
+        conference,
+        games,
+        wins,
+        losses,
+        adj_o::float as "adjO",
+        adj_d::float as "adjD",
+        adj_em::float as "adjEM",
+        adj_t::float as "adjT",
+        points,
+        opp_points,
+        fgm, fga, tpm, tpa, ftm, fta,
+        orb, drb, trb, ast, stl, blk, tov, pf,
+        opp_fgm, opp_fga, opp_tpm, opp_tpa, opp_ftm, opp_fta,
+        opp_orb, opp_drb, opp_trb, opp_ast, opp_stl, opp_blk, opp_tov, opp_pf
+      FROM teams 
+      WHERE team_id = $1 AND division = 'mens-d2'
     `, [teamId]);
 
     if (teamResult.rows.length === 0) {
@@ -25,7 +43,19 @@ export async function GET(
 
     // Get players for this team
     const playersResult = await pool.query(`
-      SELECT * FROM players 
+      SELECT 
+        player_id as "playerId",
+        first_name as "firstName",
+        last_name as "lastName",
+        number,
+        position,
+        year,
+        games,
+        starts,
+        minutes,
+        fgm, fga, tpm, tpa, ftm, fta,
+        orb, drb, trb, ast, stl, blk, tov, pf, points
+      FROM players 
       WHERE team_id = $1 AND division = 'mens-d2'
       ORDER BY points DESC
     `, [teamId]);
