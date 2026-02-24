@@ -500,23 +500,16 @@ function PlayerStatsKenPom({ players, team }: { players: any[]; team: any }) {
     const teamScoringPoss = team.fgm + (1 - Math.pow(1 - teamFTPct, 2)) * 0.44 * team.fta;
     const teamPtsPerScoringPoss = teamScoringPoss > 0 ? team.points / teamScoringPoss : 0;
 
-    // Points produced from FGs (own scoring)
-    const ppFG = pg.fgm > 0
-      ? fgScoringPoss * (1 - qAST) * (2 + (pg.tpa > 0 ? pg.tpm / pg.fgm : 0))
-        + qAST * fgScoringPoss * teamPtsPerScoringPoss
-      : 0;
+    // Points produced from FGs
+    const ppFG = (ptsFromField / Math.max(1, pg.fgm)) * fgScoringPoss;
 
-    // Points produced from assists
-    // Credit = avg pts per assisted FGM * assists
-    const teamAvgPtsPerFGM = team.fgm > 0
-      ? (team.points - team.ftm) / team.fgm
-      : 0;
-    const ppAST = pg.ast * 0.5 * teamAvgPtsPerFGM;
+    // Points produced from assists (basketball-reference formula)
+    const ppAST = pg.ast * (team.points - team.ftm) / (6 * Math.max(1, team.fga));
 
-    // Points from FTs
+    // FT points
     const ppFT = pg.ftm;
 
-    // Points from ORBs
+    // ORB points
     const ppORB = orbScoringPoss * teamPtsPerScoringPoss;
 
     const pointsProduced = ppFG + ppAST + ppFT + ppORB;
