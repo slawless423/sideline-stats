@@ -2,15 +2,16 @@ import fs from "node:fs/promises";
 import * as db from "./db_writer.mjs";
 
 const NCAA_API_BASE = "https://ncaa-api.henrygd.me";
+const DIVISION = "mens-d2";
+const SCOREBOARD_PATH = "basketball-men/d2";
 const SEASON_START = "2025-11-01";
 const BOX_DELAY_MS = 400;
 const REQUEST_TIMEOUT_MS = 20000;
 const REQUEST_RETRIES = 3;
 const BOX_CONCURRENCY = 4;
 const RETRY_428_DELAY_MS = 2000;
-const MIN_TEAMS_REQUIRED = 300;
 
-console.log("START build_complete_stats", new Date().toISOString());
+console.log("START build_mens_d2_complete", new Date().toISOString());
 
 // ===== UTILITY FUNCTIONS =====
 
@@ -84,11 +85,15 @@ async function fetchJson(path, isBoxscore = false) {
         msg.toLowerCase().includes("aborted") ||
         msg.toLowerCase().includes("timeout");
 
-      if ((isTimeout || msg.includes("ECONNRESET") || msg.includes("ENOTFOUND")) && attempt < REQUEST_RETRIES) {
+      if (
+        (isTimeout || msg.includes("ECONNRESET") || msg.includes("ENOTFOUND")) &&
+        attempt < REQUEST_RETRIES
+      ) {
         await sleep(500 * (attempt + 1));
         continue;
       }
-      if (isTimeout) throw new Error(`Fetch timed out after ${REQUEST_TIMEOUT_MS}ms for ${path}`);
+      if (isTimeout)
+        throw new Error(`Fetch timed out after ${REQUEST_TIMEOUT_MS}ms for ${path}`);
       throw e;
     } finally {
       clearTimeout(t);
@@ -115,7 +120,6 @@ async function mapLimit(items, limit, fn) {
 
 function extractGameIds(obj) {
   const ids = new Set();
-
   const walk = (x) => {
     if (Array.isArray(x)) return x.forEach(walk);
     if (x && typeof x === "object") return Object.values(x).forEach(walk);
@@ -124,22 +128,17 @@ function extractGameIds(obj) {
       if (matches) matches.forEach((m) => ids.add(m.replace("/game/", "")));
     }
   };
-
   walk(obj);
   return [...ids];
 }
 
 function extractConferenceFromGame(gameObj) {
-  // Extract conference from scoreboard game object
-  // Structure: gameObj.game.home.conferences[0].conferenceSeo
   try {
     const game = gameObj?.game;
     if (!game) return {};
-
     const homeConf = game.home?.conferences?.[0]?.conferenceSeo || null;
     const awayConf = game.away?.conferences?.[0]?.conferenceSeo || null;
     const gameId = game.gameID || game.gameId;
-
     return {
       gameId: String(gameId),
       homeConf,
@@ -161,10 +160,6 @@ function toFloat(x, d = 0) {
   return Number.isFinite(n) ? n : d;
 }
 
-function poss(fga, orb, tov, fta) {
-  return Math.max(1, fga - orb + tov + 0.475 * fta);
-}
-
 function pick(obj, keys) {
   for (const k of keys) {
     if (obj && obj[k] != null) return obj[k];
@@ -172,10 +167,9 @@ function pick(obj, keys) {
   return null;
 }
 
-// ===== ENHANCED STAT EXTRACTION =====
+// ===== STAT EXTRACTION =====
 
 function extractCompleteStats(raw) {
-  // Extract ALL available stats from a team or player object
   return {
     points: toInt(pick(raw, ["points", "pts", "score"]), 0),
     fgm: toInt(pick(raw, ["fieldGoalsMade", "fgm", "fgMade"]), 0),
@@ -197,9 +191,7 @@ function extractCompleteStats(raw) {
 }
 
 function deepCollectTeamStats(root) {
-  // Find team stats in the boxscore JSON
   const out = [];
-
   const walk = (x) => {
     if (Array.isArray(x)) return x.forEach(walk);
     if (!x || typeof x !== "object") return;
@@ -210,8 +202,6 @@ function deepCollectTeamStats(root) {
       if (stats.points || stats.fga || stats.fta) {
         out.push({ teamId: String(teamId), stats });
       }
-
-      // Check nested stats objects
       const nested = pick(x, ["teamStats", "team_stats", "statistics", "stats", "totals"]);
       if (nested && typeof nested === "object") {
         const nestedStats = extractCompleteStats(nested);
@@ -220,41 +210,27 @@ function deepCollectTeamStats(root) {
         }
       }
     }
-
     Object.values(x).forEach(walk);
   };
-
   walk(root);
   return out;
 }
 
 function extractPlayers(gameJson) {
-  // Extract player stats from NCAA API boxscore structure
-  // Structure: gameJson has teams, each team has teamBoxscore.playerStats array
-  
   const result = [];
-  
-  // Look for teamBoxscore.playerStats pattern
   const walk = (x) => {
     if (Array.isArray(x)) {
       x.forEach(walk);
-    } else if (x && typeof x === 'object') {
-      // Check if this object has playerStats array
+    } else if (x && typeof x === "object") {
       if (x.playerStats && Array.isArray(x.playerStats) && x.playerStats.length > 0) {
-        // Also need teamId to know which team these players belong to
         const teamId = pick(x, ["teamId", "team_id", "id"]);
         if (teamId) {
-          result.push({
-            teamId: String(teamId),
-            players: x.playerStats
-          });
+          result.push({ teamId: String(teamId), players: x.playerStats });
         }
       }
-      // Continue walking the tree
       Object.values(x).forEach(walk);
     }
   };
-  
   walk(gameJson);
   return result;
 }
@@ -276,7 +252,9 @@ function findTeamsMeta(gameJson) {
   const walk = (x) => {
     if (found) return;
     if (Array.isArray(x)) {
-      const ok = x.filter((t) => t && typeof t === "object" && (t.teamId != null || t.id != null));
+      const ok = x.filter(
+        (t) => t && typeof t === "object" && (t.teamId != null || t.id != null)
+      );
       if (ok.length >= 2) {
         found = ok;
         return;
@@ -308,7 +286,7 @@ function isHomeFromMeta(t) {
   return null;
 }
 
-// ===== PARSE COMPLETE GAME DATA =====
+// ===== PARSE GAME DATA =====
 
 function parseCompleteGameData(gameId, gameJson, gameDate) {
   const teamsArr = findTeamsMeta(gameJson);
@@ -332,16 +310,15 @@ function parseCompleteGameData(gameId, gameJson, gameDate) {
   const bestById = new Map();
   for (const c of candidates) {
     const key = String(c.teamId);
-    // Score based on how many fields are populated (prefer more complete data)
     const s = c.stats;
-    const score = 
-      (s.points || 0) + 
-      (s.fga || 0) + 
-      (s.fta || 0) + 
-      (s.blk || 0) * 100 +  // Heavily weight blocks to prefer teamStats
-      (s.stl || 0) * 100 +  // Heavily weight steals
-      (s.ast || 0) * 10 +   // Weight assists
-      (s.orb || 0) + 
+    const score =
+      (s.points || 0) +
+      (s.fga || 0) +
+      (s.fta || 0) +
+      (s.blk || 0) * 100 +
+      (s.stl || 0) * 100 +
+      (s.ast || 0) * 10 +
+      (s.orb || 0) +
       (s.tov || 0);
     const prev = bestById.get(key);
     if (!prev || score > prev.score) bestById.set(key, { stats: c.stats, score });
@@ -351,7 +328,6 @@ function parseCompleteGameData(gameId, gameJson, gameDate) {
   const awayStats = bestById.get(awayId)?.stats ?? null;
   if (!homeStats || !awayStats) return null;
 
-  // Extract player stats if available
   const playerData = extractPlayers(gameJson);
 
   return {
@@ -367,18 +343,18 @@ function parseCompleteGameData(gameId, gameJson, gameDate) {
       teamName: nameFromMeta(awayMeta),
       stats: awayStats,
     },
-    players: playerData, // Raw player data for later processing
+    players: playerData,
   };
 }
 
-// ===== MAIN SCRAPING LOGIC =====
+// ===== MAIN =====
 
 async function main() {
   const today = new Date();
   const end = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()));
   const start = toDate(SEASON_START);
 
-  const allGames = []; // Store ALL game data
+  const allGames = [];
   const seenGameIds = new Set();
 
   let days = 0;
@@ -387,19 +363,19 @@ async function main() {
   let totalBoxesParsed = 0;
   let totalBoxesFailed = 0;
 
-  console.log("Scraping complete game data (team + player stats)...\n");
+  console.log(`Scraping ${DIVISION} data (team + player stats)...\n`);
 
   for (let dt = start; dt <= end; dt = addDays(dt, 1)) {
     days++;
     const d = fmtDate(dt);
     const [Y, M, D] = d.split("-");
-    const scoreboardPath = `/scoreboard/basketball-women/d1/${Y}/${M}/${D}/all-conf`;
+    const scoreboardPath = `/${SCOREBOARD_PATH}/${Y}/${M}/${D}/all-conf`;
 
     if (days % 7 === 1) console.log("DATE", d);
 
     let scoreboard;
     try {
-      scoreboard = await fetchJson(scoreboardPath, false);
+      scoreboard = await fetchJson(`/scoreboard/${scoreboardPath}`, false);
     } catch (e) {
       if ((globalThis.__SCOREBOARD_FAILS__ ?? 0) < 50) {
         globalThis.__SCOREBOARD_FAILS__ = (globalThis.__SCOREBOARD_FAILS__ ?? 0) + 1;
@@ -410,17 +386,13 @@ async function main() {
 
     const gameIds = extractGameIds(scoreboard).filter((gid) => !seenGameIds.has(gid));
 
-    // Also extract conference info from scoreboard
-    const conferenceMap = new Map(); // gameId -> {homeConf, awayConf, isConfGame}
+    const conferenceMap = new Map();
     if (scoreboard.games && Array.isArray(scoreboard.games)) {
       for (const gameObj of scoreboard.games) {
         const confInfo = extractConferenceFromGame(gameObj);
         if (confInfo.gameId) {
           conferenceMap.set(confInfo.gameId, confInfo);
         }
-      }
-      if (days % 7 === 1 && conferenceMap.size > 0) {
-        console.log(`Extracted conference for ${conferenceMap.size} games on ${d}`);
       }
     }
 
@@ -453,15 +425,15 @@ async function main() {
 
       totalBoxesFetched++;
 
-      // Save first successful boxscore for debugging field names
+      // Save first boxscore for debugging
       if (totalBoxesFetched === 1) {
         await fs.mkdir("public/data", { recursive: true });
         await fs.writeFile(
-          "public/data/sample_boxscore.json",
+          "public/data/mens_d2_sample_boxscore.json",
           JSON.stringify(box, null, 2),
           "utf8"
         );
-        console.log(`Saved sample boxscore for game ${gid} to public/data/sample_boxscore.json`);
+        console.log(`Saved sample boxscore for game ${gid}`);
       }
 
       const gameData = parseCompleteGameData(gid, box, date);
@@ -470,7 +442,6 @@ async function main() {
         continue;
       }
 
-      // Add conference info from scoreboard
       const confInfo = conferenceMap.get(gid);
       if (confInfo) {
         gameData.home.conference = confInfo.homeConf;
@@ -489,24 +460,23 @@ async function main() {
     "\ngamesFound=", totalGamesFound,
     "\nboxesParsed=", totalBoxesParsed,
     "\nboxesFailed=", totalBoxesFailed,
-    "\nsuccessRate=", totalGamesFound > 0 ? ((totalBoxesParsed / totalGamesFound) * 100).toFixed(1) + "%" : "0%"
+    "\nsuccessRate=",
+    totalGamesFound > 0 ? ((totalBoxesParsed / totalGamesFound) * 100).toFixed(1) + "%" : "0%"
   );
 
   console.log("\nProcessing team and player statistics...");
 
-  // Process all games into aggregated stats
-  const teamSeasonStats = new Map(); // teamId -> season totals
-  const playerSeasonStats = new Map(); // playerId -> season totals
-  const gamesLog = []; // Game-by-game results
+  const teamSeasonStats = new Map();
+  const playerSeasonStats = new Map();
+  const gamesLog = [];
 
   for (const game of allGames) {
     const { home, away } = game;
 
-    // Add to games log with FULL stats (not just scores) + PLAYER STATS
     const gameLogEntry = {
       gameId: game.gameId,
       date: game.date,
-      division: 'womens-d1',
+      division: DIVISION,
       homeTeam: home.teamName,
       homeId: home.teamId,
       homeScore: home.stats.points,
@@ -519,7 +489,7 @@ async function main() {
         ftm: home.stats.ftm,
         fta: home.stats.fta,
         orb: home.stats.orb,
-        drb: home.stats.drb,
+        drb: Math.max(0, home.stats.trb - home.stats.orb),
         trb: home.stats.trb,
         ast: home.stats.ast,
         stl: home.stats.stl,
@@ -539,7 +509,7 @@ async function main() {
         ftm: away.stats.ftm,
         fta: away.stats.fta,
         orb: away.stats.orb,
-        drb: away.stats.drb,
+        drb: Math.max(0, away.stats.trb - away.stats.orb),
         trb: away.stats.trb,
         ast: away.stats.ast,
         stl: away.stats.stl,
@@ -548,18 +518,17 @@ async function main() {
         pf: away.stats.pf,
       },
       isConferenceGame: game.isConferenceGame,
-      players: [], // Will populate below
+      players: [],
     };
 
-    // Add per-game player stats
+    // Add per-game player stats to game log
     if (game.players && Array.isArray(game.players)) {
       for (const playerData of game.players) {
         if (!playerData.teamId || !playerData.players) continue;
-        
         const teamId = String(playerData.teamId);
         const simplifiedPlayers = playerData.players.map((p) => ({
           playerId: `${teamId}_${p.number || 0}_${p.firstName}_${p.lastName}`,
-          division: 'womens-d1',
+          division: DIVISION,
           firstName: p.firstName || "",
           lastName: p.lastName || "",
           number: p.number || "",
@@ -580,160 +549,99 @@ async function main() {
           pf: parseInt(p.personalFouls || 0),
           points: parseInt(p.points || 0),
         }));
-
-        gameLogEntry.players.push({
-          teamId,
-          players: simplifiedPlayers,
-        });
+        gameLogEntry.players.push({ teamId, players: simplifiedPlayers });
       }
     }
 
     gamesLog.push(gameLogEntry);
 
-    // Aggregate team stats
+    // Aggregate team season stats
     for (const team of [home, away]) {
       const oppStats = team === home ? away.stats : home.stats;
-      
+
       if (!teamSeasonStats.has(team.teamId)) {
         teamSeasonStats.set(team.teamId, {
           teamId: team.teamId,
           teamName: team.teamName,
           conference: team.conference,
-          games: 0,
-          wins: 0,
-          losses: 0,
-          points: 0,
-          opp_points: 0,
-          fgm: 0,
-          fga: 0,
-          tpm: 0,
-          tpa: 0,
-          ftm: 0,
-          fta: 0,
-          orb: 0,
-          drb: 0,
-          trb: 0,
-          ast: 0,
-          stl: 0,
-          blk: 0,
-          tov: 0,
-          pf: 0,
-          opp_fgm: 0,
-          opp_fga: 0,
-          opp_tpm: 0,
-          opp_tpa: 0,
-          opp_ftm: 0,
-          opp_fta: 0,
-          opp_orb: 0,
-          opp_drb: 0,
-          opp_trb: 0,
-          opp_ast: 0,
-          opp_stl: 0,
-          opp_blk: 0,
-          opp_tov: 0,
-          opp_pf: 0,
+          games: 0, wins: 0, losses: 0,
+          points: 0, opp_points: 0,
+          fgm: 0, fga: 0, tpm: 0, tpa: 0, ftm: 0, fta: 0,
+          orb: 0, drb: 0, trb: 0, ast: 0, stl: 0, blk: 0, tov: 0, pf: 0,
+          opp_fgm: 0, opp_fga: 0, opp_tpm: 0, opp_tpa: 0, opp_ftm: 0, opp_fta: 0,
+          opp_orb: 0, opp_drb: 0, opp_trb: 0, opp_ast: 0, opp_stl: 0, opp_blk: 0, opp_tov: 0, opp_pf: 0,
         });
       }
 
-      const stats = teamSeasonStats.get(team.teamId);
-      stats.games++;
-      
-      if (team.stats.points > oppStats.points) stats.wins++;
-      else stats.losses++;
+      const s = teamSeasonStats.get(team.teamId);
+      s.games++;
+      if (team.stats.points > oppStats.points) s.wins++;
+      else s.losses++;
 
-      // Our stats
-      stats.points += team.stats.points;
-      stats.fgm += team.stats.fgm;
-      stats.fga += team.stats.fga;
-      stats.tpm += team.stats.tpm;
-      stats.tpa += team.stats.tpa;
-      stats.ftm += team.stats.ftm;
-      stats.fta += team.stats.fta;
-      stats.orb += team.stats.orb;
-      stats.trb += team.stats.trb;
-      // Calculate DRB from TRB - ORB
-      const teamDrb = Math.max(0, team.stats.trb - team.stats.orb);
-      stats.drb += teamDrb;
-      stats.ast += team.stats.ast;
-      stats.stl += team.stats.stl;
-      stats.blk += team.stats.blk;
-      stats.tov += team.stats.tov;
-      stats.pf += team.stats.pf;
+      s.points += team.stats.points;
+      s.fgm += team.stats.fgm;
+      s.fga += team.stats.fga;
+      s.tpm += team.stats.tpm;
+      s.tpa += team.stats.tpa;
+      s.ftm += team.stats.ftm;
+      s.fta += team.stats.fta;
+      s.orb += team.stats.orb;
+      s.trb += team.stats.trb;
+      s.drb += Math.max(0, team.stats.trb - team.stats.orb);
+      s.ast += team.stats.ast;
+      s.stl += team.stats.stl;
+      s.blk += team.stats.blk;
+      s.tov += team.stats.tov;
+      s.pf += team.stats.pf;
 
-      // Opponent stats
-      stats.opp_points += oppStats.points;
-      stats.opp_fgm += oppStats.fgm;
-      stats.opp_fga += oppStats.fga;
-      stats.opp_tpm += oppStats.tpm;
-      stats.opp_tpa += oppStats.tpa;
-      stats.opp_ftm += oppStats.ftm;
-      stats.opp_fta += oppStats.fta;
-      stats.opp_orb += oppStats.orb;
-      stats.opp_trb += oppStats.trb;
-      // Calculate opponent DRB from TRB - ORB
-      const oppDrb = Math.max(0, oppStats.trb - oppStats.orb);
-      stats.opp_drb += oppDrb;
-      stats.opp_ast += oppStats.ast;
-      stats.opp_stl += oppStats.stl;
-      stats.opp_blk += oppStats.blk;
-      stats.opp_tov += oppStats.tov;
-      stats.opp_pf += oppStats.pf;
+      s.opp_points += oppStats.points;
+      s.opp_fgm += oppStats.fgm;
+      s.opp_fga += oppStats.fga;
+      s.opp_tpm += oppStats.tpm;
+      s.opp_tpa += oppStats.tpa;
+      s.opp_ftm += oppStats.ftm;
+      s.opp_fta += oppStats.fta;
+      s.opp_orb += oppStats.orb;
+      s.opp_trb += oppStats.trb;
+      s.opp_drb += Math.max(0, oppStats.trb - oppStats.orb);
+      s.opp_ast += oppStats.ast;
+      s.opp_stl += oppStats.stl;
+      s.opp_blk += oppStats.blk;
+      s.opp_tov += oppStats.tov;
+      s.opp_pf += oppStats.pf;
     }
 
-    // Aggregate player stats
+    // Aggregate player season stats
     if (game.players && Array.isArray(game.players)) {
       for (const playerData of game.players) {
         if (!playerData.teamId || !playerData.players) continue;
-
         const teamId = String(playerData.teamId);
         const teamName = teamId === home.teamId ? home.teamName : away.teamName;
 
         for (const p of playerData.players) {
-          // Create unique player ID: teamId + player number + name
           const playerId = `${teamId}_${p.number || 0}_${p.firstName}_${p.lastName}`;
 
           if (!playerSeasonStats.has(playerId)) {
             playerSeasonStats.set(playerId, {
-              playerId,
-              teamId,
-              teamName,
-              division: 'womens-d1',
+              playerId, teamId, teamName,
+              division: DIVISION,
               firstName: p.firstName || "",
               lastName: p.lastName || "",
               number: p.number || "",
               position: p.position || "",
               year: p.year || "",
-              games: 0,
-              starts: 0,
-              minutes: 0,
-              fgm: 0,
-              fga: 0,
-              tpm: 0,
-              tpa: 0,
-              ftm: 0,
-              fta: 0,
-              orb: 0,
-              drb: 0,
-              trb: 0,
-              ast: 0,
-              stl: 0,
-              blk: 0,
-              tov: 0,
-              pf: 0,
-              points: 0,
+              games: 0, starts: 0, minutes: 0,
+              fgm: 0, fga: 0, tpm: 0, tpa: 0, ftm: 0, fta: 0,
+              orb: 0, drb: 0, trb: 0, ast: 0, stl: 0, blk: 0, tov: 0, pf: 0, points: 0,
             });
           }
 
           const pStats = playerSeasonStats.get(playerId);
-          
-          // Parse minutes (might be string like "25.3")
           const mins = parseFloat(p.minutesPlayed || p.minutes || 0);
-          
-          // Only count this game if player actually played
+
           if (mins > 0 || parseInt(p.points || 0) > 0) {
             pStats.games++;
             if (p.starter === true || p.starter === "true") pStats.starts++;
-            
             pStats.minutes += mins;
             pStats.fgm += parseInt(p.fieldGoalsMade || 0);
             pStats.fga += parseInt(p.fieldGoalsAttempted || 0);
@@ -756,155 +664,94 @@ async function main() {
     }
   }
 
-  // Calculate efficiency ratings (for compatibility with existing site)
+  // Calculate efficiency ratings
   const ratingsRows = [];
   for (const [teamId, stats] of teamSeasonStats) {
-    const poss = Math.max(1, stats.fga - stats.orb + stats.tov + 0.475 * stats.fta);
-    const oppPoss = Math.max(1, stats.opp_fga - stats.opp_orb + stats.opp_tov + 0.475 * stats.opp_fta);
+    const offPoss = Math.max(1, stats.fga - stats.orb + stats.tov + 0.475 * stats.fta);
+    const defPoss = Math.max(1, stats.opp_fga - stats.opp_orb + stats.opp_tov + 0.475 * stats.opp_fta);
 
-    const adjO = (stats.points / poss) * 100;
-    const adjD = (stats.opp_points / oppPoss) * 100;
+    const adjO = (stats.points / offPoss) * 100;
+    const adjD = (stats.opp_points / defPoss) * 100;
     const adjEM = adjO - adjD;
-    const adjT = poss / Math.max(1, stats.games);
+    const adjT = offPoss / Math.max(1, stats.games);
 
     ratingsRows.push({
       teamId,
       team: stats.teamName,
       conference: stats.conference,
       games: stats.games,
-      adjO,
-      adjD,
-      adjEM,
-      adjT,
+      adjO, adjD, adjEM, adjT,
     });
   }
 
   ratingsRows.sort((a, b) => b.adjEM - a.adjEM);
 
-  // D1 Women's Basketball Conferences (exact codes from NCAA API)
-  const D1_CONFERENCES = new Set([
-    // Power conferences
-    'acc', 'big-12', 'big-ten', 'sec', 'pac-12', 'big-east',
-    // Other major conferences
-    'american', 'aac', 'wcc', 'mwc', 'mountain-west', 'atlantic-10', 'a-10',
-    // Mid-major conferences
-    'mvc', 'mac', 'cusa', 'sun-belt', 'sunbelt', 'colonial', 'caa',
-    'horizon', 'maac', 'ovc', 'patriot', 'southland', 'summit-league',
-    'wac', 'big-sky', 'big-south', 'southern', 'socon',
-    'big-west', 'ivy-league', 'meac', 'nec', 'northeast', 'swac',
-    'asun', 'america-east', 'americaeast'
-  ]);
+  const allPlayers = Array.from(playerSeasonStats.values()).filter((p) => p.games > 0);
 
-  // Filter to D1 teams only - teams in D1 conferences
-  const d1Rows = ratingsRows.filter(r => {
-    if (!r.conference) return false;
-    const conf = String(r.conference).toLowerCase().trim();
-    return D1_CONFERENCES.has(conf);
-  });
-  
-  console.log(`Total teams in database: ${ratingsRows.length}`);
-  console.log(`D1 teams (in D1 conferences): ${d1Rows.length}`);
-  console.log(`Non-D1 teams filtered out: ${ratingsRows.length - d1Rows.length}`);
-
-  // Save all the data files
+  // Save JSON files
   await fs.mkdir("public/data", { recursive: true });
 
-  // 1. Ratings (for compatibility)
   await fs.writeFile(
-    "public/data/ratings.json",
+    "public/data/mens_d2_ratings.json",
     JSON.stringify({
       generated_at_utc: new Date().toISOString(),
       season_start: SEASON_START,
-      rows: d1Rows,
+      rows: ratingsRows,
     }, null, 2),
     "utf8"
   );
-  console.log(`✅ WROTE public/data/ratings.json (${d1Rows.length} D1 teams)`);
+  console.log(`✅ WROTE public/data/mens_d2_ratings.json (${ratingsRows.length} teams)`);
 
-  // 2. Complete team stats (D1 only)
-  const d1TeamStats = Array.from(teamSeasonStats.values()).filter(t => t.conference && t.conference !== "—");
   await fs.writeFile(
-    "public/data/team_stats.json",
+    "public/data/mens_d2_team_stats.json",
     JSON.stringify({
       generated_at_utc: new Date().toISOString(),
-      teams: d1TeamStats,
+      teams: Array.from(teamSeasonStats.values()),
     }, null, 2),
     "utf8"
   );
-  console.log(`✅ WROTE public/data/team_stats.json (${d1TeamStats.length} D1 teams)`);
+  console.log(`✅ WROTE public/data/mens_d2_team_stats.json`);
 
-  // 3. Games log
   await fs.writeFile(
-    "public/data/games.json",
+    "public/data/mens_d2_games.json",
     JSON.stringify({
       generated_at_utc: new Date().toISOString(),
       games: gamesLog,
     }, null, 2),
     "utf8"
   );
-  console.log(`✅ WROTE public/data/games.json (${gamesLog.length} games)`);
+  console.log(`✅ WROTE public/data/mens_d2_games.json (${gamesLog.length} games)`);
 
-  // 4. Player stats - filter to D1 teams' players only
-  const d1TeamIds = new Set(d1Rows.map(r => r.teamId));
-  const d1Players = Array.from(playerSeasonStats.values())
-    .filter(p => d1TeamIds.has(p.teamId))
-    .filter(p => p.games > 0); // Only include players who actually played
-  
   await fs.writeFile(
-    "public/data/player_stats.json",
+    "public/data/mens_d2_player_stats.json",
     JSON.stringify({
       generated_at_utc: new Date().toISOString(),
-      players: d1Players,
+      players: allPlayers,
     }, null, 2),
     "utf8"
   );
-  console.log(`✅ WROTE public/data/player_stats.json (${d1Players.length} D1 players)`);
+  console.log(`✅ WROTE public/data/mens_d2_player_stats.json (${allPlayers.length} players)`);
 
-  // 5. Games cache - ONLY contains IDs of games we SUCCESSFULLY PARSED
-  // This is critical: we never add game IDs from scoreboards alone,
-  // only games where we got and parsed actual boxscore data.
-  // This prevents the incremental script from skipping evening games
-  // that appeared in the scoreboard before they were played.
-  const successfullyParsedIds = allGames.map(g => g.gameId);
-  await fs.writeFile(
-    "public/data/games_cache.json",
-    JSON.stringify({
-      generated_at_utc: new Date().toISOString(),
-      note: "Contains ONLY successfully parsed game IDs - not scheduled games",
-      total_games: successfullyParsedIds.length,
-      game_ids: successfullyParsedIds,
-    }, null, 2),
-    "utf8"
-  );
-  console.log(`✅ WROTE public/data/games_cache.json (${successfullyParsedIds.length} successfully parsed games)`);
-
-  console.log("\n🎉 ALL DATA FILES CREATED!");
-  console.log(`📊 Summary:`);
-  console.log(`   - ${ratingsRows.length} teams rated`);
-  console.log(`   - ${successfullyParsedIds.length} games with full boxscore data`);
-  console.log(`   - ${totalBoxesFailed} games failed (no boxscore available)`);
-  console.log(`\n✅ Incremental script will correctly pick up new games from here!`);
-  
-  // ===== WRITE TO DATABASE =====
+  // Write to database
   if (process.env.POSTGRES_URL) {
     console.log("\n📊 Writing data to database...");
-    
+
     try {
       db.initDb();
-      
-      // Clear existing data for this division only
-      await db.clearDivisionData('womens-d1');
-      
-      // Write teams (ALL teams, not just D1 - needed for foreign key constraints)
+
+      // Clear existing mens-d2 data
+      await db.clearDivisionData(DIVISION);
+
+      // Write teams
       console.log("Writing teams...");
       for (const [teamId, teamStat] of teamSeasonStats) {
-        const row = ratingsRows.find(r => r.teamId === teamId);
+        const row = ratingsRows.find((r) => r.teamId === teamId);
         if (row && teamStat) {
           await db.upsertTeam({
             teamId: row.teamId,
             teamName: row.team,
             conference: row.conference,
-            division: 'womens-d1',
+            division: DIVISION,
             games: row.games,
             wins: teamStat.wins,
             losses: teamStat.losses,
@@ -914,53 +761,37 @@ async function main() {
             adjT: row.adjT,
             points: teamStat.points,
             opp_points: teamStat.opp_points,
-            fgm: teamStat.fgm,
-            fga: teamStat.fga,
-            tpm: teamStat.tpm,
-            tpa: teamStat.tpa,
-            ftm: teamStat.ftm,
-            fta: teamStat.fta,
-            orb: teamStat.orb,
-            drb: teamStat.drb,
-            trb: teamStat.trb,
-            ast: teamStat.ast,
-            stl: teamStat.stl,
-            blk: teamStat.blk,
-            tov: teamStat.tov,
-            pf: teamStat.pf,
-            opp_fgm: teamStat.opp_fgm,
-            opp_fga: teamStat.opp_fga,
-            opp_tpm: teamStat.opp_tpm,
-            opp_tpa: teamStat.opp_tpa,
-            opp_ftm: teamStat.opp_ftm,
-            opp_fta: teamStat.opp_fta,
-            opp_orb: teamStat.opp_orb,
-            opp_drb: teamStat.opp_drb,
-            opp_trb: teamStat.opp_trb,
-            opp_ast: teamStat.opp_ast,
-            opp_stl: teamStat.opp_stl,
-            opp_blk: teamStat.opp_blk,
-            opp_tov: teamStat.opp_tov,
-            opp_pf: teamStat.opp_pf,
+            fgm: teamStat.fgm, fga: teamStat.fga,
+            tpm: teamStat.tpm, tpa: teamStat.tpa,
+            ftm: teamStat.ftm, fta: teamStat.fta,
+            orb: teamStat.orb, drb: teamStat.drb, trb: teamStat.trb,
+            ast: teamStat.ast, stl: teamStat.stl, blk: teamStat.blk,
+            tov: teamStat.tov, pf: teamStat.pf,
+            opp_fgm: teamStat.opp_fgm, opp_fga: teamStat.opp_fga,
+            opp_tpm: teamStat.opp_tpm, opp_tpa: teamStat.opp_tpa,
+            opp_ftm: teamStat.opp_ftm, opp_fta: teamStat.opp_fta,
+            opp_orb: teamStat.opp_orb, opp_drb: teamStat.opp_drb, opp_trb: teamStat.opp_trb,
+            opp_ast: teamStat.opp_ast, opp_stl: teamStat.opp_stl, opp_blk: teamStat.opp_blk,
+            opp_tov: teamStat.opp_tov, opp_pf: teamStat.opp_pf,
           });
         }
       }
-      console.log(`✅ Wrote ${teamSeasonStats.size} teams to database (includes non-D1 for foreign keys)`);
-      
+      console.log(`✅ Wrote ${teamSeasonStats.size} teams to database`);
+
       // Write games
       console.log("Writing games...");
       for (const game of gamesLog) {
         await db.insertGame(game);
       }
       console.log(`✅ Wrote ${gamesLog.length} games to database`);
-      
+
       // Write players
       console.log("Writing players...");
-      for (const player of d1Players) {
+      for (const player of allPlayers) {
         await db.upsertPlayer(player);
       }
-      console.log(`✅ Wrote ${d1Players.length} players to database`);
-      
+      console.log(`✅ Wrote ${allPlayers.length} players to database`);
+
       // Write player game stats
       console.log("Writing player game stats...");
       let playerGameCount = 0;
@@ -975,10 +806,9 @@ async function main() {
         }
       }
       console.log(`✅ Wrote ${playerGameCount} player game records to database`);
-      
+
       await db.closeDb();
       console.log("\n🎉 DATABASE UPDATED!");
-      
     } catch (err) {
       console.error("❌ Database write failed:", err);
       console.log("Continuing with JSON files only...");
@@ -986,6 +816,13 @@ async function main() {
   } else {
     console.log("\n⚠️  No POSTGRES_URL found - skipping database write");
   }
+
+  console.log("\n📊 Final Summary:");
+  console.log(`   - ${ratingsRows.length} teams`);
+  console.log(`   - ${gamesLog.length} games parsed`);
+  console.log(`   - ${allPlayers.length} players`);
+  console.log(`   - ${totalBoxesFailed} games failed`);
+  console.log(`   - Success rate: ${totalGamesFound > 0 ? ((totalBoxesParsed / totalGamesFound) * 100).toFixed(1) : 0}%`);
 }
 
 main().catch((e) => {
