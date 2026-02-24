@@ -14,7 +14,21 @@ export async function GET(
 
   try {
     const result = await pool.query(`
-      SELECT * FROM players 
+      SELECT 
+        player_id as "playerId",
+        team_id as "teamId",
+        team_name as "teamName",
+        first_name as "firstName",
+        last_name as "lastName",
+        number,
+        position,
+        year,
+        games,
+        starts,
+        minutes,
+        fgm, fga, tpm, tpa, ftm, fta,
+        orb, drb, trb, ast, stl, blk, tov, pf, points
+      FROM players 
       WHERE team_id = $1 AND division = 'mens-d2'
       ORDER BY points DESC
     `, [teamid]);
