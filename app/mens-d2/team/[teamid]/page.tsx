@@ -431,8 +431,8 @@ function PlayerStatsKenPom({ players, team }: { players: any[]; team: any }) {
     const teamPossOnFloor = Math.max(1, teamPoss * minShare * 5);
     const usagePct = (playerPoss / teamPossOnFloor) * 100;
 
-    // Shot% share of team FGA
-    const shotPct = team.fga > 0 ? (pg.fga / team.fga) * 100 : 0;
+    // Shot%: player FGA / (minPct/100 * team FGA)
+    const shotPct = minPct > 0 && team.fga > 0 ? (pg.fga / ((minPct / 100) * team.fga)) * 100 : 0;
 
     // eFG% and TS%
     const efg = pg.fga > 0 ? ((pg.fgm + 0.5 * pg.tpm) / pg.fga) * 100 : 0;
@@ -448,8 +448,8 @@ function PlayerStatsKenPom({ players, team }: { players: any[]; team: any }) {
     const teamFGMOnFloor = Math.max(1, (team.fgm - pg.fgm) * minShare * 5);
     const aRate = (pg.ast / teamFGMOnFloor) * 100;
 
-    // TO rate
-    const toRate = (pg.tov / teamPossOnFloor) * 100;
+    // TORate: turnovers as % of personal possessions (FGA + 0.44*FTA + TOV)
+    const toRate = playerPoss > 0 ? (pg.tov / playerPoss) * 100 : 0;
 
     // Blk%, Stl%
     const blkPct = pg.minutes > 0 && opp2PA > 0
@@ -520,7 +520,8 @@ function PlayerStatsKenPom({ players, team }: { players: any[]; team: any }) {
     const indivPoss = fgMissedPoss + ftMissedPoss + pg.tov + scoringPoss;
 
     // ORtg = points produced per 100 individual possessions
-    const ortg = indivPoss > 0 ? (pointsProduced / indivPoss) * 100 : 0;
+    // Require at least 20 possessions for a meaningful ORtg
+    const ortg = indivPoss >= 20 ? (pointsProduced / indivPoss) * 100 : 0;
 
     return {
       minPct, ortg, usagePct, shotPct, efg, ts, orPct, drPct,
