@@ -27,7 +27,7 @@ export async function GET(
       FROM games 
       WHERE (home_team_id = $1 OR away_team_id = $1)
         AND division = 'mens-d2'
-      ORDER BY game_date DESC
+      ORDER BY game_date ASC
     `, [teamid]);
 
     return NextResponse.json({
