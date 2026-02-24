@@ -166,6 +166,14 @@ function pick(obj, keys) {
   return null;
 }
 
+// Build a unique player ID using teamId + NCAA id + first/last name
+function buildPlayerId(teamId, p) {
+  const ncaaId = p.id ?? p.ncaaId ?? 0;
+  const first = (p.firstName || "").toLowerCase().replace(/\s+/g, "");
+  const last = (p.lastName || "").toLowerCase().replace(/\s+/g, "");
+  return `${teamId}_${ncaaId}_${first}_${last}`;
+}
+
 // ===== STAT EXTRACTION =====
 
 function extractCompleteStats(raw) {
@@ -217,6 +225,19 @@ function deepCollectTeamStats(root) {
 
 function extractPlayers(gameJson) {
   const result = [];
+
+  // Prefer teamBoxscore which is the correct structure for NCAA D2
+  if (gameJson.teamBoxscore && Array.isArray(gameJson.teamBoxscore)) {
+    for (const entry of gameJson.teamBoxscore) {
+      const teamId = pick(entry, ["teamId", "team_id", "id"]);
+      if (teamId && entry.playerStats && Array.isArray(entry.playerStats) && entry.playerStats.length > 0) {
+        result.push({ teamId: String(teamId), players: entry.playerStats });
+      }
+    }
+    if (result.length > 0) return result;
+  }
+
+  // Fallback: walk the tree
   const walk = (x) => {
     if (Array.isArray(x)) {
       x.forEach(walk);
@@ -353,7 +374,6 @@ async function main() {
     const d = fmtDate(dt);
     const [Y, M, D] = d.split("-");
 
-    // CORRECT Men's D2 scoreboard path
     const scoreboardPath = `/scoreboard/basketball-men/d2/${Y}/${M}/${D}/all-conf`;
 
     if (days % 7 === 1) console.log("DATE", d);
@@ -489,7 +509,7 @@ async function main() {
         if (!playerData.teamId || !playerData.players) continue;
         const teamId = String(playerData.teamId);
         const simplifiedPlayers = playerData.players.map((p) => ({
-          playerId: `${teamId}_${p.number || 0}_${p.firstName}_${p.lastName}`,
+          playerId: buildPlayerId(teamId, p),
           division: DIVISION,
           firstName: p.firstName || "",
           lastName: p.lastName || "",
@@ -565,7 +585,7 @@ async function main() {
         const teamName = teamId === home.teamId ? home.teamName : away.teamName;
 
         for (const p of playerData.players) {
-          const playerId = `${teamId}_${p.number || 0}_${p.firstName}_${p.lastName}`;
+          const playerId = buildPlayerId(teamId, p);
 
           if (!playerSeasonStats.has(playerId)) {
             playerSeasonStats.set(playerId, {
