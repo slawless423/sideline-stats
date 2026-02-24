@@ -418,32 +418,100 @@ function PlayerStatsKenPom({ players, team }: { players: any[]; team: any }) {
     const twoPA = pg.fga - pg.tpa;
     const twoPM = pg.fgm - pg.tpm;
     const minPct = teamMinutes > 0 ? (pg.minutes / teamMinutes) * 100 * 5 : 0;
+
+    // Team-level values needed for Dean Oliver formulas
+    const oppPoss = Math.max(1, team.opp_fga - team.opp_orb + team.opp_tov + 0.475 * team.opp_fta);
+    const opp2PA = team.opp_fga - team.opp_tpa;
+    const teamFGPct = team.fga > 0 ? team.fgm / team.fga : 0;
+    const teamFTPct = team.fta > 0 ? team.ftm / team.fta : 0;
+
+    // Usage (Dean Oliver): (FGA + 0.44*FTA + TOV) / team possessions while on floor
+    // Approximate team poss while on floor via minutes share
+    const minShare = teamMinutes > 0 ? pg.minutes / teamMinutes : 0;
+    const teamPossOnFloor = Math.max(1, teamPoss * minShare * 5);
     const playerPoss = pg.fga + 0.44 * pg.fta + pg.tov;
-    const usagePct = teamPoss > 0 ? (playerPoss / teamPoss) * 100 : 0;
+    const usagePct = teamPossOnFloor > 0 ? (playerPoss / teamPossOnFloor) * 100 : 0;
     const shotPct = team.fga > 0 ? (pg.fga / team.fga) * 100 : 0;
+
+    // eFG% and TS%
     const efg = pg.fga > 0 ? ((pg.fgm + 0.5 * pg.tpm) / pg.fga) * 100 : 0;
     const ts = (pg.fga + 0.44 * pg.fta) > 0 ? (pg.points / (2 * (pg.fga + 0.44 * pg.fta))) * 100 : 0;
+
+    // Rebound percentages
     const orPct = pg.minutes > 0 && (team.orb + opp_drb) > 0
       ? (pg.orb / pg.minutes) * (teamMinutes / 5) / (team.orb + opp_drb) * 100 : 0;
     const drPct = pg.minutes > 0 && (drb + team.opp_orb) > 0
       ? (pg.drb / pg.minutes) * (teamMinutes / 5) / (drb + team.opp_orb) * 100 : 0;
-    const teamFGMWhileOnFloor = (team.fgm - pg.fgm) * (pg.minutes / teamMinutes) * 5;
-    const aRate = teamFGMWhileOnFloor > 0 ? (pg.ast / teamFGMWhileOnFloor) * 100 : 0;
-    const playerPoss100 = pg.minutes > 0 ? (teamPoss / teamMinutes) * pg.minutes : 0;
-    const toRate = playerPoss100 > 0 ? (pg.tov / playerPoss100) * 100 : 0;
-    const oppPoss = team.opp_fga - team.opp_orb + team.opp_tov + 0.475 * team.opp_fta;
-    const opp2PA = team.opp_fga - team.opp_tpa;
-    const blkPct = (pg.minutes * opp2PA) > 0
+
+    // Assist rate, TO rate, Blk%, Stl%
+    const teamFGMWhileOnFloor = Math.max(1, (team.fgm - pg.fgm) * minShare * 5);
+    const aRate = pg.ast / teamFGMWhileOnFloor * 100;
+    const toRate = playerPossOnFloor > 0 ? (pg.tov / playerPossOnFloor) * 100 : 0;
+    const blkPct = pg.minutes > 0 && opp2PA > 0
       ? 100 * (pg.blk * (teamMinutes / 5)) / (pg.minutes * opp2PA) : 0;
-    const stlPct = (pg.minutes * oppPoss) > 0
+    const stlPct = pg.minutes > 0
       ? 100 * (pg.stl * (teamMinutes / 5)) / (pg.minutes * oppPoss) : 0;
+
+    // FC/40
     const per40 = pg.minutes > 0 ? 40 / pg.minutes : 0;
     const fc40 = pg.pf * per40;
+
+    // Shooting rates/pcts
     const ftRate = pg.fga > 0 ? (pg.fta / pg.fga) * 100 : 0;
     const ftPct = pg.fta > 0 ? (pg.ftm / pg.fta) * 100 : 0;
     const twoPct = twoPA > 0 ? (twoPM / twoPA) * 100 : 0;
     const threePct = pg.tpa > 0 ? (pg.tpm / pg.tpa) * 100 : 0;
-    const ortg = playerPoss > 0 ? (pg.points / playerPoss) * 100 : 0;
+
+    // ===== DEAN OLIVER INDIVIDUAL OFFENSIVE RATING =====
+    // Step 1: Unassisted and assisted FG scoring possessions
+    const qAST = pg.minutes > 0
+      ? (pg.ast / pg.minutes) * (teamMinutes / 5) / Math.max(1, team.fgm - pg.fgm) * 100
+      : 0;
+
+    const fgPart = pg.fgm > 0
+      ? pg.fgm * (1 - 0.5 * ((pg.points - pg.ftm) / Math.max(1, 2 * pg.fga)) * qAST)
+      : 0;
+
+    // Step 2: FT scoring possessions
+    const ftPart = (1 - Math.pow(1 - (pg.fta > 0 ? pg.ftm / pg.fta : 0), 2)) * 0.4 * pg.fta;
+
+    // Step 3: Team scoring possessions (needed for assisted FG credit)
+    const teamScoringPoss = team.fgm * (1 - 0.5 * ((team.points - team.ftm) / Math.max(1, 2 * team.fga)) * 0)
+      + (1 - Math.pow(1 - teamFTPct, 2)) * 0.4 * team.fta;
+
+    // Step 4: Offensive rebound scoring possessions
+    const orbWeight = (1 - 0.5 * (fgPart + ftPart) / Math.max(1, playerPoss)) * 0.5;
+    const orbPart = pg.orb * orbWeight;
+
+    // Step 5: Scoring possessions
+    const scoringPoss = fgPart + ftPart + orbPart;
+
+    // Step 6: Points produced
+    // Unassisted FG points
+    const ppFG = pg.fgm > 0
+      ? (2 + (pg.tpm / Math.max(1, pg.fgm))) * fgPart
+      : 0;
+
+    // Assisted FG points (credit for assists)
+    const ppAST = pg.ast > 0
+      ? (2 * team.fgm + team.tpm) / Math.max(1, 2 * team.fgm) * pg.ast * 0.5
+      : 0;
+
+    // FT points
+    const ppFT = pg.ftm;
+
+    // ORB points
+    const ppORB = pg.orb * orbWeight * (team.points / Math.max(1, teamScoringPoss));
+
+    const pointsProduced = ppFG + ppAST + ppFT + ppORB;
+
+    // Step 7: Individual possessions used
+    const fgxPoss = (pg.fga - pg.fgm) * (1 - 1.07 * (team.orb / Math.max(1, team.orb + opp_drb)));
+    const ftxPoss = Math.pow(1 - (pg.fta > 0 ? pg.ftm / pg.fta : 0), 2) * 0.4 * pg.fta;
+    const indivPoss = fgxPoss + ftxPoss + pg.tov + scoringPoss;
+
+    // Step 8: ORtg = (Points Produced / Individual Possessions) * 100
+    const ortg = indivPoss > 0 ? (pointsProduced / indivPoss) * 100 : 0;
 
     return {
       minPct, ortg, usagePct, shotPct, efg, ts, orPct, drPct,
