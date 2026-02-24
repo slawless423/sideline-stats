@@ -500,8 +500,10 @@ function PlayerStatsKenPom({ players, team }: { players: any[]; team: any }) {
     const teamPtsPerScoringPoss = teamScoringPoss > 0 ? team.points / teamScoringPoss : 0;
 
     // Points produced from FGs
-    const ptsFromField = pg.points - pg.ftm;
-    const ppFG = (ptsFromField / Math.max(1, pg.fgm)) * fgScoringPoss;
+    // Unassisted FGs score at player's own pts/FGM rate; assisted FGs score at team rate
+    const ptsPerFGM = pg.fgm > 0 ? (2 + pg.tpm / pg.fgm) : 2;
+    const ppFG = (1 - qAST) * fgScoringPoss * ptsPerFGM
+               + qAST * fgScoringPoss * teamPtsPerScoringPoss;
 
     // Points produced from assists (basketball-reference formula)
     const ppAST = pg.ast * (team.points - team.ftm) / (6 * Math.max(1, team.fga));
