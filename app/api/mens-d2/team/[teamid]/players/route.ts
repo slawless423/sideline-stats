@@ -15,11 +15,30 @@ export async function GET(
   const confOnly = searchParams.get('conf') === 'true';
 
   try {
-    let result;
+    // Full season totals query
+    const fullSeasonQuery = `
+      SELECT 
+        player_id as "playerId",
+        team_id as "teamId",
+        team_name as "teamName",
+        first_name as "firstName",
+        last_name as "lastName",
+        number,
+        position,
+        year,
+        games,
+        starts,
+        minutes,
+        fgm, fga, tpm, tpa, ftm, fta,
+        orb, drb, trb, ast, stl, blk, tov, pf, points
+      FROM players 
+      WHERE team_id = $1 AND division = 'mens-d2'
+      ORDER BY points DESC
+    `;
 
     if (confOnly) {
-      // Sum player stats from only conference games using player_games table
-      result = await pool.query(`
+      // Try to sum player stats from conference games only
+      const confResult = await pool.query(`
         SELECT 
           p.player_id as "playerId",
           p.team_id as "teamId",
@@ -52,30 +71,20 @@ export async function GET(
         HAVING SUM(pg.points) > 0 OR SUM(pg.minutes) > 0
         ORDER BY SUM(pg.points) DESC
       `, [teamid]);
-    } else {
-      // Full season totals from players table
-      result = await pool.query(`
-        SELECT 
-          player_id as "playerId",
-          team_id as "teamId",
-          team_name as "teamName",
-          first_name as "firstName",
-          last_name as "lastName",
-          number,
-          position,
-          year,
-          games,
-          starts,
-          minutes,
-          fgm, fga, tpm, tpa, ftm, fta,
-          orb, drb, trb, ast, stl, blk, tov, pf, points
-        FROM players 
-        WHERE team_id = $1 AND division = 'mens-d2'
-        ORDER BY points DESC
-      `, [teamid]);
+
+      // If conf filter returned results, use them; otherwise fall back to full season
+      if (confResult.rows.length > 0) {
+        return NextResponse.json({ players: confResult.rows, filtered: true });
+      }
+
+      // Fall back to full season with a flag so the UI can show a note
+      const fallbackResult = await pool.query(fullSeasonQuery, [teamid]);
+      return NextResponse.json({ players: fallbackResult.rows, filtered: false, fallback: true });
     }
 
-    return NextResponse.json({ players: result.rows });
+    const result = await pool.query(fullSeasonQuery, [teamid]);
+    return NextResponse.json({ players: result.rows, filtered: false });
+
   } catch (error) {
     console.error('Database error:', error);
     return NextResponse.json({ error: 'Failed to fetch players' }, { status: 500 });
