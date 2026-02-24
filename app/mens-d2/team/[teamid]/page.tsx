@@ -479,7 +479,6 @@ function PlayerStatsKenPom({ players, team }: { players: any[]; team: any }) {
       : 0;
 
     // FG scoring possessions
-    // Unassisted FG poss: FGM * (1 - 0.5*(2pt value / 2*FGA)*qAST)
     const fgScoringPoss = pg.fgm > 0
       ? pg.fgm * (1 - 0.5 * ((pg.points - pg.ftm) / Math.max(1, 2 * pg.fga)) * qAST)
       : 0;
@@ -501,6 +500,7 @@ function PlayerStatsKenPom({ players, team }: { players: any[]; team: any }) {
     const teamPtsPerScoringPoss = teamScoringPoss > 0 ? team.points / teamScoringPoss : 0;
 
     // Points produced from FGs
+    const ptsFromField = pg.points - pg.ftm;
     const ppFG = (ptsFromField / Math.max(1, pg.fgm)) * fgScoringPoss;
 
     // Points produced from assists (basketball-reference formula)
