@@ -68,22 +68,25 @@ function buildStatsFromGames(games: any[], teamId: string, teamName: string, con
     s.points += ourScore;
     s.opp_points += theirScore;
 
-    const us = isHome
-      ? { fgm: g.homeFgm, fga: g.homeFga, tpm: g.homeTpm, tpa: g.homeTpa, ftm: g.homeFtm, fta: g.homeFta, orb: g.homeOrb, drb: g.homeDrb, trb: g.homeTrb, ast: g.homeAst, stl: g.homeStl, blk: g.homeBlk, tov: g.homeTov, pf: g.homePf }
-      : { fgm: g.awayFgm, fga: g.awayFga, tpm: g.awayTpm, tpa: g.awayTpa, ftm: g.awayFtm, fta: g.awayFta, orb: g.awayOrb, drb: g.awayDrb, trb: g.awayTrb, ast: g.awayAst, stl: g.awayStl, blk: g.awayBlk, tov: g.awayTov, pf: g.awayPf };
-    const them = isHome
-      ? { fgm: g.awayFgm, fga: g.awayFga, tpm: g.awayTpm, tpa: g.awayTpa, ftm: g.awayFtm, fta: g.awayFta, orb: g.awayOrb, drb: g.awayDrb, trb: g.awayTrb, ast: g.awayAst, stl: g.awayStl, blk: g.awayBlk, tov: g.awayTov, pf: g.awayPf }
-      : { fgm: g.homeFgm, fga: g.homeFga, tpm: g.homeTpm, tpa: g.homeTpa, ftm: g.homeFtm, fta: g.homeFta, orb: g.homeOrb, drb: g.homeDrb, trb: g.homeTrb, ast: g.homeAst, stl: g.homeStl, blk: g.homeBlk, tov: g.homeTov, pf: g.homePf };
+    const us = isHome ? g.homeStats : g.awayStats;
+    const them = isHome ? g.awayStats : g.homeStats;
 
-    for (const [key, val] of Object.entries(us) as [keyof typeof s, any][]) {
-      (s as any)[key] += Number(val) || 0;
+    if (us) {
+      s.fgm += Number(us.fgm) || 0; s.fga += Number(us.fga) || 0;
+      s.tpm += Number(us.tpm) || 0; s.tpa += Number(us.tpa) || 0;
+      s.ftm += Number(us.ftm) || 0; s.fta += Number(us.fta) || 0;
+      s.orb += Number(us.orb) || 0; s.drb += Number(us.drb) || 0; s.trb += Number(us.trb) || 0;
+      s.ast += Number(us.ast) || 0; s.stl += Number(us.stl) || 0; s.blk += Number(us.blk) || 0;
+      s.tov += Number(us.tov) || 0; s.pf += Number(us.pf) || 0;
     }
-    s.opp_fgm += Number(them.fgm) || 0; s.opp_fga += Number(them.fga) || 0;
-    s.opp_tpm += Number(them.tpm) || 0; s.opp_tpa += Number(them.tpa) || 0;
-    s.opp_ftm += Number(them.ftm) || 0; s.opp_fta += Number(them.fta) || 0;
-    s.opp_orb += Number(them.orb) || 0; s.opp_drb += Number(them.drb) || 0; s.opp_trb += Number(them.trb) || 0;
-    s.opp_ast += Number(them.ast) || 0; s.opp_stl += Number(them.stl) || 0; s.opp_blk += Number(them.blk) || 0;
-    s.opp_tov += Number(them.tov) || 0; s.opp_pf += Number(them.pf) || 0;
+    if (them) {
+      s.opp_fgm += Number(them.fgm) || 0; s.opp_fga += Number(them.fga) || 0;
+      s.opp_tpm += Number(them.tpm) || 0; s.opp_tpa += Number(them.tpa) || 0;
+      s.opp_ftm += Number(them.ftm) || 0; s.opp_fta += Number(them.fta) || 0;
+      s.opp_orb += Number(them.orb) || 0; s.opp_drb += Number(them.drb) || 0; s.opp_trb += Number(them.trb) || 0;
+      s.opp_ast += Number(them.ast) || 0; s.opp_stl += Number(them.stl) || 0; s.opp_blk += Number(them.blk) || 0;
+      s.opp_tov += Number(them.tov) || 0; s.opp_pf += Number(them.pf) || 0;
+    }
   }
 
   const offPoss = Math.max(1, s.fga - s.orb + s.tov + 0.475 * s.fta);
