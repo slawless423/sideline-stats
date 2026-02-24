@@ -167,8 +167,8 @@ export default function PlayersPage() {
     const twoPct = twoPA > 0 ? (twoPM / twoPA) * 100 : 0;
     const threePct = p.tpa > 0 ? (p.tpm / p.tpa) * 100 : 0;
 
-    // ORtg
-    const ortg = playerPoss > 0 ? (p.points / playerPoss) * 100 : 0;
+    // ORtg = points per 100 possessions
+    const ortg = playerPoss100 > 0 ? (p.points / playerPoss100) * 100 : 0;
 
     // Per game
     const ppg = p.games > 0 ? p.points / p.games : 0;
