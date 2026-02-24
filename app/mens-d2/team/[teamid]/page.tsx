@@ -145,7 +145,7 @@ export default async function TeamPage({
     fetchAPI('/api/mens-d2/teams'),
     fetchAPI(`/api/mens-d2/team/${teamId}`),
     fetchAPI(`/api/mens-d2/team/${teamId}/games`),
-    fetchAPI(`/api/mens-d2/team/${teamId}/players`),
+    fetchAPI(`/api/mens-d2/team/${teamId}/players${confOnly ? '?conf=true' : ''}`),
     fetchAPI('/api/mens-d2/teams/stats'),
   ]);
 
