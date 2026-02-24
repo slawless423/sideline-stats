@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-02-24T14:49:18.612Z",
+  "generated_at_utc": "2026-02-24T16:33:28.640Z",
   "season_start": "2025-11-14",
   "rows": [
     {
@@ -763,6 +763,16 @@
       "adjT": 73.225
     },
     {
+      "teamId": "2194",
+      "team": "Michigan Tech",
+      "conference": "gliac",
+      "games": 26,
+      "adjO": 110.138960370561,
+      "adjD": 96.31147540983606,
+      "adjEM": 13.82748496072493,
+      "adjT": 67.25769230769231
+    },
+    {
       "teamId": "1166",
       "team": "Millersville",
       "conference": "psac",
@@ -781,16 +791,6 @@
       "adjD": 100.95884191127374,
       "adjEM": 13.706055235375246,
       "adjT": 72.45192307692308
-    },
-    {
-      "teamId": "2194",
-      "team": "Michigan Tech",
-      "conference": "gliac",
-      "games": 25,
-      "adjO": 109.99612899383615,
-      "adjD": 96.30552096305522,
-      "adjEM": 13.690608030780936,
-      "adjT": 67.166
     },
     {
       "teamId": "809",
@@ -2443,16 +2443,6 @@
       "adjT": 71.5298076923077
     },
     {
-      "teamId": "1790",
-      "team": "Ferris St.",
-      "conference": "gliac",
-      "games": 24,
-      "adjO": 104.92235401982694,
-      "adjD": 108.0115159336841,
-      "adjEM": -3.089161913857154,
-      "adjT": 72.71249999999999
-    },
-    {
       "teamId": "52014",
       "team": "King (TN)",
       "conference": "conference-carolinas",
@@ -2541,6 +2531,16 @@
       "adjD": 109.96814787739544,
       "adjEM": -3.505855444977101,
       "adjT": 71.03888888888889
+    },
+    {
+      "teamId": "1790",
+      "team": "Ferris St.",
+      "conference": "gliac",
+      "games": 25,
+      "adjO": 104.5935228023794,
+      "adjD": 108.223159101142,
+      "adjEM": -3.6296362987626054,
+      "adjT": 72.624
     },
     {
       "teamId": "261800",
