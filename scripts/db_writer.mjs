@@ -212,7 +212,7 @@ export async function upsertPlayer(player) {
   ]);
 }
 
-// Insert player game stats
+// Insert player game stats - single row (kept for compatibility)
 export async function insertPlayerGame(gameId, playerId, teamId, stats) {
   const db = initDb();
   
@@ -232,4 +232,46 @@ export async function insertPlayerGame(gameId, playerId, teamId, stats) {
     stats.minutes, stats.fgm, stats.fga, stats.tpm, stats.tpa, stats.ftm, stats.fta,
     stats.orb, stats.drb, stats.trb, stats.ast, stats.stl, stats.blk, stats.tov, stats.pf, stats.points
   ]);
+}
+
+// Batch insert player game stats - much faster than one at a time
+export async function insertPlayerGamesBatch(rows, batchSize = 500) {
+  if (!rows || rows.length === 0) return 0;
+  
+  const db = initDb();
+  let totalInserted = 0;
+
+  for (let i = 0; i < rows.length; i += batchSize) {
+    const batch = rows.slice(i, i + batchSize);
+    
+    // Build multi-row INSERT with parameterized values
+    const values = [];
+    const placeholders = batch.map((row, idx) => {
+      const base = idx * 20;
+      values.push(
+        row.gameId, row.playerId, row.teamId, row.division || null,
+        row.minutes, row.fgm, row.fga, row.tpm, row.tpa, row.ftm, row.fta,
+        row.orb, row.drb, row.trb, row.ast, row.stl, row.blk, row.tov, row.pf, row.points
+      );
+      return `($${base+1},$${base+2},$${base+3},$${base+4},$${base+5},$${base+6},$${base+7},$${base+8},$${base+9},$${base+10},$${base+11},$${base+12},$${base+13},$${base+14},$${base+15},$${base+16},$${base+17},$${base+18},$${base+19},$${base+20})`;
+    });
+
+    const query = `
+      INSERT INTO player_games (
+        game_id, player_id, team_id, division,
+        minutes, fgm, fga, tpm, tpa, ftm, fta,
+        orb, drb, trb, ast, stl, blk, tov, pf, points
+      ) VALUES ${placeholders.join(',')}
+      ON CONFLICT (game_id, player_id) DO NOTHING
+    `;
+
+    await db.query(query, values);
+    totalInserted += batch.length;
+
+    if (totalInserted % 5000 === 0) {
+      console.log(`  ...inserted ${totalInserted} / ${rows.length} player game records`);
+    }
+  }
+
+  return totalInserted;
 }
