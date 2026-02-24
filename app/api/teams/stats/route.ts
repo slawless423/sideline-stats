@@ -35,24 +35,23 @@ export async function GET() {
         opp_tov as "opp_tov",
         opp_pf as "opp_pf"
       FROM teams
-      WHERE conference IS NOT NULL 
+      WHERE division = 'womens-d1'
+        AND conference IS NOT NULL 
         AND conference != ''
         AND conference IN (
-          'acc', 'big-12', 'big-ten', 'sec', 'pac-12', 'big-east',
-          'american', 'aac', 'wcc', 'mwc', 'mountain-west', 'atlantic-10', 'a-10',
-          'mvc', 'mac', 'cusa', 'sun-belt', 'sunbelt', 'colonial', 'caa',
+          'acc', 'big-12', 'big-ten', 'sec', 'big-east',
+          'american', 'wcc', 'mountain-west', 'atlantic-10',
+          'mvc', 'mac', 'cusa', 'sun-belt', 'caa',
           'horizon', 'maac', 'ovc', 'patriot', 'southland', 'summit-league',
-          'wac', 'big-sky', 'big-south', 'southern', 'socon',
-          'big-west', 'ivy-league', 'meac', 'nec', 'northeast', 'swac',
-          'asun', 'america-east', 'americaeast'
+          'wac', 'big-sky', 'big-south', 'socon',
+          'big-west', 'ivy-league', 'meac', 'nec', 'swac',
+          'asun', 'america-east'
         )
     `);
 
-return NextResponse.json({ teams: result.rows });
+    return NextResponse.json({ teams: result.rows });
   } catch (error) {
     console.error('Database error:', error);
     return NextResponse.json({ error: 'Failed to fetch team stats' }, { status: 500 });
   }
 }
-
-export {};
