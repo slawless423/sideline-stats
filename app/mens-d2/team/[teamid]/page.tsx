@@ -464,7 +464,6 @@ function PlayerStatsKenPom({ players, team }: { players: any[]; team: any }) {
               <th style={{ padding: "6px 4px", textAlign: "left", position: "sticky", left: 0, background: ACCENT_LIGHT, zIndex: 1 }}>Player</th>
               <th style={{ padding: "6px 4px", textAlign: "center" }}>Yr</th>
               <th style={{ padding: "6px 4px", textAlign: "right" }}>G</th>
-              <th style={{ padding: "6px 4px", textAlign: "right" }}>S</th>
               <th style={{ padding: "6px 4px", textAlign: "right" }}>%Min</th>
               <th style={{ padding: "6px 4px", textAlign: "right" }}>ORtg</th>
               <th style={{ padding: "6px 4px", textAlign: "right" }}>%Poss</th>
@@ -498,7 +497,6 @@ function PlayerStatsKenPom({ players, team }: { players: any[]; team: any }) {
                   </td>
                   <td style={{ padding: "6px 4px", textAlign: "center" }}>{p.year || "—"}</td>
                   <td style={{ padding: "6px 4px", textAlign: "right" }}>{p.games}</td>
-                  <td style={{ padding: "6px 4px", textAlign: "right" }}>{p.starts || 0}</td>
                   <td style={{ padding: "6px 4px", textAlign: "right" }}>{stats.minPct.toFixed(1)}</td>
                   <td style={{ padding: "6px 4px", textAlign: "right" }}>{stats.ortg.toFixed(1)}</td>
                   <td style={{ padding: "6px 4px", textAlign: "right" }}>{stats.usagePct.toFixed(1)}</td>
