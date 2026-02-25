@@ -10,6 +10,18 @@ const REQUEST_RETRIES = 3;
 const BOX_CONCURRENCY = 4;
 const MIN_TEAMS = 300;
 
+const MENS_D1_CONFERENCES = new Set([
+  'acc', 'american', 'america-east', 'asun', 'atlantic-10',
+  'big-12', 'big-east', 'big-sky', 'big-south', 'big-ten', 'big-west',
+  'caa', 'cusa', 'horizon', 'ivy-league', 'maac', 'mac', 'meac',
+  'mountain-west', 'mvc', 'nec', 'ovc', 'patriot', 'sec', 'socon',
+  'southland', 'summit-league', 'sun-belt', 'swac', 'wac', 'wcc'
+]);
+
+function isD1Conference(conf) {
+  return conf && MENS_D1_CONFERENCES.has(conf.toLowerCase());
+}
+
 console.log("START build_mens_d1_ratings (daily update)", new Date().toISOString());
 
 function toDate(s) {
@@ -302,22 +314,34 @@ async function main() {
 
   for (const d of datesToCheck) {
     const [Y, M, D] = d.split("-");
-    try {
-      const scoreboard = await fetchJson(`/scoreboard/basketball-men/d1/${Y}/${M}/${D}/all-conf`);
-      const gameIds = extractGameIds(scoreboard).filter((gid) => !knownGameIds.has(gid));
 
-      if (scoreboard.games && Array.isArray(scoreboard.games)) {
-        for (const gameObj of scoreboard.games) {
-          const confInfo = extractConferenceFromGame(gameObj);
-          if (confInfo.gameId) conferenceMap.set(confInfo.gameId, confInfo);
+    // Fetch both all-conf and all-games to capture every D1 game
+    const scoreboardPaths = [
+      `/scoreboard/basketball-men/d1/${Y}/${M}/${D}/all-conf`,
+      `/scoreboard/basketball-men/d1/${Y}/${M}/${D}/all-games`,
+    ];
+
+    const dayGameIds = new Set();
+
+    for (const path of scoreboardPaths) {
+      try {
+        const scoreboard = await fetchJson(path);
+        const gameIds = extractGameIds(scoreboard).filter((gid) => !knownGameIds.has(gid));
+        gameIds.forEach(gid => dayGameIds.add(gid));
+
+        if (scoreboard.games && Array.isArray(scoreboard.games)) {
+          for (const gameObj of scoreboard.games) {
+            const confInfo = extractConferenceFromGame(gameObj);
+            if (confInfo.gameId) conferenceMap.set(confInfo.gameId, confInfo);
+          }
         }
+      } catch (e) {
+        console.log(`Failed to fetch ${path}:`, e.message);
       }
-
-      console.log(`${d}: ${gameIds.length} new games`);
-      for (const gid of gameIds) newGameIds.push({ gid, date: d });
-    } catch (e) {
-      console.log(`Failed to fetch scoreboard for ${d}:`, e.message);
     }
+
+    console.log(`${d}: ${dayGameIds.size} new games`);
+    for (const gid of dayGameIds) newGameIds.push({ gid, date: d });
   }
 
   if (newGameIds.length === 0) {
@@ -366,10 +390,12 @@ async function main() {
     return;
   }
 
-  // Update team stats
+  // Update team stats - only for D1 teams
   for (const game of newGames) {
     const { home, away } = game;
     for (const [team, opp] of [[home, away], [away, home]]) {
+      if (!isD1Conference(team.conference)) continue;
+
       if (!teamStatsMap.has(team.teamId)) {
         teamStatsMap.set(team.teamId, {
           teamId: team.teamId, teamName: team.teamName, conference: team.conference,
@@ -402,13 +428,16 @@ async function main() {
     }
   }
 
-  // Update player stats
+  // Update player stats - only for D1 teams
   for (const game of newGames) {
     if (!game.players) continue;
     for (const playerData of game.players) {
       if (!playerData.teamId || !playerData.players) continue;
       const teamId = String(playerData.teamId);
       const teamName = teamId === game.home.teamId ? game.home.teamName : game.away.teamName;
+      const teamConf = teamId === game.home.teamId ? game.home.conference : game.away.conference;
+
+      if (!isD1Conference(teamConf)) continue;
 
       for (const p of playerData.players) {
         const playerId = buildPlayerId(teamId, p);
@@ -532,6 +561,8 @@ async function main() {
     for (const game of newGames) {
       if (!game.players) continue;
       for (const teamData of game.players) {
+        const teamConf = teamData.teamId === game.home.teamId ? game.home.conference : game.away.conference;
+        if (!isD1Conference(teamConf)) continue;
         for (const p of teamData.players) {
           const playerId = buildPlayerId(teamData.teamId, p);
           playerGameRows.push({
