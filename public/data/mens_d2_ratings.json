@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-02-25T13:05:52.613Z",
+  "generated_at_utc": "2026-02-25T19:00:47.619Z",
   "season_start": "2025-11-14",
   "rows": [
     {
@@ -2143,6 +2143,16 @@
       "adjT": 76.41160714285715
     },
     {
+      "teamId": "154",
+      "team": "Bluefield St.",
+      "conference": "ciaa",
+      "games": 28,
+      "adjO": 102.52484518748378,
+      "adjD": 102.35425853988968,
+      "adjEM": 0.17058664759409226,
+      "adjT": 65.31517857142858
+    },
+    {
       "teamId": "681",
       "team": "Southwestern Okla.",
       "conference": "gac",
@@ -2201,16 +2211,6 @@
       "adjD": 106.423392814147,
       "adjEM": -0.3617838865447851,
       "adjT": 72.63557692307693
-    },
-    {
-      "teamId": "154",
-      "team": "Bluefield St.",
-      "conference": "ciaa",
-      "games": 27,
-      "adjO": 102.536595005858,
-      "adjD": 102.96340663415191,
-      "adjEM": -0.42681162829390473,
-      "adjT": 65.59537037037038
     },
     {
       "teamId": "544",
@@ -2653,16 +2653,6 @@
       "adjT": 69.36923076923077
     },
     {
-      "teamId": "143",
-      "team": "Winston-Salem",
-      "conference": "ciaa",
-      "games": 25,
-      "adjO": 98.52297592997812,
-      "adjD": 103.0916729505548,
-      "adjEM": -4.568697020576678,
-      "adjT": 73.12
-    },
-    {
       "teamId": "1015",
       "team": "UT Permian Basin",
       "conference": "lone-star",
@@ -2703,6 +2693,16 @@
       "adjT": 79.04807692307692
     },
     {
+      "teamId": "143",
+      "team": "Winston-Salem",
+      "conference": "ciaa",
+      "games": 26,
+      "adjO": 98.06862680029202,
+      "adjD": 103.06370308459792,
+      "adjEM": -4.995076284305895,
+      "adjT": 72.4375
+    },
+    {
       "teamId": "2581",
       "team": "Mount Olive",
       "conference": "conference-carolinas",
@@ -2713,6 +2713,16 @@
       "adjT": 74.36111111111111
     },
     {
+      "teamId": "2167",
+      "team": "Johnson C. Smith",
+      "conference": "ciaa",
+      "games": 26,
+      "adjO": 101.64842410655413,
+      "adjD": 106.83391578192062,
+      "adjEM": -5.185491675366492,
+      "adjT": 72.91346153846153
+    },
+    {
       "teamId": "1595",
       "team": "Neb.-Kearney",
       "conference": "mid-america-intercollegiate",
@@ -2721,16 +2731,6 @@
       "adjD": 109.75191494226593,
       "adjEM": -5.188764773142182,
       "adjT": 75.33173076923077
-    },
-    {
-      "teamId": "2167",
-      "team": "Johnson C. Smith",
-      "conference": "ciaa",
-      "games": 25,
-      "adjO": 102.03551557736736,
-      "adjD": 107.33009508345603,
-      "adjEM": -5.294579506088667,
-      "adjT": 73.15100000000001
     },
     {
       "teamId": "53462",
@@ -3243,6 +3243,16 @@
       "adjT": 68.36379310344827
     },
     {
+      "teamId": "2447",
+      "team": "Elizabeth City St.",
+      "conference": "ciaa",
+      "games": 24,
+      "adjO": 90.21125030704987,
+      "adjD": 102.5364274150027,
+      "adjEM": -12.32517710795284,
+      "adjT": 67.85000000000001
+    },
+    {
       "teamId": "2712",
       "team": "Tex. A&M Int'l",
       "conference": "lone-star",
@@ -3281,16 +3291,6 @@
       "adjD": 116.75126903553299,
       "adjEM": -12.893159691960122,
       "adjT": 68.3625
-    },
-    {
-      "teamId": "2447",
-      "team": "Elizabeth City St.",
-      "conference": "ciaa",
-      "games": 23,
-      "adjO": 90.1010359380995,
-      "adjD": 103.01582095612926,
-      "adjEM": -12.914785018029761,
-      "adjT": 67.99130434782609
     },
     {
       "teamId": "51928",
