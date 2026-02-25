@@ -27,9 +27,18 @@ export async function GET() {
         AND conference != ''
       ORDER BY adj_em DESC
     `);
+
+    const rows = result.rows.map(row => ({
+      ...row,
+      rawO: row.rawO ? parseFloat(row.rawO) : null,
+      rawD: row.rawD ? parseFloat(row.rawD) : null,
+      rawEM: row.rawEM ? parseFloat(row.rawEM) : null,
+      rawT: row.rawT ? parseFloat(row.rawT) : null,
+    }));
+
     return NextResponse.json({
-      rows: result.rows,
-      updated: result.rows[0]?.updated ?? null,
+      rows,
+      updated: rows[0]?.updated ?? null,
     });
   } catch (error) {
     console.error('Database error:', error);
