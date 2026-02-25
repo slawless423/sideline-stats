@@ -32,24 +32,15 @@ export async function GET() {
         opp_fta
       FROM teams
       WHERE division = 'mens-d2'
-        AND conference IN (
-          'cacc', 'ciaa', 'conference-carolinas', 'ecc', 'gliac', 'glvc',
-          'g-mac', 'gac', 'gulf-south', 'lone-star', 'mec',
-          'ne10', 'nsic', 'peach-belt', 'psac', 'rmac',
-          'sac', 'siac', 'sunshine-state',
-          'mid-america-intercollegiate', 'pacwest', 'ccaa', 'great-northwest'
-        )
       ORDER BY adj_em DESC
     `);
 
-    // Parse numeric values - use adj stats
     const rows = result.rows.map(row => ({
       ...row,
       adjO: row.adjO ? parseFloat(row.adjO) : null,
       adjD: row.adjD ? parseFloat(row.adjD) : null,
       adjEM: row.adjEM ? parseFloat(row.adjEM) : null,
       adjT: row.adjT ? parseFloat(row.adjT) : null,
-      // Use adj stats for display (they're the same as raw for now)
       rawO: row.adjO ? parseFloat(row.adjO) : null,
       rawD: row.adjD ? parseFloat(row.adjD) : null,
       rawEM: row.adjEM ? parseFloat(row.adjEM) : null,
