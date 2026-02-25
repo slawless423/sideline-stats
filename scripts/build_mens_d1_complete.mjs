@@ -10,6 +10,19 @@ const REQUEST_RETRIES = 3;
 const BOX_CONCURRENCY = 4;
 const RETRY_428_DELAY_MS = 2000;
 
+// Known Men's D1 conferences - used to filter out non-D1 opponents
+const MENS_D1_CONFERENCES = new Set([
+  'acc', 'american', 'america-east', 'asun', 'atlantic-10',
+  'big-12', 'big-east', 'big-sky', 'big-south', 'big-ten', 'big-west',
+  'caa', 'cusa', 'horizon', 'ivy-league', 'maac', 'mac', 'meac',
+  'mountain-west', 'mvc', 'nec', 'ovc', 'patriot', 'sec', 'socon',
+  'southland', 'summit-league', 'sun-belt', 'swac', 'wac', 'wcc'
+]);
+
+function isD1Conference(conf) {
+  return conf && MENS_D1_CONFERENCES.has(conf.toLowerCase());
+}
+
 console.log("START build_mens_d1_complete", new Date().toISOString());
 
 // ===== UTILITY FUNCTIONS =====
@@ -369,31 +382,41 @@ async function main() {
     const d = fmtDate(dt);
     const [Y, M, D] = d.split("-");
 
-    const scoreboardPath = `/scoreboard/basketball-men/d1/${Y}/${M}/${D}/all-conf`;
-
     if (days % 7 === 1) console.log("DATE", d);
 
-    let scoreboard;
-    try {
-      scoreboard = await fetchJson(scoreboardPath, false);
-    } catch (e) {
-      if ((globalThis.__SCOREBOARD_FAILS__ ?? 0) < 50) {
-        globalThis.__SCOREBOARD_FAILS__ = (globalThis.__SCOREBOARD_FAILS__ ?? 0) + 1;
-        console.log("SCOREBOARD FETCH FAILED for", d);
-      }
-      continue;
-    }
+    // Fetch both all-conf and all-games to capture every D1 game
+    const scoreboardPaths = [
+      `/scoreboard/basketball-men/d1/${Y}/${M}/${D}/all-conf`,
+      `/scoreboard/basketball-men/d1/${Y}/${M}/${D}/all-games`,
+    ];
 
-    const gameIds = extractGameIds(scoreboard).filter((gid) => !seenGameIds.has(gid));
-
+    const dayGameIds = new Set();
     const conferenceMap = new Map();
-    if (scoreboard.games && Array.isArray(scoreboard.games)) {
-      for (const gameObj of scoreboard.games) {
-        const confInfo = extractConferenceFromGame(gameObj);
-        if (confInfo.gameId) conferenceMap.set(confInfo.gameId, confInfo);
+
+    for (const scoreboardPath of scoreboardPaths) {
+      let scoreboard;
+      try {
+        scoreboard = await fetchJson(scoreboardPath, false);
+      } catch (e) {
+        if ((globalThis.__SCOREBOARD_FAILS__ ?? 0) < 50) {
+          globalThis.__SCOREBOARD_FAILS__ = (globalThis.__SCOREBOARD_FAILS__ ?? 0) + 1;
+          console.log("SCOREBOARD FETCH FAILED for", scoreboardPath);
+        }
+        continue;
+      }
+
+      const gameIds = extractGameIds(scoreboard).filter((gid) => !seenGameIds.has(gid));
+      gameIds.forEach(gid => dayGameIds.add(gid));
+
+      if (scoreboard.games && Array.isArray(scoreboard.games)) {
+        for (const gameObj of scoreboard.games) {
+          const confInfo = extractConferenceFromGame(gameObj);
+          if (confInfo.gameId) conferenceMap.set(confInfo.gameId, confInfo);
+        }
       }
     }
 
+    const gameIds = [...dayGameIds];
     if (gameIds.length) console.log("games on", d, "=", gameIds.length);
     if (!gameIds.length) continue;
 
@@ -438,6 +461,11 @@ async function main() {
         gameData.away.conference = confInfo.awayConf;
         gameData.isConferenceGame = confInfo.isConferenceGame;
       }
+
+      // Only keep games where at least one team is a known D1 conference
+      const homeIsD1 = isD1Conference(gameData.home.conference);
+      const awayIsD1 = isD1Conference(gameData.away.conference);
+      if (!homeIsD1 && !awayIsD1) continue;
 
       totalBoxesParsed++;
       allGames.push(gameData);
@@ -535,6 +563,9 @@ async function main() {
     for (const team of [home, away]) {
       const oppStats = team === home ? away.stats : home.stats;
 
+      // Only track stats for D1 teams - skip non-D1 opponents
+      if (!isD1Conference(team.conference)) continue;
+
       if (!teamSeasonStats.has(team.teamId)) {
         teamSeasonStats.set(team.teamId, {
           teamId: team.teamId, teamName: team.teamName, conference: team.conference,
@@ -575,6 +606,10 @@ async function main() {
         if (!playerData.teamId || !playerData.players) continue;
         const teamId = String(playerData.teamId);
         const teamName = teamId === home.teamId ? home.teamName : away.teamName;
+        const teamConf = teamId === home.teamId ? home.conference : away.conference;
+
+        // Only track players for D1 teams
+        if (!isD1Conference(teamConf)) continue;
 
         for (const p of playerData.players) {
           const playerId = buildPlayerId(teamId, p);
