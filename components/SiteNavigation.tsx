@@ -5,7 +5,6 @@ import { useState } from 'react';
 
 const ACCENT = "#4f46e5";
 const NAV_BG = "#1e293b";
-const NAV_HOVER = "#334155";
 
 type Division = {
   id: string;
@@ -18,12 +17,11 @@ const ALL_DIVISIONS: Division[] = [
   { id: 'womens-d1', label: "Women's D1", path: '/', enabled: true },
   { id: 'womens-d2', label: "Women's D2", path: '/womens-d2', enabled: false },
   { id: 'womens-d3', label: "Women's D3", path: '/womens-d3', enabled: false },
-  { id: 'mens-d1', label: "Men's D1", path: '/mens-d1', enabled: false },
+  { id: 'mens-d1', label: "Men's D1", path: '/mens-d1', enabled: true },
   { id: 'mens-d2', label: "Men's D2", path: '/mens-d2', enabled: true },
   { id: 'mens-d3', label: "Men's D3", path: '/mens-d3', enabled: false },
 ];
 
-// TIER 1: Division Switcher Dropdown
 function DivisionSwitcher({ currentDivision }: { currentDivision: string }) {
   const [isOpen, setIsOpen] = useState(false);
   
@@ -55,15 +53,11 @@ function DivisionSwitcher({ currentDivision }: { currentDivision: string }) {
       
       {isOpen && (
         <>
-          {/* Backdrop to close dropdown when clicking outside */}
           <div 
             onClick={() => setIsOpen(false)}
             style={{
               position: 'fixed',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
+              top: 0, left: 0, right: 0, bottom: 0,
               zIndex: 999,
             }}
           />
@@ -81,19 +75,8 @@ function DivisionSwitcher({ currentDivision }: { currentDivision: string }) {
             zIndex: 1000,
             overflow: 'hidden',
           }}>
-            {/* Women's Group */}
-            <div style={{ 
-              padding: '8px 12px', 
-              background: '#f9fafb', 
-              borderBottom: '1px solid #e5e7eb' 
-            }}>
-              <div style={{ 
-                fontSize: 11, 
-                fontWeight: 700, 
-                color: '#6b7280', 
-                textTransform: 'uppercase', 
-                letterSpacing: 0.5 
-              }}>
+            <div style={{ padding: '8px 12px', background: '#f9fafb', borderBottom: '1px solid #e5e7eb' }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: '#6b7280', textTransform: 'uppercase', letterSpacing: 0.5 }}>
                 Women's
               </div>
             </div>
@@ -104,9 +87,7 @@ function DivisionSwitcher({ currentDivision }: { currentDivision: string }) {
                 style={{
                   display: 'block',
                   padding: '10px 16px',
-                  color: div.enabled 
-                    ? (div.id === currentDivision ? ACCENT : '#1f2937')
-                    : '#9ca3af',
+                  color: div.enabled ? (div.id === currentDivision ? ACCENT : '#1f2937') : '#9ca3af',
                   textDecoration: 'none',
                   fontSize: 14,
                   fontWeight: div.id === currentDivision ? 600 : 400,
@@ -115,32 +96,15 @@ function DivisionSwitcher({ currentDivision }: { currentDivision: string }) {
                   cursor: div.enabled ? 'pointer' : 'not-allowed',
                   opacity: div.enabled ? 1 : 0.5,
                 }}
-                onClick={(e) => {
-                  if (div.enabled) {
-                    setIsOpen(false);
-                  } else {
-                    e.preventDefault();
-                  }
-                }}
+                onClick={(e) => { if (div.enabled) { setIsOpen(false); } else { e.preventDefault(); } }}
               >
                 {div.label}
                 {!div.enabled && <span style={{ fontSize: 11, marginLeft: 6 }}>(Coming Soon)</span>}
               </Link>
             ))}
             
-            {/* Men's Group */}
-            <div style={{ 
-              padding: '8px 12px', 
-              background: '#f9fafb', 
-              borderBottom: '1px solid #e5e7eb' 
-            }}>
-              <div style={{ 
-                fontSize: 11, 
-                fontWeight: 700, 
-                color: '#6b7280', 
-                textTransform: 'uppercase', 
-                letterSpacing: 0.5 
-              }}>
+            <div style={{ padding: '8px 12px', background: '#f9fafb', borderBottom: '1px solid #e5e7eb' }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: '#6b7280', textTransform: 'uppercase', letterSpacing: 0.5 }}>
                 Men's
               </div>
             </div>
@@ -151,9 +115,7 @@ function DivisionSwitcher({ currentDivision }: { currentDivision: string }) {
                 style={{
                   display: 'block',
                   padding: '10px 16px',
-                  color: div.enabled 
-                    ? (div.id === currentDivision ? ACCENT : '#1f2937')
-                    : '#9ca3af',
+                  color: div.enabled ? (div.id === currentDivision ? ACCENT : '#1f2937') : '#9ca3af',
                   textDecoration: 'none',
                   fontSize: 14,
                   fontWeight: div.id === currentDivision ? 600 : 400,
@@ -161,13 +123,7 @@ function DivisionSwitcher({ currentDivision }: { currentDivision: string }) {
                   cursor: div.enabled ? 'pointer' : 'not-allowed',
                   opacity: div.enabled ? 1 : 0.5,
                 }}
-                onClick={(e) => {
-                  if (div.enabled) {
-                    setIsOpen(false);
-                  } else {
-                    e.preventDefault();
-                  }
-                }}
+                onClick={(e) => { if (div.enabled) { setIsOpen(false); } else { e.preventDefault(); } }}
               >
                 {div.label}
                 {!div.enabled && <span style={{ fontSize: 11, marginLeft: 6 }}>(Coming Soon)</span>}
@@ -180,29 +136,14 @@ function DivisionSwitcher({ currentDivision }: { currentDivision: string }) {
   );
 }
 
-// TIER 2: Section Navigation Tabs
-function SectionNav({ 
-  currentPage, 
-  divisionPath 
-}: { 
-  currentPage: string;
-  divisionPath: string;
-}) {
+function SectionNav({ currentPage, divisionPath }: { currentPage: string; divisionPath: string; }) {
   const pages = [
     { id: 'rankings', label: 'Rankings', path: divisionPath === '/' ? '/' : divisionPath },
     { id: 'players', label: 'Players', path: divisionPath === '/' ? '/players' : `${divisionPath}/players` },
-    // Future pages - uncomment as you build them:
-    // { id: 'teams', label: 'Teams', path: divisionPath === '/' ? '/teams' : `${divisionPath}/teams` },
-    // { id: 'conferences', label: 'Conferences', path: divisionPath === '/' ? '/conferences' : `${divisionPath}/conferences` },
-    // { id: 'stats', label: 'Stats', path: divisionPath === '/' ? '/stats' : `${divisionPath}/stats` },
   ];
 
   return (
-    <div style={{
-      display: 'flex',
-      gap: 4,
-      borderBottom: '2px solid #e5e7eb',
-    }}>
+    <div style={{ display: 'flex', gap: 4, borderBottom: '2px solid #e5e7eb' }}>
       {pages.map(page => (
         <Link
           key={page.id}
@@ -225,7 +166,6 @@ function SectionNav({
   );
 }
 
-// COMBINED: Full Two-Tier Navigation
 export default function SiteNavigation({ 
   currentDivision, 
   currentPage,
@@ -237,12 +177,7 @@ export default function SiteNavigation({
 }) {
   return (
     <div style={{ marginBottom: 24 }}>
-      {/* Tier 1: Top Bar - Branding + Division Switcher */}
-      <div style={{
-        background: NAV_BG,
-        padding: '12px 20px',
-        marginBottom: 16,
-      }}>
+      <div style={{ background: NAV_BG, padding: '12px 20px', marginBottom: 16 }}>
         <div style={{
           maxWidth: 1200,
           margin: '0 auto',
@@ -259,12 +194,8 @@ export default function SiteNavigation({
         </div>
       </div>
 
-      {/* Tier 2: Section Navigation Tabs */}
       <div style={{ maxWidth: 1200, margin: '0 auto', paddingLeft: 20, paddingRight: 20 }}>
-        <SectionNav 
-          currentPage={currentPage}
-          divisionPath={divisionPath}
-        />
+        <SectionNav currentPage={currentPage} divisionPath={divisionPath} />
       </div>
     </div>
   );
