@@ -17,7 +17,7 @@ const MENS_D2_CONFERENCES = new Set([
   'ne10', 'nsic', 'peach-belt', 'psac', 'rmac',
   'sac', 'siac', 'sunshine-state',
   'mid-america-intercollegiate', 'pacwest', 'ccaa', 'great-northwest',
-  'nacc', 'scac', 'dii-independent', 'umac', 'nwc'
+  'dii-independent'
 ]);
 
 function isD2Conference(conf) {
