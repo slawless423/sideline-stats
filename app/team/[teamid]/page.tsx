@@ -138,17 +138,16 @@ export default async function TeamPage({
   searchParams,
 }: {
   params: Promise<{ teamid: string }>;
-  searchParams: Promise<{ conf?: string; d1?: string }>;
+  searchParams: Promise<{ conf?: string }>;
 }) {
   const { teamid: teamId } = await params;
-  const { conf, d1 } = await searchParams;
+  const { conf } = await searchParams;
   const confOnly = conf === "true";
-  const d1Only = d1 === "true";
 
   const [teamsData, teamApiData, gamesData, playersData, allTeamStatsData] = await Promise.all([
     fetchAPI('/api/teams'),
     fetchAPI(`/api/teams/${teamId}`),
-    fetchAPI(`/api/teams/${teamId}/games?conf=${confOnly}&d1=${d1Only}`),
+    fetchAPI(`/api/teams/${teamId}/games?conf=${confOnly}`),
     fetchAPI(`/api/teams/${teamId}/players${confOnly ? '?conf=true' : ''}`),
     fetchAPI('/api/teams/stats'),
   ]);
@@ -159,8 +158,6 @@ export default async function TeamPage({
   const allGames: any[] = gamesData.games ?? [];
   const filteredGames = confOnly
     ? allGames.filter((g: any) => g.isConferenceGame)
-    : d1Only
-    ? allGames.filter((g: any) => g.isD1Game)
     : allGames;
 
   const team = confOnly && filteredGames.length > 0
@@ -245,13 +242,7 @@ export default async function TeamPage({
     }
   };
 
-  const confOnlyUrl = confOnly
-    ? (d1Only ? `/team/${teamId}?d1=true` : `/team/${teamId}`)
-    : (d1Only ? `/team/${teamId}?conf=true&d1=true` : `/team/${teamId}?conf=true`);
-
-  const d1OnlyUrl = d1Only
-    ? (confOnly ? `/team/${teamId}?conf=true` : `/team/${teamId}`)
-    : (confOnly ? `/team/${teamId}?conf=true&d1=true` : `/team/${teamId}?d1=true`);
+  const confOnlyUrl = confOnly ? `/team/${teamId}` : `/team/${teamId}?conf=true`;
 
   return (
     <TeamPageWithNav>
@@ -278,10 +269,9 @@ export default async function TeamPage({
           <StatCard title="Tempo" value={team.adjT ?? null} rank={teamsData.rows.filter((r: any) => Number(r.adjT) > (team.adjT ?? 0)).length + 1} />
         </div>
 
-        {/* TOGGLES */}
+        {/* TOGGLE */}
         <div style={{ display: "flex", gap: 12, marginBottom: 24 }}>
           <ToggleLink href={confOnlyUrl} checked={confOnly} label="Conference games only" />
-          <ToggleLink href={d1OnlyUrl} checked={d1Only} label="D1 opponents only" />
         </div>
 
         {confOnly && filteredGames.length === 0 && (
@@ -294,38 +284,38 @@ export default async function TeamPage({
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, marginBottom: 32 }}>
           {/* SCOUTING REPORT */}
           <div>
-            <SectionTitle title={`Team Scouting Report${confOnly ? " (Conf. only)" : d1Only ? " (D1 only)" : ""}`} />
+            <SectionTitle title={`Team Scouting Report${confOnly ? " (Conf. only)" : ""}`} />
             <StatsTable
               title="Four Factors"
               rows={[
-                { label: "Eff. FG%", off: ff.off.efg, def: ff.def.efg, offRank: (confOnly || d1Only) ? undefined : rankings.off.efg, defRank: (confOnly || d1Only) ? undefined : rankings.def.efg, offAvg: d1Avg.off.efg, defAvg: d1Avg.def.efg },
-                { label: "TO%", off: ff.off.tov, def: ff.def.tov, offRank: (confOnly || d1Only) ? undefined : rankings.off.tov, defRank: (confOnly || d1Only) ? undefined : rankings.def.tov, offAvg: d1Avg.off.tov, defAvg: d1Avg.def.tov },
-                { label: "OR%", off: ff.off.orb, def: ff.def.orb, offRank: (confOnly || d1Only) ? undefined : rankings.off.orb, defRank: (confOnly || d1Only) ? undefined : rankings.def.orb, offAvg: d1Avg.off.orb, defAvg: d1Avg.def.orb },
-                { label: "FTA/FGA", off: ff.off.ftr, def: ff.def.ftr, offRank: (confOnly || d1Only) ? undefined : rankings.off.ftr, defRank: (confOnly || d1Only) ? undefined : rankings.def.ftr, offAvg: d1Avg.off.ftr, defAvg: d1Avg.def.ftr },
+                { label: "Eff. FG%", off: ff.off.efg, def: ff.def.efg, offRank: confOnly ? undefined : rankings.off.efg, defRank: confOnly ? undefined : rankings.def.efg, offAvg: d1Avg.off.efg, defAvg: d1Avg.def.efg },
+                { label: "TO%", off: ff.off.tov, def: ff.def.tov, offRank: confOnly ? undefined : rankings.off.tov, defRank: confOnly ? undefined : rankings.def.tov, offAvg: d1Avg.off.tov, defAvg: d1Avg.def.tov },
+                { label: "OR%", off: ff.off.orb, def: ff.def.orb, offRank: confOnly ? undefined : rankings.off.orb, defRank: confOnly ? undefined : rankings.def.orb, offAvg: d1Avg.off.orb, defAvg: d1Avg.def.orb },
+                { label: "FTA/FGA", off: ff.off.ftr, def: ff.def.ftr, offRank: confOnly ? undefined : rankings.off.ftr, defRank: confOnly ? undefined : rankings.def.ftr, offAvg: d1Avg.off.ftr, defAvg: d1Avg.def.ftr },
               ]}
             />
             <StatsTable
               title="Shooting"
               rows={[
-                { label: "2P%", off: ff.off.two, def: ff.def.two, offRank: (confOnly || d1Only) ? undefined : rankings.off.two, defRank: (confOnly || d1Only) ? undefined : rankings.def.two, offAvg: d1Avg.off.two, defAvg: d1Avg.def.two },
-                { label: "3P%", off: ff.off.three, def: ff.def.three, offRank: (confOnly || d1Only) ? undefined : rankings.off.three, defRank: (confOnly || d1Only) ? undefined : rankings.def.three, offAvg: d1Avg.off.three, defAvg: d1Avg.def.three },
-                { label: "FT%", off: ff.off.ft, def: ff.def.ft, offRank: (confOnly || d1Only) ? undefined : rankings.off.ft, defRank: (confOnly || d1Only) ? undefined : rankings.def.ft, offAvg: d1Avg.off.ft, defAvg: d1Avg.def.ft },
+                { label: "2P%", off: ff.off.two, def: ff.def.two, offRank: confOnly ? undefined : rankings.off.two, defRank: confOnly ? undefined : rankings.def.two, offAvg: d1Avg.off.two, defAvg: d1Avg.def.two },
+                { label: "3P%", off: ff.off.three, def: ff.def.three, offRank: confOnly ? undefined : rankings.off.three, defRank: confOnly ? undefined : rankings.def.three, offAvg: d1Avg.off.three, defAvg: d1Avg.def.three },
+                { label: "FT%", off: ff.off.ft, def: ff.def.ft, offRank: confOnly ? undefined : rankings.off.ft, defRank: confOnly ? undefined : rankings.def.ft, offAvg: d1Avg.off.ft, defAvg: d1Avg.def.ft },
               ]}
             />
             <StatsTable
               title="Other Stats"
               rows={[
-                { label: "3PA/FGA", off: ff.off.threePaRate, def: ff.def.threePaRate, offRank: (confOnly || d1Only) ? undefined : rankings.off.threePaRate, defRank: (confOnly || d1Only) ? undefined : rankings.def.threePaRate, offAvg: d1Avg.off.threePaRate, defAvg: d1Avg.def.threePaRate },
-                { label: "Block%", off: ff.off.blk, def: ff.def.blk, offRank: (confOnly || d1Only) ? undefined : rankings.off.blk, defRank: (confOnly || d1Only) ? undefined : rankings.def.blk, offAvg: d1Avg.off.blk, defAvg: d1Avg.def.blk },
-                { label: "Steal%", off: ff.off.stl, def: ff.def.stl, offRank: (confOnly || d1Only) ? undefined : rankings.off.stl, defRank: (confOnly || d1Only) ? undefined : rankings.def.stl, offAvg: d1Avg.off.stl, defAvg: d1Avg.def.stl },
-                { label: "Assist%", off: ff.off.ast, def: ff.def.ast, offRank: (confOnly || d1Only) ? undefined : rankings.off.ast, defRank: (confOnly || d1Only) ? undefined : rankings.def.ast, offAvg: d1Avg.off.ast, defAvg: d1Avg.def.ast },
+                { label: "3PA/FGA", off: ff.off.threePaRate, def: ff.def.threePaRate, offRank: confOnly ? undefined : rankings.off.threePaRate, defRank: confOnly ? undefined : rankings.def.threePaRate, offAvg: d1Avg.off.threePaRate, defAvg: d1Avg.def.threePaRate },
+                { label: "Block%", off: ff.off.blk, def: ff.def.blk, offRank: confOnly ? undefined : rankings.off.blk, defRank: confOnly ? undefined : rankings.def.blk, offAvg: d1Avg.off.blk, defAvg: d1Avg.def.blk },
+                { label: "Steal%", off: ff.off.stl, def: ff.def.stl, offRank: confOnly ? undefined : rankings.off.stl, defRank: confOnly ? undefined : rankings.def.stl, offAvg: d1Avg.off.stl, defAvg: d1Avg.def.stl },
+                { label: "Assist%", off: ff.off.ast, def: ff.def.ast, offRank: confOnly ? undefined : rankings.off.ast, defRank: confOnly ? undefined : rankings.def.ast, offAvg: d1Avg.off.ast, defAvg: d1Avg.def.ast },
               ]}
             />
           </div>
 
           {/* GAME LOG */}
           <div>
-            <SectionTitle title={`Game Log${confOnly ? " (Conf. only)" : d1Only ? " (D1 only)" : ""}`} />
+            <SectionTitle title={`Game Log${confOnly ? " (Conf. only)" : ""}`} />
             <div style={{ maxHeight: 600, overflowY: "auto", border: `1px solid ${ACCENT_BORDER}`, borderTop: "none" }}>
               <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 11 }}>
                 <thead style={{ position: "sticky", top: 0, background: ACCENT_LIGHT, zIndex: 1 }}>
@@ -371,7 +361,7 @@ export default async function TeamPage({
 
         {/* TEAM TOTALS */}
         <div style={{ marginBottom: 32 }}>
-          <SectionTitle title={`Team Totals${confOnly ? " (Conf. only)" : d1Only ? " (D1 only)" : ""}`} />
+          <SectionTitle title={`Team Totals${confOnly ? " (Conf. only)" : ""}`} />
           <div style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 11 }}>
               <thead>
@@ -442,7 +432,6 @@ function PlayerStatsKenPom({ players, team }: { players: any[]; team: any }) {
     const teamPossOnFloor = Math.max(1, teamPoss * minShare * 5);
     const usagePct = (playerPoss / teamPossOnFloor) * 100;
 
-    // Shot%: player FGA / (%Min * team FGA)
     const shotPct = minPct > 0 && team.fga > 0 ? (pg.fga / ((minPct / 100) * team.fga)) * 100 : 0;
 
     const efg = pg.fga > 0 ? ((pg.fgm + 0.5 * pg.tpm) / pg.fga) * 100 : 0;
@@ -456,7 +445,6 @@ function PlayerStatsKenPom({ players, team }: { players: any[]; team: any }) {
     const teamFGMOnFloor = Math.max(1, (team.fgm - pg.fgm) * minShare * 5);
     const aRate = (pg.ast / teamFGMOnFloor) * 100;
 
-    // TORate: turnovers as % of personal possessions
     const toRate = playerPoss > 0 ? (pg.tov / playerPoss) * 100 : 0;
 
     const blkPct = pg.minutes > 0 && opp2PA > 0
