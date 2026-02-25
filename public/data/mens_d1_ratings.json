@@ -1,0 +1,6976 @@
+{
+  "generated_at_utc": "2026-02-25T16:38:36.544Z",
+  "season_start": "2025-11-04",
+  "rows": [
+    {
+      "teamId": "1782",
+      "team": "Duke",
+      "conference": "acc",
+      "games": 28,
+      "adjO": 122.96545067498776,
+      "adjD": 92.5320197044335,
+      "adjEM": 30.43343097055427,
+      "adjT": 67.52767857142858
+    },
+    {
+      "teamId": "946",
+      "team": "Saint Louis",
+      "conference": "atlantic-10",
+      "games": 27,
+      "adjO": 122.41155344998853,
+      "adjD": 93.64158922286092,
+      "adjEM": 28.769964227127616,
+      "adjT": 72.70555555555555
+    },
+    {
+      "teamId": "1379",
+      "team": "High Point",
+      "conference": "big-south",
+      "games": 29,
+      "adjO": 125.5462284931833,
+      "adjD": 97.10448614153728,
+      "adjEM": 28.441742351646027,
+      "adjT": 72.40086206896552
+    },
+    {
+      "teamId": "1808",
+      "team": "Gonzaga",
+      "conference": "wcc",
+      "games": 28,
+      "adjO": 121.17872484314142,
+      "adjD": 94.09250192608793,
+      "adjEM": 27.08622291705349,
+      "adjT": 71.29375
+    },
+    {
+      "teamId": "2212",
+      "team": "Arizona",
+      "conference": "big-12",
+      "games": 27,
+      "adjO": 121.32642647685729,
+      "adjD": 94.36233703030148,
+      "adjEM": 26.964089446555818,
+      "adjT": 71.67685185185185
+    },
+    {
+      "teamId": "1845",
+      "team": "Michigan",
+      "conference": "big-ten",
+      "games": 27,
+      "adjO": 120.75452511694122,
+      "adjD": 94.73927443580065,
+      "adjEM": 26.01525068114057,
+      "adjT": 72.84444444444445
+    },
+    {
+      "teamId": "414",
+      "team": "Iowa St.",
+      "conference": "big-12",
+      "games": 27,
+      "adjO": 120.88537292406059,
+      "adjD": 96.01520602810399,
+      "adjEM": 24.8701668959566,
+      "adjT": 68.3537037037037
+    },
+    {
+      "teamId": "1535",
+      "team": "Miami (OH)",
+      "conference": "mac",
+      "games": 27,
+      "adjO": 125.53646710301436,
+      "adjD": 101.00729945411682,
+      "adjEM": 24.52916764889754,
+      "adjT": 73.13796296296296
+    },
+    {
+      "teamId": "1795",
+      "team": "Florida",
+      "conference": "sec",
+      "games": 26,
+      "adjO": 119.81001174084749,
+      "adjD": 96.95749499980131,
+      "adjEM": 22.852516741046173,
+      "adjT": 72.06923076923077
+    },
+    {
+      "teamId": "1317",
+      "team": "Saint Mary's (CA)",
+      "conference": "wcc",
+      "games": 28,
+      "adjO": 117.83529411764707,
+      "adjD": 95.87386693917637,
+      "adjEM": 21.9614271784707,
+      "adjT": 66.40625
+    },
+    {
+      "teamId": "757",
+      "team": "Illinois",
+      "conference": "big-ten",
+      "games": 27,
+      "adjO": 125.61188085953705,
+      "adjD": 104.23488927124383,
+      "adjEM": 21.376991588293222,
+      "adjT": 66.96111111111111
+    },
+    {
+      "teamId": "2157",
+      "team": "Houston",
+      "conference": "big-12",
+      "games": 27,
+      "adjO": 117.96368814524743,
+      "adjD": 96.5890385468703,
+      "adjEM": 21.374649598377133,
+      "adjT": 65.02314814814815
+    },
+    {
+      "teamId": "243",
+      "team": "Purdue",
+      "conference": "big-ten",
+      "games": 27,
+      "adjO": 124.52378966102167,
+      "adjD": 103.37202874516306,
+      "adjEM": 21.151760915858603,
+      "adjT": 66.59444444444445
+    },
+    {
+      "teamId": "1363",
+      "team": "Virginia",
+      "conference": "acc",
+      "games": 27,
+      "adjO": 120.10450933409145,
+      "adjD": 99.55593947819514,
+      "adjEM": 20.548569855896304,
+      "adjT": 68.39722222222223
+    },
+    {
+      "teamId": "1361",
+      "team": "Utah St.",
+      "conference": "mountain-west",
+      "games": 26,
+      "adjO": 121.4849409878037,
+      "adjD": 101.23608702947591,
+      "adjEM": 20.248853958327786,
+      "adjT": 68.35288461538461
+    },
+    {
+      "teamId": "2201",
+      "team": "Akron",
+      "conference": "mac",
+      "games": 27,
+      "adjO": 123.95544952349363,
+      "adjD": 103.7889368681368,
+      "adjEM": 20.166512655356826,
+      "adjT": 72.57685185185186
+    },
+    {
+      "teamId": "1455",
+      "team": "UConn",
+      "conference": "big-east",
+      "games": 27,
+      "adjO": 117.6389710027361,
+      "adjD": 98.4245484986551,
+      "adjEM": 19.214422504081,
+      "adjT": 67.34351851851852
+    },
+    {
+      "teamId": "1533",
+      "team": "McNeese",
+      "conference": "southland",
+      "games": 28,
+      "adjO": 117.85861761219081,
+      "adjD": 98.71951543488656,
+      "adjEM": 19.139102177304252,
+      "adjT": 67.02946428571428
+    },
+    {
+      "teamId": "2272",
+      "team": "Nebraska",
+      "conference": "big-ten",
+      "games": 26,
+      "adjO": 115.59742360185001,
+      "adjD": 96.46744855678068,
+      "adjEM": 19.12997504506933,
+      "adjT": 67.775
+    },
+    {
+      "teamId": "2379",
+      "team": "Utah Valley",
+      "conference": "wac",
+      "games": 27,
+      "adjO": 113.38064060846042,
+      "adjD": 94.6407012755236,
+      "adjEM": 18.739939332936828,
+      "adjT": 70.85277777777777
+    },
+    {
+      "teamId": "1163",
+      "team": "Michigan St.",
+      "conference": "big-ten",
+      "games": 26,
+      "adjO": 116.01628098938319,
+      "adjD": 98.34891813326078,
+      "adjEM": 17.66736285612241,
+      "adjT": 67.56346153846154
+    },
+    {
+      "teamId": "2680",
+      "team": "Vanderbilt",
+      "conference": "sec",
+      "games": 26,
+      "adjO": 120.60786363270886,
+      "adjD": 102.96511783074007,
+      "adjEM": 17.642745801968786,
+      "adjT": 71.75192307692308
+    },
+    {
+      "teamId": "1143",
+      "team": "Louisville",
+      "conference": "acc",
+      "games": 27,
+      "adjO": 119.8668721428664,
+      "adjD": 102.24205937305378,
+      "adjEM": 17.62481276981262,
+      "adjT": 71.49907407407407
+    },
+    {
+      "teamId": "508",
+      "team": "Yale",
+      "conference": "ivy-league",
+      "games": 25,
+      "adjO": 123.41748612743422,
+      "adjD": 106.01765971655412,
+      "adjEM": 17.399826410880095,
+      "adjT": 67.219
+    },
+    {
+      "teamId": "2478",
+      "team": "Iowa",
+      "conference": "big-ten",
+      "games": 27,
+      "adjO": 119.47772165533705,
+      "adjD": 102.1944484813254,
+      "adjEM": 17.283273174011654,
+      "adjT": 63.61018518518518
+    },
+    {
+      "teamId": "1680",
+      "team": "St. Thomas (MN)",
+      "conference": "summit-league",
+      "games": 28,
+      "adjO": 119.36392914653784,
+      "adjD": 102.33693668751494,
+      "adjEM": 17.026992459022907,
+      "adjT": 70.97142857142858
+    },
+    {
+      "teamId": "801",
+      "team": "Miami (FL)",
+      "conference": "acc",
+      "games": 27,
+      "adjO": 118.43220338983052,
+      "adjD": 101.41384075688318,
+      "adjEM": 17.018362632947344,
+      "adjT": 69.92592592592592
+    },
+    {
+      "teamId": "1354",
+      "team": "Tulsa",
+      "conference": "american",
+      "games": 27,
+      "adjO": 123.08267364402141,
+      "adjD": 106.30820828712302,
+      "adjEM": 16.77446535689839,
+      "adjT": 69.36018518518519
+    },
+    {
+      "teamId": "1641",
+      "team": "North Dakota St.",
+      "conference": "summit-league",
+      "games": 28,
+      "adjO": 117.38459773338603,
+      "adjD": 100.72547844602262,
+      "adjEM": 16.65911928736341,
+      "adjT": 70.03839285714285
+    },
+    {
+      "teamId": "2012",
+      "team": "Tennessee",
+      "conference": "sec",
+      "games": 27,
+      "adjO": 117.62322207664148,
+      "adjD": 101.23370137407876,
+      "adjEM": 16.38952070256272,
+      "adjT": 68.54907407407407
+    },
+    {
+      "teamId": "1673",
+      "team": "St. John's (NY)",
+      "conference": "big-east",
+      "games": 26,
+      "adjO": 115.34296752804032,
+      "adjD": 99.01520017126954,
+      "adjEM": 16.327767356770778,
+      "adjT": 71.92596153846154
+    },
+    {
+      "teamId": "622",
+      "team": "SFA",
+      "conference": "southland",
+      "games": 28,
+      "adjO": 114.54203211982859,
+      "adjD": 98.3475266291145,
+      "adjEM": 16.194505490714093,
+      "adjT": 66.88125
+    },
+    {
+      "teamId": "634",
+      "team": "Navy",
+      "conference": "patriot",
+      "games": 28,
+      "adjO": 112.03274803404074,
+      "adjD": 95.9549205071443,
+      "adjEM": 16.077827526896442,
+      "adjT": 66.30714285714285
+    },
+    {
+      "teamId": "1471",
+      "team": "ETSU",
+      "conference": "socon",
+      "games": 29,
+      "adjO": 116.21387430552015,
+      "adjD": 100.29207601562797,
+      "adjEM": 15.92179828989218,
+      "adjT": 67.65172413793104
+    },
+    {
+      "teamId": "1630",
+      "team": "New Mexico",
+      "conference": "mountain-west",
+      "games": 28,
+      "adjO": 113.86787695410993,
+      "adjD": 98.21033886103288,
+      "adjEM": 15.65753809307705,
+      "adjT": 70.82142857142857
+    },
+    {
+      "teamId": "113",
+      "team": "Arkansas",
+      "conference": "sec",
+      "games": 26,
+      "adjO": 123.33138328990054,
+      "adjD": 107.9763702349731,
+      "adjEM": 15.35501305492744,
+      "adjT": 72.31923076923077
+    },
+    {
+      "teamId": "2085",
+      "team": "Belmont",
+      "conference": "mvc",
+      "games": 28,
+      "adjO": 117.74562643024173,
+      "adjD": 102.42756853830987,
+      "adjEM": 15.318057891931858,
+      "adjT": 71.40089285714285
+    },
+    {
+      "teamId": "261",
+      "team": "Santa Clara",
+      "conference": "wcc",
+      "games": 29,
+      "adjO": 117.65415856999748,
+      "adjD": 102.50742896436553,
+      "adjEM": 15.146729605631947,
+      "adjT": 71.425
+    },
+    {
+      "teamId": "1813",
+      "team": "Hofstra",
+      "conference": "caa",
+      "games": 28,
+      "adjO": 114.93508246281752,
+      "adjD": 100.15480918085751,
+      "adjEM": 14.780273281960007,
+      "adjT": 66.15535714285714
+    },
+    {
+      "teamId": "755",
+      "team": "Hawaii",
+      "conference": "big-west",
+      "games": 26,
+      "adjO": 109.23792410950217,
+      "adjD": 94.58065539950805,
+      "adjEM": 14.657268709994128,
+      "adjT": 72.77692307692308
+    },
+    {
+      "teamId": "1874",
+      "team": "BYU",
+      "conference": "big-12",
+      "games": 27,
+      "adjO": 120.18322507181492,
+      "adjD": 105.64511948577058,
+      "adjEM": 14.538105586044338,
+      "adjT": 71.55740740740741
+    },
+    {
+      "teamId": "2344",
+      "team": "Texas",
+      "conference": "sec",
+      "games": 27,
+      "adjO": 122.92878635907722,
+      "adjD": 108.50295250663147,
+      "adjEM": 14.425833852445749,
+      "adjT": 69.23611111111111
+    },
+    {
+      "teamId": "2159",
+      "team": "Howard",
+      "conference": "meac",
+      "games": 27,
+      "adjO": 110.08931874636647,
+      "adjD": 95.71920961928066,
+      "adjEM": 14.370109127085811,
+      "adjT": 70.07777777777777
+    },
+    {
+      "teamId": "628",
+      "team": "Texas Tech",
+      "conference": "big-12",
+      "games": 28,
+      "adjO": 119.09576398610461,
+      "adjD": 104.8141377209019,
+      "adjEM": 14.281626265202718,
+      "adjT": 68.88214285714285
+    },
+    {
+      "teamId": "855",
+      "team": "Winthrop",
+      "conference": "big-south",
+      "games": 28,
+      "adjO": 117.9500578552499,
+      "adjD": 103.78340853870182,
+      "adjEM": 14.166649316548074,
+      "adjT": 71.76160714285714
+    },
+    {
+      "teamId": "1261",
+      "team": "UNCW",
+      "conference": "caa",
+      "games": 27,
+      "adjO": 114.3447082786908,
+      "adjD": 100.37298892167232,
+      "adjEM": 13.971719357018486,
+      "adjT": 66.36851851851851
+    },
+    {
+      "teamId": "16472",
+      "team": "Montana Tech",
+      "conference": null,
+      "games": 1,
+      "adjO": 122.43374393430386,
+      "adjD": 108.73504893077204,
+      "adjEM": 13.698695003531824,
+      "adjT": 66.975
+    },
+    {
+      "teamId": "53",
+      "team": "Georgia",
+      "conference": "sec",
+      "games": 26,
+      "adjO": 119.23883574607397,
+      "adjD": 105.63190514686067,
+      "adjEM": 13.6069305992133,
+      "adjT": 75.18846153846154
+    },
+    {
+      "teamId": "1832",
+      "team": "Liberty",
+      "conference": "cusa",
+      "games": 26,
+      "adjO": 119.26847110460864,
+      "adjD": 106.0656860887185,
+      "adjEM": 13.202785015890143,
+      "adjT": 65.72115384615384
+    },
+    {
+      "teamId": "611",
+      "team": "South Fla.",
+      "conference": "american",
+      "games": 26,
+      "adjO": 117.29800240427655,
+      "adjD": 104.13820401179792,
+      "adjEM": 13.15979839247862,
+      "adjT": 75.18653846153846
+    },
+    {
+      "teamId": "2653",
+      "team": "SMU",
+      "conference": "acc",
+      "games": 26,
+      "adjO": 120.41835737147295,
+      "adjD": 107.34185295017222,
+      "adjEM": 13.076504421300726,
+      "adjT": 71.80096153846154
+    },
+    {
+      "teamId": "896",
+      "team": "Wilmington (DE)",
+      "conference": "cacc",
+      "games": 1,
+      "adjO": 97.36030167980803,
+      "adjD": 84.29639700883753,
+      "adjEM": 13.063904670970501,
+      "adjT": 72.925
+    },
+    {
+      "teamId": "1362",
+      "team": "VCU",
+      "conference": "atlantic-10",
+      "games": 27,
+      "adjO": 117.2854102624734,
+      "adjD": 104.2995839112344,
+      "adjEM": 12.985826351239012,
+      "adjT": 70.48333333333333
+    },
+    {
+      "teamId": "1621",
+      "team": "North Carolina",
+      "conference": "acc",
+      "games": 27,
+      "adjO": 116.60534508551328,
+      "adjD": 103.65369874803329,
+      "adjEM": 12.951646337479986,
+      "adjT": 68.70277777777777
+    },
+    {
+      "teamId": "2640",
+      "team": "San Diego St.",
+      "conference": "mountain-west",
+      "games": 26,
+      "adjO": 110.9099262221982,
+      "adjD": 98.0022615906521,
+      "adjEM": 12.907664631546098,
+      "adjT": 71.15961538461539
+    },
+    {
+      "teamId": "213",
+      "team": "UNI",
+      "conference": "mvc",
+      "games": 29,
+      "adjO": 107.30780043105179,
+      "adjD": 94.46340943033924,
+      "adjEM": 12.844391000712548,
+      "adjT": 64.39741379310345
+    },
+    {
+      "teamId": "397",
+      "team": "George Washington",
+      "conference": "atlantic-10",
+      "games": 27,
+      "adjO": 118.26475710238348,
+      "adjD": 105.79014966842284,
+      "adjEM": 12.474607433960642,
+      "adjT": 71.2462962962963
+    },
+    {
+      "teamId": "2013",
+      "team": "UT Martin",
+      "conference": "ovc",
+      "games": 29,
+      "adjO": 105.93593325423858,
+      "adjD": 93.50120819025817,
+      "adjEM": 12.434725063980409,
+      "adjT": 67.575
+    },
+    {
+      "teamId": "1717",
+      "team": "Villanova",
+      "conference": "big-east",
+      "games": 26,
+      "adjO": 117.18761258340177,
+      "adjD": 104.8626524082668,
+      "adjEM": 12.324960175134976,
+      "adjT": 66.72403846153847
+    },
+    {
+      "teamId": "443",
+      "team": "Mercer",
+      "conference": "socon",
+      "games": 28,
+      "adjO": 117.77497281827611,
+      "adjD": 105.51066863446484,
+      "adjEM": 12.264304183811277,
+      "adjT": 71.44375
+    },
+    {
+      "teamId": "286",
+      "team": "Texas A&M",
+      "conference": "sec",
+      "games": 26,
+      "adjO": 119.14651346350426,
+      "adjD": 106.9890995694788,
+      "adjEM": 12.157413894025467,
+      "adjT": 74.31057692307692
+    },
+    {
+      "teamId": "435",
+      "team": "Marist",
+      "conference": "maac",
+      "games": 27,
+      "adjO": 106.5460484985551,
+      "adjD": 94.66313816297277,
+      "adjEM": 11.882910335582324,
+      "adjT": 66.325
+    },
+    {
+      "teamId": "2607",
+      "team": "NC State",
+      "conference": "acc",
+      "games": 27,
+      "adjO": 117.34479865771812,
+      "adjD": 105.50554741469543,
+      "adjEM": 11.839251243022687,
+      "adjT": 70.63703703703703
+    },
+    {
+      "teamId": "2211",
+      "team": "App State",
+      "conference": "sun-belt",
+      "games": 29,
+      "adjO": 111.94713165333015,
+      "adjD": 100.16596959437032,
+      "adjEM": 11.781162058959822,
+      "adjT": 64.96293103448275
+    },
+    {
+      "teamId": "1128",
+      "team": "Kentucky",
+      "conference": "sec",
+      "games": 28,
+      "adjO": 116.170229134878,
+      "adjD": 104.49164659358779,
+      "adjEM": 11.678582541290211,
+      "adjT": 69.63303571428571
+    },
+    {
+      "teamId": "494",
+      "team": "Wichita St.",
+      "conference": "american",
+      "games": 28,
+      "adjO": 113.33786824342002,
+      "adjD": 102.15395801145142,
+      "adjEM": 11.183910231968596,
+      "adjT": 68.25357142857142
+    },
+    {
+      "teamId": "2540",
+      "team": "Bowling Green",
+      "conference": "mac",
+      "games": 28,
+      "adjO": 111.69224753152803,
+      "adjD": 100.5126938044351,
+      "adjEM": 11.179553727092923,
+      "adjT": 73.06428571428572
+    },
+    {
+      "teamId": "1322",
+      "team": "Sam Houston",
+      "conference": "cusa",
+      "games": 26,
+      "adjO": 115.51079369793847,
+      "adjD": 104.43920511956888,
+      "adjEM": 11.071588578369585,
+      "adjT": 71.22211538461539
+    },
+    {
+      "teamId": "2557",
+      "team": "Youngstown St.",
+      "conference": "horizon",
+      "games": 28,
+      "adjO": 115.12003369366839,
+      "adjD": 104.10025986661033,
+      "adjEM": 11.01977382705806,
+      "adjT": 69.95803571428571
+    },
+    {
+      "teamId": "1817",
+      "team": "Illinois St.",
+      "conference": "mvc",
+      "games": 29,
+      "adjO": 110.88430231092967,
+      "adjD": 99.9506072771945,
+      "adjEM": 10.933695033735162,
+      "adjT": 68.4155172413793
+    },
+    {
+      "teamId": "722",
+      "team": "Clemson",
+      "conference": "acc",
+      "games": 27,
+      "adjO": 112.14586255259466,
+      "adjD": 101.21525824237649,
+      "adjEM": 10.930604310218172,
+      "adjT": 66.01851851851852
+    },
+    {
+      "teamId": "760",
+      "team": "Indiana",
+      "conference": "big-ten",
+      "games": 28,
+      "adjO": 116.68439786174922,
+      "adjD": 105.78824022309799,
+      "adjEM": 10.896157638651232,
+      "adjT": 67.97946428571429
+    },
+    {
+      "teamId": "1214",
+      "team": "Central Ark.",
+      "conference": "asun",
+      "games": 28,
+      "adjO": 113.93805309734513,
+      "adjD": 103.05617468172716,
+      "adjEM": 10.881878415617976,
+      "adjT": 71.02857142857142
+    },
+    {
+      "teamId": "1293",
+      "team": "UTRGV",
+      "conference": "southland",
+      "games": 28,
+      "adjO": 113.49874068913779,
+      "adjD": 102.66109054100849,
+      "adjEM": 10.837650148129299,
+      "adjT": 66.64642857142857
+    },
+    {
+      "teamId": "1857",
+      "team": "Alabama",
+      "conference": "sec",
+      "games": 26,
+      "adjO": 122.23574761614933,
+      "adjD": 111.58950460946207,
+      "adjEM": 10.646243006687257,
+      "adjT": 75.83076923076922
+    },
+    {
+      "teamId": "464",
+      "team": "Austin Peay",
+      "conference": "asun",
+      "games": 26,
+      "adjO": 112.68451065455241,
+      "adjD": 102.07510826354832,
+      "adjEM": 10.609402391004096,
+      "adjT": 70.4826923076923
+    },
+    {
+      "teamId": "573",
+      "team": "Ohio St.",
+      "conference": "big-ten",
+      "games": 26,
+      "adjO": 116.91641501908722,
+      "adjD": 106.37874698110528,
+      "adjEM": 10.537668037981945,
+      "adjT": 67.50384615384615
+    },
+    {
+      "teamId": "1824",
+      "team": "Kansas",
+      "conference": "big-12",
+      "games": 27,
+      "adjO": 110.85001215460659,
+      "adjD": 100.3754625752951,
+      "adjEM": 10.474549579311486,
+      "adjT": 68.56111111111112
+    },
+    {
+      "teamId": "2377",
+      "team": "Lipscomb",
+      "conference": "asun",
+      "games": 28,
+      "adjO": 113.88558924663958,
+      "adjD": 103.54440461967344,
+      "adjEM": 10.34118462696614,
+      "adjT": 71.40625
+    },
+    {
+      "teamId": "1295",
+      "team": "Portland St.",
+      "conference": "big-sky",
+      "games": 26,
+      "adjO": 109.93424853503535,
+      "adjD": 99.61844153339669,
+      "adjEM": 10.31580700163866,
+      "adjT": 69.90192307692308
+    },
+    {
+      "teamId": "1486",
+      "team": "Furman",
+      "conference": "socon",
+      "games": 28,
+      "adjO": 112.86040949352119,
+      "adjD": 102.59249008211088,
+      "adjEM": 10.267919411410304,
+      "adjT": 67.94107142857142
+    },
+    {
+      "teamId": "2029",
+      "team": "Virginia St.",
+      "conference": "ciaa",
+      "games": 1,
+      "adjO": 95.05557684936758,
+      "adjD": 84.82632541133455,
+      "adjEM": 10.229251438033032,
+      "adjT": 65.225
+    },
+    {
+      "teamId": "627",
+      "team": "TCU",
+      "conference": "big-12",
+      "games": 27,
+      "adjO": 111.4735125466884,
+      "adjD": 101.34260651301426,
+      "adjEM": 10.130906033674137,
+      "adjT": 70.40370370370371
+    },
+    {
+      "teamId": "1257",
+      "team": "Montana St.",
+      "conference": "big-sky",
+      "games": 27,
+      "adjO": 114.16605477142315,
+      "adjD": 104.10507701237867,
+      "adjEM": 10.060977759044476,
+      "adjT": 68.09444444444445
+    },
+    {
+      "teamId": "2350",
+      "team": "Troy",
+      "conference": "sun-belt",
+      "games": 29,
+      "adjO": 112.95348183628833,
+      "adjD": 103.04164944443094,
+      "adjEM": 9.911832391857388,
+      "adjT": 70.55086206896551
+    },
+    {
+      "teamId": "2095",
+      "team": "UCLA",
+      "conference": "big-ten",
+      "games": 27,
+      "adjO": 115.89810005373306,
+      "adjD": 106.19029897035108,
+      "adjEM": 9.70780108338198,
+      "adjT": 67.20462962962964
+    },
+    {
+      "teamId": "438",
+      "team": "UMBC",
+      "conference": "america-east",
+      "games": 26,
+      "adjO": 110.29672370528942,
+      "adjD": 100.88279542422435,
+      "adjEM": 9.413928281065068,
+      "adjT": 67.82403846153846
+    },
+    {
+      "teamId": "499",
+      "team": "Wisconsin",
+      "conference": "big-ten",
+      "games": 26,
+      "adjO": 117.35474006116206,
+      "adjD": 108.18478157094343,
+      "adjEM": 9.169958490218633,
+      "adjT": 70.43076923076923
+    },
+    {
+      "teamId": "2094",
+      "team": "UC Irvine",
+      "conference": "big-west",
+      "games": 27,
+      "adjO": 104.61150366166004,
+      "adjD": 95.59279950341403,
+      "adjEM": 9.01870415824601,
+      "adjT": 71.94166666666666
+    },
+    {
+      "teamId": "1326",
+      "team": "South Alabama",
+      "conference": "sun-belt",
+      "games": 28,
+      "adjO": 110.45825319981431,
+      "adjD": 101.81342062193126,
+      "adjEM": 8.64483257788305,
+      "adjT": 67.31696428571429
+    },
+    {
+      "teamId": "1061",
+      "team": "UC Santa Barbara",
+      "conference": "big-west",
+      "games": 28,
+      "adjO": 115.56656023978628,
+      "adjD": 106.9488206843791,
+      "adjEM": 8.617739555407184,
+      "adjT": 68.51339285714286
+    },
+    {
+      "teamId": "1488",
+      "team": "George Mason",
+      "conference": "atlantic-10",
+      "games": 26,
+      "adjO": 113.39496315396222,
+      "adjD": 104.84889424065318,
+      "adjEM": 8.546068913309043,
+      "adjT": 65.63173076923077
+    },
+    {
+      "teamId": "2458",
+      "team": "Fordham",
+      "conference": "atlantic-10",
+      "games": 28,
+      "adjO": 106.51128125211736,
+      "adjD": 98.08408367747613,
+      "adjEM": 8.427197574641227,
+      "adjT": 65.88839285714286
+    },
+    {
+      "teamId": "410",
+      "team": "Idaho",
+      "conference": "big-sky",
+      "games": 27,
+      "adjO": 112.99793683542293,
+      "adjD": 104.57619329000065,
+      "adjEM": 8.421743545422288,
+      "adjT": 70.0111111111111
+    },
+    {
+      "teamId": "1918",
+      "team": "Kennesaw St.",
+      "conference": "cusa",
+      "games": 26,
+      "adjO": 113.80963609211663,
+      "adjD": 105.65017993789868,
+      "adjEM": 8.15945615421795,
+      "adjT": 73.40192307692308
+    },
+    {
+      "teamId": "1825",
+      "team": "Kent St.",
+      "conference": "mac",
+      "games": 27,
+      "adjO": 114.45925594015658,
+      "adjD": 106.30648624357117,
+      "adjEM": 8.152769696585409,
+      "adjT": 74.39166666666667
+    },
+    {
+      "teamId": "2115",
+      "team": "Cornell",
+      "conference": "ivy-league",
+      "games": 24,
+      "adjO": 121.42613053878574,
+      "adjD": 113.45113493509614,
+      "adjEM": 7.974995603689607,
+      "adjT": 73.15833333333333
+    },
+    {
+      "teamId": "1965",
+      "team": "Pacific",
+      "conference": "wcc",
+      "games": 30,
+      "adjO": 111.10552258324111,
+      "adjD": 103.14685314685315,
+      "adjEM": 7.958669436387964,
+      "adjT": 66.27333333333334
+    },
+    {
+      "teamId": "1505",
+      "team": "UIC",
+      "conference": "mvc",
+      "games": 29,
+      "adjO": 110.30853499639473,
+      "adjD": 102.41162867525604,
+      "adjEM": 7.896906321138687,
+      "adjT": 68.14741379310345
+    },
+    {
+      "teamId": "2627",
+      "team": "Robert Morris",
+      "conference": "horizon",
+      "games": 29,
+      "adjO": 115.03964478274659,
+      "adjD": 107.16037581596589,
+      "adjEM": 7.8792689667807,
+      "adjT": 67.95258620689656
+    },
+    {
+      "teamId": "736",
+      "team": "Fla. Atlantic",
+      "conference": "american",
+      "games": 27,
+      "adjO": 111.93458368485949,
+      "adjD": 104.07474695042825,
+      "adjEM": 7.859836734431241,
+      "adjT": 71.33796296296296
+    },
+    {
+      "teamId": "1883",
+      "team": "Wright St.",
+      "conference": "horizon",
+      "games": 28,
+      "adjO": 116.07003688886579,
+      "adjD": 108.23999688517993,
+      "adjEM": 7.830040003685852,
+      "adjT": 68.73928571428571
+    },
+    {
+      "teamId": "2111",
+      "team": "Columbia",
+      "conference": "ivy-league",
+      "games": 25,
+      "adjO": 113.24387397899649,
+      "adjD": 105.42925603413009,
+      "adjEM": 7.814617944866399,
+      "adjT": 68.56
+    },
+    {
+      "teamId": "2218",
+      "team": "Baylor",
+      "conference": "big-12",
+      "games": 27,
+      "adjO": 116.68027497563673,
+      "adjD": 108.90841313539788,
+      "adjEM": 7.771861840238856,
+      "adjT": 70.30925925925925
+    },
+    {
+      "teamId": "918",
+      "team": "Northern Colo.",
+      "conference": "big-sky",
+      "games": 27,
+      "adjO": 116.05304984496729,
+      "adjD": 108.39110995917838,
+      "adjEM": 7.661939885788911,
+      "adjT": 71.07222222222222
+    },
+    {
+      "teamId": "1913",
+      "team": "Grand Canyon",
+      "conference": "mountain-west",
+      "games": 26,
+      "adjO": 107.04530012895354,
+      "adjD": 99.5124949363729,
+      "adjEM": 7.532805192580639,
+      "adjT": 69.3451923076923
+    },
+    {
+      "teamId": "2005",
+      "team": "SIUE",
+      "conference": "ovc",
+      "games": 29,
+      "adjO": 105.12859845579587,
+      "adjD": 97.66651213104622,
+      "adjEM": 7.462086324749649,
+      "adjT": 67.43793103448276
+    },
+    {
+      "teamId": "854",
+      "team": "William & Mary",
+      "conference": "caa",
+      "games": 26,
+      "adjO": 112.13489598287698,
+      "adjD": 104.68355250372481,
+      "adjEM": 7.451343479152172,
+      "adjT": 73.675
+    },
+    {
+      "teamId": "2682",
+      "team": "Vermont",
+      "conference": "america-east",
+      "games": 28,
+      "adjO": 113.09660899841492,
+      "adjD": 105.78950213525056,
+      "adjEM": 7.307106863164364,
+      "adjT": 65.90446428571428
+    },
+    {
+      "teamId": "721",
+      "team": "Colorado St.",
+      "conference": "mountain-west",
+      "games": 27,
+      "adjO": 118.10649182217739,
+      "adjD": 110.819917633845,
+      "adjEM": 7.286574188332395,
+      "adjT": 64.25462962962963
+    },
+    {
+      "teamId": "613",
+      "team": "Southeast Mo. St.",
+      "conference": "ovc",
+      "games": 28,
+      "adjO": 105.89227071983089,
+      "adjD": 98.70995430562218,
+      "adjEM": 7.182316414208714,
+      "adjT": 70.96160714285715
+    },
+    {
+      "teamId": "263",
+      "team": "Seton Hall",
+      "conference": "big-east",
+      "games": 27,
+      "adjO": 104.57191733576138,
+      "adjD": 97.41349420983289,
+      "adjEM": 7.158423125928493,
+      "adjT": 67.11666666666667
+    },
+    {
+      "teamId": "989",
+      "team": "West Virginia",
+      "conference": "big-12",
+      "games": 28,
+      "adjO": 107.09718230448715,
+      "adjD": 100.00276862593094,
+      "adjEM": 7.094413678556208,
+      "adjT": 64.92767857142857
+    },
+    {
+      "teamId": "1863",
+      "team": "Arkansas St.",
+      "conference": "sun-belt",
+      "games": 29,
+      "adjO": 112.99196433808434,
+      "adjD": 105.89787073676275,
+      "adjEM": 7.094093601321589,
+      "adjT": 73.48706896551724
+    },
+    {
+      "teamId": "2090",
+      "team": "California",
+      "conference": "acc",
+      "games": 26,
+      "adjO": 112.32053790404805,
+      "adjD": 105.26752499619698,
+      "adjEM": 7.05301290785107,
+      "adjT": 69.78653846153847
+    },
+    {
+      "teamId": "1775",
+      "team": "UCF",
+      "conference": "big-12",
+      "games": 26,
+      "adjO": 116.0998720287527,
+      "adjD": 109.07661656479135,
+      "adjEM": 7.023255463961348,
+      "adjT": 70.62884615384615
+    },
+    {
+      "teamId": "2007",
+      "team": "Texas St.",
+      "conference": "sun-belt",
+      "games": 29,
+      "adjO": 109.48721812063684,
+      "adjD": 102.53716972402496,
+      "adjEM": 6.9500483966118765,
+      "adjT": 68.65862068965517
+    },
+    {
+      "teamId": "1442",
+      "team": "UC San Diego",
+      "conference": "big-west",
+      "games": 27,
+      "adjO": 107.75753226213733,
+      "adjD": 100.8546553422615,
+      "adjEM": 6.902876919875837,
+      "adjT": 69.66944444444445
+    },
+    {
+      "teamId": "1629",
+      "team": "New Mexico St.",
+      "conference": "cusa",
+      "games": 26,
+      "adjO": 110.81473954584587,
+      "adjD": 103.92616218352198,
+      "adjEM": 6.888577362323886,
+      "adjT": 68.13173076923077
+    },
+    {
+      "teamId": "477",
+      "team": "Bradley",
+      "conference": "mvc",
+      "games": 29,
+      "adjO": 110.92768264136996,
+      "adjD": 104.08629628719561,
+      "adjEM": 6.841386354174347,
+      "adjT": 69.97413793103448
+    },
+    {
+      "teamId": "261807",
+      "team": "Lindenwood",
+      "conference": "ovc",
+      "games": 29,
+      "adjO": 105.77203098607957,
+      "adjD": 98.98249898249898,
+      "adjEM": 6.7895320035805895,
+      "adjT": 74.00431034482759
+    },
+    {
+      "teamId": "2303",
+      "team": "Quinnipiac",
+      "conference": "maac",
+      "games": 28,
+      "adjO": 107.5347940269725,
+      "adjD": 100.89051057640785,
+      "adjEM": 6.644283450564657,
+      "adjT": 70.37589285714286
+    },
+    {
+      "teamId": "2258",
+      "team": "Seattle U",
+      "conference": "wcc",
+      "games": 28,
+      "adjO": 102.96240467035422,
+      "adjD": 96.3490146707433,
+      "adjEM": 6.6133899996109164,
+      "adjT": 69.89375
+    },
+    {
+      "teamId": "608",
+      "team": "Siena",
+      "conference": "maac",
+      "games": 28,
+      "adjO": 109.7965241272175,
+      "adjD": 103.23403783214067,
+      "adjEM": 6.562486295076823,
+      "adjT": 64.37232142857142
+    },
+    {
+      "teamId": "1951",
+      "team": "Murray St.",
+      "conference": "mvc",
+      "games": 29,
+      "adjO": 116.47873962798852,
+      "adjD": 109.97647115028603,
+      "adjEM": 6.502268477702486,
+      "adjT": 71.79051724137932
+    },
+    {
+      "teamId": "753",
+      "team": "Harvard",
+      "conference": "ivy-league",
+      "games": 25,
+      "adjO": 110.44283087662438,
+      "adjD": 103.96116144593215,
+      "adjEM": 6.481669430692236,
+      "adjT": 64.178
+    },
+    {
+      "teamId": "816",
+      "team": "UAB",
+      "conference": "american",
+      "games": 27,
+      "adjO": 109.6775026799437,
+      "adjD": 103.25771921010936,
+      "adjEM": 6.419783469834343,
+      "adjT": 71.69166666666666
+    },
+    {
+      "teamId": "1628",
+      "team": "Nevada",
+      "conference": "mountain-west",
+      "games": 28,
+      "adjO": 112.71495916605802,
+      "adjD": 106.30224227146078,
+      "adjEM": 6.412716894597239,
+      "adjT": 67.23660714285714
+    },
+    {
+      "teamId": "2118",
+      "team": "Dayton",
+      "conference": "atlantic-10",
+      "games": 27,
+      "adjO": 108.41473274045406,
+      "adjD": 102.0817922434746,
+      "adjEM": 6.332940496979461,
+      "adjT": 69.86203703703704
+    },
+    {
+      "teamId": "2217",
+      "team": "Charleston So.",
+      "conference": "big-south",
+      "games": 28,
+      "adjO": 110.82611316651104,
+      "adjD": 104.50747322584442,
+      "adjEM": 6.318639940666614,
+      "adjT": 75.53660714285715
+    },
+    {
+      "teamId": "460",
+      "team": "Auburn",
+      "conference": "sec",
+      "games": 27,
+      "adjO": 119.6857116177314,
+      "adjD": 113.40833884844474,
+      "adjEM": 6.277372769286657,
+      "adjT": 69.41018518518518
+    },
+    {
+      "teamId": "1151",
+      "team": "Marshall",
+      "conference": "sun-belt",
+      "games": 29,
+      "adjO": 116.00477203684801,
+      "adjD": 109.8062243100411,
+      "adjEM": 6.198547726806908,
+      "adjT": 70.09224137931034
+    },
+    {
+      "teamId": "372",
+      "team": "Davidson",
+      "conference": "atlantic-10",
+      "games": 26,
+      "adjO": 111.09794394738401,
+      "adjD": 104.93736182756079,
+      "adjEM": 6.160582119823218,
+      "adjT": 64.91153846153847
+    },
+    {
+      "teamId": "2323",
+      "team": "Saint Peter's",
+      "conference": "maac",
+      "games": 25,
+      "adjO": 108.13231430618582,
+      "adjD": 102.1281672706665,
+      "adjEM": 6.004147035519324,
+      "adjT": 66.992
+    },
+    {
+      "teamId": "1788",
+      "team": "Fairfield",
+      "conference": "maac",
+      "games": 28,
+      "adjO": 112.49720074295576,
+      "adjD": 106.62481198090379,
+      "adjEM": 5.872388762051969,
+      "adjT": 67.77946428571428
+    },
+    {
+      "teamId": "1564",
+      "team": "Boise St.",
+      "conference": "mountain-west",
+      "games": 27,
+      "adjO": 113.00762014065899,
+      "adjD": 107.15967652955503,
+      "adjEM": 5.8479436111039576,
+      "adjT": 69.38240740740741
+    },
+    {
+      "teamId": "567",
+      "team": "Northwood",
+      "conference": "g-mac",
+      "games": 1,
+      "adjO": 103.81679389312977,
+      "adjD": 97.97399455700031,
+      "adjEM": 5.84279933612946,
+      "adjT": 81.875
+    },
+    {
+      "teamId": "1527",
+      "team": "LSU",
+      "conference": "sec",
+      "games": 27,
+      "adjO": 116.02202613945465,
+      "adjD": 110.26844829661731,
+      "adjEM": 5.753577842837345,
+      "adjT": 69.7824074074074
+    },
+    {
+      "teamId": "2714",
+      "team": "Utah Tech",
+      "conference": "wac",
+      "games": 28,
+      "adjO": 109.3565145825832,
+      "adjD": 103.68453105968331,
+      "adjEM": 5.671983522899893,
+      "adjT": 69.43214285714285
+    },
+    {
+      "teamId": "291",
+      "team": "Toledo",
+      "conference": "mac",
+      "games": 27,
+      "adjO": 115.32315108328312,
+      "adjD": 109.69853936868121,
+      "adjEM": 5.624611714601912,
+      "adjT": 70.68703703703703
+    },
+    {
+      "teamId": "2494",
+      "team": "Louisiana Tech",
+      "conference": "cusa",
+      "games": 27,
+      "adjO": 103.23117459436972,
+      "adjD": 97.62525583873048,
+      "adjEM": 5.605918755639237,
+      "adjT": 66.76851851851852
+    },
+    {
+      "teamId": "822",
+      "team": "American",
+      "conference": "patriot",
+      "games": 28,
+      "adjO": 110.49055810347319,
+      "adjD": 104.88702328608812,
+      "adjEM": 5.603534817385068,
+      "adjT": 67.94375
+    },
+    {
+      "teamId": "2125",
+      "team": "Duquesne",
+      "conference": "atlantic-10",
+      "games": 26,
+      "adjO": 111.70812603648426,
+      "adjD": 106.12898918413674,
+      "adjEM": 5.579136852347517,
+      "adjT": 72.47596153846153
+    },
+    {
+      "teamId": "1647",
+      "team": "Northern Ky.",
+      "conference": "horizon",
+      "games": 28,
+      "adjO": 112.1681031270957,
+      "adjD": 106.61352596836468,
+      "adjEM": 5.554577158731021,
+      "adjT": 71.89464285714286
+    },
+    {
+      "teamId": "2427",
+      "team": "Colgate",
+      "conference": "patriot",
+      "games": 28,
+      "adjO": 112.51875530041097,
+      "adjD": 106.96786837897776,
+      "adjEM": 5.550886921433218,
+      "adjT": 68.43303571428571
+    },
+    {
+      "teamId": "718",
+      "team": "Cincinnati",
+      "conference": "big-12",
+      "games": 27,
+      "adjO": 103.80214892419816,
+      "adjD": 98.30946484332938,
+      "adjEM": 5.492684080868784,
+      "adjT": 69.11296296296297
+    },
+    {
+      "teamId": "1534",
+      "team": "Mercyhurst",
+      "conference": "nec",
+      "games": 28,
+      "adjO": 107.47887536120737,
+      "adjD": 102.03748981255094,
+      "adjEM": 5.441385548656427,
+      "adjT": 65.19553571428571
+    },
+    {
+      "teamId": "2625",
+      "team": "Richmond",
+      "conference": "atlantic-10",
+      "games": 28,
+      "adjO": 112.405792628032,
+      "adjD": 107.04029464412193,
+      "adjEM": 5.365497983910075,
+      "adjT": 69.42321428571428
+    },
+    {
+      "teamId": "623",
+      "team": "Tennessee St.",
+      "conference": "ovc",
+      "games": 27,
+      "adjO": 110.92926916585691,
+      "adjD": 105.61901347129027,
+      "adjEM": 5.310255694566635,
+      "adjT": 72.41851851851851
+    },
+    {
+      "teamId": "1386",
+      "team": "A&M-Corpus Christi",
+      "conference": "southland",
+      "games": 28,
+      "adjO": 104.44255143395544,
+      "adjD": 99.13826366559485,
+      "adjEM": 5.304287768360595,
+      "adjT": 69.17678571428571
+    },
+    {
+      "teamId": "2685",
+      "team": "Virginia Tech",
+      "conference": "acc",
+      "games": 27,
+      "adjO": 112.07102793801005,
+      "adjD": 106.78448803598522,
+      "adjEM": 5.286539902024828,
+      "adjT": 69.66481481481482
+    },
+    {
+      "teamId": "1169",
+      "team": "Missouri",
+      "conference": "sec",
+      "games": 27,
+      "adjO": 115.48260787942179,
+      "adjD": 110.21552716780234,
+      "adjEM": 5.267080711619457,
+      "adjT": 69.05
+    },
+    {
+      "teamId": "2011",
+      "team": "Temple",
+      "conference": "american",
+      "games": 27,
+      "adjO": 112.23155141133286,
+      "adjD": 106.9689784350315,
+      "adjEM": 5.262572976301357,
+      "adjT": 65.83611111111111
+    },
+    {
+      "teamId": "261806",
+      "team": "California Baptist",
+      "conference": "wac",
+      "games": 26,
+      "adjO": 105.11106074342702,
+      "adjD": 99.90156096189004,
+      "adjEM": 5.209499781536977,
+      "adjT": 67.87692307692308
+    },
+    {
+      "teamId": "1997",
+      "team": "Samford",
+      "conference": "socon",
+      "games": 28,
+      "adjO": 112.72573904374832,
+      "adjD": 107.66311038161676,
+      "adjEM": 5.062628662131559,
+      "adjT": 69.85982142857144
+    },
+    {
+      "teamId": "489",
+      "team": "Buffalo",
+      "conference": "mac",
+      "games": 27,
+      "adjO": 115.55059422519298,
+      "adjD": 110.64370832262516,
+      "adjEM": 4.906885902567822,
+      "adjT": 68.01574074074074
+    },
+    {
+      "teamId": "957",
+      "team": "Southern U.",
+      "conference": "swac",
+      "games": 26,
+      "adjO": 109.32492639587296,
+      "adjD": 104.48830695068725,
+      "adjEM": 4.836619445185718,
+      "adjT": 73.80961538461538
+    },
+    {
+      "teamId": "2506",
+      "team": "Massachusetts",
+      "conference": "mac",
+      "games": 28,
+      "adjO": 110.88546891438918,
+      "adjD": 106.35104210241393,
+      "adjEM": 4.534426811975251,
+      "adjT": 72.98392857142856
+    },
+    {
+      "teamId": "2648",
+      "team": "South Dakota St.",
+      "conference": "summit-league",
+      "games": 28,
+      "adjO": 111.47635449271188,
+      "adjD": 106.99706553635475,
+      "adjEM": 4.479288956357124,
+      "adjT": 68.17589285714286
+    },
+    {
+      "teamId": "1275",
+      "team": "Norfolk St.",
+      "conference": "meac",
+      "games": 27,
+      "adjO": 108.24790369669257,
+      "adjD": 103.77821719108728,
+      "adjEM": 4.469686505605296,
+      "adjT": 69.45648148148149
+    },
+    {
+      "teamId": "488",
+      "team": "Butler",
+      "conference": "big-east",
+      "games": 28,
+      "adjO": 113.12439402143117,
+      "adjD": 108.66121935889377,
+      "adjEM": 4.463174662537398,
+      "adjT": 70.90803571428572
+    },
+    {
+      "teamId": "1204",
+      "team": "Wyoming",
+      "conference": "mountain-west",
+      "games": 27,
+      "adjO": 112.48004584339569,
+      "adjD": 108.05780599956208,
+      "adjEM": 4.422239843833609,
+      "adjT": 67.8638888888889
+    },
+    {
+      "teamId": "446",
+      "team": "Middle Tenn.",
+      "conference": "cusa",
+      "games": 27,
+      "adjO": 109.8138725046903,
+      "adjD": 105.57956039827165,
+      "adjEM": 4.234312106418642,
+      "adjT": 68.60092592592592
+    },
+    {
+      "teamId": "765",
+      "team": "Jacksonville St.",
+      "conference": "cusa",
+      "games": 26,
+      "adjO": 106.70978172999193,
+      "adjD": 102.4823568623473,
+      "adjEM": 4.227424867644629,
+      "adjT": 66.6076923076923
+    },
+    {
+      "teamId": "1139",
+      "team": "LIU",
+      "conference": "nec",
+      "games": 28,
+      "adjO": 107.95682763446015,
+      "adjD": 103.73941401667979,
+      "adjEM": 4.217413617780366,
+      "adjT": 68.90982142857142
+    },
+    {
+      "teamId": "2290",
+      "team": "Oklahoma",
+      "conference": "sec",
+      "games": 27,
+      "adjO": 118.26979628936533,
+      "adjD": 114.2395257981948,
+      "adjEM": 4.030270491170526,
+      "adjT": 69.27037037037037
+    },
+    {
+      "teamId": "787",
+      "team": "Longwood",
+      "conference": "big-south",
+      "games": 29,
+      "adjO": 107.62114644128545,
+      "adjD": 103.60403652090342,
+      "adjEM": 4.017109920382026,
+      "adjT": 71.1948275862069
+    },
+    {
+      "teamId": "209",
+      "team": "North Texas",
+      "conference": "american",
+      "games": 27,
+      "adjO": 103.89182510810626,
+      "adjD": 99.91742361684558,
+      "adjEM": 3.9744014912606787,
+      "adjT": 67.44907407407408
+    },
+    {
+      "teamId": "2197",
+      "team": "Minnesota",
+      "conference": "big-ten",
+      "games": 27,
+      "adjO": 109.98897208195484,
+      "adjD": 106.05276771857217,
+      "adjEM": 3.9362043633826715,
+      "adjT": 63.81111111111112
+    },
+    {
+      "teamId": "992",
+      "team": "Western Ky.",
+      "conference": "cusa",
+      "games": 26,
+      "adjO": 109.80836096062102,
+      "adjD": 105.95309029846705,
+      "adjEM": 3.85527066215397,
+      "adjT": 71.34807692307692
+    },
+    {
+      "teamId": "583",
+      "team": "Radford",
+      "conference": "big-south",
+      "games": 28,
+      "adjO": 110.83598062544542,
+      "adjD": 107.09348854128775,
+      "adjEM": 3.7424920841576608,
+      "adjT": 73.91875
+    },
+    {
+      "teamId": "1770",
+      "team": "UC Davis",
+      "conference": "big-west",
+      "games": 27,
+      "adjO": 108.69171219221707,
+      "adjD": 104.99204017446901,
+      "adjEM": 3.699672017748057,
+      "adjT": 71.52407407407408
+    },
+    {
+      "teamId": "1990",
+      "team": "Saint Joseph's",
+      "conference": "atlantic-10",
+      "games": 26,
+      "adjO": 105.69795418828143,
+      "adjD": 102.0192468153752,
+      "adjEM": 3.6787073729062314,
+      "adjT": 69.1375
+    },
+    {
+      "teamId": "335",
+      "team": "Wofford",
+      "conference": "socon",
+      "games": 28,
+      "adjO": 116.61959365360335,
+      "adjD": 113.05109794535775,
+      "adjEM": 3.5684957082455924,
+      "adjT": 68.59910714285715
+    },
+    {
+      "teamId": "541",
+      "team": "Tarleton St.",
+      "conference": "wac",
+      "games": 27,
+      "adjO": 102.91212965307672,
+      "adjD": 99.36839951926765,
+      "adjEM": 3.5437301338090634,
+      "adjT": 73.12962962962963
+    },
+    {
+      "teamId": "2338",
+      "team": "Stanford",
+      "conference": "acc",
+      "games": 27,
+      "adjO": 109.00047052497143,
+      "adjD": 105.49568965517241,
+      "adjEM": 3.5047808697990206,
+      "adjT": 68.875
+    },
+    {
+      "teamId": "2428",
+      "team": "Colorado",
+      "conference": "big-12",
+      "games": 26,
+      "adjO": 113.97416402964424,
+      "adjD": 110.5882992901243,
+      "adjEM": 3.3858647395199455,
+      "adjT": 70.19134615384615
+    },
+    {
+      "teamId": "1294",
+      "team": "Penn",
+      "conference": "ivy-league",
+      "games": 24,
+      "adjO": 109.74915335511135,
+      "adjD": 106.4801726062049,
+      "adjEM": 3.2689807489064435,
+      "adjT": 69.51458333333333
+    },
+    {
+      "teamId": "2033",
+      "team": "Washington",
+      "conference": "big-ten",
+      "games": 27,
+      "adjO": 110.83834040879437,
+      "adjD": 107.60444845205892,
+      "adjEM": 3.233891956735448,
+      "adjT": 68.26759259259259
+    },
+    {
+      "teamId": "520",
+      "team": "Elon",
+      "conference": "caa",
+      "games": 28,
+      "adjO": 116.31514840694916,
+      "adjD": 113.18101034381351,
+      "adjEM": 3.1341380631356515,
+      "adjT": 69.63839285714286
+    },
+    {
+      "teamId": "288",
+      "team": "UT Arlington",
+      "conference": "wac",
+      "games": 26,
+      "adjO": 102.82198592518716,
+      "adjD": 99.76726579367971,
+      "adjEM": 3.0547201315074517,
+      "adjT": 68.45288461538462
+    },
+    {
+      "teamId": "2137",
+      "team": "FIU",
+      "conference": "cusa",
+      "games": 26,
+      "adjO": 109.0696313633704,
+      "adjD": 106.0410314712418,
+      "adjEM": 3.028599892128611,
+      "adjT": 73.94711538461539
+    },
+    {
+      "teamId": "720",
+      "team": "Coastal Carolina",
+      "conference": "sun-belt",
+      "games": 29,
+      "adjO": 104.47341043999756,
+      "adjD": 101.44521690428941,
+      "adjEM": 3.028193535708155,
+      "adjT": 70.4353448275862
+    },
+    {
+      "teamId": "130",
+      "team": "Brown",
+      "conference": "ivy-league",
+      "games": 24,
+      "adjO": 103.42673431762428,
+      "adjD": 100.6027598445675,
+      "adjEM": 2.8239744730567793,
+      "adjT": 68.36562500000001
+    },
+    {
+      "teamId": "2193",
+      "team": "Merrimack",
+      "conference": "maac",
+      "games": 28,
+      "adjO": 107.20185001651801,
+      "adjD": 104.42836147852368,
+      "adjEM": 2.773488537994325,
+      "adjT": 64.86428571428571
+    },
+    {
+      "teamId": "1719",
+      "team": "Wake Forest",
+      "conference": "acc",
+      "games": 26,
+      "adjO": 111.7662277536459,
+      "adjD": 109.00808069851944,
+      "adjEM": 2.7581470551264573,
+      "adjT": 70.61442307692307
+    },
+    {
+      "teamId": "1757",
+      "team": "Queens (NC)",
+      "conference": "asun",
+      "games": 28,
+      "adjO": 119.7547495247328,
+      "adjD": 117.02700334255563,
+      "adjEM": 2.727746182177171,
+      "adjT": 70.91875
+    },
+    {
+      "teamId": "393",
+      "team": "Florida St.",
+      "conference": "acc",
+      "games": 28,
+      "adjO": 110.04696224531303,
+      "adjD": 107.36139668312381,
+      "adjEM": 2.685565562189211,
+      "adjT": 72.43660714285714
+    },
+    {
+      "teamId": "302",
+      "team": "Weber St.",
+      "conference": "big-sky",
+      "games": 28,
+      "adjO": 112.87141152082418,
+      "adjD": 110.20044431614222,
+      "adjEM": 2.6709672046819577,
+      "adjT": 71.06696428571429
+    },
+    {
+      "teamId": "1371938",
+      "team": "St. Thomas (TX)",
+      "conference": "scac",
+      "games": 1,
+      "adjO": 105.36337670580767,
+      "adjD": 102.7208804646897,
+      "adjEM": 2.6424962411179678,
+      "adjT": 78.775
+    },
+    {
+      "teamId": "616",
+      "team": "Southern California",
+      "conference": "big-ten",
+      "games": 27,
+      "adjO": 109.67700507288257,
+      "adjD": 107.08645240816116,
+      "adjEM": 2.5905526647214003,
+      "adjT": 72.09722222222223
+    },
+    {
+      "teamId": "1285",
+      "team": "Oakland",
+      "conference": "horizon",
+      "games": 28,
+      "adjO": 115.52726543704892,
+      "adjD": 112.99805697847536,
+      "adjEM": 2.5292084585735637,
+      "adjT": 71.25714285714285
+    },
+    {
+      "teamId": "277",
+      "team": "Southern Ill.",
+      "conference": "mvc",
+      "games": 28,
+      "adjO": 102.7291355013891,
+      "adjD": 100.23740437879187,
+      "adjEM": 2.49173112259723,
+      "adjT": 71.02589285714285
+    },
+    {
+      "teamId": "1065",
+      "team": "Campbell",
+      "conference": "caa",
+      "games": 27,
+      "adjO": 111.72463618536486,
+      "adjD": 109.2714371117407,
+      "adjEM": 2.4531990736241625,
+      "adjT": 71.77037037037037
+    },
+    {
+      "teamId": "1350",
+      "team": "Towson",
+      "conference": "caa",
+      "games": 27,
+      "adjO": 105.45172438112702,
+      "adjD": 103.04171207767759,
+      "adjEM": 2.4100123034494345,
+      "adjT": 65.64351851851852
+    },
+    {
+      "teamId": "619",
+      "team": "Missouri St.",
+      "conference": "cusa",
+      "games": 27,
+      "adjO": 109.40023689027673,
+      "adjD": 107.04559549168174,
+      "adjEM": 2.3546413985949926,
+      "adjT": 68.7925925925926
+    },
+    {
+      "teamId": "945",
+      "team": "St. Bonaventure",
+      "conference": "atlantic-10",
+      "games": 26,
+      "adjO": 112.86713483541382,
+      "adjD": 110.55120333121604,
+      "adjEM": 2.3159315041977777,
+      "adjT": 68.32403846153846
+    },
+    {
+      "teamId": "1586",
+      "team": "Col. of Charleston",
+      "conference": "caa",
+      "games": 28,
+      "adjO": 108.77003421573926,
+      "adjD": 106.46564520917504,
+      "adjEM": 2.3043890065642216,
+      "adjT": 69.4125
+    },
+    {
+      "teamId": "2307",
+      "team": "Rhode Island",
+      "conference": "atlantic-10",
+      "games": 26,
+      "adjO": 106.11549730814195,
+      "adjD": 103.83793138552377,
+      "adjEM": 2.27756592261818,
+      "adjT": 66.61826923076923
+    },
+    {
+      "teamId": "284",
+      "team": "Stony Brook",
+      "conference": "caa",
+      "games": 27,
+      "adjO": 106.8618881118881,
+      "adjD": 104.60388968245246,
+      "adjEM": 2.257998429435645,
+      "adjT": 67.7925925925926
+    },
+    {
+      "teamId": "70",
+      "team": "Purdue Fort Wayne",
+      "conference": "horizon",
+      "games": 28,
+      "adjO": 111.92662868404099,
+      "adjD": 109.6739765710365,
+      "adjEM": 2.252652113004487,
+      "adjT": 70.67767857142857
+    },
+    {
+      "teamId": "902",
+      "team": "Morehead St.",
+      "conference": "ovc",
+      "games": 29,
+      "adjO": 111.09981703598292,
+      "adjD": 108.89914969848358,
+      "adjEM": 2.2006673374993397,
+      "adjT": 67.84827586206896
+    },
+    {
+      "teamId": "932",
+      "team": "Providence",
+      "conference": "big-east",
+      "games": 26,
+      "adjO": 116.04719080885664,
+      "adjD": 113.94086319617274,
+      "adjEM": 2.1063276126838986,
+      "adjT": 74.7375
+    },
+    {
+      "teamId": "547",
+      "team": "Monmouth",
+      "conference": "caa",
+      "games": 28,
+      "adjO": 105.47211701710853,
+      "adjD": 103.44694085612151,
+      "adjEM": 2.025176160987016,
+      "adjT": 68.36607142857143
+    },
+    {
+      "teamId": "889",
+      "team": "Presbyterian",
+      "conference": "big-south",
+      "games": 28,
+      "adjO": 108.23215476984656,
+      "adjD": 106.21589245308132,
+      "adjEM": 2.0162623167652356,
+      "adjT": 66.91964285714286
+    },
+    {
+      "teamId": "922",
+      "team": "Oklahoma St.",
+      "conference": "big-12",
+      "games": 28,
+      "adjO": 111.03226416879552,
+      "adjD": 109.03050798848035,
+      "adjEM": 2.0017561803151693,
+      "adjT": 75.49285714285715
+    },
+    {
+      "teamId": "2602",
+      "team": "UNLV",
+      "conference": "mountain-west",
+      "games": 27,
+      "adjO": 111.72403076684019,
+      "adjD": 109.76444014198128,
+      "adjEM": 1.9595906248589046,
+      "adjT": 71.50555555555556
+    },
+    {
+      "teamId": "2225",
+      "team": "Boston U.",
+      "conference": "patriot",
+      "games": 28,
+      "adjO": 115.97980127056525,
+      "adjD": 114.03807628885649,
+      "adjEM": 1.9417249817087594,
+      "adjT": 65.775
+    },
+    {
+      "teamId": "670",
+      "team": "UIW",
+      "conference": "southland",
+      "games": 28,
+      "adjO": 112.04272363150866,
+      "adjD": 110.2732637068699,
+      "adjEM": 1.7694599246387668,
+      "adjT": 66.875
+    },
+    {
+      "teamId": "899",
+      "team": "Montana",
+      "conference": "big-sky",
+      "games": 27,
+      "adjO": 108.35957816604159,
+      "adjD": 106.60225020020742,
+      "adjEM": 1.7573279658341647,
+      "adjT": 70.85462962962963
+    },
+    {
+      "teamId": "1264",
+      "team": "Omaha",
+      "conference": "summit-league",
+      "games": 28,
+      "adjO": 113.1286910247258,
+      "adjD": 111.38385609455159,
+      "adjEM": 1.744834930174207,
+      "adjT": 68.79017857142857
+    },
+    {
+      "teamId": "1278",
+      "team": "North Dakota",
+      "conference": "summit-league",
+      "games": 30,
+      "adjO": 111.18492858159729,
+      "adjD": 109.51710761297649,
+      "adjEM": 1.667820968620802,
+      "adjT": 70.24333333333334
+    },
+    {
+      "teamId": "33",
+      "team": "Denver",
+      "conference": "summit-league",
+      "games": 29,
+      "adjO": 120.62546537602384,
+      "adjD": 119.04404779761013,
+      "adjEM": 1.5814175784137063,
+      "adjT": 69.46551724137932
+    },
+    {
+      "teamId": "1450",
+      "team": "Central Conn. St.",
+      "conference": "nec",
+      "games": 26,
+      "adjO": 109.89266703510864,
+      "adjD": 108.3979252870214,
+      "adjEM": 1.4947417480872502,
+      "adjT": 66.11346153846154
+    },
+    {
+      "teamId": "637",
+      "team": "Valparaiso",
+      "conference": "mvc",
+      "games": 29,
+      "adjO": 106.65433668554695,
+      "adjD": 105.22138733503155,
+      "adjEM": 1.4329493505154005,
+      "adjT": 67.1198275862069
+    },
+    {
+      "teamId": "2693",
+      "team": "Western Caro.",
+      "conference": "socon",
+      "games": 26,
+      "adjO": 113.08176618246162,
+      "adjD": 111.77666800392878,
+      "adjEM": 1.3050981785328446,
+      "adjT": 70.09903846153847
+    },
+    {
+      "teamId": "554",
+      "team": "UNC Asheville",
+      "conference": "big-south",
+      "games": 28,
+      "adjO": 106.84465384112028,
+      "adjD": 105.60260073932307,
+      "adjEM": 1.242053101797211,
+      "adjT": 68.22321428571429
+    },
+    {
+      "teamId": "2231",
+      "team": "Green Bay",
+      "conference": "horizon",
+      "games": 29,
+      "adjO": 114.40943238731218,
+      "adjD": 113.18728803572131,
+      "adjEM": 1.2221443515908703,
+      "adjT": 66.09655172413792
+    },
+    {
+      "teamId": "371",
+      "team": "Dartmouth",
+      "conference": "ivy-league",
+      "games": 24,
+      "adjO": 108.44375779903737,
+      "adjD": 107.23125093186223,
+      "adjEM": 1.2125068671751364,
+      "adjT": 70.12083333333334
+    },
+    {
+      "teamId": "1058",
+      "team": "CSUN",
+      "conference": "big-west",
+      "games": 27,
+      "adjO": 107.18207775093344,
+      "adjD": 106.00489442551988,
+      "adjEM": 1.1771833254135657,
+      "adjT": 75.88333333333333
+    },
+    {
+      "teamId": "37",
+      "team": "Drake",
+      "conference": "mvc",
+      "games": 28,
+      "adjO": 110.12158290095253,
+      "adjD": 108.99182561307903,
+      "adjEM": 1.1297572878735025,
+      "adjT": 69.17678571428571
+    },
+    {
+      "teamId": "1804",
+      "team": "Ga. Southern",
+      "conference": "sun-belt",
+      "games": 29,
+      "adjO": 110.26120728443887,
+      "adjD": 109.13382109983478,
+      "adjEM": 1.1273861846040916,
+      "adjT": 72.8051724137931
+    },
+    {
+      "teamId": "2666",
+      "team": "Syracuse",
+      "conference": "acc",
+      "games": 27,
+      "adjO": 108.20741529654529,
+      "adjD": 107.13713767148883,
+      "adjEM": 1.0702776250564625,
+      "adjT": 69.55092592592592
+    },
+    {
+      "teamId": "2286",
+      "team": "Northwestern",
+      "conference": "big-ten",
+      "games": 27,
+      "adjO": 111.43703168225987,
+      "adjD": 110.47978048172067,
+      "adjEM": 0.9572512005392042,
+      "adjT": 66.60462962962963
+    },
+    {
+      "teamId": "1802",
+      "team": "Georgetown",
+      "conference": "big-east",
+      "games": 27,
+      "adjO": 109.0929015643407,
+      "adjD": 108.22481245131932,
+      "adjEM": 0.8680891130213837,
+      "adjT": 67.59444444444445
+    },
+    {
+      "teamId": "2289",
+      "team": "Ohio",
+      "conference": "mac",
+      "games": 27,
+      "adjO": 109.19328527074671,
+      "adjD": 108.38580498985695,
+      "adjEM": 0.807480280889763,
+      "adjT": 70.38148148148149
+    },
+    {
+      "teamId": "1133",
+      "team": "Lamar University",
+      "conference": "southland",
+      "games": 28,
+      "adjO": 105.2758727133635,
+      "adjD": 104.49185926135065,
+      "adjEM": 0.784013452012843,
+      "adjT": 66.52589285714285
+    },
+    {
+      "teamId": "625",
+      "team": "Chattanooga",
+      "conference": "socon",
+      "games": 28,
+      "adjO": 111.68425786313254,
+      "adjD": 110.97132672852126,
+      "adjEM": 0.7129311346112814,
+      "adjT": 67.50535714285715
+    },
+    {
+      "teamId": "1820",
+      "team": "James Madison",
+      "conference": "sun-belt",
+      "games": 28,
+      "adjO": 110.33601363224878,
+      "adjD": 109.64958994568113,
+      "adjEM": 0.6864236865676503,
+      "adjT": 67.06785714285715
+    },
+    {
+      "teamId": "1819",
+      "team": "Iona",
+      "conference": "maac",
+      "games": 29,
+      "adjO": 105.92410592410593,
+      "adjD": 105.25143260269564,
+      "adjEM": 0.6726733214102865,
+      "adjT": 69.47068965517242
+    },
+    {
+      "teamId": "1040",
+      "team": "USC Upstate",
+      "conference": "big-south",
+      "games": 28,
+      "adjO": 104.76723227049536,
+      "adjD": 104.16038589086524,
+      "adjEM": 0.6068463796301131,
+      "adjT": 71.82589285714286
+    },
+    {
+      "teamId": "2433",
+      "team": "DePaul",
+      "conference": "big-east",
+      "games": 26,
+      "adjO": 104.26889802864842,
+      "adjD": 103.70096330340502,
+      "adjEM": 0.5679347252434042,
+      "adjT": 67.79807692307692
+    },
+    {
+      "teamId": "962",
+      "team": "Tennessee Tech",
+      "conference": "ovc",
+      "games": 28,
+      "adjO": 106.8996530900681,
+      "adjD": 106.51389227864199,
+      "adjEM": 0.38576081142610974,
+      "adjT": 69.49107142857143
+    },
+    {
+      "teamId": "2654",
+      "team": "Southern Miss.",
+      "conference": "sun-belt",
+      "games": 29,
+      "adjO": 104.46089412681405,
+      "adjD": 104.10805412449608,
+      "adjEM": 0.35284000231797563,
+      "adjT": 70.80689655172414
+    },
+    {
+      "teamId": "65",
+      "team": "Idaho St.",
+      "conference": "big-sky",
+      "games": 29,
+      "adjO": 112.84011284011284,
+      "adjD": 112.49359959037379,
+      "adjEM": 0.34651324973904707,
+      "adjT": 66.31293103448276
+    },
+    {
+      "teamId": "2148",
+      "team": "Hampton",
+      "conference": "caa",
+      "games": 27,
+      "adjO": 103.6756983826927,
+      "adjD": 103.37961093395347,
+      "adjEM": 0.2960874487392289,
+      "adjT": 66.125
+    },
+    {
+      "teamId": "1457",
+      "team": "Creighton",
+      "conference": "big-east",
+      "games": 28,
+      "adjO": 110.04697760128734,
+      "adjD": 109.82546613628412,
+      "adjEM": 0.22151146500321772,
+      "adjT": 68.80178571428571
+    },
+    {
+      "teamId": "731",
+      "team": "Drexel",
+      "conference": "caa",
+      "games": 28,
+      "adjO": 103.63996448815134,
+      "adjD": 103.4741246541549,
+      "adjEM": 0.16583983399642932,
+      "adjT": 65.37053571428571
+    },
+    {
+      "teamId": "452",
+      "team": "UAlbany",
+      "conference": "america-east",
+      "games": 27,
+      "adjO": 109.73441493499278,
+      "adjD": 109.65839546010905,
+      "adjEM": 0.0760194748837364,
+      "adjT": 66.65925925925926
+    },
+    {
+      "teamId": "1389",
+      "team": "FGCU",
+      "conference": "asun",
+      "games": 28,
+      "adjO": 111.37350498971585,
+      "adjD": 111.47565903649561,
+      "adjEM": -0.10215404677975926,
+      "adjT": 70.32321428571429
+    },
+    {
+      "teamId": "1764",
+      "team": "Fresno St.",
+      "conference": "mountain-west",
+      "games": 27,
+      "adjO": 105.30922981020466,
+      "adjD": 105.45001722173649,
+      "adjEM": -0.14078741153183216,
+      "adjT": 69.81203703703703
+    },
+    {
+      "teamId": "1718",
+      "team": "Wagner",
+      "conference": "nec",
+      "games": 26,
+      "adjO": 105.95386887853653,
+      "adjD": 106.15404244460511,
+      "adjEM": -0.20017356606858527,
+      "adjT": 67.7
+    },
+    {
+      "teamId": "953",
+      "team": "South Carolina",
+      "conference": "sec",
+      "games": 28,
+      "adjO": 109.58552217527004,
+      "adjD": 109.83781559079627,
+      "adjEM": -0.25229341552622486,
+      "adjT": 69.51517857142856
+    },
+    {
+      "teamId": "2359",
+      "team": "Washington St.",
+      "conference": "wcc",
+      "games": 28,
+      "adjO": 111.47558054774551,
+      "adjD": 111.79867986798679,
+      "adjEM": -0.3230993202412833,
+      "adjT": 68.59285714285714
+    },
+    {
+      "teamId": "200",
+      "team": "Charlotte",
+      "conference": "american",
+      "games": 26,
+      "adjO": 111.37643347778663,
+      "adjD": 111.79851695844852,
+      "adjEM": -0.4220834806618825,
+      "adjT": 65.2326923076923
+    },
+    {
+      "teamId": "1105",
+      "team": "FDU",
+      "conference": "nec",
+      "games": 28,
+      "adjO": 106.3535146513045,
+      "adjD": 106.83359991175337,
+      "adjEM": -0.4800852604488739,
+      "adjT": 64.475
+    },
+    {
+      "teamId": "1462",
+      "team": "Detroit Mercy",
+      "conference": "horizon",
+      "games": 26,
+      "adjO": 110.66653921260703,
+      "adjD": 111.14763078608601,
+      "adjEM": -0.48109157347897735,
+      "adjT": 70.4125
+    },
+    {
+      "teamId": "2644",
+      "team": "San Francisco",
+      "conference": "wcc",
+      "games": 29,
+      "adjO": 109.53071092357219,
+      "adjD": 110.07769740115589,
+      "adjEM": -0.546986477583701,
+      "adjT": 67.21465517241379
+    },
+    {
+      "teamId": "1766",
+      "team": "Cal St. Fullerton",
+      "conference": "big-west",
+      "games": 28,
+      "adjO": 108.47024288622697,
+      "adjD": 109.025347332697,
+      "adjEM": -0.5551044464700254,
+      "adjT": 75.43214285714285
+    },
+    {
+      "teamId": "1307",
+      "team": "Rice",
+      "conference": "american",
+      "games": 27,
+      "adjO": 108.86520037781675,
+      "adjD": 109.63123058219641,
+      "adjEM": -0.7660302043796605,
+      "adjT": 68.62037037037037
+    },
+    {
+      "teamId": "99",
+      "team": "Memphis",
+      "conference": "american",
+      "games": 27,
+      "adjO": 103.50886259108056,
+      "adjD": 104.27609820629546,
+      "adjEM": -0.7672356152149007,
+      "adjT": 71.67037037037036
+    },
+    {
+      "teamId": "507",
+      "team": "Xavier",
+      "conference": "big-east",
+      "games": 26,
+      "adjO": 108.66904369112873,
+      "adjD": 109.76384623530657,
+      "adjEM": -1.0948025441778384,
+      "adjT": 72.27307692307691
+    },
+    {
+      "teamId": "560",
+      "team": "N.C. A&T",
+      "conference": "caa",
+      "games": 26,
+      "adjO": 107.82042797264504,
+      "adjD": 108.91620665446085,
+      "adjEM": -1.0957786818158155,
+      "adjT": 69.73846153846154
+    },
+    {
+      "teamId": "1269",
+      "team": "New Haven",
+      "conference": "nec",
+      "games": 28,
+      "adjO": 102.01237527175427,
+      "adjD": 103.18985931188188,
+      "adjEM": -1.1774840401276094,
+      "adjT": 64.06785714285715
+    },
+    {
+      "teamId": "790",
+      "team": "LMU (CA)",
+      "conference": "wcc",
+      "games": 28,
+      "adjO": 104.66887713952863,
+      "adjD": 105.90105048260179,
+      "adjEM": -1.232173343073157,
+      "adjT": 69.74375
+    },
+    {
+      "teamId": "2213",
+      "team": "Arizona St.",
+      "conference": "big-12",
+      "games": 28,
+      "adjO": 110.0372495721333,
+      "adjD": 111.27342333266171,
+      "adjEM": -1.236173760528402,
+      "adjT": 70.95
+    },
+    {
+      "teamId": "771",
+      "team": "Kansas St.",
+      "conference": "big-12",
+      "games": 27,
+      "adjO": 109.01773361841278,
+      "adjD": 110.3042050016991,
+      "adjEM": -1.286471383286326,
+      "adjT": 73.62037037037037
+    },
+    {
+      "teamId": "746",
+      "team": "Grambling",
+      "conference": "swac",
+      "games": 26,
+      "adjO": 101.30786796761471,
+      "adjD": 102.67562210966747,
+      "adjEM": -1.3677541420527604,
+      "adjT": 69.47596153846153
+    },
+    {
+      "teamId": "42",
+      "team": "Eastern Ky.",
+      "conference": "asun",
+      "games": 29,
+      "adjO": 112.69780007719025,
+      "adjD": 114.20105408884463,
+      "adjEM": -1.503254011654377,
+      "adjT": 71.47586206896553
+    },
+    {
+      "teamId": "2023",
+      "team": "Tulane",
+      "conference": "american",
+      "games": 26,
+      "adjO": 105.62642337194193,
+      "adjD": 107.13185674684289,
+      "adjEM": -1.50543337490096,
+      "adjT": 68.82019230769231
+    },
+    {
+      "teamId": "1507",
+      "team": "Indiana St.",
+      "conference": "mvc",
+      "games": 28,
+      "adjO": 104.77580393538321,
+      "adjD": 106.2878989277531,
+      "adjEM": -1.5120949923698959,
+      "adjT": 70.96785714285714
+    },
+    {
+      "teamId": "2166",
+      "team": "Jacksonville",
+      "conference": "asun",
+      "games": 28,
+      "adjO": 108.38695809879495,
+      "adjD": 109.91978826261916,
+      "adjEM": -1.5328301638242152,
+      "adjT": 66.46160714285715
+    },
+    {
+      "teamId": "1560",
+      "team": "Bellarmine",
+      "conference": "asun",
+      "games": 27,
+      "adjO": 120.11912182284092,
+      "adjD": 121.70385395537527,
+      "adjEM": -1.5847321325343415,
+      "adjT": 66.84722222222223
+    },
+    {
+      "teamId": "241",
+      "team": "Prairie View",
+      "conference": "swac",
+      "games": 27,
+      "adjO": 105.72881563629679,
+      "adjD": 107.34296667649662,
+      "adjEM": -1.614151040199829,
+      "adjT": 75.56018518518519
+    },
+    {
+      "teamId": "2649",
+      "team": "South Dakota",
+      "conference": "summit-league",
+      "games": 28,
+      "adjO": 110.45151119540853,
+      "adjD": 112.06683474220178,
+      "adjEM": -1.615323546793249,
+      "adjT": 72.49464285714285
+    },
+    {
+      "teamId": "839",
+      "team": "Bethune-Cookman",
+      "conference": "swac",
+      "games": 27,
+      "adjO": 104.6713475140555,
+      "adjD": 106.31725274159503,
+      "adjEM": -1.6459052275395294,
+      "adjT": 71.47592592592592
+    },
+    {
+      "teamId": "807",
+      "team": "Mississippi St.",
+      "conference": "sec",
+      "games": 27,
+      "adjO": 108.66939111213921,
+      "adjD": 110.31533388293488,
+      "adjEM": -1.6459427707956706,
+      "adjT": 72.05
+    },
+    {
+      "teamId": "1144",
+      "team": "Loyola Maryland",
+      "conference": "patriot",
+      "games": 28,
+      "adjO": 108.5206666919393,
+      "adjD": 110.23582028867655,
+      "adjEM": -1.7151535967372524,
+      "adjT": 70.65803571428572
+    },
+    {
+      "teamId": "16381",
+      "team": "Fla. Memorial",
+      "conference": null,
+      "games": 1,
+      "adjO": 83.00536672629696,
+      "adjD": 85.16678495386799,
+      "adjEM": -2.1614182275710334,
+      "adjT": 69.875
+    },
+    {
+      "teamId": "450",
+      "team": "Alabama A&M",
+      "conference": "swac",
+      "games": 27,
+      "adjO": 104.08739413280964,
+      "adjD": 106.34807807972004,
+      "adjEM": -2.2606839469104045,
+      "adjT": 67.89166666666667
+    },
+    {
+      "teamId": "426",
+      "team": "Lehigh",
+      "conference": "patriot",
+      "games": 28,
+      "adjO": 104.60956663941128,
+      "adjD": 106.96854317328086,
+      "adjEM": -2.35897653386958,
+      "adjT": 69.88571428571429
+    },
+    {
+      "teamId": "1281",
+      "team": "Notre Dame",
+      "conference": "acc",
+      "games": 27,
+      "adjO": 108.49095451176325,
+      "adjD": 110.92150170648465,
+      "adjEM": -2.430547194721399,
+      "adjT": 67.4574074074074
+    },
+    {
+      "teamId": "287",
+      "team": "Texas Southern",
+      "conference": "swac",
+      "games": 25,
+      "adjO": 105.21946089555543,
+      "adjD": 107.72132238739738,
+      "adjEM": -2.50186149184195,
+      "adjT": 72.268
+    },
+    {
+      "teamId": "2632",
+      "team": "Sacred Heart",
+      "conference": "maac",
+      "games": 30,
+      "adjO": 109.22324247463426,
+      "adjD": 111.82274956111145,
+      "adjEM": -2.599507086477189,
+      "adjT": 69.155
+    },
+    {
+      "teamId": "2517",
+      "team": "Ole Miss",
+      "conference": "sec",
+      "games": 26,
+      "adjO": 107.71285945299867,
+      "adjD": 110.3813738478451,
+      "adjEM": -2.668514394846426,
+      "adjT": 68.3798076923077
+    },
+    {
+      "teamId": "813",
+      "team": "Abilene Christian",
+      "conference": "wac",
+      "games": 26,
+      "adjO": 101.13343995549684,
+      "adjD": 103.84695652173912,
+      "adjEM": -2.7135165662422764,
+      "adjT": 69.13942307692308
+    },
+    {
+      "teamId": "1752",
+      "team": "North Greenville",
+      "conference": "conference-carolinas",
+      "games": 2,
+      "adjO": 108.6401749908859,
+      "adjD": 111.50083071810965,
+      "adjEM": -2.860655727223758,
+      "adjT": 68.575
+    },
+    {
+      "teamId": "1137",
+      "team": "Le Moyne",
+      "conference": "nec",
+      "games": 28,
+      "adjO": 104.6100885023956,
+      "adjD": 107.5629385059843,
+      "adjEM": -2.9528500035887078,
+      "adjT": 69.50982142857143
+    },
+    {
+      "teamId": "796",
+      "team": "Marquette",
+      "conference": "big-east",
+      "games": 27,
+      "adjO": 106.74127922179804,
+      "adjD": 109.71696882744229,
+      "adjEM": -2.9756896056442486,
+      "adjT": 70.81851851851852
+    },
+    {
+      "teamId": "1446",
+      "team": "Capital",
+      "conference": "oac",
+      "games": 1,
+      "adjO": 98.93992932862191,
+      "adjD": 102.01149425287358,
+      "adjEM": -3.0715649242516605,
+      "adjT": 70.75
+    },
+    {
+      "teamId": "201",
+      "team": "UNC Greensboro",
+      "conference": "socon",
+      "games": 29,
+      "adjO": 112.5312106004796,
+      "adjD": 115.69473554432253,
+      "adjEM": -3.16352494384293,
+      "adjT": 69.74310344827586
+    },
+    {
+      "teamId": "2177",
+      "team": "UMass Lowell",
+      "conference": "america-east",
+      "games": 27,
+      "adjO": 107.66938102081005,
+      "adjD": 110.86209868848546,
+      "adjEM": -3.19271766767541,
+      "adjT": 69.58888888888889
+    },
+    {
+      "teamId": "1134",
+      "team": "Lane",
+      "conference": "siac",
+      "games": 1,
+      "adjO": 119.87156617909382,
+      "adjD": 123.11901504787963,
+      "adjEM": -3.24744886878581,
+      "adjT": 70.075
+    },
+    {
+      "teamId": "223",
+      "team": "Old Dominion",
+      "conference": "sun-belt",
+      "games": 29,
+      "adjO": 106.19983997284388,
+      "adjD": 109.67481563917868,
+      "adjEM": -3.4749756663347995,
+      "adjT": 71.10862068965517
+    },
+    {
+      "teamId": "773",
+      "team": "Kean",
+      "conference": "njac",
+      "games": 1,
+      "adjO": 90.52333804809052,
+      "adjD": 94.05058781617386,
+      "adjEM": -3.527249768083337,
+      "adjT": 70.7
+    },
+    {
+      "teamId": "350",
+      "team": "Cal Poly",
+      "conference": "big-west",
+      "games": 27,
+      "adjO": 107.45993871198264,
+      "adjD": 111.12327434166515,
+      "adjEM": -3.663335629682507,
+      "adjT": 76.44537037037037
+    },
+    {
+      "teamId": "1099",
+      "team": "Eastern Mich.",
+      "conference": "mac",
+      "games": 28,
+      "adjO": 103.29029571012079,
+      "adjD": 107.02530343550708,
+      "adjEM": -3.7350077253862963,
+      "adjT": 68.6
+    },
+    {
+      "teamId": "561",
+      "team": "N.C. Central",
+      "conference": "meac",
+      "games": 25,
+      "adjO": 105.04207766624663,
+      "adjD": 108.78829762727482,
+      "adjEM": -3.7462199610281885,
+      "adjT": 69.039
+    },
+    {
+      "teamId": "2326",
+      "team": "San Diego",
+      "conference": "wcc",
+      "games": 29,
+      "adjO": 106.71235391299028,
+      "adjD": 110.63612115897547,
+      "adjEM": -3.9237672459851893,
+      "adjT": 70.44396551724138
+    },
+    {
+      "teamId": "903",
+      "team": "Mount St. Mary's",
+      "conference": "maac",
+      "games": 29,
+      "adjO": 99.96973670937153,
+      "adjD": 103.91250536738148,
+      "adjEM": -3.9427686580099532,
+      "adjT": 68.36551724137931
+    },
+    {
+      "teamId": "1658",
+      "team": "Pittsburgh",
+      "conference": "acc",
+      "games": 26,
+      "adjO": 107.02085051242784,
+      "adjD": 110.96808557858759,
+      "adjEM": -3.947235066159749,
+      "adjT": 65.3
+    },
+    {
+      "teamId": "127",
+      "team": "Boston College",
+      "conference": "acc",
+      "games": 26,
+      "adjO": 100.64412238325282,
+      "adjD": 104.62765118380106,
+      "adjEM": -3.9835288005482425,
+      "adjT": 66.87692307692308
+    },
+    {
+      "teamId": "2279",
+      "team": "Nicholls",
+      "conference": "southland",
+      "games": 29,
+      "adjO": 105.6922694506587,
+      "adjD": 109.7685542738982,
+      "adjEM": -4.076284823239504,
+      "adjT": 69.36206896551724
+    },
+    {
+      "teamId": "1964",
+      "team": "Oregon St.",
+      "conference": "wcc",
+      "games": 28,
+      "adjO": 105.49707913611626,
+      "adjD": 109.66833957354152,
+      "adjEM": -4.171260437425261,
+      "adjT": 67.09732142857142
+    },
+    {
+      "teamId": "2611",
+      "team": "Northern Ariz.",
+      "conference": "big-sky",
+      "games": 27,
+      "adjO": 108.9226848389152,
+      "adjD": 113.15814857174354,
+      "adjEM": -4.235463732828336,
+      "adjT": 66.85000000000001
+    },
+    {
+      "teamId": "1057",
+      "team": "Long Beach St.",
+      "conference": "big-west",
+      "games": 28,
+      "adjO": 103.22645240419514,
+      "adjD": 107.46477640675593,
+      "adjEM": -4.238324002560788,
+      "adjT": 71.34107142857142
+    },
+    {
+      "teamId": "1476",
+      "team": "Eastern Wash.",
+      "conference": "big-sky",
+      "games": 27,
+      "adjO": 110.48967613733566,
+      "adjD": 114.78404651100769,
+      "adjEM": -4.294370373672024,
+      "adjT": 70.36018518518519
+    },
+    {
+      "teamId": "1473",
+      "team": "Eastern Ill.",
+      "conference": "ovc",
+      "games": 29,
+      "adjO": 99.53494298273556,
+      "adjD": 103.8498250079542,
+      "adjEM": -4.314882025218637,
+      "adjT": 67.65948275862068
+    },
+    {
+      "teamId": "216",
+      "team": "Northwestern St.",
+      "conference": "southland",
+      "games": 28,
+      "adjO": 104.84695249878959,
+      "adjD": 109.21372088922648,
+      "adjEM": -4.366768390436889,
+      "adjT": 66.38928571428572
+    },
+    {
+      "teamId": "2233",
+      "team": "Milwaukee",
+      "conference": "horizon",
+      "games": 29,
+      "adjO": 110.34241614425935,
+      "adjD": 114.74637231799578,
+      "adjEM": -4.403956173736432,
+      "adjT": 69.03275862068966
+    },
+    {
+      "teamId": "649",
+      "team": "West Ga.",
+      "conference": "asun",
+      "games": 27,
+      "adjO": 108.11793267295884,
+      "adjD": 112.54713301261215,
+      "adjEM": -4.429200339653306,
+      "adjT": 71.3212962962963
+    },
+    {
+      "teamId": "1949",
+      "team": "Morgan St.",
+      "conference": "meac",
+      "games": 24,
+      "adjO": 105.33057730938309,
+      "adjD": 109.92600002942345,
+      "adjEM": -4.595422720040361,
+      "adjT": 71.56041666666667
+    },
+    {
+      "teamId": "52",
+      "team": "Georgia Tech",
+      "conference": "acc",
+      "games": 27,
+      "adjO": 103.50396021838874,
+      "adjD": 108.13300410680245,
+      "adjEM": -4.629043888413705,
+      "adjT": 72.2462962962963
+    },
+    {
+      "teamId": "1297",
+      "team": "Princeton",
+      "conference": "ivy-league",
+      "games": 26,
+      "adjO": 106.07513163522661,
+      "adjD": 110.73029264434484,
+      "adjEM": -4.655161009118231,
+      "adjT": 65.19326923076923
+    },
+    {
+      "teamId": "1070",
+      "team": "Central Mich.",
+      "conference": "mac",
+      "games": 27,
+      "adjO": 105.66519835513621,
+      "adjD": 110.48875117520095,
+      "adjEM": -4.823552820064734,
+      "adjT": 69.57685185185186
+    },
+    {
+      "teamId": "907",
+      "team": "New Hampshire",
+      "conference": "america-east",
+      "games": 25,
+      "adjO": 100.77285958044766,
+      "adjD": 105.63907609008697,
+      "adjEM": -4.866216509639315,
+      "adjT": 69.741
+    },
+    {
+      "teamId": "1109",
+      "team": "Georgia St.",
+      "conference": "sun-belt",
+      "games": 29,
+      "adjO": 102.11582397933843,
+      "adjD": 106.99833668478935,
+      "adjEM": -4.882512705450921,
+      "adjT": 69.42758620689655
+    },
+    {
+      "teamId": "814",
+      "team": "Alabama St.",
+      "conference": "swac",
+      "games": 28,
+      "adjO": 102.06735950254549,
+      "adjD": 107.11775802335185,
+      "adjEM": -5.050398520806368,
+      "adjT": 72.08125
+    },
+    {
+      "teamId": "1019",
+      "team": "Ark.-Pine Bluff",
+      "conference": "swac",
+      "games": 27,
+      "adjO": 107.08126204727604,
+      "adjD": 112.30346260563292,
+      "adjEM": -5.2222005583568745,
+      "adjT": 73.01481481481481
+    },
+    {
+      "teamId": "2091",
+      "team": "Sacramento St.",
+      "conference": "big-sky",
+      "games": 27,
+      "adjO": 107.60802798009301,
+      "adjD": 112.86148589231426,
+      "adjEM": -5.253457912221251,
+      "adjT": 73.86203703703704
+    },
+    {
+      "teamId": "2717",
+      "team": "IU Indy",
+      "conference": "horizon",
+      "games": 28,
+      "adjO": 108.76486562412211,
+      "adjD": 114.08208001688021,
+      "adjEM": -5.317214392758103,
+      "adjT": 76.27857142857144
+    },
+    {
+      "teamId": "278",
+      "team": "Southern Utah",
+      "conference": "wac",
+      "games": 28,
+      "adjO": 104.76856452345025,
+      "adjD": 110.09400372072393,
+      "adjEM": -5.325439197273681,
+      "adjT": 72.77946428571428
+    },
+    {
+      "teamId": "926",
+      "team": "Oregon",
+      "conference": "big-ten",
+      "games": 27,
+      "adjO": 105.94236867503102,
+      "adjD": 111.31024326539685,
+      "adjEM": -5.36787459036583,
+      "adjT": 67.1574074074074
+    },
+    {
+      "teamId": "395",
+      "team": "Franklin Pierce",
+      "conference": "ne10",
+      "games": 1,
+      "adjO": 92.48554913294798,
+      "adjD": 97.8835978835979,
+      "adjEM": -5.39804875064992,
+      "adjT": 77.85
+    },
+    {
+      "teamId": "1389413",
+      "team": "Bloomfield Col.",
+      "conference": null,
+      "games": 1,
+      "adjO": 108.58143607705779,
+      "adjD": 114.28571428571428,
+      "adjEM": -5.70427820865649,
+      "adjT": 85.65
+    },
+    {
+      "teamId": "2604",
+      "team": "New Orleans",
+      "conference": "southland",
+      "games": 28,
+      "adjO": 106.45369188581249,
+      "adjD": 112.16425685462352,
+      "adjEM": -5.710564968811028,
+      "adjT": 70.65446428571428
+    },
+    {
+      "teamId": "2527",
+      "team": "Little Rock",
+      "conference": "ovc",
+      "games": 29,
+      "adjO": 102.62096774193547,
+      "adjD": 108.70689763938482,
+      "adjEM": -6.085929897449347,
+      "adjT": 68.41379310344827
+    },
+    {
+      "teamId": "2017",
+      "team": "UTEP",
+      "conference": "cusa",
+      "games": 26,
+      "adjO": 101.97505048624338,
+      "adjD": 108.10966312821841,
+      "adjEM": -6.134612641975039,
+      "adjT": 67.13557692307693
+    },
+    {
+      "teamId": "2354",
+      "team": "Utah",
+      "conference": "big-12",
+      "games": 27,
+      "adjO": 107.76858620551405,
+      "adjD": 113.90906645143932,
+      "adjEM": -6.140480245925261,
+      "adjT": 69.28425925925926
+    },
+    {
+      "teamId": "94",
+      "team": "Manhattan",
+      "conference": "maac",
+      "games": 29,
+      "adjO": 108.61871292557699,
+      "adjD": 115.12117362823481,
+      "adjEM": -6.502460702657828,
+      "adjT": 69.17586206896551
+    },
+    {
+      "teamId": "1967",
+      "team": "Penn St.",
+      "conference": "big-ten",
+      "games": 27,
+      "adjO": 110.65786952117611,
+      "adjD": 117.3368132017508,
+      "adjEM": -6.67894368057469,
+      "adjT": 67.64259259259259
+    },
+    {
+      "teamId": "2275",
+      "team": "NJIT",
+      "conference": "america-east",
+      "games": 29,
+      "adjO": 100.29046008374306,
+      "adjD": 107.02475197915624,
+      "adjEM": -6.734291895413179,
+      "adjT": 68.55948275862069
+    },
+    {
+      "teamId": "1461",
+      "team": "Delaware",
+      "conference": "cusa",
+      "games": 26,
+      "adjO": 104.19913612682015,
+      "adjD": 111.19308289314486,
+      "adjEM": -6.9939467663247115,
+      "adjT": 64.7798076923077
+    },
+    {
+      "teamId": "1481",
+      "team": "Florida A&M",
+      "conference": "swac",
+      "games": 25,
+      "adjO": 99.29380337326116,
+      "adjD": 106.51780755592897,
+      "adjEM": -7.224004182667812,
+      "adjT": 70.377
+    },
+    {
+      "teamId": "1778",
+      "team": "Cleveland St.",
+      "conference": "horizon",
+      "games": 28,
+      "adjO": 112.55270434271272,
+      "adjD": 119.8580496826111,
+      "adjEM": -7.3053453398983805,
+      "adjT": 71.36339285714286
+    },
+    {
+      "teamId": "1691",
+      "team": "Southeastern La.",
+      "conference": "southland",
+      "games": 28,
+      "adjO": 98.58849077090119,
+      "adjD": 105.89768654284784,
+      "adjEM": -7.309195771946648,
+      "adjT": 65.78571428571429
+    },
+    {
+      "teamId": "406",
+      "team": "Holy Cross",
+      "conference": "patriot",
+      "games": 28,
+      "adjO": 103.02035723488805,
+      "adjD": 110.33920195771871,
+      "adjEM": -7.3188447228306615,
+      "adjT": 65.83303571428571
+    },
+    {
+      "teamId": "2331",
+      "team": "Southern Ind.",
+      "conference": "ovc",
+      "games": 29,
+      "adjO": 98.41332608373288,
+      "adjD": 105.86473671075618,
+      "adjEM": -7.451410627023293,
+      "adjT": 69.76206896551724
+    },
+    {
+      "teamId": "1132",
+      "team": "Lafayette",
+      "conference": "patriot",
+      "games": 28,
+      "adjO": 101.74171622769754,
+      "adjD": 109.43536011007038,
+      "adjEM": -7.6936438823728395,
+      "adjT": 67.25714285714285
+    },
+    {
+      "teamId": "120",
+      "team": "Ball St.",
+      "conference": "mac",
+      "games": 27,
+      "adjO": 99.0677612355642,
+      "adjD": 106.79733986699335,
+      "adjEM": -7.729578631429149,
+      "adjT": 66.54629629629629
+    },
+    {
+      "teamId": "1834",
+      "team": "Maine",
+      "conference": "america-east",
+      "games": 27,
+      "adjO": 96.7270145544906,
+      "adjD": 104.74383301707779,
+      "adjEM": -8.016818462587196,
+      "adjT": 65.20833333333333
+    },
+    {
+      "teamId": "2156",
+      "team": "Houston Christian",
+      "conference": "southland",
+      "games": 28,
+      "adjO": 103.6986018320821,
+      "adjD": 111.9050236341651,
+      "adjEM": -8.206421802083,
+      "adjT": 64.81696428571429
+    },
+    {
+      "teamId": "1296",
+      "team": "Portland",
+      "conference": "wcc",
+      "games": 28,
+      "adjO": 103.67051004481145,
+      "adjD": 111.91047162270185,
+      "adjEM": -8.239961577890398,
+      "adjT": 70.93214285714285
+    },
+    {
+      "teamId": "265",
+      "team": "Shaw",
+      "conference": "ciaa",
+      "games": 1,
+      "adjO": 108.66574965612104,
+      "adjD": 117.02502643637646,
+      "adjEM": -8.359276780255428,
+      "adjT": 72.7
+    },
+    {
+      "teamId": "960",
+      "team": "Stonehill",
+      "conference": "nec",
+      "games": 28,
+      "adjO": 94.42900621939924,
+      "adjD": 102.81056251078688,
+      "adjEM": -8.38155629138764,
+      "adjT": 67.47321428571429
+    },
+    {
+      "teamId": "633",
+      "team": "Army West Point",
+      "conference": "patriot",
+      "games": 29,
+      "adjO": 105.39710286500173,
+      "adjD": 113.82757344023287,
+      "adjEM": -8.43047057523114,
+      "adjT": 67.0698275862069
+    },
+    {
+      "teamId": "2631",
+      "team": "Rutgers",
+      "conference": "big-ten",
+      "games": 28,
+      "adjO": 104.82721885611559,
+      "adjD": 113.28964403454214,
+      "adjEM": -8.462425178426543,
+      "adjT": 67.04910714285714
+    },
+    {
+      "teamId": "1876",
+      "team": "Western Mich.",
+      "conference": "mac",
+      "games": 27,
+      "adjO": 106.96655315329583,
+      "adjD": 115.6600748262961,
+      "adjEM": -8.693521673000262,
+      "adjT": 70.14999999999999
+    },
+    {
+      "teamId": "2442",
+      "team": "East Texas A&M",
+      "conference": "southland",
+      "games": 29,
+      "adjO": 99.56338396089114,
+      "adjD": 108.31644515174497,
+      "adjEM": -8.753061190853828,
+      "adjT": 69.30258620689655
+    },
+    {
+      "teamId": "2126",
+      "team": "East Carolina",
+      "conference": "american",
+      "games": 27,
+      "adjO": 100.54049768074955,
+      "adjD": 109.59847441466258,
+      "adjEM": -9.057976733913023,
+      "adjT": 70.06574074074075
+    },
+    {
+      "teamId": "281",
+      "team": "Stetson",
+      "conference": "asun",
+      "games": 28,
+      "adjO": 106.70684191386566,
+      "adjD": 115.7690817512592,
+      "adjEM": -9.062239837393534,
+      "adjT": 68.74642857142858
+    },
+    {
+      "teamId": "260",
+      "team": "San Jose St.",
+      "conference": "mountain-west",
+      "games": 27,
+      "adjO": 107.61754037058304,
+      "adjD": 116.8476357267951,
+      "adjEM": -9.230095356212061,
+      "adjT": 66.11203703703704
+    },
+    {
+      "teamId": "1388735",
+      "team": "Jessup",
+      "conference": "pacwest",
+      "games": 1,
+      "adjO": 101.09743930828068,
+      "adjD": 110.50433665274655,
+      "adjEM": -9.406897344465861,
+      "adjT": 75.175
+    },
+    {
+      "teamId": "353",
+      "team": "UC Riverside",
+      "conference": "big-west",
+      "games": 28,
+      "adjO": 101.85033154404799,
+      "adjD": 111.34067661262723,
+      "adjEM": -9.490345068579245,
+      "adjT": 70.69196428571429
+    },
+    {
+      "teamId": "1982",
+      "team": "Redlands",
+      "conference": "sciac",
+      "games": 1,
+      "adjO": 103.67999999999999,
+      "adjD": 113.42894393741851,
+      "adjEM": -9.748943937418517,
+      "adjT": 78.125
+    },
+    {
+      "teamId": "53691",
+      "team": "Washington Adventist",
+      "conference": null,
+      "games": 1,
+      "adjO": 101.90300798035605,
+      "adjD": 111.73885750156936,
+      "adjEM": -9.835849521213305,
+      "adjT": 81.45
+    },
+    {
+      "teamId": "1290",
+      "team": "Oral Roberts",
+      "conference": "summit-league",
+      "games": 29,
+      "adjO": 101.61357459415783,
+      "adjD": 111.54654119728258,
+      "adjEM": -9.932966603124754,
+      "adjT": 70.4155172413793
+    },
+    {
+      "teamId": "1646",
+      "team": "NIU",
+      "conference": "mac",
+      "games": 26,
+      "adjO": 99.5490045099549,
+      "adjD": 109.7251321613409,
+      "adjEM": -10.176127651385997,
+      "adjT": 69.93076923076923
+    },
+    {
+      "teamId": "2487",
+      "team": "La Salle",
+      "conference": "atlantic-10",
+      "games": 28,
+      "adjO": 99.21051922506938,
+      "adjD": 109.50028346966876,
+      "adjEM": -10.289764244599382,
+      "adjT": 66.27321428571429
+    },
+    {
+      "teamId": "917",
+      "team": "Northeastern",
+      "conference": "caa",
+      "games": 25,
+      "adjO": 106.4992042668502,
+      "adjD": 116.86273380466241,
+      "adjEM": -10.363529537812212,
+      "adjT": 69.747
+    },
+    {
+      "teamId": "2336",
+      "team": "Louisiana",
+      "conference": "sun-belt",
+      "games": 29,
+      "adjO": 99.31763391945083,
+      "adjD": 109.79964563172959,
+      "adjEM": -10.482011712278762,
+      "adjT": 63.29396551724138
+    },
+    {
+      "teamId": "2097",
+      "team": "Canisius",
+      "conference": "maac",
+      "games": 28,
+      "adjO": 97.55292369908803,
+      "adjD": 108.19730744372174,
+      "adjEM": -10.644383744633714,
+      "adjT": 64.90982142857142
+    },
+    {
+      "teamId": "2534",
+      "team": "Binghamton",
+      "conference": "america-east",
+      "games": 28,
+      "adjO": 102.68896321070233,
+      "adjD": 113.72564902191083,
+      "adjEM": -11.0366858112085,
+      "adjT": 66.74107142857143
+    },
+    {
+      "teamId": "2635",
+      "team": "Saint Francis",
+      "conference": "nec",
+      "games": 28,
+      "adjO": 101.73826072644864,
+      "adjD": 113.0063427084123,
+      "adjEM": -11.268081981963661,
+      "adjT": 70.52410714285715
+    },
+    {
+      "teamId": "2503",
+      "team": "Maryland",
+      "conference": "big-ten",
+      "games": 26,
+      "adjO": 104.36015597305921,
+      "adjD": 115.69612685579263,
+      "adjEM": -11.33597088273342,
+      "adjT": 67.8125
+    },
+    {
+      "teamId": "56321",
+      "team": "Doane",
+      "conference": null,
+      "games": 1,
+      "adjO": 101.81818181818181,
+      "adjD": 113.42426417803301,
+      "adjEM": -11.6060823598512,
+      "adjT": 68.75
+    },
+    {
+      "teamId": "1055",
+      "team": "CSU Bakersfield",
+      "conference": "big-west",
+      "games": 27,
+      "adjO": 100.02041232904675,
+      "adjD": 111.66705154850793,
+      "adjEM": -11.646639219461179,
+      "adjT": 72.57777777777777
+    },
+    {
+      "teamId": "2718",
+      "team": "North Florida",
+      "conference": "asun",
+      "games": 29,
+      "adjO": 109.81614651599418,
+      "adjD": 121.76423264398278,
+      "adjEM": -11.948086127988603,
+      "adjT": 73.00603448275862
+    },
+    {
+      "teamId": "2620",
+      "team": "Pepperdine",
+      "conference": "wcc",
+      "games": 28,
+      "adjO": 101.54903137650531,
+      "adjD": 113.5588674763419,
+      "adjEM": -12.00983609983659,
+      "adjT": 69.91696428571429
+    },
+    {
+      "teamId": "1636",
+      "team": "Niagara",
+      "conference": "maac",
+      "games": 27,
+      "adjO": 100.20081204285944,
+      "adjD": 112.2734639752468,
+      "adjEM": -12.072651932387359,
+      "adjT": 63.169444444444444
+    },
+    {
+      "teamId": "484",
+      "team": "Bryant",
+      "conference": "america-east",
+      "games": 26,
+      "adjO": 97.99567580202185,
+      "adjD": 110.24801397923672,
+      "adjEM": -12.252338177214867,
+      "adjT": 65.81923076923077
+    },
+    {
+      "teamId": "1838",
+      "team": "UMES",
+      "conference": "meac",
+      "games": 27,
+      "adjO": 96.70807713222068,
+      "adjD": 108.99105822713511,
+      "adjEM": -12.282981094914433,
+      "adjT": 66.40833333333333
+    },
+    {
+      "teamId": "1581",
+      "team": "Adams St.",
+      "conference": "rmac",
+      "games": 1,
+      "adjO": 80.67226890756302,
+      "adjD": 93.1537598204265,
+      "adjEM": -12.481490912863478,
+      "adjT": 89.25
+    },
+    {
+      "teamId": "1787",
+      "team": "Evansville",
+      "conference": "mvc",
+      "games": 28,
+      "adjO": 97.96153192379607,
+      "adjD": 110.68493150684931,
+      "adjEM": -12.723399583053236,
+      "adjT": 68.28482142857142
+    },
+    {
+      "teamId": "910",
+      "team": "North Ala.",
+      "conference": "asun",
+      "games": 27,
+      "adjO": 104.32956649075788,
+      "adjD": 117.58985259589603,
+      "adjEM": -13.26028610513815,
+      "adjT": 67.02407407407408
+    },
+    {
+      "teamId": "53649",
+      "team": "Penn St.-Hazleton",
+      "conference": null,
+      "games": 1,
+      "adjO": 96.35416666666667,
+      "adjD": 110.15262110152622,
+      "adjEM": -13.79845443485955,
+      "adjT": 76.8
+    },
+    {
+      "teamId": "2107",
+      "team": "Chicago St.",
+      "conference": "nec",
+      "games": 28,
+      "adjO": 100.118996105582,
+      "adjD": 114.04943042849614,
+      "adjEM": -13.930434322914138,
+      "adjT": 66.02857142857142
+    },
+    {
+      "teamId": "53443",
+      "team": "Williams Baptist",
+      "conference": null,
+      "games": 1,
+      "adjO": 99.29078014184398,
+      "adjD": 113.55735805330242,
+      "adjEM": -14.266577911458441,
+      "adjT": 84.6
+    },
+    {
+      "teamId": "1076",
+      "team": "The Citadel",
+      "conference": "socon",
+      "games": 28,
+      "adjO": 102.70757394380405,
+      "adjD": 117.11772574347057,
+      "adjEM": -14.410151799666522,
+      "adjT": 66.38125
+    },
+    {
+      "teamId": "973",
+      "team": "VMI",
+      "conference": "socon",
+      "games": 28,
+      "adjO": 102.59613507710326,
+      "adjD": 117.02652843817394,
+      "adjEM": -14.430393361070685,
+      "adjT": 68.61160714285714
+    },
+    {
+      "teamId": "211",
+      "team": "ULM",
+      "conference": "sun-belt",
+      "games": 28,
+      "adjO": 100.63980632889505,
+      "adjD": 115.58999577776122,
+      "adjEM": -14.950189448866169,
+      "adjT": 72.2875
+    },
+    {
+      "teamId": "485",
+      "team": "Bucknell",
+      "conference": "patriot",
+      "games": 29,
+      "adjO": 97.83538561244329,
+      "adjD": 113.62182625155015,
+      "adjEM": -15.786440639106857,
+      "adjT": 66.50862068965517
+    },
+    {
+      "teamId": "1618",
+      "team": "Morehouse",
+      "conference": "siac",
+      "games": 1,
+      "adjO": 99.8914223669924,
+      "adjD": 115.81291759465479,
+      "adjEM": -15.92149522766239,
+      "adjT": 69.075
+    },
+    {
+      "teamId": "2435",
+      "team": "Delaware St.",
+      "conference": "meac",
+      "games": 26,
+      "adjO": 89.88256549232159,
+      "adjD": 106.0382078690016,
+      "adjEM": -16.155642376680007,
+      "adjT": 68.12307692307692
+    },
+    {
+      "teamId": "2539",
+      "team": "Bowie St.",
+      "conference": "ciaa",
+      "games": 1,
+      "adjO": 85.74091332712023,
+      "adjD": 102.16346153846155,
+      "adjEM": -16.422548211341322,
+      "adjT": 80.475
+    },
+    {
+      "teamId": "1690",
+      "team": "South Carolina St.",
+      "conference": "meac",
+      "games": 25,
+      "adjO": 96.1803957662218,
+      "adjD": 112.87719749225253,
+      "adjEM": -16.696801726030728,
+      "adjT": 69.536
+    },
+    {
+      "teamId": "2178",
+      "team": "Loyola Chicago",
+      "conference": "atlantic-10",
+      "games": 27,
+      "adjO": 99.47658633526466,
+      "adjD": 116.19698582553643,
+      "adjEM": -16.720399490271774,
+      "adjT": 66.16111111111111
+    },
+    {
+      "teamId": "305",
+      "team": "Western Ill.",
+      "conference": "ovc",
+      "games": 28,
+      "adjO": 96.391923204237,
+      "adjD": 113.14827281247113,
+      "adjEM": -16.75634960823413,
+      "adjT": 67.43303571428571
+    },
+    {
+      "teamId": "1705",
+      "team": "UTSA",
+      "conference": "american",
+      "games": 27,
+      "adjO": 97.8732895133887,
+      "adjD": 114.88457426448267,
+      "adjEM": -17.011284751093967,
+      "adjT": 70.575
+    },
+    {
+      "teamId": "1662",
+      "team": "Rider",
+      "conference": "maac",
+      "games": 26,
+      "adjO": 97.55384322957028,
+      "adjD": 114.75385853266037,
+      "adjEM": -17.200015303090098,
+      "adjT": 65.7625
+    },
+    {
+      "teamId": "2067",
+      "team": "Hawaii Pacific",
+      "conference": "pacwest",
+      "games": 1,
+      "adjO": 109.35251798561151,
+      "adjD": 126.57317511686443,
+      "adjEM": -17.22065713125292,
+      "adjT": 69.5
+    },
+    {
+      "teamId": "652",
+      "team": "Piedmont",
+      "conference": "ccs",
+      "games": 1,
+      "adjO": 96.0284528749259,
+      "adjD": 113.38006705272782,
+      "adjEM": -17.35161417780192,
+      "adjT": 84.35
+    },
+    {
+      "teamId": "2493",
+      "team": "Loras",
+      "conference": "american-rivers",
+      "games": 1,
+      "adjO": 105.03903477643719,
+      "adjD": 123.18104906937396,
+      "adjEM": -18.142014292936764,
+      "adjT": 70.45
+    },
+    {
+      "teamId": "2252",
+      "team": "Midwestern St.",
+      "conference": "lone-star",
+      "games": 1,
+      "adjO": 71.65304839723444,
+      "adjD": 89.99328408327736,
+      "adjEM": -18.340235686042917,
+      "adjT": 79.55
+    },
+    {
+      "teamId": "792",
+      "team": "Lynchburg",
+      "conference": "odac",
+      "games": 1,
+      "adjO": 94.58618543870567,
+      "adjD": 113.06042884990252,
+      "adjEM": -18.474243411196852,
+      "adjT": 80.35
+    },
+    {
+      "teamId": "664",
+      "team": "Brevard",
+      "conference": "usa-south",
+      "games": 1,
+      "adjO": 88.45208845208846,
+      "adjD": 106.98159083014937,
+      "adjEM": -18.52950237806091,
+      "adjT": 71.225
+    },
+    {
+      "teamId": "1382",
+      "team": "Lewis & Clark",
+      "conference": "nwc",
+      "games": 1,
+      "adjO": 119.75223675154851,
+      "adjD": 138.62045984671775,
+      "adjEM": -18.868223095169242,
+      "adjT": 72.65
+    },
+    {
+      "teamId": "2628",
+      "team": "RIT",
+      "conference": "liberty-league",
+      "games": 2,
+      "adjO": 89.66934429291986,
+      "adjD": 108.77258334885454,
+      "adjEM": -19.10323905593468,
+      "adjT": 66.9125
+    },
+    {
+      "teamId": "763",
+      "team": "Jackson St.",
+      "conference": "swac",
+      "games": 26,
+      "adjO": 98.2054505094809,
+      "adjD": 117.64390466232338,
+      "adjEM": -19.438454152842482,
+      "adjT": 71.90576923076922
+    },
+    {
+      "teamId": "1387410",
+      "team": "Park (AZ)",
+      "conference": null,
+      "games": 1,
+      "adjO": 108.60420650095601,
+      "adjD": 128.06324110671937,
+      "adjEM": -19.459034605763364,
+      "adjT": 65.375
+    },
+    {
+      "teamId": "58659",
+      "team": "McPherson",
+      "conference": null,
+      "games": 1,
+      "adjO": 108.93854748603353,
+      "adjD": 128.66737363025806,
+      "adjEM": -19.728826144224527,
+      "adjT": 71.6
+    },
+    {
+      "teamId": "2397",
+      "team": "Kansas City",
+      "conference": "summit-league",
+      "games": 27,
+      "adjO": 96.0994767746805,
+      "adjD": 115.93390493419795,
+      "adjEM": -19.834428159517458,
+      "adjT": 72.3787037037037
+    },
+    {
+      "teamId": "1916",
+      "team": "Holy Family",
+      "conference": "cacc",
+      "games": 1,
+      "adjO": 91.31736526946108,
+      "adjD": 111.19573495811119,
+      "adjEM": -19.87836968865011,
+      "adjT": 66.8
+    },
+    {
+      "teamId": "1388164",
+      "team": "Ark. Baptist",
+      "conference": null,
+      "games": 3,
+      "adjO": 83.67101084218595,
+      "adjD": 103.59085963003265,
+      "adjEM": -19.919848787846703,
+      "adjT": 76.09166666666667
+    },
+    {
+      "teamId": "2260",
+      "team": "Tiffin",
+      "conference": "g-mac",
+      "games": 1,
+      "adjO": 76.65772326561901,
+      "adjD": 96.76160749122123,
+      "adjEM": -20.103884225602215,
+      "adjT": 65.225
+    },
+    {
+      "teamId": "1860",
+      "team": "Alcorn",
+      "conference": "swac",
+      "games": 26,
+      "adjO": 97.43504330446369,
+      "adjD": 117.60799180894928,
+      "adjEM": -20.17294850448559,
+      "adjT": 69.27692307692308
+    },
+    {
+      "teamId": "2447",
+      "team": "Elizabeth City St.",
+      "conference": "ciaa",
+      "games": 2,
+      "adjO": 90.81455805892547,
+      "adjD": 111.54529307282415,
+      "adjEM": -20.73073501389868,
+      "adjT": 72.125
+    },
+    {
+      "teamId": "53463",
+      "team": "St. Ambrose",
+      "conference": null,
+      "games": 1,
+      "adjO": 106.92054192603442,
+      "adjD": 127.69010043041607,
+      "adjEM": -20.76955850438165,
+      "adjT": 68.275
+    },
+    {
+      "teamId": "53623",
+      "team": "Concordia (NE)",
+      "conference": null,
+      "games": 1,
+      "adjO": 115.02516175413373,
+      "adjD": 135.88110403397027,
+      "adjEM": -20.85594227983654,
+      "adjT": 69.55
+    },
+    {
+      "teamId": "981",
+      "team": "Wash. & Lee",
+      "conference": "odac",
+      "games": 1,
+      "adjO": 85.59419182269775,
+      "adjD": 106.87022900763358,
+      "adjEM": -21.27603718493583,
+      "adjT": 65.425
+    },
+    {
+      "teamId": "1089",
+      "team": "Coppin St.",
+      "conference": "meac",
+      "games": 27,
+      "adjO": 93.55052310952192,
+      "adjD": 115.3127360928864,
+      "adjEM": -21.762212983364478,
+      "adjT": 69.91666666666667
+    },
+    {
+      "teamId": "2731",
+      "team": "Tusculum",
+      "conference": "sac",
+      "games": 1,
+      "adjO": 87.50882145377558,
+      "adjD": 109.74322898346816,
+      "adjEM": -22.234407529692575,
+      "adjT": 70.85
+    },
+    {
+      "teamId": "1427",
+      "team": "Mo. Southern St.",
+      "conference": "mid-america-intercollegiate",
+      "games": 1,
+      "adjO": 92.47027741083222,
+      "adjD": 115.82757486015139,
+      "adjEM": -23.357297449319162,
+      "adjT": 75.7
+    },
+    {
+      "teamId": "1388991",
+      "team": "Jamestown",
+      "conference": "nsic",
+      "games": 1,
+      "adjO": 94.56598447424136,
+      "adjD": 118.15561959654177,
+      "adjEM": -23.589635122300407,
+      "adjT": 70.85
+    },
+    {
+      "teamId": "16417",
+      "team": "Montana Western",
+      "conference": null,
+      "games": 1,
+      "adjO": 93.29446064139943,
+      "adjD": 117.77695988222305,
+      "adjEM": -24.48249924082363,
+      "adjT": 68.6
+    },
+    {
+      "teamId": "2167",
+      "team": "Johnson C. Smith",
+      "conference": "ciaa",
+      "games": 1,
+      "adjO": 97.20086127345432,
+      "adjD": 121.81479179614666,
+      "adjEM": -24.613930522692343,
+      "adjT": 81.275
+    },
+    {
+      "teamId": "56143",
+      "team": "Dakota St.",
+      "conference": null,
+      "games": 3,
+      "adjO": 93.21824907521578,
+      "adjD": 118.22166562304321,
+      "adjEM": -25.003416547827428,
+      "adjT": 67.58333333333333
+    },
+    {
+      "teamId": "1911",
+      "team": "Gardner-Webb",
+      "conference": "big-south",
+      "games": 28,
+      "adjO": 96.44689056123404,
+      "adjD": 121.80359170837025,
+      "adjEM": -25.356701147136206,
+      "adjT": 71.54196428571429
+    },
+    {
+      "teamId": "819",
+      "team": "Albany St. (GA)",
+      "conference": "siac",
+      "games": 1,
+      "adjO": 106.42709053213547,
+      "adjD": 131.91489361702128,
+      "adjEM": -25.48780308488581,
+      "adjT": 72.35
+    },
+    {
+      "teamId": "53462",
+      "team": "Cumberland (TN)",
+      "conference": null,
+      "games": 1,
+      "adjO": 87.44817188088956,
+      "adjD": 113.32312404287903,
+      "adjEM": -25.87495216198947,
+      "adjT": 66.325
+    },
+    {
+      "teamId": "2626",
+      "team": "Ripon",
+      "conference": "mwc",
+      "games": 1,
+      "adjO": 89.17197452229298,
+      "adjD": 115.80048831531218,
+      "adjEM": -26.628513793019195,
+      "adjT": 70.65
+    },
+    {
+      "teamId": "968",
+      "team": "Air Force",
+      "conference": "mountain-west",
+      "games": 27,
+      "adjO": 92.16842682759567,
+      "adjD": 119.4481506444203,
+      "adjEM": -27.279723816824628,
+      "adjT": 67.50925925925925
+    },
+    {
+      "teamId": "1862",
+      "team": "Angelo St.",
+      "conference": "lone-star",
+      "games": 1,
+      "adjO": 73.66984993178718,
+      "adjD": 101.1826544021025,
+      "adjEM": -27.512804470315317,
+      "adjT": 73.3
+    },
+    {
+      "teamId": "1540",
+      "team": "Mississippi Val.",
+      "conference": "swac",
+      "games": 28,
+      "adjO": 90.98138213947618,
+      "adjD": 118.61673080098043,
+      "adjEM": -27.635348661504253,
+      "adjT": 70.73660714285714
+    },
+    {
+      "teamId": "479",
+      "team": "Brandeis",
+      "conference": "uaa",
+      "games": 1,
+      "adjO": 92.63477600607442,
+      "adjD": 120.51868802440886,
+      "adjEM": -27.883912018334442,
+      "adjT": 65.85
+    },
+    {
+      "teamId": "924",
+      "team": "Olivet",
+      "conference": "michigan-intercol. ath. assn.",
+      "games": 1,
+      "adjO": 81.65829145728644,
+      "adjD": 109.81912144702841,
+      "adjEM": -28.16082998974197,
+      "adjT": 79.6
+    },
+    {
+      "teamId": "1072",
+      "team": "Chaminade",
+      "conference": "pacwest",
+      "games": 3,
+      "adjO": 98.67877786952933,
+      "adjD": 127.82572955199343,
+      "adjEM": -29.146951682464106,
+      "adjT": 80.73333333333333
+    },
+    {
+      "teamId": "16469",
+      "team": "Dominican (CA)",
+      "conference": "pacwest",
+      "games": 2,
+      "adjO": 97.94319294809011,
+      "adjD": 127.25206946924199,
+      "adjEM": -29.308876521151873,
+      "adjT": 76.575
+    },
+    {
+      "teamId": "16456",
+      "team": "Brewton-Parker",
+      "conference": null,
+      "games": 2,
+      "adjO": 75.74921860636147,
+      "adjD": 105.18292682926831,
+      "adjEM": -29.433708222906844,
+      "adjT": 67.9875
+    },
+    {
+      "teamId": "2255",
+      "team": "Pacific Lutheran",
+      "conference": "nwc",
+      "games": 1,
+      "adjO": 95.58378705384149,
+      "adjD": 125.27131782945737,
+      "adjEM": -29.687530775615883,
+      "adjT": 82.65
+    },
+    {
+      "teamId": "51930",
+      "team": "St. Xavier",
+      "conference": null,
+      "games": 2,
+      "adjO": 84.46957100099768,
+      "adjD": 114.399074227145,
+      "adjEM": -29.929503226147318,
+      "adjT": 75.175
+    },
+    {
+      "teamId": "154",
+      "team": "Bluefield St.",
+      "conference": "ciaa",
+      "games": 1,
+      "adjO": 92.17982621836042,
+      "adjD": 122.17374057913526,
+      "adjEM": -29.993914360774838,
+      "adjT": 66.175
+    },
+    {
+      "teamId": "18511",
+      "team": "Berea",
+      "conference": "hcac",
+      "games": 1,
+      "adjO": 86.22431795217246,
+      "adjD": 116.25549172017575,
+      "adjEM": -30.0311737680033,
+      "adjT": 74.225
+    },
+    {
+      "teamId": "1660",
+      "team": "Regis (MA)",
+      "conference": "great-northeast",
+      "games": 1,
+      "adjO": 72.41910631741139,
+      "adjD": 103.02351623740202,
+      "adjEM": -30.60440991999063,
+      "adjT": 64.9
+    },
+    {
+      "teamId": "53596",
+      "team": "Tougaloo",
+      "conference": null,
+      "games": 2,
+      "adjO": 83.22580645161291,
+      "adjD": 114.06476558724022,
+      "adjEM": -30.838959135627306,
+      "adjT": 77.5
+    },
+    {
+      "teamId": "53655",
+      "team": "Penn St.-York",
+      "conference": null,
+      "games": 1,
+      "adjO": 74.56911712979247,
+      "adjD": 105.45065906661917,
+      "adjEM": -30.881541936826693,
+      "adjT": 71.075
+    },
+    {
+      "teamId": "509",
+      "team": "Arcadia",
+      "conference": "mac-freedom",
+      "games": 1,
+      "adjO": 95.41284403669725,
+      "adjD": 126.3157894736842,
+      "adjEM": -30.902945436986954,
+      "adjT": 68.125
+    },
+    {
+      "teamId": "1048",
+      "team": "Northeastern St.",
+      "conference": "mid-america-intercollegiate",
+      "games": 1,
+      "adjO": 104.87444608567206,
+      "adjD": 136.09467455621302,
+      "adjEM": -31.22022847054096,
+      "adjT": 67.7
+    },
+    {
+      "teamId": "1396",
+      "team": "Mitchell",
+      "conference": "great-northeast",
+      "games": 1,
+      "adjO": 96.87609687609688,
+      "adjD": 129.07751666082075,
+      "adjEM": -32.20141978472387,
+      "adjT": 71.225
+    },
+    {
+      "teamId": "53677",
+      "team": "Eastern Ore.",
+      "conference": null,
+      "games": 2,
+      "adjO": 96.87392648574372,
+      "adjD": 129.09871244635193,
+      "adjEM": -32.2247859606082,
+      "adjT": 72.775
+    },
+    {
+      "teamId": "2082",
+      "team": "Pitt.-Greensburg",
+      "conference": "amcc",
+      "games": 1,
+      "adjO": 80.79376328844792,
+      "adjD": 113.12849162011173,
+      "adjEM": -32.33472833166381,
+      "adjT": 70.55
+    },
+    {
+      "teamId": "16453",
+      "team": "Bluefield Univ.",
+      "conference": null,
+      "games": 1,
+      "adjO": 98.44559585492227,
+      "adjD": 131.08614232209737,
+      "adjEM": -32.6405464671751,
+      "adjT": 77.2
+    },
+    {
+      "teamId": "1672",
+      "team": "Saint John's (MN)",
+      "conference": "miac",
+      "games": 1,
+      "adjO": 81.07129931234165,
+      "adjD": 113.87900355871888,
+      "adjEM": -32.80770424637723,
+      "adjT": 69.075
+    },
+    {
+      "teamId": "50901",
+      "team": "Truett-McConnell",
+      "conference": null,
+      "games": 1,
+      "adjO": 88.27586206896552,
+      "adjD": 121.53589315525876,
+      "adjEM": -33.26003108629324,
+      "adjT": 72.5
+    },
+    {
+      "teamId": "156",
+      "team": "Catawba",
+      "conference": "sac",
+      "games": 1,
+      "adjO": 90.11627906976744,
+      "adjD": 123.43021169716542,
+      "adjEM": -33.313932627397975,
+      "adjT": 68.8
+    },
+    {
+      "teamId": "2061",
+      "team": "Franciscan",
+      "conference": "pac",
+      "games": 1,
+      "adjO": 78.76599934361667,
+      "adjD": 112.88180610889775,
+      "adjEM": -34.11580676528108,
+      "adjT": 76.175
+    },
+    {
+      "teamId": "2240",
+      "team": "Cameron",
+      "conference": "lone-star",
+      "games": 1,
+      "adjO": 82.46073298429319,
+      "adjD": 116.83417085427136,
+      "adjEM": -34.373437869978176,
+      "adjT": 76.4
+    },
+    {
+      "teamId": "1156",
+      "team": "Mercy",
+      "conference": "ecc",
+      "games": 1,
+      "adjO": 78.70967741935485,
+      "adjD": 113.46592761656342,
+      "adjEM": -34.75625019720857,
+      "adjT": 77.5
+    },
+    {
+      "teamId": "1760",
+      "team": "Gwynedd Mercy",
+      "conference": "atlantic-east",
+      "games": 1,
+      "adjO": 85.31816565943832,
+      "adjD": 120.25769506084467,
+      "adjEM": -34.93952940140635,
+      "adjT": 70.325
+    },
+    {
+      "teamId": "16533",
+      "team": "Huston-Tillotson",
+      "conference": null,
+      "games": 1,
+      "adjO": 74.12309728656518,
+      "adjD": 109.51403148528405,
+      "adjEM": -35.39093419871887,
+      "adjT": 75.55
+    },
+    {
+      "teamId": "867",
+      "team": "Caldwell",
+      "conference": "cacc",
+      "games": 1,
+      "adjO": 84.2627013630731,
+      "adjD": 120.11260556771974,
+      "adjEM": -35.849904204646634,
+      "adjT": 80.7
+    },
+    {
+      "teamId": "18503",
+      "team": "William Carey",
+      "conference": null,
+      "games": 2,
+      "adjO": 71.68705841805964,
+      "adjD": 107.91747487215657,
+      "adjEM": -36.23041645409694,
+      "adjT": 72.5375
+    },
+    {
+      "teamId": "1387974",
+      "team": "Spurgeon",
+      "conference": null,
+      "games": 1,
+      "adjO": 85.5188141391106,
+      "adjD": 121.90020914251569,
+      "adjEM": -36.38139500340509,
+      "adjT": 87.7
+    },
+    {
+      "teamId": "2131",
+      "team": "Emerson",
+      "conference": "newmac",
+      "games": 1,
+      "adjO": 101.90114068441065,
+      "adjD": 138.56812933025404,
+      "adjEM": -36.66698864584339,
+      "adjT": 65.75
+    },
+    {
+      "teamId": "1287",
+      "team": "Occidental",
+      "conference": "sciac",
+      "games": 1,
+      "adjO": 79.94579945799458,
+      "adjD": 116.74958540630183,
+      "adjEM": -36.80378594830725,
+      "adjT": 73.8
+    },
+    {
+      "teamId": "53572",
+      "team": "Mid-Amer. Christian",
+      "conference": null,
+      "games": 1,
+      "adjO": 97.83037475345168,
+      "adjD": 135.10253317249698,
+      "adjEM": -37.2721584190453,
+      "adjT": 63.375
+    },
+    {
+      "teamId": "16523",
+      "team": "Bethel (TN)",
+      "conference": null,
+      "games": 2,
+      "adjO": 84.17143741296613,
+      "adjD": 121.71507607192254,
+      "adjEM": -37.54363865895641,
+      "adjT": 80.7875
+    },
+    {
+      "teamId": "1530",
+      "team": "Mansfield",
+      "conference": "psac",
+      "games": 1,
+      "adjO": 68.83365200764818,
+      "adjD": 106.5651760228354,
+      "adjEM": -37.73152401518722,
+      "adjT": 78.45
+    },
+    {
+      "teamId": "1388734",
+      "team": "Stanton",
+      "conference": null,
+      "games": 2,
+      "adjO": 100.0189429816253,
+      "adjD": 138.16925734024178,
+      "adjEM": -38.150314358616484,
+      "adjT": 65.9875
+    },
+    {
+      "teamId": "2244",
+      "team": "Erskine",
+      "conference": "conference-carolinas",
+      "games": 1,
+      "adjO": 98.6159169550173,
+      "adjD": 137.11383834109182,
+      "adjEM": -38.49792138607452,
+      "adjT": 57.8
+    },
+    {
+      "teamId": "34290",
+      "team": "Houghton",
+      "conference": "empire-8",
+      "games": 1,
+      "adjO": 89.50617283950618,
+      "adjD": 128.01264322402213,
+      "adjEM": -38.50647038451595,
+      "adjT": 64.8
+    },
+    {
+      "teamId": "261801",
+      "team": "William Peace",
+      "conference": "usa-south",
+      "games": 1,
+      "adjO": 91.5129151291513,
+      "adjD": 130.1989150090416,
+      "adjEM": -38.6859998798903,
+      "adjT": 67.75
+    },
+    {
+      "teamId": "16383",
+      "team": "AUM",
+      "conference": "gulf-south",
+      "games": 1,
+      "adjO": 54.833040421792624,
+      "adjD": 93.61702127659575,
+      "adjEM": -38.783980854803126,
+      "adjT": 71.125
+    },
+    {
+      "teamId": "1388158",
+      "team": "St. Mary-Woods",
+      "conference": null,
+      "games": 1,
+      "adjO": 74.63175122749591,
+      "adjD": 113.47517730496455,
+      "adjEM": -38.843426077468635,
+      "adjT": 76.375
+    },
+    {
+      "teamId": "53629",
+      "team": "Cumberlands (KY)",
+      "conference": null,
+      "games": 1,
+      "adjO": 94.40672486259295,
+      "adjD": 133.4214002642008,
+      "adjEM": -39.014675401607846,
+      "adjT": 77.325
+    },
+    {
+      "teamId": "2449",
+      "team": "Emmanuel (MA)",
+      "conference": "great-northeast",
+      "games": 1,
+      "adjO": 95.30386740331491,
+      "adjD": 134.44213444213443,
+      "adjEM": -39.13826703881952,
+      "adjT": 72.4
+    },
+    {
+      "teamId": "159",
+      "team": "Christian Brothers",
+      "conference": "gulf-south",
+      "games": 1,
+      "adjO": 98.27649431609828,
+      "adjD": 137.53166847629387,
+      "adjEM": -39.255174160195594,
+      "adjT": 68.175
+    },
+    {
+      "teamId": "1371936",
+      "team": "MUW",
+      "conference": "sliac",
+      "games": 1,
+      "adjO": 77.60814249363868,
+      "adjD": 116.9026815305815,
+      "adjEM": -39.29453903694282,
+      "adjT": 78.6
+    },
+    {
+      "teamId": "53661",
+      "team": "Embry-Riddle (AZ)",
+      "conference": null,
+      "games": 1,
+      "adjO": 107.73951585407433,
+      "adjD": 148.09736030167983,
+      "adjEM": -40.3578444476055,
+      "adjT": 73.325
+    },
+    {
+      "teamId": "16530",
+      "team": "Haskell",
+      "conference": null,
+      "games": 2,
+      "adjO": 78.27659924354546,
+      "adjD": 119.15460143118656,
+      "adjEM": -40.8780021876411,
+      "adjT": 76.0125
+    },
+    {
+      "teamId": "661",
+      "team": "Central St. (OH)",
+      "conference": "siac",
+      "games": 2,
+      "adjO": 89.56676943047218,
+      "adjD": 130.56761537224634,
+      "adjEM": -41.00084594177416,
+      "adjT": 77.0375
+    },
+    {
+      "teamId": "261794",
+      "team": "SUNY Canton",
+      "conference": "sunyac",
+      "games": 1,
+      "adjO": 74.30340557275542,
+      "adjD": 115.36126290224651,
+      "adjEM": -41.057857329491085,
+      "adjT": 80.75
+    },
+    {
+      "teamId": "53578",
+      "team": "Mt. Marty",
+      "conference": null,
+      "games": 2,
+      "adjO": 99.21770654455257,
+      "adjD": 140.5152224824356,
+      "adjEM": -41.297515937883034,
+      "adjT": 65.5125
+    },
+    {
+      "teamId": "151",
+      "team": "Worcester St.",
+      "conference": "mascac",
+      "games": 2,
+      "adjO": 77.79128320889043,
+      "adjD": 119.09295482084126,
+      "adjEM": -41.30167161195082,
+      "adjT": 71.9875
+    },
+    {
+      "teamId": "1747",
+      "team": "Eastern",
+      "conference": "mac-commonwealth",
+      "games": 1,
+      "adjO": 76.08312786192322,
+      "adjD": 117.40614334470989,
+      "adjEM": -41.32301548278667,
+      "adjT": 70.975
+    },
+    {
+      "teamId": "1371967",
+      "team": "Cheyney",
+      "conference": null,
+      "games": 2,
+      "adjO": 86.91258211217786,
+      "adjD": 128.40662096639358,
+      "adjEM": -41.49403885421572,
+      "adjT": 74.2125
+    },
+    {
+      "teamId": "2036",
+      "team": "Misericordia",
+      "conference": "mac-freedom",
+      "games": 2,
+      "adjO": 85.70472045530633,
+      "adjD": 127.28221178925403,
+      "adjEM": -41.577491333947705,
+      "adjT": 74.675
+    },
+    {
+      "teamId": "51822",
+      "team": "Illinois Tech",
+      "conference": "nacc",
+      "games": 2,
+      "adjO": 91.63879598662207,
+      "adjD": 133.46290897311306,
+      "adjEM": -41.82411298649099,
+      "adjT": 74.75
+    },
+    {
+      "teamId": "53229",
+      "team": "Westminster (UT)",
+      "conference": "rmac",
+      "games": 1,
+      "adjO": 86.45533141210375,
+      "adjD": 128.3045470567501,
+      "adjEM": -41.84921564464635,
+      "adjT": 69.4
+    },
+    {
+      "teamId": "53466",
+      "team": "Paul Quinn",
+      "conference": null,
+      "games": 1,
+      "adjO": 77.6228016979988,
+      "adjD": 119.5814648729447,
+      "adjEM": -41.9586631749459,
+      "adjT": 82.45
+    },
+    {
+      "teamId": "16489",
+      "team": "Tenn. Southern",
+      "conference": null,
+      "games": 1,
+      "adjO": 87.20930232558139,
+      "adjD": 129.34973637961335,
+      "adjEM": -42.14043405403196,
+      "adjT": 68.8
+    },
+    {
+      "teamId": "1388150",
+      "team": "Fort Lauderdale",
+      "conference": null,
+      "games": 3,
+      "adjO": 85.59811684142949,
+      "adjD": 127.85388127853882,
+      "adjEM": -42.255764437109335,
+      "adjT": 77.88333333333334
+    },
+    {
+      "teamId": "1371958",
+      "team": "Rust",
+      "conference": null,
+      "games": 1,
+      "adjO": 72.55936675461741,
+      "adjD": 114.95754408883083,
+      "adjEM": -42.398177334213415,
+      "adjT": 75.8
+    },
+    {
+      "teamId": "53575",
+      "team": "Mobile",
+      "conference": null,
+      "games": 1,
+      "adjO": 71.89768406498445,
+      "adjD": 114.40107671601616,
+      "adjEM": -42.50339265103172,
+      "adjT": 72.325
+    },
+    {
+      "teamId": "53465",
+      "team": "LIFE Pacific",
+      "conference": null,
+      "games": 1,
+      "adjO": 86.82170542635659,
+      "adjD": 129.63686060132758,
+      "adjEM": -42.815155174971,
+      "adjT": 64.5
+    },
+    {
+      "teamId": "1120",
+      "team": "Cal Poly Humboldt",
+      "conference": "ccaa",
+      "games": 1,
+      "adjO": 71.86440677966101,
+      "adjD": 114.75976494987901,
+      "adjEM": -42.895358170218,
+      "adjT": 73.75
+    },
+    {
+      "teamId": "2123",
+      "team": "Dist. Columbia",
+      "conference": "ecc",
+      "games": 1,
+      "adjO": 97.6952184382525,
+      "adjD": 140.80656185919344,
+      "adjEM": -43.11134342094094,
+      "adjT": 72.675
+    },
+    {
+      "teamId": "53616",
+      "team": "Dakota Wesleyan",
+      "conference": null,
+      "games": 1,
+      "adjO": 87.57062146892656,
+      "adjD": 130.69169273548835,
+      "adjEM": -43.121071266561785,
+      "adjT": 70.8
+    },
+    {
+      "teamId": "2701",
+      "team": "Minn.-Crookston",
+      "conference": "nsic",
+      "games": 1,
+      "adjO": 87.1261378413524,
+      "adjD": 130.49095607235142,
+      "adjEM": -43.36481823099902,
+      "adjT": 76.9
+    },
+    {
+      "teamId": "1147",
+      "team": "Manhattanville",
+      "conference": "skyline",
+      "games": 1,
+      "adjO": 79.36,
+      "adjD": 122.80140709945636,
+      "adjEM": -43.441407099456356,
+      "adjT": 78.125
+    },
+    {
+      "teamId": "1389034",
+      "team": "IU Columbus",
+      "conference": null,
+      "games": 1,
+      "adjO": 76.76969092721835,
+      "adjD": 120.27833001988073,
+      "adjEM": -43.50863909266238,
+      "adjT": 100.3
+    },
+    {
+      "teamId": "16447",
+      "team": "Tenn. Wesleyan",
+      "conference": null,
+      "games": 2,
+      "adjO": 84.23660576029731,
+      "adjD": 127.81722753936403,
+      "adjEM": -43.58062177906672,
+      "adjT": 80.725
+    },
+    {
+      "teamId": "1661",
+      "team": "Rhodes",
+      "conference": "saa",
+      "games": 2,
+      "adjO": 80.70926322225618,
+      "adjD": 124.38035150968905,
+      "adjEM": -43.671088287432866,
+      "adjT": 81.775
+    },
+    {
+      "teamId": "16403",
+      "team": "Brescia",
+      "conference": null,
+      "games": 2,
+      "adjO": 67.21044045676999,
+      "adjD": 110.8897742363878,
+      "adjEM": -43.67933377961781,
+      "adjT": 76.625
+    },
+    {
+      "teamId": "56121",
+      "team": "Holy Cross (IN)",
+      "conference": null,
+      "games": 1,
+      "adjO": 80.46368905557449,
+      "adjD": 124.57684495599189,
+      "adjEM": -44.1131559004174,
+      "adjT": 73.325
+    },
+    {
+      "teamId": "2282",
+      "team": "North Central (IL)",
+      "conference": "cciw",
+      "games": 1,
+      "adjO": 76.04017216642754,
+      "adjD": 120.15368494586099,
+      "adjEM": -44.11351277943345,
+      "adjT": 69.7
+    },
+    {
+      "teamId": "1484",
+      "team": "Fort Valley St.",
+      "conference": "siac",
+      "games": 1,
+      "adjO": 71.13369323594793,
+      "adjD": 115.49566891241578,
+      "adjEM": -44.36197567646785,
+      "adjT": 78.725
+    },
+    {
+      "teamId": "1594",
+      "team": "Huntingdon",
+      "conference": "ccs",
+      "games": 1,
+      "adjO": 101.06544901065449,
+      "adjD": 145.45454545454547,
+      "adjEM": -44.38909644389098,
+      "adjT": 82.125
+    },
+    {
+      "teamId": "1754",
+      "team": "UCCS",
+      "conference": "rmac",
+      "games": 1,
+      "adjO": 119.03999999999999,
+      "adjD": 163.65366317792578,
+      "adjEM": -44.61366317792579,
+      "adjT": 78.125
+    },
+    {
+      "teamId": "325",
+      "team": "Lancaster Bible",
+      "conference": "united-east",
+      "games": 1,
+      "adjO": 64.40322016100805,
+      "adjD": 109.17030567685589,
+      "adjEM": -44.76708551584784,
+      "adjT": 71.425
+    },
+    {
+      "teamId": "257",
+      "team": "Salve Regina",
+      "conference": "newmac",
+      "games": 1,
+      "adjO": 73.2372419166342,
+      "adjD": 118.40607210626186,
+      "adjEM": -45.168830189627656,
+      "adjT": 64.175
+    },
+    {
+      "teamId": "1136",
+      "team": "Lawrence",
+      "conference": "mwc",
+      "games": 1,
+      "adjO": 73.39449541284404,
+      "adjD": 119.05576462538488,
+      "adjEM": -45.661269212540844,
+      "adjT": 70.85
+    },
+    {
+      "teamId": "53441",
+      "team": "Lourdes",
+      "conference": null,
+      "games": 1,
+      "adjO": 88.94789246598074,
+      "adjD": 134.63480309660045,
+      "adjEM": -45.68691063061971,
+      "adjT": 75.325
+    },
+    {
+      "teamId": "1371959",
+      "team": "Ottawa (AZ)",
+      "conference": null,
+      "games": 1,
+      "adjO": 54.794520547945204,
+      "adjD": 100.51635111876077,
+      "adjEM": -45.72183057081556,
+      "adjT": 71.175
+    },
+    {
+      "teamId": "2190",
+      "team": "MIT",
+      "conference": "newmac",
+      "games": 1,
+      "adjO": 74.07407407407408,
+      "adjD": 120.01519179642992,
+      "adjEM": -45.94111772235584,
+      "adjT": 67.5
+    },
+    {
+      "teamId": "1068",
+      "team": "Centenary (LA)",
+      "conference": "scac",
+      "games": 1,
+      "adjO": 77.20465890183029,
+      "adjD": 123.32990750256938,
+      "adjEM": -46.1252486007391,
+      "adjT": 75.125
+    },
+    {
+      "teamId": "810",
+      "team": "Molloy",
+      "conference": "ecc",
+      "games": 1,
+      "adjO": 76.94733522548091,
+      "adjD": 123.17666126418152,
+      "adjEM": -46.229326038700606,
+      "adjT": 79.275
+    },
+    {
+      "teamId": "35",
+      "team": "Dickinson",
+      "conference": "centennial",
+      "games": 1,
+      "adjO": 56.555269922879184,
+      "adjD": 103.33551340745586,
+      "adjEM": -46.78024348457668,
+      "adjT": 77.8
+    },
+    {
+      "teamId": "975",
+      "team": "Vassar",
+      "conference": "liberty-league",
+      "games": 1,
+      "adjO": 90.03690036900369,
+      "adjD": 137.26937269372695,
+      "adjEM": -47.23247232472326,
+      "adjT": 67.75
+    },
+    {
+      "teamId": "1388189",
+      "team": "Manor",
+      "conference": null,
+      "games": 2,
+      "adjO": 68.02721088435374,
+      "adjD": 115.52346570397111,
+      "adjEM": -47.49625481961738,
+      "adjT": 69.825
+    },
+    {
+      "teamId": "50871",
+      "team": "Me.-Fort Kent",
+      "conference": null,
+      "games": 1,
+      "adjO": 79.85480943738656,
+      "adjD": 127.37293325168402,
+      "adjEM": -47.518123814297454,
+      "adjT": 82.65
+    },
+    {
+      "teamId": "226",
+      "team": "SUNY Oneonta",
+      "conference": "sunyac",
+      "games": 2,
+      "adjO": 83.98950131233596,
+      "adjD": 131.90126248351234,
+      "adjEM": -47.91176117117638,
+      "adjT": 66.675
+    },
+    {
+      "teamId": "16420",
+      "team": "Hannibal-La Grange",
+      "conference": null,
+      "games": 1,
+      "adjO": 76.76602694977541,
+      "adjD": 124.89991993594876,
+      "adjEM": -48.13389298617335,
+      "adjT": 61.225
+    },
+    {
+      "teamId": "1826",
+      "team": "Kentucky St.",
+      "conference": "siac",
+      "games": 1,
+      "adjO": 75.4462782081509,
+      "adjD": 123.7936772046589,
+      "adjEM": -48.347398996508005,
+      "adjT": 74.225
+    },
+    {
+      "teamId": "53633",
+      "team": "Apprentice",
+      "conference": null,
+      "games": 1,
+      "adjO": 77.1020272515786,
+      "adjD": 125.58450233800936,
+      "adjEM": -48.48247508643075,
+      "adjT": 75.225
+    },
+    {
+      "teamId": "53566",
+      "team": "La Sierra",
+      "conference": null,
+      "games": 2,
+      "adjO": 66.74453529117304,
+      "adjD": 115.49755301794453,
+      "adjEM": -48.75301772677149,
+      "adjT": 74.9125
+    },
+    {
+      "teamId": "2727",
+      "team": "N.M. Highlands",
+      "conference": "rmac",
+      "games": 2,
+      "adjO": 75.82596136486731,
+      "adjD": 125,
+      "adjEM": -49.17403863513269,
+      "adjT": 69.2375
+    },
+    {
+      "teamId": "16432",
+      "team": "Central Penn",
+      "conference": null,
+      "games": 3,
+      "adjO": 78.55361596009975,
+      "adjD": 127.97111623708754,
+      "adjEM": -49.417500276987795,
+      "adjT": 80.2
+    },
+    {
+      "teamId": "53577",
+      "team": "Morris",
+      "conference": null,
+      "games": 1,
+      "adjO": 77.64298093587522,
+      "adjD": 127.18828152911755,
+      "adjEM": -49.54530059324233,
+      "adjT": 72.125
+    },
+    {
+      "teamId": "18519",
+      "team": "Union Commonwealth",
+      "conference": null,
+      "games": 1,
+      "adjO": 79.03402854006586,
+      "adjD": 128.74908558888077,
+      "adjEM": -49.71505704881491,
+      "adjT": 68.325
+    },
+    {
+      "teamId": "56142",
+      "team": "Coastal Ga.",
+      "conference": null,
+      "games": 3,
+      "adjO": 81.4856499718627,
+      "adjD": 131.21361397223467,
+      "adjEM": -49.72796400037197,
+      "adjT": 74.04166666666667
+    },
+    {
+      "teamId": "16379",
+      "team": "Jarvis Christian",
+      "conference": null,
+      "games": 2,
+      "adjO": 78.6190394804307,
+      "adjD": 128.4249453689696,
+      "adjEM": -49.80590588853889,
+      "adjT": 73.1375
+    },
+    {
+      "teamId": "53442",
+      "team": "John Brown",
+      "conference": null,
+      "games": 1,
+      "adjO": 65.72461386789352,
+      "adjD": 115.86206896551725,
+      "adjEM": -50.13745509762373,
+      "adjT": 76.075
+    },
+    {
+      "teamId": "1388906",
+      "team": "Nobel",
+      "conference": null,
+      "games": 6,
+      "adjO": 76.89263300729348,
+      "adjD": 127.40740740740742,
+      "adjEM": -50.514774400113936,
+      "adjT": 73.69583333333334
+    },
+    {
+      "teamId": "1986",
+      "team": "Rutgers-Camden",
+      "conference": "njac",
+      "games": 1,
+      "adjO": 79.42708333333334,
+      "adjD": 129.99675008124797,
+      "adjEM": -50.569666747914624,
+      "adjT": 76.8
+    },
+    {
+      "teamId": "1388964",
+      "team": "Penn St. Brandywine",
+      "conference": "united-east",
+      "games": 2,
+      "adjO": 72.68639940052455,
+      "adjD": 123.3414315081293,
+      "adjEM": -50.655032107604754,
+      "adjT": 66.725
+    },
+    {
+      "teamId": "261813",
+      "team": "Southern Wesleyan",
+      "conference": "conference-carolinas",
+      "games": 3,
+      "adjO": 91.24788255223038,
+      "adjD": 142.12060076216096,
+      "adjEM": -50.87271820993058,
+      "adjT": 73.79166666666667
+    },
+    {
+      "teamId": "1251",
+      "team": "Western N.M.",
+      "conference": "lone-star",
+      "games": 1,
+      "adjO": 86.76789587852495,
+      "adjD": 137.6648440012866,
+      "adjEM": -50.89694812276166,
+      "adjT": 80.675
+    },
+    {
+      "teamId": "1492",
+      "team": "Greensboro",
+      "conference": "usa-south",
+      "games": 1,
+      "adjO": 87.04663212435233,
+      "adjD": 137.9800853485064,
+      "adjEM": -50.93345322415408,
+      "adjT": 72.375
+    },
+    {
+      "teamId": "259",
+      "team": "San Fran. St.",
+      "conference": "ccaa",
+      "games": 2,
+      "adjO": 72.54052319049912,
+      "adjD": 123.85099177552009,
+      "adjEM": -51.31046858502097,
+      "adjT": 77.8875
+    },
+    {
+      "teamId": "756",
+      "team": "Lehman",
+      "conference": "cunyac",
+      "games": 1,
+      "adjO": 64.54091432961967,
+      "adjD": 116.03053435114504,
+      "adjEM": -51.48962002152537,
+      "adjT": 65.075
+    },
+    {
+      "teamId": "493",
+      "team": "Whittier",
+      "conference": "sciac",
+      "games": 2,
+      "adjO": 75.99746675110829,
+      "adjD": 127.5398562050641,
+      "adjEM": -51.542389453955806,
+      "adjT": 78.95
+    },
+    {
+      "teamId": "51670",
+      "team": "Wilson",
+      "conference": "united-east",
+      "games": 1,
+      "adjO": 79.25854905720678,
+      "adjD": 130.87139617751865,
+      "adjEM": -51.61284712031187,
+      "adjT": 78.225
+    },
+    {
+      "teamId": "2222",
+      "team": "Bethany (WV)",
+      "conference": "pac",
+      "games": 2,
+      "adjO": 70.51671732522796,
+      "adjD": 122.21203788573175,
+      "adjEM": -51.69532056050379,
+      "adjT": 82.25
+    },
+    {
+      "teamId": "1173",
+      "team": "Adrian",
+      "conference": "michigan-intercol. ath. assn.",
+      "games": 1,
+      "adjO": 75.74901074053138,
+      "adjD": 127.52633077142043,
+      "adjEM": -51.77732003088906,
+      "adjT": 88.45
+    },
+    {
+      "teamId": "1388733",
+      "team": "Justice Col.",
+      "conference": null,
+      "games": 3,
+      "adjO": 71.97943444730078,
+      "adjD": 123.99111007135338,
+      "adjEM": -52.0116756240526,
+      "adjT": 71.31666666666666
+    },
+    {
+      "teamId": "2522",
+      "team": "Alas. Anchorage",
+      "conference": "great-northwest",
+      "games": 1,
+      "adjO": 92.77566539923954,
+      "adjD": 144.93836384011954,
+      "adjEM": -52.16269844087999,
+      "adjT": 65.75
+    },
+    {
+      "teamId": "687",
+      "team": "West Va. Wesleyan",
+      "conference": "mec",
+      "games": 1,
+      "adjO": 82.12722988892628,
+      "adjD": 134.32835820895522,
+      "adjEM": -52.20112832002894,
+      "adjT": 74.275
+    },
+    {
+      "teamId": "50923",
+      "team": "Columbia Int'l",
+      "conference": null,
+      "games": 2,
+      "adjO": 79.91202346041055,
+      "adjD": 132.484076433121,
+      "adjEM": -52.57205297271045,
+      "adjT": 68.2
+    },
+    {
+      "teamId": "2001",
+      "team": "Simpson",
+      "conference": "american-rivers",
+      "games": 1,
+      "adjO": 67.23796967699407,
+      "adjD": 119.86531986531988,
+      "adjEM": -52.627350188325806,
+      "adjT": 75.85
+    },
+    {
+      "teamId": "1388705",
+      "team": "Notre Dame (MD)",
+      "conference": "united-east",
+      "games": 3,
+      "adjO": 79.65072942178682,
+      "adjD": 132.29820270126555,
+      "adjEM": -52.64747327947873,
+      "adjT": 78.25833333333334
+    },
+    {
+      "teamId": "1443",
+      "team": "UC Santa Cruz",
+      "conference": "c2c",
+      "games": 1,
+      "adjO": 87.22741433021808,
+      "adjD": 140.15802129852284,
+      "adjEM": -52.93060696830476,
+      "adjT": 72.225
+    },
+    {
+      "teamId": "16500",
+      "team": "Fisk",
+      "conference": null,
+      "games": 3,
+      "adjO": 71.77602421359853,
+      "adjD": 124.78920741989883,
+      "adjEM": -53.0131832063003,
+      "adjT": 77.09166666666667
+    },
+    {
+      "teamId": "1387964",
+      "team": "Oakland City",
+      "conference": null,
+      "games": 2,
+      "adjO": 71.46724417975095,
+      "adjD": 124.68285610728526,
+      "adjEM": -53.21561192753431,
+      "adjT": 69.2625
+    },
+    {
+      "teamId": "1756",
+      "team": "Colo. Christian",
+      "conference": "rmac",
+      "games": 2,
+      "adjO": 93.0930930930931,
+      "adjD": 146.67913938260057,
+      "adjEM": -53.586046289507465,
+      "adjT": 66.6
+    },
+    {
+      "teamId": "18518",
+      "team": "Siena Heights",
+      "conference": null,
+      "games": 2,
+      "adjO": 80.2547770700637,
+      "adjD": 133.97425957512795,
+      "adjEM": -53.71948250506425,
+      "adjT": 78.5
+    },
+    {
+      "teamId": "30645",
+      "team": "Northwest (WA)",
+      "conference": null,
+      "games": 1,
+      "adjO": 73.64473235594954,
+      "adjD": 127.4409044193217,
+      "adjEM": -53.796172063372154,
+      "adjT": 73.325
+    },
+    {
+      "teamId": "53574",
+      "team": "Mo. Baptist",
+      "conference": null,
+      "games": 1,
+      "adjO": 83.58662613981764,
+      "adjD": 137.46731415763915,
+      "adjEM": -53.88068801782151,
+      "adjT": 65.8
+    },
+    {
+      "teamId": "261793",
+      "team": "Valley Forge",
+      "conference": "united-east",
+      "games": 1,
+      "adjO": 66.51742884553886,
+      "adjD": 120.45003309066844,
+      "adjEM": -53.93260424512958,
+      "adjT": 78.175
+    },
+    {
+      "teamId": "382",
+      "team": "Eureka",
+      "conference": "sliac",
+      "games": 2,
+      "adjO": 72.60834014717906,
+      "adjD": 126.63543853981585,
+      "adjEM": -54.02709839263679,
+      "adjT": 76.4375
+    },
+    {
+      "teamId": "1807",
+      "team": "Rowan",
+      "conference": "njac",
+      "games": 1,
+      "adjO": 83.74527478918291,
+      "adjD": 137.9310344827586,
+      "adjEM": -54.18575969357569,
+      "adjT": 85.975
+    },
+    {
+      "teamId": "35514",
+      "team": "Trinity Baptist",
+      "conference": null,
+      "games": 2,
+      "adjO": 82.76695363238181,
+      "adjD": 136.9539551357733,
+      "adjEM": -54.187001503391485,
+      "adjT": 82.7625
+    },
+    {
+      "teamId": "877",
+      "team": "LaGrange",
+      "conference": "ccs",
+      "games": 2,
+      "adjO": 65.09405792773963,
+      "adjD": 119.43828529194383,
+      "adjEM": -54.3442273642042,
+      "adjT": 83.725
+    },
+    {
+      "teamId": "1303",
+      "team": "Randolph",
+      "conference": "odac",
+      "games": 1,
+      "adjO": 70.64311896034654,
+      "adjD": 125,
+      "adjEM": -54.35688103965346,
+      "adjT": 75.025
+    },
+    {
+      "teamId": "1387396",
+      "team": "Columbia (SC)",
+      "conference": null,
+      "games": 2,
+      "adjO": 85.19134775374376,
+      "adjD": 139.60445404686718,
+      "adjEM": -54.41310629312342,
+      "adjT": 75.125
+    },
+    {
+      "teamId": "1389069",
+      "team": "Bry. & Strat. (OH) USCAA",
+      "conference": null,
+      "games": 1,
+      "adjO": 89.27918038785218,
+      "adjD": 143.84308027606247,
+      "adjEM": -54.56389988821029,
+      "adjT": 68.325
+    },
+    {
+      "teamId": "1914",
+      "team": "Hanover",
+      "conference": "hcac",
+      "games": 1,
+      "adjO": 80.49762166117819,
+      "adjD": 135.25179856115108,
+      "adjEM": -54.75417689997289,
+      "adjT": 68.325
+    },
+    {
+      "teamId": "261798",
+      "team": "Roberts Wesleyan",
+      "conference": "ecc",
+      "games": 1,
+      "adjO": 80.02353633421595,
+      "adjD": 134.79052823315118,
+      "adjEM": -54.76699189893523,
+      "adjT": 84.975
+    },
+    {
+      "teamId": "1178",
+      "team": "Allegheny",
+      "conference": "pac",
+      "games": 1,
+      "adjO": 62.25117625769091,
+      "adjD": 117.31843575418995,
+      "adjEM": -55.06725949649904,
+      "adjT": 69.075
+    },
+    {
+      "teamId": "16389",
+      "team": "Coe",
+      "conference": "american-rivers",
+      "games": 2,
+      "adjO": 69.6463830551068,
+      "adjD": 125.18089725036181,
+      "adjEM": -55.534514195255014,
+      "adjT": 69.6375
+    },
+    {
+      "teamId": "1582",
+      "team": "Arkansas Tech",
+      "conference": "gac",
+      "games": 1,
+      "adjO": 84.45040214477213,
+      "adjD": 140.0523560209424,
+      "adjEM": -55.60195387617027,
+      "adjT": 74.6
+    },
+    {
+      "teamId": "50929",
+      "team": "Southwestern Christ.",
+      "conference": null,
+      "games": 3,
+      "adjO": 80.8211777417612,
+      "adjD": 136.59189822564446,
+      "adjEM": -55.77072048388325,
+      "adjT": 77.125
+    },
+    {
+      "teamId": "1388730",
+      "team": "Cleary",
+      "conference": null,
+      "games": 3,
+      "adjO": 67.65990814383332,
+      "adjD": 123.68832328644788,
+      "adjEM": -56.02841514261456,
+      "adjT": 74.39166666666667
+    },
+    {
+      "teamId": "18510",
+      "team": "Ind.-East",
+      "conference": null,
+      "games": 2,
+      "adjO": 77.68132999852875,
+      "adjD": 134.126868921469,
+      "adjEM": -56.445538922940244,
+      "adjT": 84.9625
+    },
+    {
+      "teamId": "53659",
+      "team": "Ohio Christian",
+      "conference": null,
+      "games": 1,
+      "adjO": 68.5091475282211,
+      "adjD": 125.14851485148515,
+      "adjEM": -56.63936732326404,
+      "adjT": 64.225
+    },
+    {
+      "teamId": "51925",
+      "team": "Mid-Atlantic Christ.",
+      "conference": null,
+      "games": 6,
+      "adjO": 70.0016509823345,
+      "adjD": 126.67478684531059,
+      "adjEM": -56.673135862976096,
+      "adjT": 75.71249999999999
+    },
+    {
+      "teamId": "16501",
+      "team": "Toccoa Falls",
+      "conference": null,
+      "games": 4,
+      "adjO": 81.67668361843118,
+      "adjD": 138.57532113662904,
+      "adjEM": -56.89863751819786,
+      "adjT": 81.1125
+    },
+    {
+      "teamId": "2306",
+      "team": "Regis (CO)",
+      "conference": "rmac",
+      "games": 1,
+      "adjO": 87.68267223382047,
+      "adjD": 144.6453407510431,
+      "adjEM": -56.96266851722264,
+      "adjT": 71.85
+    },
+    {
+      "teamId": "50866",
+      "team": "Campbellsville",
+      "conference": null,
+      "games": 1,
+      "adjO": 83.89619623178102,
+      "adjD": 140.88397790055248,
+      "adjEM": -56.98778166877146,
+      "adjT": 70.325
+    },
+    {
+      "teamId": "16397",
+      "team": "Our Lady of the Lake",
+      "conference": null,
+      "games": 1,
+      "adjO": 61.84873949579832,
+      "adjD": 118.89035667107002,
+      "adjEM": -57.0416171752717,
+      "adjT": 74.375
+    },
+    {
+      "teamId": "53568",
+      "team": "Me.-Augusta",
+      "conference": null,
+      "games": 1,
+      "adjO": 85.26645768025078,
+      "adjD": 142.31738035264482,
+      "adjEM": -57.05092267239404,
+      "adjT": 79.75
+    },
+    {
+      "teamId": "16442",
+      "team": "Southern Va.",
+      "conference": "usa-south",
+      "games": 2,
+      "adjO": 67.59443339960238,
+      "adjD": 124.89674541549647,
+      "adjEM": -57.30231201589409,
+      "adjT": 75.45
+    },
+    {
+      "teamId": "53461",
+      "team": "Boyce",
+      "conference": null,
+      "games": 1,
+      "adjO": 79.3465577596266,
+      "adjD": 136.73232908458866,
+      "adjEM": -57.38577132496205,
+      "adjT": 85.7
+    },
+    {
+      "teamId": "1821",
+      "team": "John Jay",
+      "conference": "cunyac",
+      "games": 1,
+      "adjO": 82.83608283608285,
+      "adjD": 140.6964474147028,
+      "adjEM": -57.86036457861994,
+      "adjT": 71.225
+    },
+    {
+      "teamId": "1394",
+      "team": "North Central (MN)",
+      "conference": "umac",
+      "games": 1,
+      "adjO": 75.32716246409193,
+      "adjD": 133.20647002854423,
+      "adjEM": -57.879307564452304,
+      "adjT": 78.325
+    },
+    {
+      "teamId": "982",
+      "team": "Washington Col.",
+      "conference": "centennial",
+      "games": 2,
+      "adjO": 76.97456492637215,
+      "adjD": 135.06139154160982,
+      "adjEM": -58.08682661523767,
+      "adjT": 74.7
+    },
+    {
+      "teamId": "16516",
+      "team": "Ecclesia",
+      "conference": null,
+      "games": 5,
+      "adjO": 71.43771604147996,
+      "adjD": 129.9611390711601,
+      "adjEM": -58.52342302968013,
+      "adjT": 78.11
+    },
+    {
+      "teamId": "50862",
+      "team": "Evergreen St.",
+      "conference": null,
+      "games": 2,
+      "adjO": 80.04140072451267,
+      "adjD": 138.60351732543967,
+      "adjEM": -58.562116600927,
+      "adjT": 72.4625
+    },
+    {
+      "teamId": "234",
+      "team": "Penn St.-Behrend",
+      "conference": "amcc",
+      "games": 1,
+      "adjO": 102.27272727272727,
+      "adjD": 161.05032822757113,
+      "adjEM": -58.77760095484386,
+      "adjT": 61.6
+    },
+    {
+      "teamId": "53565",
+      "team": "Ky. Christian",
+      "conference": null,
+      "games": 3,
+      "adjO": 72.41792998145927,
+      "adjD": 131.48411051654472,
+      "adjEM": -59.06618053508545,
+      "adjT": 76.40833333333333
+    },
+    {
+      "teamId": "1388169",
+      "team": "Calumet Col.",
+      "conference": null,
+      "games": 2,
+      "adjO": 78.03468208092485,
+      "adjD": 137.1841155234657,
+      "adjEM": -59.14943344254084,
+      "adjT": 69.2
+    },
+    {
+      "teamId": "16519",
+      "team": "George Fox",
+      "conference": "nwc",
+      "games": 1,
+      "adjO": 72.93946024799418,
+      "adjD": 132.16168717047452,
+      "adjEM": -59.222226922480345,
+      "adjT": 68.55
+    },
+    {
+      "teamId": "53638",
+      "team": "St. Francis (IL)",
+      "conference": null,
+      "games": 1,
+      "adjO": 78.26396300249021,
+      "adjD": 137.5921375921376,
+      "adjEM": -59.328174589647375,
+      "adjT": 70.275
+    },
+    {
+      "teamId": "1124",
+      "team": "VTSU-Johnson",
+      "conference": "north-atlantic",
+      "games": 2,
+      "adjO": 80.26067569885097,
+      "adjD": 139.64577656675746,
+      "adjEM": -59.38510086790649,
+      "adjT": 72.8875
+    },
+    {
+      "teamId": "1388157",
+      "team": "Lincoln (CA)",
+      "conference": null,
+      "games": 4,
+      "adjO": 86.81620138776826,
+      "adjD": 146.29482071713147,
+      "adjEM": -59.47861932936321,
+      "adjT": 77.4625
+    },
+    {
+      "teamId": "53571",
+      "team": "Miami-Middletown",
+      "conference": null,
+      "games": 1,
+      "adjO": 83.98044291055507,
+      "adjD": 143.6716077537058,
+      "adjEM": -59.691164843150744,
+      "adjT": 86.925
+    },
+    {
+      "teamId": "58642",
+      "team": "Saint Elizabeth",
+      "conference": "atlantic-east",
+      "games": 1,
+      "adjO": 81.23249299719888,
+      "adjD": 140.99400775467043,
+      "adjEM": -59.76151475747156,
+      "adjT": 71.4
+    },
+    {
+      "teamId": "1371949",
+      "team": "Miami-Hamilton",
+      "conference": null,
+      "games": 1,
+      "adjO": 85.94319009468316,
+      "adjD": 145.97495527728086,
+      "adjEM": -60.031765182597695,
+      "adjT": 68.65
+    },
+    {
+      "teamId": "1563",
+      "team": "Bloomsburg",
+      "conference": "psac",
+      "games": 1,
+      "adjO": 66.95212144803426,
+      "adjD": 127.34944380514001,
+      "adjEM": -60.39732235710575,
+      "adjT": 64.225
+    },
+    {
+      "teamId": "261814",
+      "team": "Georgian Court",
+      "conference": "cacc",
+      "games": 1,
+      "adjO": 78.21612349914237,
+      "adjD": 138.62718707940783,
+      "adjEM": -60.41106358026546,
+      "adjT": 72.875
+    },
+    {
+      "teamId": "16401",
+      "team": "Oakwood",
+      "conference": null,
+      "games": 2,
+      "adjO": 82.29342327150084,
+      "adjD": 142.76315789473685,
+      "adjEM": -60.46973462323601,
+      "adjT": 74.125
+    },
+    {
+      "teamId": "58655",
+      "team": "Midway",
+      "conference": null,
+      "games": 3,
+      "adjO": 80.41799182189914,
+      "adjD": 141.21327226008268,
+      "adjEM": -60.79528043818354,
+      "adjT": 73.36666666666666
+    },
+    {
+      "teamId": "261791",
+      "team": "Northwestern Okla.",
+      "conference": "gac",
+      "games": 1,
+      "adjO": 75.97467510829723,
+      "adjD": 136.95090439276484,
+      "adjEM": -60.97622928446761,
+      "adjT": 75.025
+    },
+    {
+      "teamId": "1785",
+      "team": "Elmira",
+      "conference": "empire-8",
+      "games": 1,
+      "adjO": 90.80590238365494,
+      "adjD": 151.80265654648957,
+      "adjEM": -60.996754162834634,
+      "adjT": 66.075
+    },
+    {
+      "teamId": "1406",
+      "team": "Penn St.-Abington",
+      "conference": "united-east",
+      "games": 2,
+      "adjO": 77.75831873905429,
+      "adjD": 138.85547344904623,
+      "adjEM": -61.09715470999194,
+      "adjT": 71.375
+    },
+    {
+      "teamId": "1901",
+      "team": "Dallas",
+      "conference": "scac",
+      "games": 2,
+      "adjO": 73.45689508586975,
+      "adjD": 135.27896995708156,
+      "adjEM": -61.82207487121181,
+      "adjT": 73.5125
+    },
+    {
+      "teamId": "1371941",
+      "team": "Bryan",
+      "conference": null,
+      "games": 3,
+      "adjO": 73.36893429301138,
+      "adjD": 135.53113553113553,
+      "adjEM": -62.162201238124155,
+      "adjT": 71.78333333333333
+    },
+    {
+      "teamId": "1412",
+      "team": "Howard Payne",
+      "conference": "asc",
+      "games": 2,
+      "adjO": 71.64676478755901,
+      "adjD": 133.96331295163978,
+      "adjEM": -62.31654816408077,
+      "adjT": 90.025
+    },
+    {
+      "teamId": "921",
+      "team": "Ohio Wesleyan",
+      "conference": "ncac",
+      "games": 2,
+      "adjO": 73.99425287356323,
+      "adjD": 136.53603034134008,
+      "adjEM": -62.54177746777685,
+      "adjT": 69.6
+    },
+    {
+      "teamId": "2381",
+      "team": "Crown (MN)",
+      "conference": "umac",
+      "games": 1,
+      "adjO": 57.486631016042786,
+      "adjD": 120.1484981437732,
+      "adjEM": -62.66186712773041,
+      "adjT": 74.8
+    },
+    {
+      "teamId": "53444",
+      "team": "Benedictine Mesa",
+      "conference": null,
+      "games": 1,
+      "adjO": 72.59528130671505,
+      "adjD": 135.38833484436387,
+      "adjEM": -62.79305353764882,
+      "adjT": 82.65
+    },
+    {
+      "teamId": "53667",
+      "team": "Bethesda (CA)",
+      "conference": null,
+      "games": 6,
+      "adjO": 74.59687805883263,
+      "adjD": 137.83962889330684,
+      "adjEM": -63.24275083447421,
+      "adjT": 80.87916666666666
+    },
+    {
+      "teamId": "1671",
+      "team": "St. John Fisher",
+      "conference": "empire-8",
+      "games": 1,
+      "adjO": 67.84260515603799,
+      "adjD": 131.1018131101813,
+      "adjEM": -63.25920795414331,
+      "adjT": 73.7
+    },
+    {
+      "teamId": "53467",
+      "team": "York (NE)",
+      "conference": null,
+      "games": 1,
+      "adjO": 77.54010695187165,
+      "adjD": 140.93959731543623,
+      "adjEM": -63.39949036356458,
+      "adjT": 74.8
+    },
+    {
+      "teamId": "137",
+      "team": "Whitman",
+      "conference": "nwc",
+      "games": 1,
+      "adjO": 66.1491731353358,
+      "adjD": 129.565816678153,
+      "adjEM": -63.4166435428172,
+      "adjT": 74.075
+    },
+    {
+      "teamId": "645",
+      "team": "Webster",
+      "conference": "sliac",
+      "games": 2,
+      "adjO": 63.66918280275681,
+      "adjD": 127.1488809601038,
+      "adjEM": -63.47969815734699,
+      "adjT": 76.175
+    },
+    {
+      "teamId": "51928",
+      "team": "CarolinaU",
+      "conference": null,
+      "games": 3,
+      "adjO": 72.13578500707214,
+      "adjD": 135.95543935432534,
+      "adjEM": -63.81965434725319,
+      "adjT": 70.7
+    },
+    {
+      "teamId": "18515",
+      "team": "Fisher",
+      "conference": null,
+      "games": 1,
+      "adjO": 87.60876087608762,
+      "adjD": 151.93026151930263,
+      "adjEM": -64.32150064321502,
+      "adjT": 83.325
+    },
+    {
+      "teamId": "1388998",
+      "team": "Defiance",
+      "conference": null,
+      "games": 2,
+      "adjO": 68.00719306849763,
+      "adjD": 132.37410071942446,
+      "adjEM": -64.36690765092683,
+      "adjT": 76.4625
+    },
+    {
+      "teamId": "2063",
+      "team": "Geneva",
+      "conference": "pac",
+      "games": 1,
+      "adjO": 67.89454676778621,
+      "adjD": 132.43147027411894,
+      "adjEM": -64.53692350633273,
+      "adjT": 69.225
+    },
+    {
+      "teamId": "1738",
+      "team": "Oglethorpe",
+      "conference": "saa",
+      "games": 1,
+      "adjO": 65.06180871828238,
+      "adjD": 129.65964343598054,
+      "adjEM": -64.59783471769816,
+      "adjT": 76.85
+    },
+    {
+      "teamId": "666",
+      "team": "Belmont Abbey",
+      "conference": "conference-carolinas",
+      "games": 1,
+      "adjO": 74.80748074807481,
+      "adjD": 139.4857344135259,
+      "adjEM": -64.6782536654511,
+      "adjT": 68.175
+    },
+    {
+      "teamId": "261796",
+      "team": "Sarah Lawrence",
+      "conference": "skyline",
+      "games": 1,
+      "adjO": 59.0802282645183,
+      "adjD": 124.198447519406,
+      "adjEM": -65.1182192548877,
+      "adjT": 74.475
+    },
+    {
+      "teamId": "16434",
+      "team": "Champion Chris.",
+      "conference": null,
+      "games": 5,
+      "adjO": 72.94267959811836,
+      "adjD": 138.1384855671892,
+      "adjEM": -65.19580596907085,
+      "adjT": 86.095
+    },
+    {
+      "teamId": "16409",
+      "team": "Northern N.M.",
+      "conference": null,
+      "games": 1,
+      "adjO": 76.37906647807637,
+      "adjD": 141.5929203539823,
+      "adjEM": -65.21385387590593,
+      "adjT": 70.7
+    },
+    {
+      "teamId": "56145",
+      "team": "Point U.",
+      "conference": null,
+      "games": 1,
+      "adjO": 73.2824427480916,
+      "adjD": 138.57677902621722,
+      "adjEM": -65.29433627812563,
+      "adjT": 81.875
+    },
+    {
+      "teamId": "56130",
+      "team": "Pacific Union",
+      "conference": null,
+      "games": 1,
+      "adjO": 62.745098039215684,
+      "adjD": 128.26603325415678,
+      "adjEM": -65.52093521494109,
+      "adjT": 82.875
+    },
+    {
+      "teamId": "53569",
+      "team": "Manhattan Chrst.",
+      "conference": null,
+      "games": 1,
+      "adjO": 78.17589576547232,
+      "adjD": 143.92220421393841,
+      "adjEM": -65.7463084484661,
+      "adjT": 76.75
+    },
+    {
+      "teamId": "56116",
+      "team": "Harris-Stowe",
+      "conference": null,
+      "games": 1,
+      "adjO": 59.615935798222985,
+      "adjD": 125.39545585274664,
+      "adjEM": -65.77952005452366,
+      "adjT": 87.225
+    },
+    {
+      "teamId": "1613",
+      "team": "Waynesburg",
+      "conference": "pac",
+      "games": 1,
+      "adjO": 68.7960687960688,
+      "adjD": 134.69261662032747,
+      "adjEM": -65.89654782425868,
+      "adjT": 81.4
+    },
+    {
+      "teamId": "1684",
+      "team": "Shenandoah",
+      "conference": "odac",
+      "games": 1,
+      "adjO": 69.48282668772207,
+      "adjD": 135.46126897625535,
+      "adjEM": -65.97844228853329,
+      "adjT": 63.325
+    },
+    {
+      "teamId": "1216",
+      "team": "Concord",
+      "conference": "mec",
+      "games": 1,
+      "adjO": 81.21827411167513,
+      "adjD": 147.2,
+      "adjEM": -65.98172588832486,
+      "adjT": 78.8
+    },
+    {
+      "teamId": "1388739",
+      "team": "New College (FL)",
+      "conference": null,
+      "games": 1,
+      "adjO": 79.50163156333431,
+      "adjD": 146.0203470975464,
+      "adjEM": -66.51871553421208,
+      "adjT": 84.275
+    },
+    {
+      "teamId": "56133",
+      "team": "Alice Lloyd",
+      "conference": null,
+      "games": 1,
+      "adjO": 85.75197889182058,
+      "adjD": 152.31788079470198,
+      "adjEM": -66.5659019028814,
+      "adjT": 75.8
+    },
+    {
+      "teamId": "1371952",
+      "team": "Paul Smiths",
+      "conference": null,
+      "games": 1,
+      "adjO": 74.2671009771987,
+      "adjD": 140.9106015287471,
+      "adjEM": -66.6435005515484,
+      "adjT": 76.75
+    },
+    {
+      "teamId": "53622",
+      "team": "Science & Arts Okla.",
+      "conference": null,
+      "games": 1,
+      "adjO": 77.58919293384136,
+      "adjD": 144.2753143613501,
+      "adjEM": -66.68612142750874,
+      "adjT": 72.175
+    },
+    {
+      "teamId": "50928",
+      "team": "Bob Jones",
+      "conference": null,
+      "games": 3,
+      "adjO": 72.12326521691618,
+      "adjD": 139.00955690703736,
+      "adjEM": -66.88629169012118,
+      "adjT": 76.25833333333334
+    },
+    {
+      "teamId": "2470",
+      "team": "Benedictine (IL)",
+      "conference": "nacc",
+      "games": 1,
+      "adjO": 80.23293432546102,
+      "adjD": 147.12354605469977,
+      "adjEM": -66.89061172923876,
+      "adjT": 77.275
+    },
+    {
+      "teamId": "16458",
+      "team": "Milligan",
+      "conference": null,
+      "games": 2,
+      "adjO": 84.6832397754611,
+      "adjD": 151.88237195023427,
+      "adjEM": -67.19913217477317,
+      "adjT": 77.9375
+    },
+    {
+      "teamId": "58661",
+      "team": "East-West U.",
+      "conference": null,
+      "games": 3,
+      "adjO": 70.78909015198835,
+      "adjD": 138.00080938891136,
+      "adjEM": -67.21171923692302,
+      "adjT": 80.05
+    },
+    {
+      "teamId": "2622",
+      "team": "Plattsburgh St.",
+      "conference": "sunyac",
+      "games": 1,
+      "adjO": 83.16566063044937,
+      "adjD": 150.5161505161505,
+      "adjEM": -67.35048988570114,
+      "adjT": 74.55
+    },
+    {
+      "teamId": "2589",
+      "team": "Schreiner",
+      "conference": "scac",
+      "games": 1,
+      "adjO": 68.07437756066813,
+      "adjD": 135.48387096774192,
+      "adjEM": -67.4094934070738,
+      "adjT": 79.325
+    },
+    {
+      "teamId": "53644",
+      "team": "Penn St.-New Kens.",
+      "conference": null,
+      "games": 1,
+      "adjO": 57.679409792085856,
+      "adjD": 125.12479201331115,
+      "adjEM": -67.44538222122529,
+      "adjT": 74.55
+    },
+    {
+      "teamId": "1153",
+      "team": "UMass Boston",
+      "conference": "little-east",
+      "games": 1,
+      "adjO": 53.51170568561873,
+      "adjD": 121.29290236587804,
+      "adjEM": -67.78119668025931,
+      "adjT": 74.75
+    },
+    {
+      "teamId": "53603",
+      "team": "Warner Pacific",
+      "conference": null,
+      "games": 1,
+      "adjO": 73.91438250692947,
+      "adjD": 141.84397163120568,
+      "adjEM": -67.9295891242762,
+      "adjT": 81.175
+    },
+    {
+      "teamId": "53673",
+      "team": "West Va. Tech",
+      "conference": null,
+      "games": 1,
+      "adjO": 72.57501744591764,
+      "adjD": 140.59269469331497,
+      "adjEM": -68.01767724739733,
+      "adjT": 71.65
+    },
+    {
+      "teamId": "2322",
+      "team": "St. Mary's (MD)",
+      "conference": "united-east",
+      "games": 2,
+      "adjO": 63.31296035104216,
+      "adjD": 131.45248798635868,
+      "adjEM": -68.13952763531651,
+      "adjT": 79.7625
+    },
+    {
+      "teamId": "2621",
+      "team": "Pfeiffer",
+      "conference": "usa-south",
+      "games": 2,
+      "adjO": 75.28072117665666,
+      "adjD": 143.54373598205703,
+      "adjEM": -68.26301480540037,
+      "adjT": 79.0375
+    },
+    {
+      "teamId": "16382",
+      "team": "Southern-N.O.",
+      "conference": null,
+      "games": 1,
+      "adjO": 74.77906186267845,
+      "adjD": 143.71257485029938,
+      "adjEM": -68.93351298762093,
+      "adjT": 73.55
+    },
+    {
+      "teamId": "1388155",
+      "team": "La. Christian",
+      "conference": null,
+      "games": 1,
+      "adjO": 63.85101429996675,
+      "adjD": 133.1136738056013,
+      "adjEM": -69.26265950563456,
+      "adjT": 75.175
+    },
+    {
+      "teamId": "56153",
+      "team": "Peru St.",
+      "conference": null,
+      "games": 1,
+      "adjO": 68.8622754491018,
+      "adjD": 138.2861346083119,
+      "adjEM": -69.4238591592101,
+      "adjT": 66.8
+    },
+    {
+      "teamId": "1389052",
+      "team": "TAMU-San Antonio",
+      "conference": null,
+      "games": 1,
+      "adjO": 70.19783024888322,
+      "adjD": 139.66309341500767,
+      "adjEM": -69.46526316612444,
+      "adjT": 78.35
+    },
+    {
+      "teamId": "58663",
+      "team": "Kansas Christian",
+      "conference": null,
+      "games": 1,
+      "adjO": 55.3918680023571,
+      "adjD": 125,
+      "adjEM": -69.6081319976429,
+      "adjT": 84.85
+    },
+    {
+      "teamId": "1389056",
+      "team": "Regent",
+      "conference": "c2c",
+      "games": 2,
+      "adjO": 72.44501940491591,
+      "adjD": 142.21938775510205,
+      "adjEM": -69.77436835018614,
+      "adjT": 77.3
+    },
+    {
+      "teamId": "58656",
+      "team": "Ozark Christian",
+      "conference": null,
+      "games": 1,
+      "adjO": 89.0106128038343,
+      "adjD": 159.15817165406114,
+      "adjEM": -70.14755885022683,
+      "adjT": 73.025
+    },
+    {
+      "teamId": "1371968",
+      "team": "Bry. & Strat. (Alb.)",
+      "conference": null,
+      "games": 1,
+      "adjO": 46.617028164454524,
+      "adjD": 117.12285168682368,
+      "adjEM": -70.50582352236916,
+      "adjT": 77.225
+    },
+    {
+      "teamId": "940",
+      "team": "Rockford",
+      "conference": "nacc",
+      "games": 1,
+      "adjO": 78.94736842105263,
+      "adjD": 149.57780458383596,
+      "adjEM": -70.63043616278333,
+      "adjT": 60.8
+    },
+    {
+      "teamId": "1387965",
+      "team": "Converse",
+      "conference": "conference-carolinas",
+      "games": 1,
+      "adjO": 64.9772579597141,
+      "adjD": 135.68340538742933,
+      "adjEM": -70.70614742771524,
+      "adjT": 76.95
+    },
+    {
+      "teamId": "487",
+      "team": "Buena Vista",
+      "conference": "american-rivers",
+      "games": 1,
+      "adjO": 76.1068422978412,
+      "adjD": 146.81647940074907,
+      "adjEM": -70.70963710290788,
+      "adjT": 68.325
+    },
+    {
+      "teamId": "50926",
+      "team": "S'western Adventist",
+      "conference": null,
+      "games": 3,
+      "adjO": 69.9252443933295,
+      "adjD": 140.95500459136824,
+      "adjEM": -71.02976019803873,
+      "adjT": 72.45833333333333
+    },
+    {
+      "teamId": "16531",
+      "team": "Arlington Baptist",
+      "conference": null,
+      "games": 2,
+      "adjO": 72.5111441307578,
+      "adjD": 143.98805078416729,
+      "adjEM": -71.47690665340949,
+      "adjT": 84.125
+    },
+    {
+      "teamId": "261792",
+      "team": "Spring Hill",
+      "conference": "siac",
+      "games": 1,
+      "adjO": 68.09669731018046,
+      "adjD": 139.68253968253967,
+      "adjEM": -71.58584237235921,
+      "adjT": 73.425
+    },
+    {
+      "teamId": "1023",
+      "team": "Hawaii Hilo",
+      "conference": "pacwest",
+      "games": 1,
+      "adjO": 67.32528357116722,
+      "adjD": 139.10574875798437,
+      "adjEM": -71.78046518681715,
+      "adjT": 68.325
+    },
+    {
+      "teamId": "1388041",
+      "team": "Warren Wilson",
+      "conference": "c2c",
+      "games": 1,
+      "adjO": 77.97029702970298,
+      "adjD": 150.30303030303028,
+      "adjEM": -72.3327332733273,
+      "adjT": 80.8
+    },
+    {
+      "teamId": "53531",
+      "team": "Simpson (CA)",
+      "conference": null,
+      "games": 1,
+      "adjO": 72.28044813877847,
+      "adjD": 144.84679665738162,
+      "adjEM": -72.56634851860315,
+      "adjT": 69.175
+    },
+    {
+      "teamId": "1389400",
+      "team": "Salish-Kootenai",
+      "conference": null,
+      "games": 1,
+      "adjO": 62.82007511095937,
+      "adjD": 135.5031550979741,
+      "adjEM": -72.68307998701471,
+      "adjT": 73.225
+    },
+    {
+      "teamId": "53602",
+      "team": "Voorhees",
+      "conference": null,
+      "games": 1,
+      "adjO": 62.92456203074723,
+      "adjD": 135.66583363084612,
+      "adjEM": -72.74127160009888,
+      "adjT": 69.925
+    },
+    {
+      "teamId": "1371969",
+      "team": "Penn St.-Shenango",
+      "conference": null,
+      "games": 4,
+      "adjO": 62.610296938540635,
+      "adjD": 135.61893203883494,
+      "adjEM": -73.0086351002943,
+      "adjT": 81.45625
+    },
+    {
+      "teamId": "53552",
+      "team": "Christendom",
+      "conference": null,
+      "games": 1,
+      "adjO": 50.50859347597334,
+      "adjD": 123.95543175487467,
+      "adjEM": -73.44683827890132,
+      "adjT": 71.275
+    },
+    {
+      "teamId": "1975",
+      "team": "Puget Sound",
+      "conference": "nwc",
+      "games": 1,
+      "adjO": 62.59097525473071,
+      "adjD": 136.61971830985914,
+      "adjEM": -74.02874305512843,
+      "adjT": 68.7
+    },
+    {
+      "teamId": "290",
+      "team": "Thiel",
+      "conference": "pac",
+      "games": 1,
+      "adjO": 79.0273556231003,
+      "adjD": 153.2168092227594,
+      "adjEM": -74.18945359965909,
+      "adjT": 65.8
+    },
+    {
+      "teamId": "18539",
+      "team": "Northwest Indian",
+      "conference": null,
+      "games": 2,
+      "adjO": 78.64045318227258,
+      "adjD": 152.948801036941,
+      "adjEM": -74.30834785466843,
+      "adjT": 75.025
+    },
+    {
+      "teamId": "16527",
+      "team": "Dallas Christian",
+      "conference": null,
+      "games": 3,
+      "adjO": 58.63964643742589,
+      "adjD": 133.39015555082037,
+      "adjEM": -74.75050911339449,
+      "adjT": 77.30833333333334
+    },
+    {
+      "teamId": "2245",
+      "team": "Georgia College",
+      "conference": "peach-belt",
+      "games": 1,
+      "adjO": 62.656641604010034,
+      "adjD": 137.4187558031569,
+      "adjEM": -74.76211419914686,
+      "adjT": 79.8
+    },
+    {
+      "teamId": "98",
+      "team": "Marywood",
+      "conference": "atlantic-east",
+      "games": 1,
+      "adjO": 71.71853856562922,
+      "adjD": 146.70561506004543,
+      "adjEM": -74.98707649441621,
+      "adjT": 73.9
+    },
+    {
+      "teamId": "465",
+      "team": "Averett",
+      "conference": "odac",
+      "games": 2,
+      "adjO": 64.94132776081015,
+      "adjD": 140.1824291886702,
+      "adjEM": -75.24110142786004,
+      "adjT": 77.7625
+    },
+    {
+      "teamId": "1271",
+      "team": "CCNY",
+      "conference": "cunyac",
+      "games": 2,
+      "adjO": 68.06930693069307,
+      "adjD": 144.250116081102,
+      "adjEM": -76.18080915040892,
+      "adjT": 80.8
+    },
+    {
+      "teamId": "16470",
+      "team": "Reinhardt",
+      "conference": null,
+      "games": 2,
+      "adjO": 60.36700394443491,
+      "adjD": 136.74626352860332,
+      "adjEM": -76.37925958416841,
+      "adjT": 72.8875
+    },
+    {
+      "teamId": "1388738",
+      "team": "Biblical Stud. (TX)",
+      "conference": null,
+      "games": 8,
+      "adjO": 62.46712788768865,
+      "adjD": 139.81395723432527,
+      "adjEM": -77.34682934663662,
+      "adjT": 77.240625
+    },
+    {
+      "teamId": "1388990",
+      "team": "UC Merced",
+      "conference": "ccaa",
+      "games": 1,
+      "adjO": 59.893048128342244,
+      "adjD": 137.5850949480473,
+      "adjEM": -77.69204681970506,
+      "adjT": 70.125
+    },
+    {
+      "teamId": "1389269",
+      "team": "Baptist U. (FL)",
+      "conference": null,
+      "games": 1,
+      "adjO": 51.64690382081687,
+      "adjD": 129.75272533900556,
+      "adjEM": -78.10582151818869,
+      "adjT": 94.875
+    },
+    {
+      "teamId": "53585",
+      "team": "Pensacola Christian",
+      "conference": null,
+      "games": 1,
+      "adjO": 67.71463119709794,
+      "adjD": 145.9149834187519,
+      "adjEM": -78.20035222165394,
+      "adjT": 82.7
+    },
+    {
+      "teamId": "1487",
+      "team": "Gallaudet",
+      "conference": "united-east",
+      "games": 1,
+      "adjO": 71.21263016459524,
+      "adjD": 149.44463143722652,
+      "adjEM": -78.23200127263128,
+      "adjT": 74.425
+    },
+    {
+      "teamId": "2278",
+      "team": "SUNY Maritime",
+      "conference": "skyline",
+      "games": 1,
+      "adjO": 65.89990674541498,
+      "adjD": 144.13304588851247,
+      "adjEM": -78.23313914309749,
+      "adjT": 80.425
+    },
+    {
+      "teamId": "2256",
+      "team": "Dominican (IL)",
+      "conference": "nacc",
+      "games": 2,
+      "adjO": 75.68704009611052,
+      "adjD": 154.34462444771725,
+      "adjEM": -78.65758435160673,
+      "adjT": 83.2375
+    },
+    {
+      "teamId": "596",
+      "team": "Saint Leo",
+      "conference": "sunshine-state",
+      "games": 1,
+      "adjO": 73.26007326007326,
+      "adjD": 152.48468345813478,
+      "adjEM": -79.22461019806153,
+      "adjT": 75.075
+    },
+    {
+      "teamId": "188",
+      "team": "Texas Lutheran",
+      "conference": "scac",
+      "games": 2,
+      "adjO": 66.4819944598338,
+      "adjD": 145.98540145985402,
+      "adjEM": -79.50340700002022,
+      "adjT": 72.2
+    },
+    {
+      "teamId": "1388508",
+      "team": "Lyon",
+      "conference": "sliac",
+      "games": 1,
+      "adjO": 48.71259568545582,
+      "adjD": 128.2758620689655,
+      "adjEM": -79.56326638350967,
+      "adjT": 71.85
+    },
+    {
+      "teamId": "125",
+      "team": "Blackburn",
+      "conference": "sliac",
+      "games": 1,
+      "adjO": 69.52820148989004,
+      "adjD": 149.7326203208556,
+      "adjEM": -80.20441883096557,
+      "adjT": 70.475
+    },
+    {
+      "teamId": "1436",
+      "team": "Rosemont",
+      "conference": "united-east",
+      "games": 1,
+      "adjO": 37.59705762157745,
+      "adjD": 117.94439764111205,
+      "adjEM": -80.3473400195346,
+      "adjT": 61.175
+    },
+    {
+      "teamId": "1371877",
+      "team": "SUNY Delhi",
+      "conference": "north-atlantic",
+      "games": 1,
+      "adjO": 65.32663316582915,
+      "adjD": 145.93908629441626,
+      "adjEM": -80.6124531285871,
+      "adjT": 79.6
+    },
+    {
+      "teamId": "1383",
+      "team": "JWU (Providence)",
+      "conference": "cne",
+      "games": 2,
+      "adjO": 68.98839137645108,
+      "adjD": 150.18193847171685,
+      "adjEM": -81.19354709526577,
+      "adjT": 75.375
+    },
+    {
+      "teamId": "296",
+      "team": "Merchant Marine",
+      "conference": "skyline",
+      "games": 1,
+      "adjO": 67.37458806298059,
+      "adjD": 148.57554994590697,
+      "adjEM": -81.20096188292638,
+      "adjT": 68.275
+    },
+    {
+      "teamId": "18513",
+      "team": "Virginia-Lynchburg",
+      "conference": null,
+      "games": 10,
+      "adjO": 68.15033161385409,
+      "adjD": 149.4689145849884,
+      "adjEM": -81.3185829711343,
+      "adjT": 84.8125
+    },
+    {
+      "teamId": "56119",
+      "team": "Blue Mountain (MS)",
+      "conference": null,
+      "games": 1,
+      "adjO": 75.68590350047303,
+      "adjD": 157.44,
+      "adjEM": -81.75409649952697,
+      "adjT": 79.275
+    },
+    {
+      "teamId": "1244",
+      "team": "St. Joseph's (L.I.)",
+      "conference": "skyline",
+      "games": 1,
+      "adjO": 55.753646677471636,
+      "adjD": 137.79781068898905,
+      "adjEM": -82.04416401151741,
+      "adjT": 77.125
+    },
+    {
+      "teamId": "1371945",
+      "team": "UHSP",
+      "conference": null,
+      "games": 1,
+      "adjO": 63.69029035279426,
+      "adjD": 146.5108935901484,
+      "adjEM": -82.82060323735416,
+      "adjT": 80.075
+    },
+    {
+      "teamId": "345",
+      "team": "Centenary (NJ)",
+      "conference": "atlantic-east",
+      "games": 1,
+      "adjO": 67.02412868632707,
+      "adjD": 150.50275705481673,
+      "adjEM": -83.47862836848965,
+      "adjT": 74.6
+    },
+    {
+      "teamId": "261811",
+      "team": "Alfred St.",
+      "conference": "amcc",
+      "games": 1,
+      "adjO": 77.03703703703704,
+      "adjD": 160.91954022988503,
+      "adjEM": -83.88250319284799,
+      "adjT": 84.375
+    },
+    {
+      "teamId": "1401",
+      "team": "St. Joseph's (Brkln)",
+      "conference": "skyline",
+      "games": 1,
+      "adjO": 79.54162453656893,
+      "adjD": 165.0709805216243,
+      "adjEM": -85.52935598505537,
+      "adjT": 74.175
+    },
+    {
+      "teamId": "1388485",
+      "team": "Clinton",
+      "conference": null,
+      "games": 1,
+      "adjO": 54.12541254125413,
+      "adjD": 140.14407334643093,
+      "adjEM": -86.01866080517681,
+      "adjT": 75.75
+    },
+    {
+      "teamId": "197",
+      "team": "Mt. St. Mary (NY)",
+      "conference": "skyline",
+      "games": 1,
+      "adjO": 49.94937563280459,
+      "adjD": 137.4392220421394,
+      "adjEM": -87.4898464093348,
+      "adjT": 74.075
+    },
+    {
+      "teamId": "16398",
+      "team": "Mayville St.",
+      "conference": null,
+      "games": 1,
+      "adjO": 71.91568505889646,
+      "adjD": 159.9500156201187,
+      "adjEM": -88.03433056122225,
+      "adjT": 80.65
+    },
+    {
+      "teamId": "16497",
+      "team": "Culver-Stockton",
+      "conference": null,
+      "games": 1,
+      "adjO": 57.68600458865946,
+      "adjD": 146.5201465201465,
+      "adjEM": -88.83414193148705,
+      "adjT": 76.275
+    },
+    {
+      "teamId": "53653",
+      "team": "West Coast Baptist",
+      "conference": null,
+      "games": 2,
+      "adjO": 59.10091166299905,
+      "adjD": 149.53271028037383,
+      "adjEM": -90.43179861737478,
+      "adjT": 79.525
+    },
+    {
+      "teamId": "1399",
+      "team": "VTSU Lyndon",
+      "conference": "north-atlantic",
+      "games": 1,
+      "adjO": 67.50496360026472,
+      "adjD": 158.28738241972104,
+      "adjEM": -90.78241881945632,
+      "adjT": 75.55
+    },
+    {
+      "teamId": "41",
+      "team": "Earlham",
+      "conference": "hcac",
+      "games": 1,
+      "adjO": 44.34589800443459,
+      "adjD": 136.71444321940461,
+      "adjEM": -92.36854521497003,
+      "adjT": 67.65
+    },
+    {
+      "teamId": "149003",
+      "team": "Southwest (NM)",
+      "conference": null,
+      "games": 1,
+      "adjO": 43.868394815553344,
+      "adjD": 137.65718067504963,
+      "adjEM": -93.78878585949629,
+      "adjT": 75.225
+    },
+    {
+      "teamId": "51961",
+      "team": "Aquinas",
+      "conference": null,
+      "games": 1,
+      "adjO": 60.38647342995169,
+      "adjD": 154.61788138093834,
+      "adjEM": -94.23140795098665,
+      "adjT": 82.8
+    },
+    {
+      "teamId": "2294",
+      "team": "Elms",
+      "conference": "great-northeast",
+      "games": 2,
+      "adjO": 52.09742895805142,
+      "adjD": 148.74371859296483,
+      "adjEM": -96.64628963491342,
+      "adjT": 73.9
+    },
+    {
+      "teamId": "1679",
+      "team": "St. Scholastica",
+      "conference": "miac",
+      "games": 1,
+      "adjO": 49.270664505672606,
+      "adjD": 146.63143989431967,
+      "adjEM": -97.36077538864706,
+      "adjT": 77.125
+    },
+    {
+      "teamId": "16534",
+      "team": "Trinity (FL)",
+      "conference": null,
+      "games": 1,
+      "adjO": 53.52363960749331,
+      "adjD": 152.46895755125612,
+      "adjEM": -98.94531794376282,
+      "adjT": 84.075
+    },
+    {
+      "teamId": "18512",
+      "team": "Trinity Christian",
+      "conference": null,
+      "games": 2,
+      "adjO": 64.01045068582626,
+      "adjD": 164.48230668414155,
+      "adjEM": -100.47185599831529,
+      "adjT": 76.55
+    },
+    {
+      "teamId": "2432",
+      "team": "Curry",
+      "conference": "cne",
+      "games": 1,
+      "adjO": 38.46153846153847,
+      "adjD": 140.02478314745971,
+      "adjEM": -101.56324468592125,
+      "adjT": 80.6
+    },
+    {
+      "teamId": "1387979",
+      "team": "Mary Baldwin",
+      "conference": "usa-south",
+      "games": 1,
+      "adjO": 59.682539682539684,
+      "adjD": 163.96568160152526,
+      "adjEM": -104.28314191898558,
+      "adjT": 78.75
+    },
+    {
+      "teamId": "582",
+      "team": "Principia",
+      "conference": "sliac",
+      "games": 1,
+      "adjO": 43.65079365079366,
+      "adjD": 150.7936507936508,
+      "adjEM": -107.14285714285715,
+      "adjT": 75.6
+    },
+    {
+      "teamId": "1962",
+      "team": "Old Westbury",
+      "conference": "skyline",
+      "games": 1,
+      "adjO": 36.02192638997651,
+      "adjD": 143.58174014826375,
+      "adjEM": -107.55981375828725,
+      "adjT": 63.85
+    }
+  ]
+}
