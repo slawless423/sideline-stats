@@ -21,10 +21,20 @@ jobs:
       - name: Install dependencies
         run: npm install pg
       
-      - name: Run incremental update and write to database
+      - name: Update Women's D1 ratings
         env:
           POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
-        run: node scripts/build_ratings.mjs
+        run: node scripts/build_womens_d1_ratings.mjs
+
+      - name: Update Men's D1 ratings
+        env:
+          POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+        run: node scripts/build_mens_d1_ratings.mjs
+
+      - name: Update Men's D2 ratings
+        env:
+          POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+        run: node scripts/build_mens_d2_ratings.mjs
       
       - name: Clean up installation artifacts
         run: |
@@ -36,11 +46,9 @@ jobs:
           git config user.name "ratings-bot"
           git config user.email "bot@users.noreply.github.com"
           
-          # Add and commit changes first
           git add public/data/*.json
           git commit -m "Update ratings" || echo "No changes to commit"
           
-          # Then pull and rebase
           git fetch origin main
           git rebase origin/main || {
             echo "Rebase failed, force pushing our changes"
