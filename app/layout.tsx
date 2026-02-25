@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Baseline Analytics",
+  title: "Sideline Stats",
   description: "Advanced college basketball efficiency ratings and data-driven analytics.",
 };
 
