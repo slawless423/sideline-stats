@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-02-25T19:52:01.832Z",
+  "generated_at_utc": "2026-02-25T20:25:29.565Z",
   "season_start": "2025-11-14",
   "rows": [
     {
@@ -2543,16 +2543,6 @@
       "adjT": 74.958
     },
     {
-      "teamId": "2573",
-      "team": "Linfield",
-      "conference": "nwc",
-      "games": 1,
-      "adjO": 103.96975425330812,
-      "adjD": 113.4892981582877,
-      "adjEM": -9.519543904979571,
-      "adjT": 52.9
-    },
-    {
       "teamId": "2722",
       "team": "Western Colo.",
       "conference": "rmac",
@@ -2913,26 +2903,6 @@
       "adjT": 69.3787037037037
     },
     {
-      "teamId": "1923",
-      "team": "Minn.-Morris",
-      "conference": "umac",
-      "games": 1,
-      "adjO": 80.23676422229529,
-      "adjD": 103.67999999999999,
-      "adjEM": -23.4432357777047,
-      "adjT": 76.025
-    },
-    {
-      "teamId": "873",
-      "team": "Edgewood",
-      "conference": "nacc",
-      "games": 1,
-      "adjO": 108.499095840868,
-      "adjD": 132.17391304347825,
-      "adjEM": -23.674817202610257,
-      "adjT": 69.125
-    },
-    {
       "teamId": "2187",
       "team": "Maryville (MO)",
       "conference": "glvc",
@@ -2973,16 +2943,6 @@
       "adjT": 71.358
     },
     {
-      "teamId": "2255",
-      "team": "Pacific Lutheran",
-      "conference": "nwc",
-      "games": 1,
-      "adjO": 88.13559322033898,
-      "adjD": 122.06243423360223,
-      "adjEM": -33.92684101326326,
-      "adjT": 73.75
-    },
-    {
       "teamId": "2244",
       "team": "Erskine",
       "conference": "conference-carolinas",
@@ -3003,66 +2963,6 @@
       "adjT": 71.5638888888889
     },
     {
-      "teamId": "1743",
-      "team": "McMurry",
-      "conference": "scac",
-      "games": 1,
-      "adjO": 108.61021793497679,
-      "adjD": 146.63376806485724,
-      "adjEM": -38.02355012988045,
-      "adjT": 69.975
-    },
-    {
-      "teamId": "2381",
-      "team": "Crown (MN)",
-      "conference": "umac",
-      "games": 1,
-      "adjO": 98.50249584026622,
-      "adjD": 139.42781979611968,
-      "adjEM": -40.92532395585346,
-      "adjT": 75.125
-    },
-    {
-      "teamId": "1777",
-      "team": "Colorado Col.",
-      "conference": "scac",
-      "games": 1,
-      "adjO": 91.6613621896881,
-      "adjD": 137.61467889908258,
-      "adjEM": -45.95331670939447,
-      "adjT": 78.55
-    },
-    {
-      "teamId": "1394",
-      "team": "North Central (MN)",
-      "conference": "umac",
-      "games": 1,
-      "adjO": 85.21303258145365,
-      "adjD": 132.31552162849874,
-      "adjEM": -47.1024890470451,
-      "adjT": 79.8
-    },
-    {
-      "teamId": "175",
-      "team": "Lakeland",
-      "conference": "nacc",
-      "games": 1,
-      "adjO": 76.42442852268849,
-      "adjD": 125.89804994868285,
-      "adjEM": -49.47362142599437,
-      "adjT": 73.275
-    },
-    {
-      "teamId": "309",
-      "team": "Ozarks (AR)",
-      "conference": "scac",
-      "games": 2,
-      "adjO": 68.37050301155787,
-      "adjD": 117.96067977340886,
-      "adjEM": -49.590176761850984,
-      "adjT": 76.7875
-    },
-    {
       "teamId": "51864",
       "team": "P.R.-Rio Piedras",
       "conference": "dii-independent",
@@ -3073,16 +2973,6 @@
       "adjT": 77.53
     },
     {
-      "teamId": "2720",
-      "team": "Pacific (OR)",
-      "conference": "nwc",
-      "games": 1,
-      "adjO": 82.81053952321204,
-      "adjD": 137.49204328453214,
-      "adjEM": -54.6815037613201,
-      "adjT": 79.7
-    },
-    {
       "teamId": "51861",
       "team": "P.R.-Mayaguez",
       "conference": "dii-independent",
@@ -3091,46 +2981,6 @@
       "adjD": 133.40270551508846,
       "adjEM": -62.6930011817725,
       "adjT": 79.90416666666667
-    },
-    {
-      "teamId": "876",
-      "team": "Hendrix",
-      "conference": "scac",
-      "games": 2,
-      "adjO": 63.646695892190294,
-      "adjD": 127.67336357744652,
-      "adjEM": -64.02666768525623,
-      "adjT": 76.9875
-    },
-    {
-      "teamId": "2072",
-      "team": "Martin Luther",
-      "conference": "umac",
-      "games": 1,
-      "adjO": 63.40454858718125,
-      "adjD": 134.07821229050282,
-      "adjEM": -70.67366370332157,
-      "adjT": 72.55
-    },
-    {
-      "teamId": "1900",
-      "team": "Concordia Wisconsin",
-      "conference": "nacc",
-      "games": 1,
-      "adjO": 55.4016620498615,
-      "adjD": 135.67251461988303,
-      "adjEM": -80.27085257002153,
-      "adjT": 63.175
-    },
-    {
-      "teamId": "1921",
-      "team": "Marian (WI)",
-      "conference": "nacc",
-      "games": 1,
-      "adjO": 74.3653914908831,
-      "adjD": 154.82954545454544,
-      "adjEM": -80.46415396366234,
-      "adjT": 69.925
     }
   ]
 }
