@@ -35,14 +35,10 @@ export async function GET() {
         opp_tov as "opp_tov",
         opp_pf as "opp_pf"
       FROM teams
+
       WHERE division = 'mens-d2'
-        AND conference IN (
-          'cacc', 'ciaa', 'conference-carolinas', 'ecc', 'gliac', 'glvc',
-          'g-mac', 'gac', 'gulf-south', 'lone-star', 'mec',
-          'ne10', 'nsic', 'peach-belt', 'psac', 'rmac',
-          'sac', 'siac', 'sunshine-state',
-          'mid-america-intercollegiate', 'pacwest', 'ccaa', 'great-northwest'
-        )
+  AND conference IS NOT NULL
+  AND conference != ''
     `);
 
     return NextResponse.json({
