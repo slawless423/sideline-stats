@@ -145,20 +145,25 @@ export async function insertGame(game) {
     ON CONFLICT (game_id) DO NOTHING
   `;
   
-  await db.query(query, [
-    game.gameId, game.date, game.division || null,
-    game.homeId, game.homeTeam, game.homeScore, game.homeConf,
-    game.awayId, game.awayTeam, game.awayScore, game.awayConf,
-    game.isConferenceGame,
-    game.homeStats.fgm, game.homeStats.fga, game.homeStats.tpm, game.homeStats.tpa,
-    game.homeStats.ftm, game.homeStats.fta, game.homeStats.orb, game.homeStats.drb,
-    game.homeStats.trb, game.homeStats.ast, game.homeStats.stl, game.homeStats.blk,
-    game.homeStats.tov, game.homeStats.pf,
-    game.awayStats.fgm, game.awayStats.fga, game.awayStats.tpm, game.awayStats.tpa,
-    game.awayStats.ftm, game.awayStats.fta, game.awayStats.orb, game.awayStats.drb,
-    game.awayStats.trb, game.awayStats.ast, game.awayStats.stl, game.awayStats.blk,
-    game.awayStats.tov, game.awayStats.pf
-  ]);
+  try {
+    await db.query(query, [
+      game.gameId, game.date, game.division || null,
+      game.homeId, game.homeTeam, game.homeScore, game.homeConf,
+      game.awayId, game.awayTeam, game.awayScore, game.awayConf,
+      game.isConferenceGame,
+      game.homeStats.fgm, game.homeStats.fga, game.homeStats.tpm, game.homeStats.tpa,
+      game.homeStats.ftm, game.homeStats.fta, game.homeStats.orb, game.homeStats.drb,
+      game.homeStats.trb, game.homeStats.ast, game.homeStats.stl, game.homeStats.blk,
+      game.homeStats.tov, game.homeStats.pf,
+      game.awayStats.fgm, game.awayStats.fga, game.awayStats.tpm, game.awayStats.tpa,
+      game.awayStats.ftm, game.awayStats.fta, game.awayStats.orb, game.awayStats.drb,
+      game.awayStats.trb, game.awayStats.ast, game.awayStats.stl, game.awayStats.blk,
+      game.awayStats.tov, game.awayStats.pf
+    ]);
+  } catch (err) {
+    // Skip games where one team is not in our teams table (non-D1/D2 opponents)
+    if (err.code !== '23503') throw err;
+  }
 }
 
 // Insert or update player
@@ -265,7 +270,12 @@ export async function insertPlayerGamesBatch(rows, batchSize = 500) {
       ON CONFLICT (game_id, player_id) DO NOTHING
     `;
 
-    await db.query(query, values);
+    try {
+      await db.query(query, values);
+    } catch (err) {
+      // Skip batches with foreign key violations (games not in our teams table)
+      if (err.code !== '23503') throw err;
+    }
     totalInserted += batch.length;
 
     if (totalInserted % 5000 === 0) {
