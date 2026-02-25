@@ -10,6 +10,20 @@ const REQUEST_RETRIES = 3;
 const BOX_CONCURRENCY = 4;
 const RETRY_428_DELAY_MS = 2000;
 
+// Known Men's D2 conferences - used to filter out non-D2 opponents
+const MENS_D2_CONFERENCES = new Set([
+  'cacc', 'ciaa', 'conference-carolinas', 'ecc', 'gliac', 'glvc',
+  'g-mac', 'gac', 'gulf-south', 'lone-star', 'mec',
+  'ne10', 'nsic', 'peach-belt', 'psac', 'rmac',
+  'sac', 'siac', 'sunshine-state',
+  'mid-america-intercollegiate', 'pacwest', 'ccaa', 'great-northwest',
+  'nacc', 'scac', 'dii-independent', 'umac', 'nwc'
+]);
+
+function isD2Conference(conf) {
+  return conf && MENS_D2_CONFERENCES.has(conf.toLowerCase());
+}
+
 console.log("START build_mens_d2_complete", new Date().toISOString());
 
 // ===== UTILITY FUNCTIONS =====
@@ -443,6 +457,11 @@ async function main() {
         gameData.isConferenceGame = confInfo.isConferenceGame;
       }
 
+      // Only keep games where at least one team is a known D2 conference
+      const homeIsD2 = isD2Conference(gameData.home.conference);
+      const awayIsD2 = isD2Conference(gameData.away.conference);
+      if (!homeIsD2 && !awayIsD2) continue;
+
       totalBoxesParsed++;
       allGames.push(gameData);
     }
@@ -540,6 +559,9 @@ async function main() {
     for (const team of [home, away]) {
       const oppStats = team === home ? away.stats : home.stats;
 
+      // Only track stats for D2 teams - skip non-D2 opponents
+      if (!isD2Conference(team.conference)) continue;
+
       if (!teamSeasonStats.has(team.teamId)) {
         teamSeasonStats.set(team.teamId, {
           teamId: team.teamId, teamName: team.teamName, conference: team.conference,
@@ -582,6 +604,10 @@ async function main() {
         if (!playerData.teamId || !playerData.players) continue;
         const teamId = String(playerData.teamId);
         const teamName = teamId === home.teamId ? home.teamName : away.teamName;
+        const teamConf = teamId === home.teamId ? home.conference : away.conference;
+
+        // Only track players for D2 teams
+        if (!isD2Conference(teamConf)) continue;
 
         for (const p of playerData.players) {
           const playerId = buildPlayerId(teamId, p);
