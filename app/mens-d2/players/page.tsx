@@ -70,12 +70,11 @@ export default function PlayersPage() {
   useEffect(() => {
     Promise.all([
       fetch(`/api/mens-d2/players?minMinutes=${minMinutes}`).then(res => res.json()),
-      fetch('/api/teams/stats').then(res => res.json())
+      fetch('/api/mens-d2/teams/stats').then(res => res.json())
     ]).then(([playersData, teamsData]) => {
       setPlayers(playersData.players);
       setFilteredPlayers(playersData.players);
       
-      // Create map of team stats
       const statsMap = new Map();
       teamsData.teams.forEach((t: any) => {
         statsMap.set(t.teamId, {
@@ -122,55 +121,43 @@ export default function PlayersPage() {
     const twoPA = p.fga - p.tpa;
     const twoPM = p.fgm - p.tpm;
 
-    // Usage %
     const playerPoss = p.fga + 0.44 * p.fta + p.tov;
     const usagePct = teamPoss > 0 ? (playerPoss / teamPoss) * 100 : 0;
 
-    // Shot %
     const shotPct = team.fga > 0 ? (p.fga / team.fga) * 100 : 0;
 
-    // eFG% and TS%
     const efg = p.fga > 0 ? ((p.fgm + 0.5 * p.tpm) / p.fga) * 100 : 0;
     const ts = (p.fga + 0.44 * p.fta) > 0 ? (p.points / (2 * (p.fga + 0.44 * p.fta))) * 100 : 0;
 
-    // Rebound %
     const orPct = p.minutes > 0 && (team.orb + opp_drb) > 0 
       ? (p.orb / p.minutes) * (teamMinutes / 5) / (team.orb + opp_drb) * 100 : 0;
     const drbPct = p.minutes > 0 && (drb + team.opp_orb) > 0
       ? (p.drb / p.minutes) * (teamMinutes / 5) / (drb + team.opp_orb) * 100 : 0;
 
-    // Assist/TO Rate
     const teamFGMWhileOnFloor = (team.fgm - p.fgm) * (p.minutes / teamMinutes) * 5;
     const aRate = teamFGMWhileOnFloor > 0 ? (p.ast / teamFGMWhileOnFloor) * 100 : 0;
     
     const playerPoss100 = p.minutes > 0 ? (teamPoss / teamMinutes) * p.minutes : 0;
     const toRate = playerPoss100 > 0 ? (p.tov / playerPoss100) * 100 : 0;
 
-    // Block/Steal %
-    const minutesPct = teamMinutes > 0 ? (p.minutes / teamMinutes) * 5 : 0;
+    const teamMinutes5 = teamMinutes > 0 ? teamMinutes / 5 : 1;
     const oppPoss = team.opp_fga - team.opp_orb + team.opp_tov + 0.475 * team.opp_fta;
     const opp2PA = team.opp_fga - team.opp_tpa;
     const blkPct = (p.minutes * opp2PA) > 0 
-      ? 100 * (p.blk * (teamMinutes / 5)) / (p.minutes * opp2PA) : 0;
+      ? 100 * (p.blk * teamMinutes5) / (p.minutes * opp2PA) : 0;
     const stlPct = (p.minutes * oppPoss) > 0 
-      ? 100 * (p.stl * (teamMinutes / 5)) / (p.minutes * oppPoss) : 0;
+      ? 100 * (p.stl * teamMinutes5) / (p.minutes * oppPoss) : 0;
 
-    // Per 40
     const per40 = p.minutes > 0 ? 40 / p.minutes : 0;
     const fc40 = p.pf * per40;
 
-    // FT Rate
     const ftRate = p.fga > 0 ? (p.fta / p.fga) * 100 : 0;
-
-    // Shooting %s
     const ftPct = p.fta > 0 ? (p.ftm / p.fta) * 100 : 0;
     const twoPct = twoPA > 0 ? (twoPM / twoPA) * 100 : 0;
     const threePct = p.tpa > 0 ? (p.tpm / p.tpa) * 100 : 0;
 
-    // ORtg
     const ortg = playerPoss > 0 ? (p.points / playerPoss) * 100 : 0;
 
-    // Per game
     const ppg = p.games > 0 ? p.points / p.games : 0;
     const rpg = p.games > 0 ? p.trb / p.games : 0;
     const apg = p.games > 0 ? p.ast / p.games : 0;
@@ -205,8 +192,8 @@ export default function PlayersPage() {
     const bStats = calculatePlayerStats(b);
     if (!aStats || !bStats) return 0;
 
-    const aVal = sortKey === 'games' ? a.games : sortKey === 'starts' ? a.starts : aStats[sortKey];
-    const bVal = sortKey === 'games' ? b.games : sortKey === 'starts' ? b.starts : bStats[sortKey];
+    const aVal = sortKey === 'games' ? a.games : sortKey === 'starts' ? a.starts : aStats[sortKey as keyof typeof aStats] as number;
+    const bVal = sortKey === 'games' ? b.games : sortKey === 'starts' ? b.starts : bStats[sortKey as keyof typeof bStats] as number;
     
     return sortOrder === 'asc' ? aVal - bVal : bVal - aVal;
   });
@@ -334,7 +321,7 @@ export default function PlayersPage() {
                     {p.firstName} {p.lastName}
                   </td>
                   <td style={{ padding: "4px" }}>
-                    <Link href={`/team/${p.teamId}`} style={{ color: ACCENT, textDecoration: "none" }}>
+                    <Link href={`/mens-d2/team/${p.teamId}`} style={{ color: ACCENT, textDecoration: "none" }}>
                       {p.teamName}
                     </Link>
                   </td>
