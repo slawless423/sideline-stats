@@ -1,0 +1,47 @@
+name: Update Men's D1 (Full Rebuild)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: |
+          cd scripts
+          echo '{"type":"module"}' > package.json
+          npm install pg
+
+      - name: Run Men's D1 full rebuild
+        env:
+          POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+        run: node scripts/build_mens_d1_complete.mjs
+
+      - name: Clean up package files
+        run: |
+          rm -f scripts/package.json scripts/package-lock.json
+          rm -rf scripts/node_modules
+
+      - name: Commit and push updated data
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add public/data/mens_d1_ratings.json
+          git add public/data/mens_d1_team_stats.json
+          git add public/data/mens_d1_player_stats.json
+          git add public/data/mens_d1_games.json
+          git add public/data/mens_d1_games_cache.json
+          git add public/data/mens_d1_sample_boxscore.json || true
+          git diff --staged --quiet || git commit -m "Update Men's D1 data (full rebuild)"
+          git push
