@@ -166,7 +166,6 @@ function pick(obj, keys) {
   return null;
 }
 
-// Build a unique player ID using teamId + NCAA id + first/last name
 function buildPlayerId(teamId, p) {
   const ncaaId = p.id ?? p.ncaaId ?? 0;
   const first = (p.firstName || "").toLowerCase().replace(/\s+/g, "");
@@ -670,6 +669,20 @@ async function main() {
   );
   console.log(`✅ WROTE public/data/mens_d2_games.json (${gamesLog.length} games)`);
 
+  // Save games cache so the daily update knows which games are already processed
+  const successfullyParsedIds = allGames.map(g => g.gameId);
+  await fs.writeFile(
+    "public/data/mens_d2_games_cache.json",
+    JSON.stringify({
+      generated_at_utc: new Date().toISOString(),
+      note: "Contains ONLY successfully parsed game IDs - not scheduled games",
+      total_games: successfullyParsedIds.length,
+      game_ids: successfullyParsedIds,
+    }, null, 2),
+    "utf8"
+  );
+  console.log(`✅ WROTE public/data/mens_d2_games_cache.json (${successfullyParsedIds.length} games)`);
+
   await fs.writeFile(
     "public/data/mens_d2_player_stats.json",
     JSON.stringify({ generated_at_utc: new Date().toISOString(), players: allPlayers }, null, 2),
@@ -721,18 +734,31 @@ async function main() {
       }
       console.log(`✅ Wrote ${allPlayers.length} players to database`);
 
+      // Batch insert player game stats
       console.log("Writing player game stats...");
-      let playerGameCount = 0;
+      const playerGameRows = [];
       for (const game of gamesLog) {
         if (game.players && Array.isArray(game.players)) {
           for (const teamData of game.players) {
             for (const p of teamData.players) {
-              await db.insertPlayerGame(game.gameId, p.playerId, teamData.teamId, p);
-              playerGameCount++;
+              playerGameRows.push({
+                gameId: game.gameId,
+                playerId: p.playerId,
+                teamId: teamData.teamId,
+                division: p.division || DIVISION,
+                minutes: p.minutes,
+                fgm: p.fgm, fga: p.fga,
+                tpm: p.tpm, tpa: p.tpa,
+                ftm: p.ftm, fta: p.fta,
+                orb: p.orb, drb: p.drb, trb: p.trb,
+                ast: p.ast, stl: p.stl, blk: p.blk,
+                tov: p.tov, pf: p.pf, points: p.points,
+              });
             }
           }
         }
       }
+      const playerGameCount = await db.insertPlayerGamesBatch(playerGameRows);
       console.log(`✅ Wrote ${playerGameCount} player game records to database`);
 
       await db.closeDb();
