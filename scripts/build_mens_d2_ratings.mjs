@@ -499,6 +499,8 @@ async function main() {
         });
       } else {
         existing.games++;
+        // *** FIX: preserve conference if we now have it and didn't before ***
+        if (!existing.conference && side.conference) existing.conference = side.conference;
         if (side.stats.points > opp.stats.points) existing.wins++; else existing.losses++;
         existing.points += side.stats.points; existing.opp_points += opp.stats.points;
         existing.fgm += side.stats.fgm; existing.fga += side.stats.fga;
