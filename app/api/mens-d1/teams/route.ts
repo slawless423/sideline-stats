@@ -6,6 +6,14 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false }
 });
 
+const MENS_D1_CONFERENCES = [
+  'acc', 'american', 'america-east', 'asun', 'atlantic-10',
+  'big-12', 'big-east', 'big-sky', 'big-south', 'big-ten', 'big-west',
+  'caa', 'cusa', 'horizon', 'ivy-league', 'maac', 'mac', 'meac',
+  'mountain-west', 'mvc', 'nec', 'ovc', 'patriot', 'sec', 'socon',
+  'southland', 'summit-league', 'sun-belt', 'swac', 'wac', 'wcc'
+];
+
 export async function GET() {
   try {
     const result = await pool.query(`
@@ -23,10 +31,9 @@ export async function GET() {
         updated_at as "updated"
       FROM teams
       WHERE division = 'mens-d1'
-        AND conference IS NOT NULL
-        AND conference != ''
+        AND conference = ANY($1)
       ORDER BY adj_em DESC
-    `);
+    `, [MENS_D1_CONFERENCES]);
 
     const rows = result.rows.map(row => ({
       ...row,
