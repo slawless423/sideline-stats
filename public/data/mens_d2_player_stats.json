@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-02-25T20:25:29.952Z",
+  "generated_at_utc": "2026-02-25T22:18:04.373Z",
   "players": [
     {
       "playerId": "427_21_matthieu_biembongo",
@@ -33595,7 +33595,7 @@
       "year": "",
       "games": 26,
       "starts": 5,
-      "minutes": 256.29999999999995,
+      "minutes": 254.89999999999995,
       "fgm": 19,
       "fga": 51,
       "tpm": 0,
@@ -33624,7 +33624,7 @@
       "year": "",
       "games": 22,
       "starts": 6,
-      "minutes": 364.4,
+      "minutes": 364.9,
       "fgm": 37,
       "fga": 96,
       "tpm": 5,
@@ -33798,7 +33798,7 @@
       "year": "",
       "games": 23,
       "starts": 12,
-      "minutes": 542.9999999999999,
+      "minutes": 543.8,
       "fgm": 81,
       "fga": 228,
       "tpm": 28,
@@ -39784,7 +39784,7 @@
       "trb": 166,
       "ast": 62,
       "stl": 52,
-      "blk": 10,
+      "blk": 11,
       "tov": 66,
       "pf": 62,
       "points": 553
