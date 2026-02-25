@@ -32,6 +32,7 @@ export async function GET() {
         opp_fta
       FROM teams
       WHERE division = 'mens-d2'
+        AND conference IS NOT NULL
       ORDER BY adj_em DESC
     `);
 
