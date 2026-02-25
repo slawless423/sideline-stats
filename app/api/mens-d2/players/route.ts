@@ -21,7 +21,7 @@ export async function GET(request: Request) {
         p.number,
         p.position,
         p.year,
-        p.games,
+        p.games, 
         p.starts,
         p.minutes,
         p.fgm, p.fga, p.tpm, p.tpa, p.ftm, p.fta,
