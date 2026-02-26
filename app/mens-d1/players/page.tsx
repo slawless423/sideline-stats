@@ -115,7 +115,8 @@ export default function MensD1PlayersPage() {
       (teamPossTotal / teamMinutes * p.minutes) / 5;
 
     // ── Shot % ──────────────────────────────────────────────────────
-    const shotPct = team.fga > 0 ? (p.fga / team.fga) * 100 : 0;
+    const shotPct = team.fga > 0 && p.minutes > 0
+  ? (p.fga / team.fga) / (p.minutes / teamMinutes) / 5 * 100 : 0;
 
     // ── eFG% ────────────────────────────────────────────────────────
     const efg = p.fga > 0 ? ((p.fgm + 0.5 * p.tpm) / p.fga) * 100 : 0;
