@@ -9,7 +9,7 @@ const pool = new Pool({
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const minMinutes = parseInt(searchParams.get('minMinutes') || '0');
-  
+
   try {
     const result = await pool.query(`
       SELECT 
@@ -40,7 +40,8 @@ export async function GET(request: Request) {
         p.pf,
         p.points
       FROM players p
-      WHERE p.minutes >= $1
+      WHERE p.division = 'womens-d1'
+        AND p.minutes >= $1
       ORDER BY p.points DESC
     `, [minMinutes]);
 
