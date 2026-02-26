@@ -422,7 +422,7 @@ async function main() {
       if (totalBoxesFetched === 1) {
         await fs.mkdir("public/data", { recursive: true });
         await fs.writeFile(
-          "public/data/sample_boxscore.json",
+          "public/data/womens_d1_sample_boxscore.json",
           JSON.stringify(box, null, 2),
           "utf8"
         );
@@ -643,36 +643,36 @@ async function main() {
   await fs.mkdir("public/data", { recursive: true });
 
   await fs.writeFile(
-    "public/data/ratings.json",
+    "public/data/womens_d1_ratings.json",
     JSON.stringify({ generated_at_utc: new Date().toISOString(), season_start: SEASON_START, rows: ratingsRows }, null, 2),
     "utf8"
   );
-  console.log(`✅ WROTE public/data/ratings.json (${ratingsRows.length} teams)`);
+  console.log(`✅ WROTE public/data/womens_d1_ratings.json (${ratingsRows.length} teams)`);
 
   await fs.writeFile(
-    "public/data/team_stats.json",
+    "public/data/womens_d1_team_stats.json",
     JSON.stringify({ generated_at_utc: new Date().toISOString(), teams: Array.from(teamSeasonStats.values()) }, null, 2),
     "utf8"
   );
-  console.log(`✅ WROTE public/data/team_stats.json`);
+  console.log(`✅ WROTE public/data/womens_d1_team_stats.json`);
 
   await fs.writeFile(
-    "public/data/games.json",
+    "public/data/womens_d1_games.json",
     JSON.stringify({ generated_at_utc: new Date().toISOString(), games: gamesLog }, null, 2),
     "utf8"
   );
-  console.log(`✅ WROTE public/data/games.json (${gamesLog.length} games)`);
+  console.log(`✅ WROTE public/data/womens_d1_games.json (${gamesLog.length} games)`);
 
   await fs.writeFile(
-    "public/data/player_stats.json",
+    "public/data/womens_d1_player_stats.json",
     JSON.stringify({ generated_at_utc: new Date().toISOString(), players: allPlayers }, null, 2),
     "utf8"
   );
-  console.log(`✅ WROTE public/data/player_stats.json (${allPlayers.length} players)`);
+  console.log(`✅ WROTE public/data/womens_d1_player_stats.json (${allPlayers.length} players)`);
 
   const successfullyParsedIds = allGames.map(g => g.gameId);
   await fs.writeFile(
-    "public/data/games_cache.json",
+    "public/data/womens_d1_games_cache.json",
     JSON.stringify({
       generated_at_utc: new Date().toISOString(),
       note: "Contains ONLY successfully parsed game IDs - not scheduled games",
@@ -681,7 +681,7 @@ async function main() {
     }, null, 2),
     "utf8"
   );
-  console.log(`✅ WROTE public/data/games_cache.json (${successfullyParsedIds.length} games)`);
+  console.log(`✅ WROTE public/data/womens_d1_games_cache.json (${successfullyParsedIds.length} games)`);
 
   if (process.env.POSTGRES_URL) {
     console.log("\n📊 Writing data to database...");
