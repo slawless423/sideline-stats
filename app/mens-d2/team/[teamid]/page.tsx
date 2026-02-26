@@ -134,9 +134,9 @@ export default async function MensD2TeamPage({
 
   const [teamsData, teamApiData, gamesData, playersData, allTeamStatsData] = await Promise.all([
     fetchAPI('/api/mens-d2/teams'),
-    fetchAPI(`/api/mens-d2/teams/${teamId}`),
-    fetchAPI(`/api/mens-d2/teams/${teamId}/games?conf=${confOnly}`),
-    fetchAPI(`/api/mens-d2/teams/${teamId}/players${confOnly ? '?conf=true' : ''}`),
+    fetchAPI(`/api/mens-d2/team/${teamId}`),
+    fetchAPI(`/api/mens-d2/team/${teamId}/games?conf=${confOnly}`),
+    fetchAPI(`/api/mens-d2/team/${teamId}/players${confOnly ? '?conf=true' : ''}`),
     fetchAPI('/api/mens-d2/teams/stats'),
   ]);
 
