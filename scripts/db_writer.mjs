@@ -161,8 +161,8 @@ export async function insertGame(game) {
       game.awayStats.tov, game.awayStats.pf
     ]);
   } catch (err) {
-    // Skip games where one team is not in our teams table (non-D1/D2 opponents)
-    if (err.code !== '23503') throw err;
+    // Log and skip any game insert errors (non-D1 opponents, null IDs, constraint violations, etc.)
+    console.log(`insertGame skipped game ${game.gameId}: ${err.message}`);
   }
 }
 
@@ -273,8 +273,8 @@ export async function insertPlayerGamesBatch(rows, batchSize = 500) {
     try {
       await db.query(query, values);
     } catch (err) {
-      // Skip batches with foreign key violations (games not in our teams table)
-      if (err.code !== '23503') throw err;
+      // Log and skip batches with any insert errors
+      console.log(`insertPlayerGamesBatch skipped batch at offset ${i}: ${err.message}`);
     }
     totalInserted += batch.length;
 
