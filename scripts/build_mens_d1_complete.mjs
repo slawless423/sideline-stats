@@ -3,7 +3,7 @@ import * as db from "./db_writer.mjs";
 
 const NCAA_API_BASE = "https://ncaa-api.henrygd.me";
 const DIVISION = "mens-d1";
-const SEASON_START = "2025-11-04";
+const SEASON_START = "2025-11-03";
 const BOX_DELAY_MS = 400;
 const REQUEST_TIMEOUT_MS = 20000;
 const REQUEST_RETRIES = 3;
