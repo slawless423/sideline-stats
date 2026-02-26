@@ -81,7 +81,6 @@ export default function PlayersPage() {
     ]).then(([playersData, teamsData]) => {
       setPlayers(playersData.players);
       setFilteredPlayers(playersData.players);
-      
       const statsMap = new Map();
       teamsData.teams.forEach((t: any) => {
         statsMap.set(t.teamId, {
@@ -115,9 +114,13 @@ export default function PlayersPage() {
     if (!team) return null;
 
     const teamMinutes = team.games * 200;
+    const opp_drb = team.opp_trb - team.opp_orb;
+    const drb = team.trb - team.orb;
+    const twoPA = p.fga - p.tpa;
+    const twoPM = p.fgm - p.tpm;
 
     // ── Derived team values ──────────────────────────────────────────
-    const Team_ORB_pct = team.orb / (team.orb + (team.opp_trb - team.opp_orb));
+    const Team_ORB_pct = team.orb / (team.orb + opp_drb);
     const Team_Scoring_Poss = team.fgm +
       (1 - Math.pow(1 - team.ftm / team.fta, 2)) * team.fta * 0.4;
     const Team_Play_pct = Team_Scoring_Poss /
@@ -126,40 +129,36 @@ export default function PlayersPage() {
       ((1 - Team_ORB_pct) * Team_Play_pct) /
       ((1 - Team_ORB_pct) * Team_Play_pct + Team_ORB_pct * (1 - Team_Play_pct));
 
-    // ── Basic per-game / per-minute ──────────────────────────────────
+    // ── %Min ────────────────────────────────────────────────────────
     const minPct = teamMinutes > 0 ? (p.minutes / teamMinutes) * 100 * 5 : 0;
-    const twoPA = p.fga - p.tpa;
-    const twoPM = p.fgm - p.tpm;
 
     // ── Usage % (BBRef formula) ──────────────────────────────────────
     const teamPossTotal = team.fga + 0.44 * team.fta + team.tov;
     const usagePct = 100 * (p.fga + 0.44 * p.fta + p.tov) /
       (teamPossTotal / teamMinutes * p.minutes) / 5;
 
-    // Shot %
-    const shotPct = team.fga > 0 ? (p.fga / team.fga) * 100 : 0;
+    // ── Shot % (minutes-adjusted) ────────────────────────────────────
+    const shotPct = team.fga > 0 && p.minutes > 0
+      ? (p.fga / team.fga) / (p.minutes / teamMinutes) / 5 * 100 : 0;
 
     // ── eFG% ────────────────────────────────────────────────────────
     const efg = p.fga > 0 ? ((p.fgm + 0.5 * p.tpm) / p.fga) * 100 : 0;
 
-    // ── TS% (uses 0.475, matches BBRef/KenPom) ──────────────────────
+    // ── TS% (0.475, matches BBRef/KenPom) ───────────────────────────
     const ts = (p.fga + 0.475 * p.fta) > 0
-      ? (p.points / (2 * (p.fga + 0.475 * p.fta))) * 100
-      : 0;
+      ? (p.points / (2 * (p.fga + 0.475 * p.fta))) * 100 : 0;
 
     // ── Rebound % ───────────────────────────────────────────────────
-    const opp_drb = team.opp_trb - team.opp_orb;
-    const drb = team.trb - team.orb;
     const orbPct = p.minutes > 0 && (team.orb + opp_drb) > 0
       ? (p.orb / p.minutes) * (teamMinutes / 5) / (team.orb + opp_drb) * 100 : 0;
     const drbPct = p.minutes > 0 && (drb + team.opp_orb) > 0
       ? (p.drb / p.minutes) * (teamMinutes / 5) / (drb + team.opp_orb) * 100 : 0;
 
-    // ── Assist Rate (BBRef: AST / (((MP / (TmMP/5)) * TmFGM) - FGM)) ──
+    // ── Assist Rate (BBRef) ──────────────────────────────────────────
     const aRateDenom = ((p.minutes / (teamMinutes / 5)) * team.fgm) - p.fgm;
     const aRate = aRateDenom > 0 ? (p.ast / aRateDenom) * 100 : 0;
 
-    // ── TO Rate (BBRef: TOV / (FGA + 0.44*FTA + TOV)) ───────────────
+    // ── TO Rate (BBRef) ─────────────────────────────────────────────
     const playerPossSimple = p.fga + 0.44 * p.fta + p.tov;
     const toRate = playerPossSimple > 0 ? (p.tov / playerPossSimple) * 100 : 0;
 
@@ -183,14 +182,12 @@ export default function PlayersPage() {
     const threePct = p.tpa > 0 ? (p.tpm / p.tpa) * 100 : 0;
 
     // ── Dean Oliver Individual ORtg ──────────────────────────────────
-    // qAST: estimated % of player's FGM that were assisted
     const qAST = ((p.minutes / (teamMinutes / 5)) *
       (1.14 * ((team.ast - p.ast) / team.fgm))) +
       ((((team.ast / teamMinutes) * p.minutes * 5 - p.ast) /
         ((team.fgm / teamMinutes) * p.minutes * 5 - p.fgm)) *
         (1 - p.minutes / (teamMinutes / 5)));
 
-    // Scoring Possessions components
     const FG_Part = p.fgm * (1 - 0.5 * ((p.points - p.ftm) / (2 * p.fga)) * qAST);
     const AST_Part = 0.5 *
       (((team.points - team.ftm) - (p.points - p.ftm)) / (2 * (team.fga - p.fga))) * p.ast;
@@ -200,14 +197,10 @@ export default function PlayersPage() {
     const ScPoss = (FG_Part + AST_Part + FT_Part) *
       (1 - (team.orb / Team_Scoring_Poss) * Team_ORB_Weight * Team_Play_pct) + ORB_Part_sc;
 
-    // Missed shot possessions
     const FGxPoss = (p.fga - p.fgm) * (1 - 1.07 * Team_ORB_pct);
     const FTxPoss = Math.pow(1 - p.ftm / p.fta, 2) * 0.4 * p.fta;
-
-    // Total possessions
     const TotPoss = ScPoss + FGxPoss + FTxPoss + p.tov;
 
-    // Points Produced
     const PProd_FG_Part = 2 * (p.fgm + 0.5 * p.tpm) *
       (1 - 0.5 * ((p.points - p.ftm) / (2 * p.fga)) * qAST);
     const PProd_AST_Part = 2 *
@@ -252,14 +245,11 @@ export default function PlayersPage() {
     if (sortKey === 'team') {
       return sortOrder === 'asc' ? a.teamName.localeCompare(b.teamName) : b.teamName.localeCompare(a.teamName);
     }
-
     const aStats = calculatePlayerStats(a);
     const bStats = calculatePlayerStats(b);
     if (!aStats || !bStats) return 0;
-
     const aVal = sortKey === 'games' ? a.games : sortKey === 'starts' ? a.starts : (aStats as any)[sortKey];
     const bVal = sortKey === 'games' ? b.games : sortKey === 'starts' ? b.starts : (bStats as any)[sortKey];
-
     return sortOrder === 'asc' ? aVal - bVal : bVal - aVal;
   });
 
@@ -267,14 +257,9 @@ export default function PlayersPage() {
     <th
       onClick={() => handleSort(key)}
       style={{
-        padding: "6px 4px",
-        textAlign: "right",
-        cursor: "pointer",
-        userSelect: "none",
+        padding: "6px 4px", textAlign: "right", cursor: "pointer", userSelect: "none",
         background: sortKey === key ? ACCENT : "transparent",
-        color: sortKey === key ? "#fff" : "inherit",
-        fontWeight: 700,
-        fontSize: 10,
+        color: sortKey === key ? "#fff" : "inherit", fontWeight: 700, fontSize: 10,
       }}
     >
       {label} {sortKey === key && (sortOrder === 'desc' ? '↓' : '↑')}
@@ -287,32 +272,19 @@ export default function PlayersPage() {
 
   return (
     <>
-      <SiteNavigation
-        currentDivision="womens-d1"
-        currentPage="players"
-        divisionPath="/"
-      />
-
+      <SiteNavigation currentDivision="womens-d1" currentPage="players" divisionPath="/" />
       <main style={{ maxWidth: "100%", margin: "0 auto", padding: 20 }}>
         <div style={{ marginBottom: 24 }}>
           <h2 style={{ fontSize: 24, fontWeight: 700, marginBottom: 8 }}>Player Database</h2>
           <p style={{ color: "#666", marginBottom: 16 }}>{players.length} players</p>
-
           <div style={{ display: "flex", gap: 12, marginBottom: 16, flexWrap: "wrap" }}>
             <input
               type="text"
               placeholder="Search by player name or team..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              style={{
-                padding: "8px 12px",
-                border: "1px solid #ddd",
-                borderRadius: 6,
-                flex: 1,
-                minWidth: 250,
-              }}
+              style={{ padding: "8px 12px", border: "1px solid #ddd", borderRadius: 6, flex: 1, minWidth: 250 }}
             />
-
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <label style={{ fontSize: 14, color: "#666" }}>Min Minutes:</label>
               <select
@@ -328,26 +300,17 @@ export default function PlayersPage() {
               </select>
             </div>
           </div>
-
-          <p style={{ fontSize: 12, color: "#666" }}>
-            Click column headers to sort. Showing {sortedPlayers.length} players.
-          </p>
+          <p style={{ fontSize: 12, color: "#666" }}>Click column headers to sort. Showing {sortedPlayers.length} players.</p>
         </div>
 
         <div style={{ overflowX: "auto" }}>
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 10, whiteSpace: "nowrap" }}>
             <thead>
               <tr style={{ borderBottom: `2px solid ${ACCENT}`, background: ACCENT_LIGHT }}>
-                <th
-                  onClick={() => handleSort('name')}
-                  style={{ padding: "6px 4px", textAlign: "left", position: "sticky", left: 0, background: ACCENT_LIGHT, zIndex: 2, cursor: "pointer" }}
-                >
+                <th onClick={() => handleSort('name')} style={{ padding: "6px 4px", textAlign: "left", position: "sticky", left: 0, background: ACCENT_LIGHT, zIndex: 2, cursor: "pointer" }}>
                   Player {sortKey === 'name' && (sortOrder === 'desc' ? '↓' : '↑')}
                 </th>
-                <th
-                  onClick={() => handleSort('team')}
-                  style={{ padding: "6px 4px", textAlign: "left", cursor: "pointer" }}
-                >
+                <th onClick={() => handleSort('team')} style={{ padding: "6px 4px", textAlign: "left", cursor: "pointer" }}>
                   Team {sortKey === 'team' && (sortOrder === 'desc' ? '↓' : '↑')}
                 </th>
                 <th style={{ padding: "6px 4px", textAlign: "center" }}>Yr</th>
@@ -379,7 +342,6 @@ export default function PlayersPage() {
               {sortedPlayers.map((p) => {
                 const stats = calculatePlayerStats(p);
                 if (!stats) return null;
-
                 return (
                   <tr key={p.playerId} style={{ borderBottom: "1px solid #f0f0f0" }}>
                     <td style={{ padding: "4px", fontWeight: 600, position: "sticky", left: 0, background: "#fff", zIndex: 1 }}>
