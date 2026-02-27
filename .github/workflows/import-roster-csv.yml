@@ -1,0 +1,46 @@
+name: Import Roster CSV
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (preview changes without writing to DB)?'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Find uploaded CSV
+        id: find_csv
+        run: |
+          CSV=$(ls rosters/*.csv 2>/dev/null | head -1)
+          if [ -z "$CSV" ]; then
+            echo "❌ No CSV found in rosters/ directory"
+            echo "   Please commit your filled CSV to the rosters/ folder before running this workflow"
+            exit 1
+          fi
+          echo "csv_file=$CSV" >> $GITHUB_OUTPUT
+          echo "Found CSV: $CSV"
+
+      - name: Import roster CSV
+        env:
+          POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+        run: |
+          ARGS="--file ${{ steps.find_csv.outputs.csv_file }}"
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            ARGS="$ARGS --dry-run"
+          fi
+          node scripts/import_roster_csv.mjs $ARGS
