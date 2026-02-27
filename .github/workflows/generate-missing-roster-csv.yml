@@ -1,0 +1,53 @@
+name: Generate Missing Roster CSV
+
+on:
+  workflow_dispatch:
+    inputs:
+      division:
+        description: 'Division to export (leave blank for all)'
+        required: false
+        type: choice
+        options:
+          - ''
+          - womens-d1
+          - mens-d1
+          - mens-d2
+          - womens-d2
+      team:
+        description: 'Team name to export (leave blank for all teams in division)'
+        required: false
+        type: string
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Generate missing roster CSV
+        env:
+          POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+        run: |
+          ARGS=""
+          if [ -n "${{ github.event.inputs.division }}" ]; then
+            ARGS="$ARGS --division ${{ github.event.inputs.division }}"
+          fi
+          if [ -n "${{ github.event.inputs.team }}" ]; then
+            ARGS="$ARGS --team \"${{ github.event.inputs.team }}\""
+          fi
+          eval node scripts/generate_missing_roster_csv.mjs $ARGS
+
+      - name: Upload CSV as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: missing-rosters
+          path: missing_rosters_*.csv
+          retention-days: 30
