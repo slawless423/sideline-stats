@@ -217,7 +217,7 @@ const ESPN_ID_MAP = {
   'marist': 2373,
   'marquette': 269,
   'marshall': 276,
-  'maryland': 166,
+  'maryland': 120,
   'massachusetts': 2663,
   'mcneese': 2383,
   'memphis': 235,
@@ -239,7 +239,7 @@ const ESPN_ID_MAP = {
   'montana': 149,
   'montana st.': 147,
   'morehead st.': 2413,
-  'morgan st.': 2430,
+  'morgan st.': 2415,
   "mount st. mary's": 2427,
   'murray st.': 93,
 
@@ -255,7 +255,7 @@ const ESPN_ID_MAP = {
   'new hampshire': 160,
   'new haven': 2441,
   'new mexico': 167,
-  'new mexico st.': 2466,
+  'new mexico st.': 166,
   'new orleans': 2443,
   'niagara': 315,
   'nicholls': 2446,
@@ -268,14 +268,14 @@ const ESPN_ID_MAP = {
   'north texas': 249,
   'northeastern': 2462,
   'northern ariz.': 2464,
-  'northern colo.': 2459,
+  'northern colo.': 2458,
   'northern ky.': 94,
   'northwestern': 77,
   'northwestern st.': 2466,
   'notre dame': 87,
 
   // ── O ──
-  'oakland': 2439,
+  'oakland': 2473,
   'ohio': 195,
   'ohio st.': 194,
   'oklahoma': 201,
@@ -319,7 +319,7 @@ const ESPN_ID_MAP = {
   'sfa': 2617,
   'siue': 2565,
   'smu': 2567,
-  'sacramento st.': 2561,
+  'sacramento st.': 16,
   'sacred heart': 2566,
   'saint francis': 2598,
   "saint joseph's": 2603,
@@ -347,7 +347,7 @@ const ESPN_ID_MAP = {
   'southern california': 30,
   'southern ill.': 79,
   'southern ind.': 88,
-  'southern miss.': 2608,
+  'southern miss.': 2572,
   'southern u.': 2582,
   'southern utah': 253,
   'st. bonaventure': 179,
@@ -396,11 +396,11 @@ const ESPN_ID_MAP = {
   'umes': 2379,
   'umass lowell': 2349,
   'unc asheville': 2427,
-  'unc greensboro': 2428,
+  'unc greensboro': 2430,
   'uncw': 350,
   'uni': 2271,
   'unlv': 2439,
-  'usc upstate': 2631,
+  'usc upstate': 2908,
   'ut arlington': 250,
   'ut martin': 2630,
   'utep': 2638,
@@ -426,11 +426,11 @@ const ESPN_ID_MAP = {
   'wake forest': 154,
   'washington': 264,
   'washington st.': 265,
-  'weber st.': 2710,
+  'weber st.': 2692,
   'west ga.': 2698,
   'west virginia': 277,
   'western caro.': 2717,
-  'western ill.': 2724,
+  'western ill.': 2710,
   'western ky.': 2758,
   'western mich.': 2720,
   'wichita st.': 2724,
@@ -533,6 +533,7 @@ async function getDBTeams(division) {
 
 async function updatePlayers(players, teamName, division) {
   let updated = 0;
+  const misses = [];
   for (const { firstName, lastName, heightIn, year } of players) {
     if (!heightIn && !year) continue;
     const res = await pool.query(`
@@ -547,7 +548,21 @@ async function updatePlayers(players, teamName, division) {
         AND LOWER(team_name) = LOWER($6)
       RETURNING player_id
     `, [heightIn, year, firstName, lastName, division, teamName]);
+    if (res.rowCount === 0) misses.push(`${firstName} ${lastName}`);
     updated += res.rowCount;
+  }
+  if (updated === 0 && misses.length > 0) {
+    const dbRes = await pool.query(
+      `SELECT first_name, last_name FROM players WHERE division = $1 AND LOWER(team_name) = LOWER($2) LIMIT 5`,
+      [division, teamName]
+    );
+    if (dbRes.rows.length === 0) {
+      process.stdout.write(` [NO DB PLAYERS for "${teamName}"]`);
+    } else {
+      const espnSample = misses.slice(0, 3).join(', ');
+      const dbSample = dbRes.rows.map(r => `${r.first_name} ${r.last_name}`).join(', ');
+      process.stdout.write(` [ESPN: ${espnSample} | DB: ${dbSample}]`);
+    }
   }
   return updated;
 }
