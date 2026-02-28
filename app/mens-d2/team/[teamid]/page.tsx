@@ -153,7 +153,7 @@ export default async function MensD2TeamPage({
   if (!team.teamName) {
     return (
       <main style={{ maxWidth: 1200, margin: "0 auto", padding: 20 }}>
-        <Link href="/mens-d1" style={{ color: "#2563eb" }}>← Back</Link>
+        <Link href="/mens-d2" style={{ color: "#2563eb" }}>← Back</Link>
         <h1>Team not found</h1>
       </main>
     );
@@ -199,7 +199,7 @@ export default async function MensD2TeamPage({
     }
   };
 
-  const d1Avg = {
+  const d2Avg = {
     off: {
       efg: allTeamFactors.reduce((s, t) => s + t.ff.off.efg, 0) / allTeamFactors.length,
       tov: allTeamFactors.reduce((s, t) => s + t.ff.off.tov, 0) / allTeamFactors.length,
@@ -228,7 +228,7 @@ export default async function MensD2TeamPage({
     }
   };
 
-  const confOnlyUrl = confOnly ? `/mens-d2/team/${teamId}` : `/mens-d1/team/${teamId}?conf=true`;
+  const confOnlyUrl = confOnly ? `/mens-d2/team/${teamId}` : `/mens-d2/team/${teamId}?conf=true`;
 
   return (
     <div>
@@ -268,21 +268,21 @@ export default async function MensD2TeamPage({
           <div>
             <SectionTitle title={`Team Scouting Report${confOnly ? " (Conf. only)" : ""}`} />
             <StatsTable title="Four Factors" rows={[
-              { label: "Eff. FG%", off: ff.off.efg, def: ff.def.efg, offRank: confOnly ? undefined : rankings.off.efg, defRank: confOnly ? undefined : rankings.def.efg, offAvg: d1Avg.off.efg, defAvg: d1Avg.def.efg },
-              { label: "TO%", off: ff.off.tov, def: ff.def.tov, offRank: confOnly ? undefined : rankings.off.tov, defRank: confOnly ? undefined : rankings.def.tov, offAvg: d1Avg.off.tov, defAvg: d1Avg.def.tov },
-              { label: "OR%", off: ff.off.orb, def: ff.def.orb, offRank: confOnly ? undefined : rankings.off.orb, defRank: confOnly ? undefined : rankings.def.orb, offAvg: d1Avg.off.orb, defAvg: d1Avg.def.orb },
-              { label: "FTA/FGA", off: ff.off.ftr, def: ff.def.ftr, offRank: confOnly ? undefined : rankings.off.ftr, defRank: confOnly ? undefined : rankings.def.ftr, offAvg: d1Avg.off.ftr, defAvg: d1Avg.def.ftr },
+              { label: "Eff. FG%", off: ff.off.efg, def: ff.def.efg, offRank: confOnly ? undefined : rankings.off.efg, defRank: confOnly ? undefined : rankings.def.efg, offAvg: d2Avg.off.efg, defAvg: d2Avg.def.efg },
+              { label: "TO%", off: ff.off.tov, def: ff.def.tov, offRank: confOnly ? undefined : rankings.off.tov, defRank: confOnly ? undefined : rankings.def.tov, offAvg: d2Avg.off.tov, defAvg: d2Avg.def.tov },
+              { label: "OR%", off: ff.off.orb, def: ff.def.orb, offRank: confOnly ? undefined : rankings.off.orb, defRank: confOnly ? undefined : rankings.def.orb, offAvg: d2Avg.off.orb, defAvg: d2Avg.def.orb },
+              { label: "FTA/FGA", off: ff.off.ftr, def: ff.def.ftr, offRank: confOnly ? undefined : rankings.off.ftr, defRank: confOnly ? undefined : rankings.def.ftr, offAvg: d2Avg.off.ftr, defAvg: d2Avg.def.ftr },
             ]} />
             <StatsTable title="Shooting" rows={[
-              { label: "2P%", off: ff.off.two, def: ff.def.two, offRank: confOnly ? undefined : rankings.off.two, defRank: confOnly ? undefined : rankings.def.two, offAvg: d1Avg.off.two, defAvg: d1Avg.def.two },
-              { label: "3P%", off: ff.off.three, def: ff.def.three, offRank: confOnly ? undefined : rankings.off.three, defRank: confOnly ? undefined : rankings.def.three, offAvg: d1Avg.off.three, defAvg: d1Avg.def.three },
-              { label: "FT%", off: ff.off.ft, def: ff.def.ft, offRank: confOnly ? undefined : rankings.off.ft, defRank: confOnly ? undefined : rankings.def.ft, offAvg: d1Avg.off.ft, defAvg: d1Avg.def.ft },
+              { label: "2P%", off: ff.off.two, def: ff.def.two, offRank: confOnly ? undefined : rankings.off.two, defRank: confOnly ? undefined : rankings.def.two, offAvg: d2Avg.off.two, defAvg: d2Avg.def.two },
+              { label: "3P%", off: ff.off.three, def: ff.def.three, offRank: confOnly ? undefined : rankings.off.three, defRank: confOnly ? undefined : rankings.def.three, offAvg: d2Avg.off.three, defAvg: d2Avg.def.three },
+              { label: "FT%", off: ff.off.ft, def: ff.def.ft, offRank: confOnly ? undefined : rankings.off.ft, defRank: confOnly ? undefined : rankings.def.ft, offAvg: d2Avg.off.ft, defAvg: d2Avg.def.ft },
             ]} />
             <StatsTable title="Other Stats" rows={[
-              { label: "3PA/FGA", off: ff.off.threePaRate, def: ff.def.threePaRate, offRank: confOnly ? undefined : rankings.off.threePaRate, defRank: confOnly ? undefined : rankings.def.threePaRate, offAvg: d1Avg.off.threePaRate, defAvg: d1Avg.def.threePaRate },
-              { label: "Block%", off: ff.off.blk, def: ff.def.blk, offRank: confOnly ? undefined : rankings.off.blk, defRank: confOnly ? undefined : rankings.def.blk, offAvg: d1Avg.off.blk, defAvg: d1Avg.def.blk },
-              { label: "Steal%", off: ff.off.stl, def: ff.def.stl, offRank: confOnly ? undefined : rankings.off.stl, defRank: confOnly ? undefined : rankings.def.stl, offAvg: d1Avg.off.stl, defAvg: d1Avg.def.stl },
-              { label: "Assist%", off: ff.off.ast, def: ff.def.ast, offRank: confOnly ? undefined : rankings.off.ast, defRank: confOnly ? undefined : rankings.def.ast, offAvg: d1Avg.off.ast, defAvg: d1Avg.def.ast },
+              { label: "3PA/FGA", off: ff.off.threePaRate, def: ff.def.threePaRate, offRank: confOnly ? undefined : rankings.off.threePaRate, defRank: confOnly ? undefined : rankings.def.threePaRate, offAvg: d2Avg.off.threePaRate, defAvg: d2Avg.def.threePaRate },
+              { label: "Block%", off: ff.off.blk, def: ff.def.blk, offRank: confOnly ? undefined : rankings.off.blk, defRank: confOnly ? undefined : rankings.def.blk, offAvg: d2Avg.off.blk, defAvg: d2Avg.def.blk },
+              { label: "Steal%", off: ff.off.stl, def: ff.def.stl, offRank: confOnly ? undefined : rankings.off.stl, defRank: confOnly ? undefined : rankings.def.stl, offAvg: d2Avg.off.stl, defAvg: d2Avg.def.stl },
+              { label: "Assist%", off: ff.off.ast, def: ff.def.ast, offRank: confOnly ? undefined : rankings.off.ast, defRank: confOnly ? undefined : rankings.def.ast, offAvg: d2Avg.off.ast, defAvg: d2Avg.def.ast },
             ]} />
           </div>
 
@@ -372,12 +372,18 @@ export default async function MensD2TeamPage({
   );
 }
 
+function formatHeight(inches: number | null | undefined): string {
+  if (!inches || inches === 0) return "—";
+  const feet = Math.floor(inches / 12);
+  const remaining = inches % 12;
+  return `${feet}'${remaining}"`;
+}
+
 function PlayerStats({ players, team }: { players: any[]; team: any }) {
   const teamMinutes = team.games * 200;
   const opp_drb = team.opp_trb - team.opp_orb;
   const drb = team.trb - team.orb;
 
-  // ── Derived team values for Dean Oliver ORtg ──────────────────────
   const Team_ORB_pct = team.orb / (team.orb + opp_drb);
   const Team_Scoring_Poss = team.fgm +
     (1 - Math.pow(1 - team.ftm / team.fta, 2)) * team.fta * 0.4;
@@ -397,61 +403,35 @@ function PlayerStats({ players, team }: { players: any[]; team: any }) {
 
     const twoPA = pg.fga - pg.tpa;
     const twoPM = pg.fgm - pg.tpm;
-
-    // %Min
     const minPct = teamMinutes > 0 ? (pg.minutes / teamMinutes) * 100 * 5 : 0;
-
-    // Usage % (BBRef formula)
     const teamPossTotal = team.fga + 0.44 * team.fta + team.tov;
     const usagePct = teamPossTotal > 0 && pg.minutes > 0
-      ? 100 * (pg.fga + 0.44 * pg.fta + pg.tov) / (teamPossTotal / teamMinutes * pg.minutes) / 5
-      : 0;
-
-    // Shot %
+      ? 100 * (pg.fga + 0.44 * pg.fta + pg.tov) / (teamPossTotal / teamMinutes * pg.minutes) / 5 : 0;
     const shotPct = team.fga > 0 && pg.minutes > 0
       ? (pg.fga / team.fga) / (pg.minutes / teamMinutes) / 5 * 100 : 0;
-
-    // eFG%
     const efg = pg.fga > 0 ? ((pg.fgm + 0.5 * pg.tpm) / pg.fga) * 100 : 0;
-
-    // TS% (0.475, matches BBRef/KenPom)
     const ts = (pg.fga + 0.475 * pg.fta) > 0
       ? (pg.points / (2 * (pg.fga + 0.475 * pg.fta))) * 100 : 0;
-
-    // Rebound %
     const orPct = pg.minutes > 0 && (team.orb + opp_drb) > 0
       ? (pg.orb / pg.minutes) * (teamMinutes / 5) / (team.orb + opp_drb) * 100 : 0;
     const drPct = pg.minutes > 0 && (drb + team.opp_orb) > 0
       ? (pg.drb / pg.minutes) * (teamMinutes / 5) / (drb + team.opp_orb) * 100 : 0;
-
-    // Assist Rate (BBRef)
     const aRateDenom = ((pg.minutes / (teamMinutes / 5)) * team.fgm) - pg.fgm;
     const aRate = aRateDenom > 0 ? (pg.ast / aRateDenom) * 100 : 0;
-
-    // TO Rate (BBRef)
     const playerPossSimple = pg.fga + 0.44 * pg.fta + pg.tov;
     const toRate = playerPossSimple > 0 ? (pg.tov / playerPossSimple) * 100 : 0;
-
-    // Block % / Steal %
     const oppPoss = Math.max(1, team.opp_fga - team.opp_orb + team.opp_tov + 0.475 * team.opp_fta);
     const opp2PA = team.opp_fga - team.opp_tpa;
     const blkPct = pg.minutes > 0 && opp2PA > 0
       ? 100 * (pg.blk * (teamMinutes / 5)) / (pg.minutes * opp2PA) : 0;
     const stlPct = pg.minutes > 0
       ? 100 * (pg.stl * (teamMinutes / 5)) / (pg.minutes * oppPoss) : 0;
-
-    // FC/40
     const fc40 = pg.minutes > 0 ? pg.pf * (40 / pg.minutes) : 0;
-
-    // FT Rate
     const ftRate = pg.fga > 0 ? (pg.fta / pg.fga) * 100 : 0;
-
-    // Shooting %
     const ftPct = pg.fta > 0 ? (pg.ftm / pg.fta) * 100 : 0;
     const twoPct = twoPA > 0 ? (twoPM / twoPA) * 100 : 0;
     const threePct = pg.tpa > 0 ? (pg.tpm / pg.tpa) * 100 : 0;
 
-    // Dean Oliver Individual ORtg
     let ortg = 0;
     if (pg.fga > 0 && pg.fta > 0 && pg.minutes > 0) {
       const qAST = ((pg.minutes / (teamMinutes / 5)) *
@@ -459,20 +439,16 @@ function PlayerStats({ players, team }: { players: any[]; team: any }) {
         ((((team.ast / teamMinutes) * pg.minutes * 5 - pg.ast) /
           ((team.fgm / teamMinutes) * pg.minutes * 5 - pg.fgm)) *
           (1 - pg.minutes / (teamMinutes / 5)));
-
       const FG_Part = pg.fgm * (1 - 0.5 * ((pg.points - pg.ftm) / (2 * pg.fga)) * qAST);
       const AST_Part = 0.5 *
         (((team.points - team.ftm) - (pg.points - pg.ftm)) / (2 * (team.fga - pg.fga))) * pg.ast;
       const FT_Part = (1 - Math.pow(1 - pg.ftm / pg.fta, 2)) * 0.4 * pg.fta;
       const ORB_Part_sc = pg.orb * Team_ORB_Weight * Team_Play_pct;
-
       const ScPoss = (FG_Part + AST_Part + FT_Part) *
         (1 - (team.orb / Team_Scoring_Poss) * Team_ORB_Weight * Team_Play_pct) + ORB_Part_sc;
-
       const FGxPoss = (pg.fga - pg.fgm) * (1 - 1.07 * Team_ORB_pct);
       const FTxPoss = Math.pow(1 - pg.ftm / pg.fta, 2) * 0.4 * pg.fta;
       const TotPoss = ScPoss + FGxPoss + FTxPoss + pg.tov;
-
       const PProd_FG_Part = 2 * (pg.fgm + 0.5 * pg.tpm) *
         (1 - 0.5 * ((pg.points - pg.ftm) / (2 * pg.fga)) * qAST);
       const PProd_AST_Part = 2 *
@@ -481,10 +457,8 @@ function PlayerStats({ players, team }: { players: any[]; team: any }) {
       const PProd_ORB_Part = pg.orb * Team_ORB_Weight * Team_Play_pct *
         (team.points / (team.fgm +
           (1 - Math.pow(1 - team.ftm / team.fta, 2)) * 0.4 * team.fta));
-
       const PProd = (PProd_FG_Part + PProd_AST_Part + pg.ftm) *
         (1 - (team.orb / Team_Scoring_Poss) * Team_ORB_Weight * Team_Play_pct) + PProd_ORB_Part;
-
       ortg = TotPoss > 0 ? 100 * PProd / TotPoss : 0;
     }
 
@@ -506,6 +480,7 @@ function PlayerStats({ players, team }: { players: any[]; team: any }) {
             <tr style={{ borderBottom: `2px solid ${ACCENT}`, background: ACCENT_LIGHT }}>
               <th style={{ padding: "6px 4px", textAlign: "left", position: "sticky", left: 0, background: ACCENT_LIGHT, zIndex: 1 }}>Player</th>
               <th style={{ padding: "6px 4px", textAlign: "center" }}>Yr</th>
+              <th style={{ padding: "6px 4px", textAlign: "center" }}>Ht</th>
               <th style={{ padding: "6px 4px", textAlign: "right" }}>G</th>
               <th style={{ padding: "6px 4px", textAlign: "right" }}>%Min</th>
               <th style={{ padding: "6px 4px", textAlign: "right" }}>ORtg</th>
@@ -538,6 +513,7 @@ function PlayerStats({ players, team }: { players: any[]; team: any }) {
                     {p.firstName} {p.lastName}
                   </td>
                   <td style={{ padding: "6px 4px", textAlign: "center" }}>{p.year || "—"}</td>
+                  <td style={{ padding: "6px 4px", textAlign: "center" }}>{formatHeight(p.height)}</td>
                   <td style={{ padding: "6px 4px", textAlign: "right" }}>{p.games}</td>
                   <td style={{ padding: "6px 4px", textAlign: "right" }}>{stats.minPct.toFixed(1)}</td>
                   <td style={{ padding: "6px 4px", textAlign: "right" }}>{stats.ortg > 0 ? stats.ortg.toFixed(1) : "—"}</td>
@@ -609,7 +585,7 @@ function StatsTable({ title, rows }: { title: string; rows: Array<{ label: strin
             <th style={{ fontSize: 11, fontWeight: 700, padding: "8px 10px", textAlign: "left", width: "40%" }}>{title}</th>
             <th style={{ fontSize: 11, fontWeight: 700, padding: "8px 10px", textAlign: "right", width: "20%" }}>Off</th>
             <th style={{ fontSize: 11, fontWeight: 700, padding: "8px 10px", textAlign: "right", width: "20%" }}>Def</th>
-            <th style={{ fontSize: 11, fontWeight: 700, padding: "8px 10px", textAlign: "right", width: "20%" }}>D1 Avg</th>
+            <th style={{ fontSize: 11, fontWeight: 700, padding: "8px 10px", textAlign: "right", width: "20%" }}>D2 Avg</th>
           </tr>
         </thead>
         <tbody>
