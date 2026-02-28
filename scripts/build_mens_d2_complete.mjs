@@ -695,7 +695,6 @@ async function main() {
   );
   console.log(`✅ WROTE public/data/mens_d2_games.json (${gamesLog.length} games)`);
 
-  // Save games cache so the daily update knows which games are already processed
   const successfullyParsedIds = allGames.map(g => g.gameId);
   await fs.writeFile(
     "public/data/mens_d2_games_cache.json",
@@ -760,12 +759,14 @@ async function main() {
       }
       console.log(`✅ Wrote ${allPlayers.length} players to database`);
 
-      // Batch insert player game stats
+      // Batch insert player game stats - only for valid D2 team IDs
       console.log("Writing player game stats...");
+      const validTeamIds = new Set(teamSeasonStats.keys());
       const playerGameRows = [];
       for (const game of gamesLog) {
         if (game.players && Array.isArray(game.players)) {
           for (const teamData of game.players) {
+            if (!validTeamIds.has(teamData.teamId)) continue;
             for (const p of teamData.players) {
               playerGameRows.push({
                 gameId: game.gameId,
