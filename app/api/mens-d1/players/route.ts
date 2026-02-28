@@ -1,16 +1,13 @@
 import { NextResponse } from 'next/server';
 import { Pool } from 'pg';
-
 const pool = new Pool({
   connectionString: process.env.POSTGRES_URL,
   ssl: { rejectUnauthorized: false }
 });
-
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const minMinutes = parseInt(searchParams.get('minMinutes') || '0');
-
     const result = await pool.query(`
       SELECT 
         p.player_id as "playerId",
@@ -21,6 +18,7 @@ export async function GET(request: Request) {
         p.number,
         p.position,
         p.year,
+        p.height,
         p.games,
         p.starts,
         p.minutes,
@@ -31,7 +29,6 @@ export async function GET(request: Request) {
         AND p.minutes >= $1
       ORDER BY p.points DESC
     `, [minMinutes]);
-
     return NextResponse.json({ players: result.rows });
   } catch (error) {
     console.error('Database error:', error);
