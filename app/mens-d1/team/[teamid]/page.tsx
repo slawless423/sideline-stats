@@ -372,12 +372,18 @@ export default async function MensD1TeamPage({
   );
 }
 
+function formatHeight(inches: number | null | undefined): string {
+  if (!inches || inches === 0) return "—";
+  const feet = Math.floor(inches / 12);
+  const remaining = inches % 12;
+  return `${feet}'${remaining}"`;
+}
+
 function PlayerStats({ players, team }: { players: any[]; team: any }) {
   const teamMinutes = team.games * 200;
   const opp_drb = team.opp_trb - team.opp_orb;
   const drb = team.trb - team.orb;
 
-  // ── Derived team values for Dean Oliver ORtg ──────────────────────
   const Team_ORB_pct = team.orb / (team.orb + opp_drb);
   const Team_Scoring_Poss = team.fgm +
     (1 - Math.pow(1 - team.ftm / team.fta, 2)) * team.fta * 0.4;
@@ -397,61 +403,36 @@ function PlayerStats({ players, team }: { players: any[]; team: any }) {
 
     const twoPA = pg.fga - pg.tpa;
     const twoPM = pg.fgm - pg.tpm;
-
-    // %Min
     const minPct = teamMinutes > 0 ? (pg.minutes / teamMinutes) * 100 * 5 : 0;
-
-    // Usage % (BBRef formula)
     const teamPossTotal = team.fga + 0.44 * team.fta + team.tov;
     const usagePct = teamPossTotal > 0 && pg.minutes > 0
       ? 100 * (pg.fga + 0.44 * pg.fta + pg.tov) / (teamPossTotal / teamMinutes * pg.minutes) / 5
       : 0;
-
-    // Shot %
     const shotPct = team.fga > 0 && pg.minutes > 0
       ? (pg.fga / team.fga) / (pg.minutes / teamMinutes) / 5 * 100 : 0;
-
-    // eFG%
     const efg = pg.fga > 0 ? ((pg.fgm + 0.5 * pg.tpm) / pg.fga) * 100 : 0;
-
-    // TS% (0.475, matches BBRef/KenPom)
     const ts = (pg.fga + 0.475 * pg.fta) > 0
       ? (pg.points / (2 * (pg.fga + 0.475 * pg.fta))) * 100 : 0;
-
-    // Rebound %
     const orPct = pg.minutes > 0 && (team.orb + opp_drb) > 0
       ? (pg.orb / pg.minutes) * (teamMinutes / 5) / (team.orb + opp_drb) * 100 : 0;
     const drPct = pg.minutes > 0 && (drb + team.opp_orb) > 0
       ? (pg.drb / pg.minutes) * (teamMinutes / 5) / (drb + team.opp_orb) * 100 : 0;
-
-    // Assist Rate (BBRef)
     const aRateDenom = ((pg.minutes / (teamMinutes / 5)) * team.fgm) - pg.fgm;
     const aRate = aRateDenom > 0 ? (pg.ast / aRateDenom) * 100 : 0;
-
-    // TO Rate (BBRef)
     const playerPossSimple = pg.fga + 0.44 * pg.fta + pg.tov;
     const toRate = playerPossSimple > 0 ? (pg.tov / playerPossSimple) * 100 : 0;
-
-    // Block % / Steal %
     const oppPoss = Math.max(1, team.opp_fga - team.opp_orb + team.opp_tov + 0.475 * team.opp_fta);
     const opp2PA = team.opp_fga - team.opp_tpa;
     const blkPct = pg.minutes > 0 && opp2PA > 0
       ? 100 * (pg.blk * (teamMinutes / 5)) / (pg.minutes * opp2PA) : 0;
     const stlPct = pg.minutes > 0
       ? 100 * (pg.stl * (teamMinutes / 5)) / (pg.minutes * oppPoss) : 0;
-
-    // FC/40
     const fc40 = pg.minutes > 0 ? pg.pf * (40 / pg.minutes) : 0;
-
-    // FT Rate
     const ftRate = pg.fga > 0 ? (pg.fta / pg.fga) * 100 : 0;
-
-    // Shooting %
     const ftPct = pg.fta > 0 ? (pg.ftm / pg.fta) * 100 : 0;
     const twoPct = twoPA > 0 ? (twoPM / twoPA) * 100 : 0;
     const threePct = pg.tpa > 0 ? (pg.tpm / pg.tpa) * 100 : 0;
 
-    // Dean Oliver Individual ORtg
     let ortg = 0;
     if (pg.fga > 0 && pg.fta > 0 && pg.minutes > 0) {
       const qAST = ((pg.minutes / (teamMinutes / 5)) *
@@ -459,20 +440,16 @@ function PlayerStats({ players, team }: { players: any[]; team: any }) {
         ((((team.ast / teamMinutes) * pg.minutes * 5 - pg.ast) /
           ((team.fgm / teamMinutes) * pg.minutes * 5 - pg.fgm)) *
           (1 - pg.minutes / (teamMinutes / 5)));
-
       const FG_Part = pg.fgm * (1 - 0.5 * ((pg.points - pg.ftm) / (2 * pg.fga)) * qAST);
       const AST_Part = 0.5 *
         (((team.points - team.ftm) - (pg.points - pg.ftm)) / (2 * (team.fga - pg.fga))) * pg.ast;
       const FT_Part = (1 - Math.pow(1 - pg.ftm / pg.fta, 2)) * 0.4 * pg.fta;
       const ORB_Part_sc = pg.orb * Team_ORB_Weight * Team_Play_pct;
-
       const ScPoss = (FG_Part + AST_Part + FT_Part) *
         (1 - (team.orb / Team_Scoring_Poss) * Team_ORB_Weight * Team_Play_pct) + ORB_Part_sc;
-
       const FGxPoss = (pg.fga - pg.fgm) * (1 - 1.07 * Team_ORB_pct);
       const FTxPoss = Math.pow(1 - pg.ftm / pg.fta, 2) * 0.4 * pg.fta;
       const TotPoss = ScPoss + FGxPoss + FTxPoss + pg.tov;
-
       const PProd_FG_Part = 2 * (pg.fgm + 0.5 * pg.tpm) *
         (1 - 0.5 * ((pg.points - pg.ftm) / (2 * pg.fga)) * qAST);
       const PProd_AST_Part = 2 *
@@ -481,10 +458,8 @@ function PlayerStats({ players, team }: { players: any[]; team: any }) {
       const PProd_ORB_Part = pg.orb * Team_ORB_Weight * Team_Play_pct *
         (team.points / (team.fgm +
           (1 - Math.pow(1 - team.ftm / team.fta, 2)) * 0.4 * team.fta));
-
       const PProd = (PProd_FG_Part + PProd_AST_Part + pg.ftm) *
         (1 - (team.orb / Team_Scoring_Poss) * Team_ORB_Weight * Team_Play_pct) + PProd_ORB_Part;
-
       ortg = TotPoss > 0 ? 100 * PProd / TotPoss : 0;
     }
 
@@ -506,6 +481,7 @@ function PlayerStats({ players, team }: { players: any[]; team: any }) {
             <tr style={{ borderBottom: `2px solid ${ACCENT}`, background: ACCENT_LIGHT }}>
               <th style={{ padding: "6px 4px", textAlign: "left", position: "sticky", left: 0, background: ACCENT_LIGHT, zIndex: 1 }}>Player</th>
               <th style={{ padding: "6px 4px", textAlign: "center" }}>Yr</th>
+              <th style={{ padding: "6px 4px", textAlign: "center" }}>Ht</th>
               <th style={{ padding: "6px 4px", textAlign: "right" }}>G</th>
               <th style={{ padding: "6px 4px", textAlign: "right" }}>%Min</th>
               <th style={{ padding: "6px 4px", textAlign: "right" }}>ORtg</th>
@@ -538,6 +514,7 @@ function PlayerStats({ players, team }: { players: any[]; team: any }) {
                     {p.firstName} {p.lastName}
                   </td>
                   <td style={{ padding: "6px 4px", textAlign: "center" }}>{p.year || "—"}</td>
+                  <td style={{ padding: "6px 4px", textAlign: "center" }}>{formatHeight(p.height)}</td>
                   <td style={{ padding: "6px 4px", textAlign: "right" }}>{p.games}</td>
                   <td style={{ padding: "6px 4px", textAlign: "right" }}>{stats.minPct.toFixed(1)}</td>
                   <td style={{ padding: "6px 4px", textAlign: "right" }}>{stats.ortg > 0 ? stats.ortg.toFixed(1) : "—"}</td>
