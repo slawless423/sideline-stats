@@ -1,11 +1,9 @@
 import { Pool } from 'pg';
 import { NextResponse } from 'next/server';
-
 const pool = new Pool({
   connectionString: process.env.POSTGRES_URL,
   ssl: { rejectUnauthorized: false }
 });
-
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ teamid: string }> }
@@ -13,9 +11,7 @@ export async function GET(
   const { teamid } = await params;
   const { searchParams } = new URL(request.url);
   const confOnly = searchParams.get('conf') === 'true';
-
   try {
-    // Full season totals query
     const fullSeasonQuery = `
       SELECT 
         player_id as "playerId",
@@ -26,6 +22,7 @@ export async function GET(
         number,
         position,
         year,
+        height,
         games,
         starts,
         minutes,
@@ -35,9 +32,7 @@ export async function GET(
       WHERE team_id = $1 AND division = 'mens-d2'
       ORDER BY points DESC
     `;
-
     if (confOnly) {
-      // Try to sum player stats from conference games only
       const confResult = await pool.query(`
         SELECT 
           p.player_id as "playerId",
@@ -48,6 +43,7 @@ export async function GET(
           p.number,
           p.position,
           p.year,
+          p.height,
           COUNT(pg.game_id) as "games",
           p.starts,
           SUM(pg.minutes) as "minutes",
@@ -67,24 +63,18 @@ export async function GET(
           AND (g.home_team_id = $1 OR g.away_team_id = $1)
         GROUP BY 
           p.player_id, p.team_id, p.team_name, p.first_name, p.last_name,
-          p.number, p.position, p.year, p.starts
+          p.number, p.position, p.year, p.height, p.starts
         HAVING SUM(pg.points) > 0 OR SUM(pg.minutes) > 0
         ORDER BY SUM(pg.points) DESC
       `, [teamid]);
-
-      // If conf filter returned results, use them; otherwise fall back to full season
       if (confResult.rows.length > 0) {
         return NextResponse.json({ players: confResult.rows, filtered: true });
       }
-
-      // Fall back to full season with a flag so the UI can show a note
       const fallbackResult = await pool.query(fullSeasonQuery, [teamid]);
       return NextResponse.json({ players: fallbackResult.rows, filtered: false, fallback: true });
     }
-
     const result = await pool.query(fullSeasonQuery, [teamid]);
     return NextResponse.json({ players: result.rows, filtered: false });
-
   } catch (error) {
     console.error('Database error:', error);
     return NextResponse.json({ error: 'Failed to fetch players' }, { status: 500 });
