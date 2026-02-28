@@ -35,11 +35,12 @@ export async function clearAllData() {
 }
 
 // Clear data for specific division only
+// NOTE: Does NOT delete from players table - height/year data must be preserved.
+// Player stats are overwritten by upsertPlayer during rebuild instead.
 export async function clearDivisionData(division) {
   const db = initDb();
   
   await db.query('DELETE FROM player_games WHERE division = $1', [division]);
-  await db.query('DELETE FROM players WHERE division = $1', [division]);
   await db.query('DELETE FROM games WHERE division = $1', [division]);
   await db.query('DELETE FROM teams WHERE division = $1', [division]);
   
@@ -161,12 +162,13 @@ export async function insertGame(game) {
       game.awayStats.tov, game.awayStats.pf
     ]);
   } catch (err) {
-    // Log and skip any game insert errors (non-D1 opponents, null IDs, constraint violations, etc.)
     console.log(`insertGame skipped game ${game.gameId}: ${err.message}`);
   }
 }
 
 // Insert or update player
+// NOTE: height and year are intentionally excluded from ON CONFLICT DO UPDATE
+// so that manually imported height/year data is never overwritten by a rebuild.
 export async function upsertPlayer(player) {
   const db = initDb();
   
@@ -184,7 +186,13 @@ export async function upsertPlayer(player) {
       CURRENT_TIMESTAMP
     )
     ON CONFLICT (player_id) DO UPDATE SET
+      team_id = EXCLUDED.team_id,
+      team_name = EXCLUDED.team_name,
       division = EXCLUDED.division,
+      first_name = EXCLUDED.first_name,
+      last_name = EXCLUDED.last_name,
+      number = EXCLUDED.number,
+      position = EXCLUDED.position,
       games = EXCLUDED.games,
       starts = EXCLUDED.starts,
       minutes = EXCLUDED.minutes,
@@ -249,7 +257,6 @@ export async function insertPlayerGamesBatch(rows, batchSize = 500) {
   for (let i = 0; i < rows.length; i += batchSize) {
     const batch = rows.slice(i, i + batchSize);
     
-    // Build multi-row INSERT with parameterized values
     const values = [];
     const placeholders = batch.map((row, idx) => {
       const base = idx * 20;
@@ -272,13 +279,31 @@ export async function insertPlayerGamesBatch(rows, batchSize = 500) {
 
     try {
       await db.query(query, values);
+      totalInserted += batch.length;
     } catch (err) {
-      // Log and skip batches with any insert errors
-      console.log(`insertPlayerGamesBatch skipped batch at offset ${i}: ${err.message}`);
+      console.log(`insertPlayerGamesBatch batch failed at offset ${i}, falling back to individual inserts: ${err.message}`);
+      for (const row of batch) {
+        try {
+          await db.query(`
+            INSERT INTO player_games (
+              game_id, player_id, team_id, division,
+              minutes, fgm, fga, tpm, tpa, ftm, fta,
+              orb, drb, trb, ast, stl, blk, tov, pf, points
+            ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20)
+            ON CONFLICT (game_id, player_id) DO NOTHING
+          `, [
+            row.gameId, row.playerId, row.teamId, row.division || null,
+            row.minutes, row.fgm, row.fga, row.tpm, row.tpa, row.ftm, row.fta,
+            row.orb, row.drb, row.trb, row.ast, row.stl, row.blk, row.tov, row.pf, row.points
+          ]);
+          totalInserted++;
+        } catch (rowErr) {
+          console.log(`insertPlayerGamesBatch skipped row game=${row.gameId} player=${row.playerId}: ${rowErr.message}`);
+        }
+      }
     }
-    totalInserted += batch.length;
 
-    if (totalInserted % 5000 === 0) {
+    if (totalInserted % 5000 === 0 && totalInserted > 0) {
       console.log(`  ...inserted ${totalInserted} / ${rows.length} player game records`);
     }
   }
