@@ -1,11 +1,9 @@
 import { NextResponse } from 'next/server';
 import { Pool } from 'pg';
-
 const pool = new Pool({
   connectionString: process.env.POSTGRES_URL,
   ssl: { rejectUnauthorized: false }
 });
-
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ teamId: string }> }
@@ -13,12 +11,9 @@ export async function GET(
   const { teamId } = await params;
   const { searchParams } = new URL(request.url);
   const confOnly = searchParams.get('conf') === 'true';
-
   try {
     let result;
-
     if (confOnly) {
-      // Aggregate player stats from conference games only
       result = await pool.query(`
         SELECT
           p.player_id as "playerId",
@@ -29,6 +24,7 @@ export async function GET(
           p.number,
           p.position,
           p.year,
+          p.height,
           COUNT(DISTINCT pg.game_id) as games,
           p.starts,
           SUM(pg.minutes) as minutes,
@@ -47,18 +43,16 @@ export async function GET(
           AND pg.division = 'womens-d1'
           AND g.is_conference_game = true
         GROUP BY p.player_id, p.team_id, p.team_name, p.first_name, p.last_name,
-                 p.number, p.position, p.year, p.starts, p.drb, p.trb
+                 p.number, p.position, p.year, p.height, p.starts, p.drb, p.trb
         HAVING SUM(pg.minutes) > 0
         ORDER BY SUM(pg.minutes) DESC
       `, [teamId]);
-
       if (result.rows.length === 0) {
-        // Fallback to full season
         result = await pool.query(`
           SELECT
             player_id as "playerId", team_id as "teamId", team_name as "teamName",
             first_name as "firstName", last_name as "lastName",
-            number, position, year, games, starts, minutes,
+            number, position, year, height, games, starts, minutes,
             fgm, fga, tpm, tpa, ftm, fta,
             orb, drb, trb, ast, stl, blk, tov, pf, points
           FROM players
@@ -72,7 +66,7 @@ export async function GET(
         SELECT
           player_id as "playerId", team_id as "teamId", team_name as "teamName",
           first_name as "firstName", last_name as "lastName",
-          number, position, year, games, starts, minutes,
+          number, position, year, height, games, starts, minutes,
           fgm, fga, tpm, tpa, ftm, fta,
           orb, drb, trb, ast, stl, blk, tov, pf, points
         FROM players
@@ -80,7 +74,6 @@ export async function GET(
         ORDER BY minutes DESC
       `, [teamId]);
     }
-
     return NextResponse.json({ players: result.rows });
   } catch (error) {
     console.error('Database error:', error);
