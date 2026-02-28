@@ -144,7 +144,7 @@ export default async function MensD2TeamPage({
   const fullTeamData = coerceTeamStats(rawTeam);
 
   const allGames: any[] = gamesData.games ?? [];
-  const filteredGames = confOnly ? allGames.filter((g: any) => g.isConferenceGame) : allGames;
+  const filteredGames = allGames;
 
   const team = confOnly && filteredGames.length > 0
     ? buildStatsFromGames(filteredGames, teamId, fullTeamData.teamName, fullTeamData.conference)
@@ -248,10 +248,10 @@ export default async function MensD2TeamPage({
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16, marginBottom: 24 }}>
-          <StatCard title="Off. Efficiency" value={team.adjO ?? null} rank={teamsData.rows.filter((r: any) => Number(r.rawO) > (team.adjO ?? 0)).length + 1} />
-          <StatCard title="Def. Efficiency" value={team.adjD ?? null} rank={teamsData.rows.filter((r: any) => Number(r.rawD) < (team.adjD ?? 999)).length + 1} />
-          <StatCard title="Raw Margin" value={team.adjEM ?? null} prefix="+" rank={teamsData.rows.filter((r: any) => Number(r.rawEM) > (team.adjEM ?? 0)).length + 1} />
-          <StatCard title="Tempo" value={team.adjT ?? null} rank={teamsData.rows.filter((r: any) => Number(r.rawT) > (team.adjT ?? 0)).length + 1} />
+          <StatCard title="Off. Efficiency" value={team.adjO ?? null} rank={confOnly ? undefined : teamsData.rows.filter((r: any) => Number(r.rawO) > (team.adjO ?? 0)).length + 1} />
+          <StatCard title="Def. Efficiency" value={team.adjD ?? null} rank={confOnly ? undefined : teamsData.rows.filter((r: any) => Number(r.rawD) < (team.adjD ?? 999)).length + 1} />
+          <StatCard title="Raw Margin" value={team.adjEM ?? null} prefix="+" rank={confOnly ? undefined : teamsData.rows.filter((r: any) => Number(r.rawEM) > (team.adjEM ?? 0)).length + 1} />
+          <StatCard title="Tempo" value={team.adjT ?? null} rank={confOnly ? undefined : teamsData.rows.filter((r: any) => Number(r.rawT) > (team.adjT ?? 0)).length + 1} />
         </div>
 
         <div style={{ display: "flex", gap: 12, marginBottom: 24 }}>
