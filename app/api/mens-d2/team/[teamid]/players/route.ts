@@ -58,7 +58,6 @@ export async function GET(
         JOIN games g ON g.game_id = pg.game_id
         WHERE p.team_id = $1
           AND p.division = 'mens-d2'
-          AND g.division = 'mens-d2'
           AND g.is_conference_game = true
           AND (g.home_team_id = $1 OR g.away_team_id = $1)
         GROUP BY 
