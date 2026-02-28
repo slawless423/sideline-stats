@@ -277,7 +277,9 @@ function findTeamsMeta(gameJson) {
 }
 
 function nameFromMeta(t) {
-  return String(pick(t, ["nameShort", "name_short", "shortName", "nameFull", "name_full", "fullName", "name"]) ?? "Team");
+  return String(
+    pick(t, ["nameShort", "name_short", "shortName", "nameFull", "name_full", "fullName", "name"]) ?? "Team"
+  );
 }
 
 function isHomeFromMeta(t) {
@@ -726,11 +728,14 @@ async function main() {
       }
       console.log(`✅ Wrote ${allPlayers.length} players to database`);
 
+      // Batch insert player game stats - only for valid D1 team IDs
       console.log("Writing player game stats...");
+      const validTeamIds = new Set(teamSeasonStats.keys());
       const playerGameRows = [];
       for (const game of gamesLog) {
         if (game.players && Array.isArray(game.players)) {
           for (const teamData of game.players) {
+            if (!validTeamIds.has(teamData.teamId)) continue;
             for (const p of teamData.players) {
               playerGameRows.push({
                 gameId: game.gameId,
