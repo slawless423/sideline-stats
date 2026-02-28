@@ -499,7 +499,6 @@ async function main() {
         });
       } else {
         existing.games++;
-        // *** FIX: preserve conference if we now have it and didn't before ***
         if (!existing.conference && side.conference) existing.conference = side.conference;
         if (side.stats.points > opp.stats.points) existing.wins++; else existing.losses++;
         existing.points += side.stats.points; existing.opp_points += opp.stats.points;
@@ -520,11 +519,12 @@ async function main() {
       }
     }
 
-    // Update player stats and collect game rows
+    // Update player stats and collect game rows - only for known D2 teams
     if (gameData.players && Array.isArray(gameData.players)) {
       for (const playerData of gameData.players) {
         if (!playerData.teamId || !playerData.players) continue;
         const teamId = String(playerData.teamId);
+        if (!teamSeasonStats.has(teamId)) continue;
         const teamName = teamId === home.teamId ? home.teamName : away.teamName;
 
         for (const p of playerData.players) {
