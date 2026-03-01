@@ -690,6 +690,11 @@ async function main() {
 
     try {
       db.initDb();
+      // Safety guard: abort if we didn't scrape enough data (e.g. API was down)
+      if (allGames.length < 500) {
+        throw new Error(`BAD RUN: Only ${allGames.length} games parsed. API may be down. Aborting to protect existing database data.`);
+      }
+
       await db.clearDivisionData(DIVISION);
 
       console.log("Writing teams...");
