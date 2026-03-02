@@ -84,7 +84,6 @@ function ContactForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Placeholder — wire up to your email service
     setSubmitted(true);
   };
 
@@ -151,14 +150,16 @@ export default function LandingPage() {
     <>
       <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-      <div style={{ fontFamily: "'Outfit', sans-serif", color: INK, background: '#fff' }}>
+      <div style={{ fontFamily: "'Outfit', sans-serif", color: INK, background: '#fff', display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
 
-        {/* ── HERO ── */}
+        {/* ── ABOVE THE FOLD: Nav + Two-Column Layout ── */}
         <div style={{
           background: NAVY,
           position: 'relative',
           overflow: 'hidden',
-          padding: '0 0 80px',
+          display: 'flex',
+          flexDirection: 'column',
+          minHeight: '100vh',
         }}>
           {/* Subtle grid overlay */}
           <div style={{
@@ -168,164 +169,130 @@ export default function LandingPage() {
             pointerEvents: 'none',
           }} />
 
-          {/* Abstract court lines */}
-          <div style={{ position: 'absolute', right: -60, top: '50%', transform: 'translateY(-50%)', opacity: 0.08, pointerEvents: 'none' }}>
-            <svg width="500" height="500" viewBox="0 0 400 400" fill="none">
-              <circle cx="200" cy="200" r="160" stroke="#2E7DD1" strokeWidth="1.5"/>
-              <circle cx="200" cy="200" r="90" stroke="#2E7DD1" strokeWidth="1"/>
-              <line x1="200" y1="0" x2="200" y2="400" stroke="#2E7DD1" strokeWidth="1"/>
-              <line x1="0" y1="200" x2="400" y2="200" stroke="#2E7DD1" strokeWidth="0.5"/>
-              <rect x="80" y="120" width="240" height="160" stroke="#2E7DD1" strokeWidth="0.75"/>
-              <path d="M80 160 Q160 200 80 240" stroke="#2E7DD1" strokeWidth="1"/>
-            </svg>
-          </div>
-
           {/* Nav */}
-          <div style={{ maxWidth: 1200, margin: '0 auto', padding: '24px 40px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative' }}>
+          <div style={{ maxWidth: 1200, width: '100%', margin: '0 auto', padding: '24px 40px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative', boxSizing: 'border-box' }}>
             <Wordmark />
             <nav style={{ display: 'flex', gap: 32, alignItems: 'center' }}>
-              <a href="#divisions" style={{ fontFamily: "'Outfit', sans-serif", color: ICE, fontSize: 14, fontWeight: 500, textDecoration: 'none', letterSpacing: '0.01em' }}>Divisions</a>
-              <a href="#about" style={{ fontFamily: "'Outfit', sans-serif", color: ICE, fontSize: 14, fontWeight: 500, textDecoration: 'none', letterSpacing: '0.01em' }}>About</a>
               <a href="#contact" style={{ fontFamily: "'Outfit', sans-serif", color: ICE, fontSize: 14, fontWeight: 500, textDecoration: 'none', letterSpacing: '0.01em' }}>Contact</a>
             </nav>
           </div>
 
-          {/* Hero content */}
-          <div style={{ maxWidth: 1200, margin: '0 auto', padding: '64px 40px 0', position: 'relative' }}>
-            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: '0.25em', textTransform: 'uppercase', color: SKY, marginBottom: 24 }}>
-              Women's & Men's · D1 · D2 · D3
-            </div>
-            <h1 style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 800, fontSize: 72, letterSpacing: '-0.03em', lineHeight: 0.95, color: '#fff', marginBottom: 28, maxWidth: 700 }}>
-              The Numbers<br />Behind the <em style={{ color: ACCENT, fontStyle: 'italic' }}>Game.</em>
-            </h1>
-            <p style={{ fontFamily: "'Outfit', sans-serif", fontSize: 18, lineHeight: 1.7, color: ICE, maxWidth: 540, marginBottom: 40, fontWeight: 400 }}>
-              KenPom-style ratings, advanced efficiency metrics, and deep player analytics for college basketball divisions that rarely get this level of attention.
-            </p>
-            <a href="#divisions" style={{
-              display: 'inline-block',
-              padding: '14px 32px',
-              background: ACCENT,
-              color: '#fff',
-              textDecoration: 'none',
-              borderRadius: 8,
-              fontFamily: "'Outfit', sans-serif",
-              fontWeight: 700,
-              fontSize: 15,
-              letterSpacing: '0.01em',
-            }}>
-              Explore Divisions →
-            </a>
-          </div>
-        </div>
+          {/* ── TWO-COLUMN MAIN ── */}
+          <div style={{
+            flex: 1,
+            maxWidth: 1200,
+            width: '100%',
+            margin: '0 auto',
+            padding: '40px 40px 60px',
+            display: 'grid',
+            gridTemplateColumns: '1fr 1.6fr',
+            gap: 64,
+            alignItems: 'start',
+            position: 'relative',
+            boxSizing: 'border-box',
+          }}>
 
-        {/* ── DIVISION CARDS ── */}
-        <div id="divisions" style={{ background: FROST, padding: '80px 40px' }}>
-          <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: '0.25em', textTransform: 'uppercase', color: SKY, marginBottom: 12 }}>
-              Divisions
-            </div>
-            <h2 style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 800, fontSize: 40, letterSpacing: '-0.02em', color: NAVY, marginBottom: 48 }}>
-              Pick Your Division
-            </h2>
+            {/* LEFT — About / Description */}
+            <div style={{ position: 'sticky', top: 40 }}>
+              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: '0.25em', textTransform: 'uppercase', color: SKY, marginBottom: 20 }}>
+                Women's & Men's · D1 · D2 · D3
+              </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
+              <h1 style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 800, fontSize: 48, letterSpacing: '-0.03em', lineHeight: 1.0, color: '#fff', marginBottom: 24 }}>
+                The Numbers<br />Behind the{' '}
+                <em style={{ color: ACCENT, fontStyle: 'italic' }}>Game.</em>
+              </h1>
+
+              <p style={{ fontFamily: "'Outfit', sans-serif", fontSize: 15, lineHeight: 1.75, color: ICE, marginBottom: 24, fontWeight: 400 }}>
+                KenPom-style ratings, advanced efficiency metrics, and deep player analytics for college basketball divisions that rarely get this level of attention.
+              </p>
+
+              <p style={{ fontFamily: "'Outfit', sans-serif", fontSize: 15, lineHeight: 1.75, color: `${ICE}99`, fontWeight: 400, marginBottom: 36 }}>
+                Whether you're a coach, scout, analyst, or just a fan who loves the numbers — Sideline Stats gives you the tools to understand the game at a deeper level.
+              </p>
+
+              {/* Mini stats */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                {[
+                  { value: '1,000+', label: 'Teams Tracked' },
+                  { value: '15,000+', label: 'Players' },
+                  { value: '3', label: 'Live Divisions' },
+                  { value: 'Daily', label: 'Data Updates' },
+                ].map(stat => (
+                  <div key={stat.label} style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 12, padding: '16px 18px', border: `1px solid rgba(168,200,240,0.15)` }}>
+                    <div style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 800, fontSize: 26, color: '#fff', letterSpacing: '-0.02em', marginBottom: 4 }}>
+                      {stat.value}
+                    </div>
+                    <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: MUTED }}>
+                      {stat.label}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* RIGHT — Division Cards */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
               {DIVISIONS.map(div => (
                 <div key={div.id} style={{
-                  background: '#fff',
-                  borderRadius: 16,
-                  padding: '32px 28px',
-                  border: `1px solid ${div.enabled ? `${ICE}80` : '#e5e7eb'}`,
-                  opacity: div.enabled ? 1 : 0.65,
+                  background: div.enabled ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.025)',
+                  borderRadius: 14,
+                  padding: '24px 22px',
+                  border: `1px solid ${div.enabled ? 'rgba(168,200,240,0.2)' : 'rgba(168,200,240,0.08)'}`,
+                  opacity: div.enabled ? 1 : 0.55,
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: 16,
-                  boxShadow: div.enabled ? '0 4px 20px rgba(13,31,60,0.06)' : 'none',
+                  gap: 12,
                 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                    <h3 style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 800, fontSize: 20, color: NAVY, letterSpacing: '-0.01em' }}>
+                    <h3 style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 800, fontSize: 17, color: '#fff', letterSpacing: '-0.01em', margin: 0 }}>
                       {div.label}
                     </h3>
                     {!div.enabled && (
-                      <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: '0.15em', textTransform: 'uppercase', color: MUTED, background: FROST, padding: '4px 8px', borderRadius: 4 }}>
-                        Coming Soon
+                      <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 8, letterSpacing: '0.12em', textTransform: 'uppercase', color: MUTED, background: 'rgba(255,255,255,0.05)', padding: '3px 7px', borderRadius: 4, whiteSpace: 'nowrap' }}>
+                        Soon
                       </span>
                     )}
                   </div>
-                  <p style={{ fontFamily: "'Outfit', sans-serif", fontSize: 14, lineHeight: 1.6, color: MUTED, flex: 1 }}>
+
+                  <p style={{ fontFamily: "'Outfit', sans-serif", fontSize: 13, lineHeight: 1.6, color: `${ICE}99`, flex: 1, margin: 0 }}>
                     {div.description}
                   </p>
-                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: div.enabled ? SKY : MUTED, letterSpacing: '0.05em' }}>
+
+                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, color: div.enabled ? SKY : MUTED, letterSpacing: '0.05em' }}>
                     {div.stats}
                   </div>
+
                   {div.enabled ? (
                     <Link href={div.path} style={{
-                      display: 'inline-block',
-                      padding: '10px 20px',
-                      background: NAVY,
+                      display: 'block',
+                      padding: '9px 16px',
+                      background: ACCENT,
                       color: '#fff',
                       textDecoration: 'none',
-                      borderRadius: 8,
+                      borderRadius: 7,
                       fontFamily: "'Outfit', sans-serif",
-                      fontWeight: 600,
-                      fontSize: 14,
+                      fontWeight: 700,
+                      fontSize: 13,
                       textAlign: 'center',
                     }}>
                       View Rankings →
                     </Link>
                   ) : (
                     <div style={{
-                      padding: '10px 20px',
-                      background: '#f3f4f6',
-                      color: '#9ca3af',
-                      borderRadius: 8,
+                      padding: '9px 16px',
+                      background: 'rgba(255,255,255,0.04)',
+                      color: MUTED,
+                      borderRadius: 7,
                       fontFamily: "'Outfit', sans-serif",
                       fontWeight: 600,
-                      fontSize: 14,
+                      fontSize: 13,
                       textAlign: 'center',
                       cursor: 'not-allowed',
                     }}>
                       Coming Soon
                     </div>
                   )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* ── ABOUT ── */}
-        <div id="about" style={{ background: '#fff', padding: '80px 40px' }}>
-          <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'center' }}>
-            <div>
-              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: '0.25em', textTransform: 'uppercase', color: SKY, marginBottom: 12 }}>
-                About
-              </div>
-              <h2 style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 800, fontSize: 40, letterSpacing: '-0.02em', color: NAVY, marginBottom: 24, lineHeight: 1.1 }}>
-                What is Sideline Stats?
-              </h2>
-              <p style={{ fontFamily: "'Outfit', sans-serif", fontSize: 16, lineHeight: 1.8, color: MUTED, marginBottom: 20 }}>
-                Sideline Stats brings KenPom-style advanced analytics to the divisions of college basketball that have historically been underserved by data. We track efficiency ratings, tempo-adjusted stats, and player-level metrics across Women's and Men's D1, D2, and D3.
-              </p>
-              <p style={{ fontFamily: "'Outfit', sans-serif", fontSize: 16, lineHeight: 1.8, color: MUTED }}>
-                Whether you're a coach, scout, analyst, or just a fan who loves the numbers — Sideline Stats gives you the tools to understand the game at a deeper level.
-              </p>
-            </div>
-
-            {/* Stat highlights */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
-              {[
-                { value: '1,000+', label: 'Teams Tracked' },
-                { value: '15,000+', label: 'Players in Database' },
-                { value: '3', label: 'Active Divisions' },
-                { value: 'Daily', label: 'Data Updates' },
-              ].map(stat => (
-                <div key={stat.label} style={{ background: FROST, borderRadius: 16, padding: '28px 24px', border: `1px solid ${ICE}60` }}>
-                  <div style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 800, fontSize: 36, color: NAVY, letterSpacing: '-0.02em', marginBottom: 8 }}>
-                    {stat.value}
-                  </div>
-                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', color: MUTED }}>
-                    {stat.label}
-                  </div>
                 </div>
               ))}
             </div>
