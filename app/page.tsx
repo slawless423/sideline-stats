@@ -16,7 +16,7 @@ const INK    = "#0A0F1C";
 const DIVISIONS = [
   { id: 'womens-d1', label: "Women's D1", path: '/womens-d1', enabled: true,  stats: '363 Teams · 5,400+ Players' },
   { id: 'mens-d1',   label: "Men's D1",   path: '/mens-d1',   enabled: true,  stats: '365 Teams · 5,500+ Players' },
-  { id: 'womens-d2', label: "Women's D2", path: '/womens-d2', enabled: false, stats: 'Coming Soon' },
+  { id: 'womens-d2', label: "Women's D2", path: '/womens-d2', enabled: true, stats: '290+ Teams · 3,800+ Players' },
   { id: 'mens-d2',   label: "Men's D2",   path: '/mens-d2',   enabled: true,  stats: '290+ Teams · 4,200+ Players' },
   { id: 'womens-d3', label: "Women's D3", path: '/womens-d3', enabled: false, stats: 'Coming Soon' },
   { id: 'mens-d3',   label: "Men's D3",   path: '/mens-d3',   enabled: false, stats: 'Coming Soon' },
