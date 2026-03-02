@@ -216,7 +216,7 @@ export default function PlayersPage() {
 
   return (
     <>
-      <SiteNavigation currentDivision="womens-d1" currentPage="players" divisionPath="/" />
+      <SiteNavigation currentDivision="womens-d1" currentPage="players" divisionPath="/womens-d1" />
       <main style={{ maxWidth: "100%", margin: "0 auto", padding: 20 }}>
         <div style={{ marginBottom: 24 }}>
           <h2 style={{ fontSize: 24, fontWeight: 700, marginBottom: 8 }}>Player Database</h2>
