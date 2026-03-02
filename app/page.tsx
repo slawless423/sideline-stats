@@ -14,48 +14,12 @@ const MUTED  = "#6B7E9A";
 const INK    = "#0A0F1C";
 
 const DIVISIONS = [
-  {
-    id: 'womens-d1',
-    label: "Women's D1",
-    path: '/womens-d1',
-    enabled: true,
-    stats: '363 Teams · 5,400+ Players',
-  },
-  {
-    id: 'womens-d2',
-    label: "Women's D2",
-    path: '/womens-d2',
-    enabled: false,
-    stats: 'Coming Soon',
-  },
-  {
-    id: 'womens-d3',
-    label: "Women's D3",
-    path: '/womens-d3',
-    enabled: false,
-    stats: 'Coming Soon',
-  },
-  {
-    id: 'mens-d1',
-    label: "Men's D1",
-    path: '/mens-d1',
-    enabled: true,
-    stats: '362 Teams · 5,500+ Players',
-  },
-  {
-    id: 'mens-d2',
-    label: "Men's D2",
-    path: '/mens-d2',
-    enabled: true,
-    stats: '290+ Teams · 4,200+ Players',
-  },
-  {
-    id: 'mens-d3',
-    label: "Men's D3",
-    path: '/mens-d3',
-    enabled: false,
-    stats: 'Coming Soon',
-  },
+  { id: 'womens-d1', label: "Women's D1", path: '/womens-d1', enabled: true,  stats: '363 Teams · 5,400+ Players' },
+  { id: 'mens-d1',   label: "Men's D1",   path: '/mens-d1',   enabled: true,  stats: '365 Teams · 5,500+ Players' },
+  { id: 'womens-d2', label: "Women's D2", path: '/womens-d2', enabled: false, stats: 'Coming Soon' },
+  { id: 'mens-d2',   label: "Men's D2",   path: '/mens-d2',   enabled: true,  stats: '290+ Teams · 4,200+ Players' },
+  { id: 'womens-d3', label: "Women's D3", path: '/womens-d3', enabled: false, stats: 'Coming Soon' },
+  { id: 'mens-d3',   label: "Men's D3",   path: '/mens-d3',   enabled: false, stats: 'Coming Soon' },
 ];
 
 const CARD_BULLETS = [
@@ -211,11 +175,10 @@ export default function LandingPage() {
               </p>
 
               {/* Mini stats */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
                 {[
                   { value: '1,000+', label: 'Teams Tracked' },
                   { value: '15,000+', label: 'Players' },
-                  { value: '3', label: 'Live Divisions' },
                   { value: 'Daily', label: 'Data Updates' },
                 ].map(stat => (
                   <div key={stat.label} style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 12, padding: '16px 18px', border: `1px solid rgba(168,200,240,0.15)` }}>
