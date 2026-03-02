@@ -133,7 +133,7 @@ export default async function WomensD1TeamPage({
   const confOnly = conf === "true";
 
   const [teamsData, teamApiData, gamesData, playersData, allTeamStatsData] = await Promise.all([
-    fetchAPI('/api/teams'),
+    fetchAPI('/api/womens-d1/teams'),
     fetchAPI(`/api/teams/${teamId}`),
     fetchAPI(`/api/teams/${teamId}/games?conf=${confOnly}`),
     fetchAPI(`/api/teams/${teamId}/players${confOnly ? '?conf=true' : ''}`),
