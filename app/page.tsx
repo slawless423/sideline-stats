@@ -152,7 +152,7 @@ export default function LandingPage() {
 
       <div style={{ fontFamily: "'Outfit', sans-serif", color: INK, background: '#fff', display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
 
-        {/* ── ABOVE THE FOLD: Nav + Two-Column Layout ── */}
+        {/* ── ABOVE THE FOLD ── */}
         <div style={{
           background: NAVY,
           position: 'relative',
@@ -198,17 +198,16 @@ export default function LandingPage() {
                 Women's & Men's · D1 · D2 · D3
               </div>
 
-              <h1 style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 800, fontSize: 48, letterSpacing: '-0.03em', lineHeight: 1.0, color: '#fff', marginBottom: 24 }}>
-                The Numbers<br />Behind the{' '}
-                <em style={{ color: ACCENT, fontStyle: 'italic' }}>Game.</em>
+              <h1 style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 800, fontSize: 44, letterSpacing: '-0.03em', lineHeight: 1.05, color: '#fff', marginBottom: 24 }}>
+                The Numbers Behind College Basketball.
               </h1>
 
-              <p style={{ fontFamily: "'Outfit', sans-serif", fontSize: 15, lineHeight: 1.75, color: ICE, marginBottom: 24, fontWeight: 400 }}>
-                KenPom-style ratings, advanced efficiency metrics, and deep player analytics for college basketball divisions that rarely get this level of attention.
+              <p style={{ fontFamily: "'Outfit', sans-serif", fontSize: 15, lineHeight: 1.75, color: ICE, marginBottom: 20, fontWeight: 400 }}>
+                Whether you're a coach, scout, analyst, or a fan who loves the numbers — Sideline Stats gives you scouting and recruiting tools to surface the insights that give you an edge before anyone else is looking.
               </p>
 
               <p style={{ fontFamily: "'Outfit', sans-serif", fontSize: 15, lineHeight: 1.75, color: `${ICE}99`, fontWeight: 400, marginBottom: 36 }}>
-                Whether you're a coach, scout, analyst, or just a fan who loves the numbers — Sideline Stats gives you the tools to understand the game at a deeper level.
+                Sideline Stats organizes team and player metrics for all levels of college basketball, especially those that rarely get this level of attention.
               </p>
 
               {/* Mini stats */}
@@ -296,6 +295,7 @@ export default function LandingPage() {
                 </div>
               ))}
             </div>
+
           </div>
         </div>
 
