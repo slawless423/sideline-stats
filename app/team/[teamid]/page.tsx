@@ -232,7 +232,7 @@ export default async function WomensD1TeamPage({
 
   return (
     <div>
-      <SiteNavigation currentDivision="womens-d1" currentPage="rankings" divisionPath="/" />
+      <SiteNavigation currentDivision="womens-d1" currentPage="rankings" divisionPath="/womens-d1" />
       <main style={{ maxWidth: 1200, margin: "0 auto", padding: 20 }}>
 
         <div style={{ marginBottom: 24 }}>
