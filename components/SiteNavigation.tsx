@@ -21,7 +21,7 @@ type Division = {
 
 const ALL_DIVISIONS: Division[] = [
   { id: 'womens-d1', label: "Women's D1", path: '/womens-d1', enabled: true  },
-  { id: 'womens-d2', label: "Women's D2", path: '/womens-d2', enabled: false },
+  { id: 'womens-d2', label: "Women's D2", path: '/womens-d2', enabled: true  },
   { id: 'womens-d3', label: "Women's D3", path: '/womens-d3', enabled: false },
   { id: 'mens-d1',   label: "Men's D1",   path: '/mens-d1',   enabled: true  },
   { id: 'mens-d2',   label: "Men's D2",   path: '/mens-d2',   enabled: true  },
