@@ -246,7 +246,7 @@ export default function LandingPage() {
                       fontSize: 13,
                       textAlign: 'center',
                     }}>
-                      View Rankings →
+                      View Stats →
                     </Link>
                   ) : (
                     <div style={{
