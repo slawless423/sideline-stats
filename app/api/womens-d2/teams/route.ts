@@ -1,11 +1,9 @@
 import { NextResponse } from 'next/server';
 import { Pool } from 'pg';
-
 const pool = new Pool({
   connectionString: process.env.POSTGRES_URL,
   ssl: { rejectUnauthorized: false }
 });
-
 export async function GET() {
   try {
     const result = await pool.query(`
@@ -35,7 +33,6 @@ export async function GET() {
         AND conference IS NOT NULL
       ORDER BY adj_em DESC
     `);
-
     const rows = result.rows.map(row => ({
       ...row,
       adjO: row.adjO ? parseFloat(row.adjO) : null,
@@ -47,7 +44,6 @@ export async function GET() {
       rawEM: row.adjEM ? parseFloat(row.adjEM) : null,
       rawT: row.adjT ? parseFloat(row.adjT) : null,
     }));
-
     return NextResponse.json({
       updated: new Date().toISOString(),
       rows
