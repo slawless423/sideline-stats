@@ -153,7 +153,7 @@ export default async function WomensD1TeamPage({
   if (!team.teamName) {
     return (
       <main style={{ maxWidth: 1200, margin: "0 auto", padding: 20 }}>
-        <Link href="/" style={{ color: "#2563eb" }}>← Back</Link>
+        <Link href="/womens-d1" style={{ color: "#2563eb" }}>← Back</Link>
         <h1>Team not found</h1>
       </main>
     );
