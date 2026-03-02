@@ -134,10 +134,10 @@ export default async function WomensD1TeamPage({
 
   const [teamsData, teamApiData, gamesData, playersData, allTeamStatsData] = await Promise.all([
     fetchAPI('/api/womens-d1/teams'),
-    fetchAPI(`/api/teams/${teamId}`),
-    fetchAPI(`/api/teams/${teamId}/games?conf=${confOnly}`),
-    fetchAPI(`/api/teams/${teamId}/players${confOnly ? '?conf=true' : ''}`),
-    fetchAPI('/api/teams/stats'),
+    fetchAPI(`/api/womens-d1/teams/${teamId}`),
+    fetchAPI(`/api/womens-d1/teams/${teamId}/games?conf=${confOnly}`),
+    fetchAPI(`/api/womens-d1/teams/${teamId}/players${confOnly ? '?conf=true' : ''}`),
+    fetchAPI('/api/womens-d1/teams/stats'),
   ]);
 
   const rawTeam = teamApiData.team ?? teamApiData;
@@ -228,7 +228,7 @@ export default async function WomensD1TeamPage({
     }
   };
 
-  const confOnlyUrl = confOnly ? `/team/${teamId}` : `/team/${teamId}?conf=true`;
+  const confOnlyUrl = confOnly ? `/womens-d1/team/${teamId}` : `/womens-d1/team/${teamId}?conf=true`;
 
   return (
     <div>
