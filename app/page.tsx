@@ -18,7 +18,7 @@ const DIVISIONS = [
     id: 'womens-d1',
     label: "Women's D1",
     description: "Full KenPom-style ratings, advanced metrics, and player analytics for all 363 Division I women's programs.",
-    path: '/',
+    path: '/womens-d1',
     enabled: true,
     stats: '363 Teams · 5,400+ Players',
   },
