@@ -17,15 +17,27 @@ const DIVISIONS = [
   {
     id: 'womens-d1',
     label: "Women's D1",
-    description: "Full KenPom-style ratings, advanced metrics, and player analytics for all 363 Division I women's programs.",
     path: '/womens-d1',
     enabled: true,
     stats: '363 Teams · 5,400+ Players',
   },
   {
+    id: 'womens-d2',
+    label: "Women's D2",
+    path: '/womens-d2',
+    enabled: false,
+    stats: 'Coming Soon',
+  },
+  {
+    id: 'womens-d3',
+    label: "Women's D3",
+    path: '/womens-d3',
+    enabled: false,
+    stats: 'Coming Soon',
+  },
+  {
     id: 'mens-d1',
     label: "Men's D1",
-    description: "Comprehensive efficiency ratings, tempo-adjusted stats, and player tracking for all Division I men's programs.",
     path: '/mens-d1',
     enabled: true,
     stats: '362 Teams · 5,500+ Players',
@@ -33,35 +45,23 @@ const DIVISIONS = [
   {
     id: 'mens-d2',
     label: "Men's D2",
-    description: "Advanced analytics brought to Division II men's basketball — a level rarely covered at this depth.",
     path: '/mens-d2',
     enabled: true,
     stats: '290+ Teams · 4,200+ Players',
   },
   {
-    id: 'womens-d2',
-    label: "Women's D2",
-    description: "In-depth statistics and ratings for Women's Division II college basketball.",
-    path: '/womens-d2',
-    enabled: false,
-    stats: 'Coming Soon',
-  },
-  {
     id: 'mens-d3',
     label: "Men's D3",
-    description: "Advanced analytics for Men's Division III — the largest division in college basketball.",
     path: '/mens-d3',
     enabled: false,
     stats: 'Coming Soon',
   },
-  {
-    id: 'womens-d3',
-    label: "Women's D3",
-    description: "Bringing data-driven insights to Women's Division III college basketball.",
-    path: '/womens-d3',
-    enabled: false,
-    stats: 'Coming Soon',
-  },
+];
+
+const CARD_BULLETS = [
+  'Team Stats',
+  'Player Database',
+  'Recruiting / Transfers Database',
 ];
 
 function Wordmark() {
@@ -194,8 +194,8 @@ export default function LandingPage() {
 
             {/* LEFT — About / Description */}
             <div style={{ position: 'sticky', top: 40 }}>
-              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: '0.25em', textTransform: 'uppercase', color: SKY, marginBottom: 20 }}>
-                Women's & Men's · D1 · D2 · D3
+              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: SKY, marginBottom: 20 }}>
+                College Basketball Analytics
               </div>
 
               <h1 style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 800, fontSize: 44, letterSpacing: '-0.03em', lineHeight: 1.05, color: '#fff', marginBottom: 24 }}>
@@ -254,9 +254,17 @@ export default function LandingPage() {
                     )}
                   </div>
 
-                  <p style={{ fontFamily: "'Outfit', sans-serif", fontSize: 13, lineHeight: 1.6, color: `${ICE}99`, flex: 1, margin: 0 }}>
-                    {div.description}
-                  </p>
+                  {/* Bullets */}
+                  <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 6, flex: 1 }}>
+                    {CARD_BULLETS.map(bullet => (
+                      <li key={bullet} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <span style={{ width: 4, height: 4, borderRadius: '50%', background: div.enabled ? ACCENT : MUTED, flexShrink: 0 }} />
+                        <span style={{ fontFamily: "'Outfit', sans-serif", fontSize: 13, color: div.enabled ? `${ICE}cc` : `${MUTED}99`, lineHeight: 1.4 }}>
+                          {bullet}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
 
                   <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, color: div.enabled ? SKY : MUTED, letterSpacing: '0.05em' }}>
                     {div.stats}
