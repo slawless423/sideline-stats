@@ -61,8 +61,8 @@ export default function PlayersPage() {
 
   useEffect(() => {
     Promise.all([
-      fetch(`/api/players?minMinutes=${minMinutes}`).then(res => res.json()),
-      fetch('/api/teams/stats').then(res => res.json()),
+      fetch(`/api/womens-d1/players?minMinutes=${minMinutes}`).then(res => res.json()),
+      fetch('/api/womens-d1/teams/stats').then(res => res.json()),
     ]).then(([playersData, teamsData]) => {
       setPlayers(playersData.players);
       setFilteredPlayers(playersData.players);
@@ -293,7 +293,7 @@ export default function PlayersPage() {
                       {p.firstName} {p.lastName}
                     </td>
                     <td style={{ padding: "4px" }}>
-                      <Link href={`/team/${p.teamId}`} style={{ color: ACCENT, textDecoration: "none" }}>
+                      <Link href={`/womens-d1/team/${p.teamId}`} style={{ color: ACCENT, textDecoration: "none" }}>
                         {p.teamName}
                       </Link>
                     </td>
