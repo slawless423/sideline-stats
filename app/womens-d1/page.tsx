@@ -29,7 +29,7 @@ export default function HomePage() {
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
 
   useEffect(() => {
-    fetch('/api/teams')
+    fetch('/api/womens-d1/teams')
       .then(res => res.json())
       .then(data => {
         setTeams(data.rows);
@@ -98,7 +98,7 @@ export default function HomePage() {
         <SiteNavigation 
           currentDivision="womens-d1"
           currentPage="rankings"
-          divisionPath="/"
+          divisionPath="/womens-d1"
         />
         <div style={{ padding: 40, textAlign: "center" }}>Loading...</div>
       </>
@@ -146,7 +146,7 @@ export default function HomePage() {
                   <td style={{ padding: "10px 12px" }}>{idx + 1}</td>
                   <td style={{ padding: "10px 12px" }}>
                     <Link
-                      href={`/team/${row.teamId}`}
+                      href={`/womens-d1/team/${row.teamId}`}
                       style={{ color: "#2563eb", textDecoration: "none", fontWeight: 600 }}
                     >
                       {row.team}
