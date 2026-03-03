@@ -268,7 +268,7 @@ export default async function WomensD1TeamPage({
           <div>
             <SectionTitle title={`Team Scouting Report${confOnly ? " (Conf. only)" : ""}`} />
             <StatsTable title="Four Factors" rows={[
-              { label: "Eff. FG%", off: ff.off.efg, def: ff.def.efg, offRank: confOnly ? undefined : rankings.off.efg, defRank: confOnly ? undefined : rankings.def.efg, offAvg: d1Avg.off.efg, defAvg: d1Avg.def.efg },
+              { label: "EFG%", off: ff.off.efg, def: ff.def.efg, offRank: confOnly ? undefined : rankings.off.efg, defRank: confOnly ? undefined : rankings.def.efg, offAvg: d1Avg.off.efg, defAvg: d1Avg.def.efg },
               { label: "TO%", off: ff.off.tov, def: ff.def.tov, offRank: confOnly ? undefined : rankings.off.tov, defRank: confOnly ? undefined : rankings.def.tov, offAvg: d1Avg.off.tov, defAvg: d1Avg.def.tov },
               { label: "OR%", off: ff.off.orb, def: ff.def.orb, offRank: confOnly ? undefined : rankings.off.orb, defRank: confOnly ? undefined : rankings.def.orb, offAvg: d1Avg.off.orb, defAvg: d1Avg.def.orb },
               { label: "FTA/FGA", off: ff.off.ftr, def: ff.def.ftr, offRank: confOnly ? undefined : rankings.off.ftr, defRank: confOnly ? undefined : rankings.def.ftr, offAvg: d1Avg.off.ftr, defAvg: d1Avg.def.ftr },
@@ -282,7 +282,7 @@ export default async function WomensD1TeamPage({
               { label: "3PA/FGA", off: ff.off.threePaRate, def: ff.def.threePaRate, offRank: confOnly ? undefined : rankings.off.threePaRate, defRank: confOnly ? undefined : rankings.def.threePaRate, offAvg: d1Avg.off.threePaRate, defAvg: d1Avg.def.threePaRate },
               { label: "Block%", off: ff.off.blk, def: ff.def.blk, offRank: confOnly ? undefined : rankings.off.blk, defRank: confOnly ? undefined : rankings.def.blk, offAvg: d1Avg.off.blk, defAvg: d1Avg.def.blk },
               { label: "Steal%", off: ff.off.stl, def: ff.def.stl, offRank: confOnly ? undefined : rankings.off.stl, defRank: confOnly ? undefined : rankings.def.stl, offAvg: d1Avg.off.stl, defAvg: d1Avg.def.stl },
-              { label: "Assist%", off: ff.off.ast, def: ff.def.ast, offRank: confOnly ? undefined : rankings.off.ast, defRank: confOnly ? undefined : rankings.def.ast, offAvg: d1Avg.off.ast, defAvg: d1Avg.def.ast },
+              { label: "A/FGM", off: ff.off.ast, def: ff.def.ast, offRank: confOnly ? undefined : rankings.off.ast, defRank: confOnly ? undefined : rankings.def.ast, offAvg: d1Avg.off.ast, defAvg: d1Avg.def.ast },
             ]} />
           </div>
 
