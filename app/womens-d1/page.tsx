@@ -110,7 +110,7 @@ export default function HomePage() {
       <SiteNavigation 
         currentDivision="womens-d1"
         currentPage="rankings"
-        divisionPath="/"
+        divisionPath="/womens-d1"
       />
       
       <main style={{ maxWidth: 1200, margin: "0 auto", padding: 20 }}>
