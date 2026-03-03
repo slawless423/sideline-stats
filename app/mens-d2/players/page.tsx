@@ -271,7 +271,7 @@ export default function MensD2PlayersPage() {
                 <SortableHeader label="S" sortKey="starts" />
                 <SortableHeader label="%Min" sortKey="minPct" />
                 <SortableHeader label="ORtg" sortKey="ortg" />
-                <SortableHeader label="%Poss" sortKey="usagePct" />
+                <SortableHeader label="%Usage" sortKey="usagePct" />
                 <SortableHeader label="%Shots" sortKey="shotPct" />
                 <SortableHeader label="eFG%" sortKey="efg" />
                 <SortableHeader label="TS%" sortKey="ts" />

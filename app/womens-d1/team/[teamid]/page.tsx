@@ -484,7 +484,7 @@ function PlayerStats({ players, team }: { players: any[]; team: any }) {
               <th style={{ padding: "6px 4px", textAlign: "right" }}>G</th>
               <th style={{ padding: "6px 4px", textAlign: "right" }}>%Min</th>
               <th style={{ padding: "6px 4px", textAlign: "right" }}>ORtg</th>
-              <th style={{ padding: "6px 4px", textAlign: "right" }}>%Poss</th>
+              <th style={{ padding: "6px 4px", textAlign: "right" }}>%Usage</th>
               <th style={{ padding: "6px 4px", textAlign: "right" }}>%Shot</th>
               <th style={{ padding: "6px 4px", textAlign: "right" }}>eFG%</th>
               <th style={{ padding: "6px 4px", textAlign: "right" }}>TS%</th>
