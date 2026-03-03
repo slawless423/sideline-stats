@@ -38,6 +38,12 @@ jobs:
         env:
           POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
         run: node scripts/build_mens_d2_ratings.mjs
+
+      - name: Update Women's D2 ratings
+        continue-on-error: true
+        env:
+          POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+        run: node scripts/build_womens_d2_ratings.mjs
       
       - name: Clean up installation artifacts
         run: |
