@@ -10,6 +10,10 @@ const REQUEST_RETRIES = 3;
 const BOX_CONCURRENCY = 4;
 const MIN_TEAMS_REQUIRED = 200;
 
+// Minimum players per team in a box score to be considered complete.
+// Games below this threshold are NOT cached so they get re-attempted on next daily run.
+const MIN_PLAYERS_PER_TEAM = 5;
+
 const dbEnabled = !!process.env.POSTGRES_URL;
 if (dbEnabled) {
   console.log("Database connection enabled");
@@ -292,6 +296,17 @@ function parseBoxscore(gameId, gameJson, gameDate, confInfo) {
   };
 }
 
+// ===== SPARSE BOX SCORE DETECTION =====
+// Returns true if the box score has enough player data to be considered complete.
+// Games that fail this check are NOT cached so they get re-attempted on the next daily run.
+function isBoxScoreComplete(playerData, homeId, awayId) {
+  const homeEntry = playerData.find(pd => pd.teamId === homeId);
+  const awayEntry = playerData.find(pd => pd.teamId === awayId);
+  const homePlayers = homeEntry?.players?.length ?? 0;
+  const awayPlayers = awayEntry?.players?.length ?? 0;
+  return homePlayers >= MIN_PLAYERS_PER_TEAM && awayPlayers >= MIN_PLAYERS_PER_TEAM;
+}
+
 // ===== CACHE & FILE HELPERS =====
 
 async function loadKnownGameIds() {
@@ -360,9 +375,11 @@ async function loadExistingPlayerStats() {
 async function main() {
   const today = new Date();
 
+  // CHANGED: expanded from 2 days to 3 days so recently-sparse games get more retry attempts
   const datesToCheck = [
     fmtDate(new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate() - 1))),
     fmtDate(new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate() - 2))),
+    fmtDate(new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate() - 3))),
   ];
 
   console.log(`Checking dates: ${datesToCheck.join(", ")}`);
@@ -412,7 +429,8 @@ async function main() {
 
   let newGamesProcessed = 0;
   let failed = 0;
-  const processedGameIds = [];
+  let sparseCount = 0;
+  const processedGameIds = []; // Only complete box scores go here
   const newGamesForDb = [];
   const newPlayerGameRows = [];
 
@@ -442,6 +460,14 @@ async function main() {
     }
 
     const { home, away } = gameData;
+
+    // Check if box score is complete - sparse games still get written to DB
+    // but are NOT added to the cache so they get re-attempted next run
+    const boxComplete = isBoxScoreComplete(gameData.players, home.teamId, away.teamId);
+    if (!boxComplete) {
+      sparseCount++;
+      console.log(`⚠️  Sparse box score for game ${gid} on ${gameDate} (${home.teamName} vs ${away.teamName}) - will retry next run`);
+    }
 
     newGamesForDb.push({
       gameId: gameData.gameId,
@@ -575,11 +601,14 @@ async function main() {
       }
     }
 
-    processedGameIds.push(gid);
+    // Only cache games with complete box scores
+    if (boxComplete) {
+      processedGameIds.push(gid);
+    }
     newGamesProcessed++;
   }
 
-  console.log(`Successfully processed ${newGamesProcessed} new games, ${failed} failed`);
+  console.log(`Successfully processed ${newGamesProcessed} new games, ${failed} failed, ${sparseCount} sparse (not cached)`);
 
   // ===== WRITE TO DATABASE =====
   if (dbEnabled) {
@@ -679,8 +708,9 @@ async function main() {
 
   await saveKnownGameIds(processedGameIds);
 
-  console.log(`\n✅ Done! Processed ${newGamesProcessed} new games, ${failed} failed`);
+  console.log(`\n✅ Done! Processed ${newGamesProcessed} new games, ${failed} failed, ${sparseCount} sparse (not cached)`);
   if (failed > 0) console.log(`⚠️  ${failed} games failed - check logs`);
+  if (sparseCount > 0) console.log(`⚠️  ${sparseCount} sparse games will be retried on next run`);
 }
 
 main().catch((e) => {
