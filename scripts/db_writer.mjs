@@ -225,7 +225,8 @@ export async function upsertPlayer(player) {
   ]);
 }
 
-// Insert player game stats - single row (kept for compatibility)
+// Insert or update player game stats - single row (kept for compatibility)
+// CHANGED: DO UPDATE instead of DO NOTHING so sparse rows get overwritten with better data
 export async function insertPlayerGame(gameId, playerId, teamId, stats) {
   const db = initDb();
   
@@ -237,7 +238,14 @@ export async function insertPlayerGame(gameId, playerId, teamId, stats) {
     ) VALUES (
       $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20
     )
-    ON CONFLICT (game_id, player_id) DO NOTHING
+    ON CONFLICT (game_id, player_id) DO UPDATE SET
+      minutes = EXCLUDED.minutes,
+      fgm = EXCLUDED.fgm, fga = EXCLUDED.fga,
+      tpm = EXCLUDED.tpm, tpa = EXCLUDED.tpa,
+      ftm = EXCLUDED.ftm, fta = EXCLUDED.fta,
+      orb = EXCLUDED.orb, drb = EXCLUDED.drb, trb = EXCLUDED.trb,
+      ast = EXCLUDED.ast, stl = EXCLUDED.stl, blk = EXCLUDED.blk,
+      tov = EXCLUDED.tov, pf = EXCLUDED.pf, points = EXCLUDED.points
   `;
   
   await db.query(query, [
@@ -248,6 +256,7 @@ export async function insertPlayerGame(gameId, playerId, teamId, stats) {
 }
 
 // Batch insert player game stats - much faster than one at a time
+// CHANGED: DO UPDATE instead of DO NOTHING so sparse rows get overwritten with better data
 export async function insertPlayerGamesBatch(rows, batchSize = 500) {
   if (!rows || rows.length === 0) return 0;
   
@@ -274,7 +283,14 @@ export async function insertPlayerGamesBatch(rows, batchSize = 500) {
         minutes, fgm, fga, tpm, tpa, ftm, fta,
         orb, drb, trb, ast, stl, blk, tov, pf, points
       ) VALUES ${placeholders.join(',')}
-      ON CONFLICT (game_id, player_id) DO NOTHING
+      ON CONFLICT (game_id, player_id) DO UPDATE SET
+        minutes = EXCLUDED.minutes,
+        fgm = EXCLUDED.fgm, fga = EXCLUDED.fga,
+        tpm = EXCLUDED.tpm, tpa = EXCLUDED.tpa,
+        ftm = EXCLUDED.ftm, fta = EXCLUDED.fta,
+        orb = EXCLUDED.orb, drb = EXCLUDED.drb, trb = EXCLUDED.trb,
+        ast = EXCLUDED.ast, stl = EXCLUDED.stl, blk = EXCLUDED.blk,
+        tov = EXCLUDED.tov, pf = EXCLUDED.pf, points = EXCLUDED.points
     `;
 
     try {
@@ -290,7 +306,14 @@ export async function insertPlayerGamesBatch(rows, batchSize = 500) {
               minutes, fgm, fga, tpm, tpa, ftm, fta,
               orb, drb, trb, ast, stl, blk, tov, pf, points
             ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20)
-            ON CONFLICT (game_id, player_id) DO NOTHING
+            ON CONFLICT (game_id, player_id) DO UPDATE SET
+              minutes = EXCLUDED.minutes,
+              fgm = EXCLUDED.fgm, fga = EXCLUDED.fga,
+              tpm = EXCLUDED.tpm, tpa = EXCLUDED.tpa,
+              ftm = EXCLUDED.ftm, fta = EXCLUDED.fta,
+              orb = EXCLUDED.orb, drb = EXCLUDED.drb, trb = EXCLUDED.trb,
+              ast = EXCLUDED.ast, stl = EXCLUDED.stl, blk = EXCLUDED.blk,
+              tov = EXCLUDED.tov, pf = EXCLUDED.pf, points = EXCLUDED.points
           `, [
             row.gameId, row.playerId, row.teamId, row.division || null,
             row.minutes, row.fgm, row.fga, row.tpm, row.tpa, row.ftm, row.fta,
