@@ -10,6 +10,9 @@ const REQUEST_RETRIES = 3;
 const BOX_CONCURRENCY = 4;
 const RETRY_428_DELAY_MS = 2000;
 
+// Minimum players per team in a box score to be considered complete
+const MIN_PLAYERS_PER_TEAM = 5;
+
 // Known Men's D1 conferences - used to filter out non-D1 opponents
 const MENS_D1_CONFERENCES = new Set([
   'acc', 'american', 'america-east', 'asun', 'atlantic-10',
@@ -24,8 +27,6 @@ function isD1Conference(conf) {
 }
 
 console.log("START build_mens_d1_complete", new Date().toISOString());
-
-// ===== UTILITY FUNCTIONS =====
 
 function toDate(s) {
   const [y, m, d] = s.split("-").map(Number);
@@ -185,8 +186,6 @@ function buildPlayerId(teamId, p) {
   const last = (p.lastName || "").toLowerCase().replace(/\s+/g, "");
   return `${teamId}_${ncaaId}_${first}_${last}`;
 }
-
-// ===== STAT EXTRACTION =====
 
 function extractCompleteStats(raw) {
   return {
@@ -359,7 +358,14 @@ function parseCompleteGameData(gameId, gameJson, gameDate) {
   };
 }
 
-// ===== MAIN =====
+// ===== SPARSE BOX SCORE DETECTION =====
+function isBoxScoreComplete(playerData, homeId, awayId) {
+  const homeEntry = playerData.find(pd => pd.teamId === homeId);
+  const awayEntry = playerData.find(pd => pd.teamId === awayId);
+  const homePlayers = homeEntry?.players?.length ?? 0;
+  const awayPlayers = awayEntry?.players?.length ?? 0;
+  return homePlayers >= MIN_PLAYERS_PER_TEAM && awayPlayers >= MIN_PLAYERS_PER_TEAM;
+}
 
 async function main() {
   const today = new Date();
@@ -368,12 +374,14 @@ async function main() {
 
   const allGames = [];
   const seenGameIds = new Set();
+  const sparseGameIds = new Set();
 
   let days = 0;
   let totalGamesFound = 0;
   let totalBoxesFetched = 0;
   let totalBoxesParsed = 0;
   let totalBoxesFailed = 0;
+  let totalSparseBoxes = 0;
 
   console.log(`Scraping ${DIVISION} data (team + player stats)...\n`);
 
@@ -384,7 +392,6 @@ async function main() {
 
     if (days % 7 === 1) console.log("DATE", d);
 
-    // Fetch both all-conf and all-games to capture every D1 game
     const scoreboardPaths = [
       `/scoreboard/basketball-men/d1/${Y}/${M}/${D}/all-conf`,
       `/scoreboard/basketball-men/d1/${Y}/${M}/${D}/all-games`,
@@ -462,10 +469,16 @@ async function main() {
         gameData.isConferenceGame = confInfo.isConferenceGame;
       }
 
-      // Only keep games where at least one team is a known D1 conference
       const homeIsD1 = isD1Conference(gameData.home.conference);
       const awayIsD1 = isD1Conference(gameData.away.conference);
       if (!homeIsD1 && !awayIsD1) continue;
+
+      // Check for sparse box score - still write to DB but don't cache
+      if (!isBoxScoreComplete(gameData.players, gameData.home.teamId, gameData.away.teamId)) {
+        totalSparseBoxes++;
+        sparseGameIds.add(gid);
+        console.log(`⚠️  Sparse box score for game ${gid} on ${date} (home: ${gameData.home.teamName}, away: ${gameData.away.teamName}) - will not cache`);
+      }
 
       totalBoxesParsed++;
       allGames.push(gameData);
@@ -478,6 +491,7 @@ async function main() {
     "\ngamesFound=", totalGamesFound,
     "\nboxesParsed=", totalBoxesParsed,
     "\nboxesFailed=", totalBoxesFailed,
+    "\nsparseBoxes=", totalSparseBoxes,
     "\nsuccessRate=",
     totalGamesFound > 0 ? ((totalBoxesParsed / totalGamesFound) * 100).toFixed(1) + "%" : "0%"
   );
@@ -562,8 +576,6 @@ async function main() {
 
     for (const team of [home, away]) {
       const oppStats = team === home ? away.stats : home.stats;
-
-      // Only track stats for D1 teams - skip non-D1 opponents
       if (!isD1Conference(team.conference)) continue;
 
       if (!teamSeasonStats.has(team.teamId)) {
@@ -608,7 +620,6 @@ async function main() {
         const teamName = teamId === home.teamId ? home.teamName : away.teamName;
         const teamConf = teamId === home.teamId ? home.conference : away.conference;
 
-        // Only track players for D1 teams
         if (!isD1Conference(teamConf)) continue;
 
         for (const p of playerData.players) {
@@ -695,13 +706,19 @@ async function main() {
   );
   console.log(`✅ WROTE public/data/mens_d1_games.json (${gamesLog.length} games)`);
 
-  const successfullyParsedIds = allGames.map(g => g.gameId);
+  // Only cache complete box scores - sparse ones will be re-attempted next rebuild
+  const successfullyParsedIds = allGames
+    .map(g => g.gameId)
+    .filter(gid => !sparseGameIds.has(gid));
+  console.log(`Caching ${successfullyParsedIds.length} complete games (${sparseGameIds.size} sparse games excluded from cache)`);
+
   await fs.writeFile(
     "public/data/mens_d1_games_cache.json",
     JSON.stringify({
       generated_at_utc: new Date().toISOString(),
-      note: "Contains ONLY successfully parsed game IDs - not scheduled games",
+      note: "Contains ONLY successfully parsed game IDs with complete box scores",
       total_games: successfullyParsedIds.length,
+      sparse_games_excluded: sparseGameIds.size,
       game_ids: successfullyParsedIds,
     }, null, 2),
     "utf8"
@@ -720,7 +737,6 @@ async function main() {
 
     try {
       db.initDb();
-      // Safety guard: abort if we didn't scrape enough data (e.g. API was down)
       if (allGames.length < 500) {
         throw new Error(`BAD RUN: Only ${allGames.length} games parsed. API may be down. Aborting to protect existing database data.`);
       }
@@ -763,7 +779,6 @@ async function main() {
       }
       console.log(`✅ Wrote ${allPlayers.length} players to database`);
 
-      // Batch insert player game stats - only for valid D1 team IDs
       console.log("Writing player game stats...");
       const validTeamIds = new Set(teamSeasonStats.keys());
       const playerGameRows = [];
@@ -807,6 +822,7 @@ async function main() {
   console.log(`   - ${gamesLog.length} games parsed`);
   console.log(`   - ${allPlayers.length} players`);
   console.log(`   - ${totalBoxesFailed} games failed`);
+  console.log(`   - ${totalSparseBoxes} sparse box scores (not cached, will retry next rebuild)`);
   console.log(`   - Success rate: ${totalGamesFound > 0 ? ((totalBoxesParsed / totalGamesFound) * 100).toFixed(1) : 0}%`);
 }
 
