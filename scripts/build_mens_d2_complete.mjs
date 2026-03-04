@@ -10,6 +10,10 @@ const REQUEST_RETRIES = 3;
 const BOX_CONCURRENCY = 4;
 const RETRY_428_DELAY_MS = 2000;
 
+// Minimum players per team in a box score to be considered complete
+// Games below this threshold are NOT cached so they get re-attempted on next rebuild
+const MIN_PLAYERS_PER_TEAM = 5;
+
 // Known Men's D2 conferences - used to filter out non-D2 opponents
 const MENS_D2_CONFERENCES = new Set([
   'cacc', 'ciaa', 'conference-carolinas', 'ecc', 'gliac', 'glvc',
@@ -364,6 +368,18 @@ function parseCompleteGameData(gameId, gameJson, gameDate) {
   };
 }
 
+// ===== SPARSE BOX SCORE DETECTION =====
+// Returns true if the box score has enough player data to be considered complete.
+// Games that fail this check are written to the DB but NOT cached,
+// so the next full rebuild will re-attempt them.
+function isBoxScoreComplete(playerData, homeId, awayId) {
+  const homeEntry = playerData.find(pd => pd.teamId === homeId);
+  const awayEntry = playerData.find(pd => pd.teamId === awayId);
+  const homePlayers = homeEntry?.players?.length ?? 0;
+  const awayPlayers = awayEntry?.players?.length ?? 0;
+  return homePlayers >= MIN_PLAYERS_PER_TEAM && awayPlayers >= MIN_PLAYERS_PER_TEAM;
+}
+
 // ===== MAIN =====
 
 async function main() {
@@ -373,12 +389,14 @@ async function main() {
 
   const allGames = [];
   const seenGameIds = new Set();
+  const sparseGameIds = new Set(); // Games with incomplete box scores - not cached
 
   let days = 0;
   let totalGamesFound = 0;
   let totalBoxesFetched = 0;
   let totalBoxesParsed = 0;
   let totalBoxesFailed = 0;
+  let totalSparseBoxes = 0;
 
   console.log(`Scraping ${DIVISION} data (team + player stats)...\n`);
 
@@ -462,6 +480,13 @@ async function main() {
       const awayIsD2 = isD2Conference(gameData.away.conference);
       if (!homeIsD2 && !awayIsD2) continue;
 
+      // Check if box score has enough player data
+      if (!isBoxScoreComplete(gameData.players, gameData.home.teamId, gameData.away.teamId)) {
+        totalSparseBoxes++;
+        sparseGameIds.add(gid);
+        console.log(`⚠️  Sparse box score for game ${gid} on ${date} (home: ${gameData.home.teamName}, away: ${gameData.away.teamName}) - will not cache`);
+      }
+
       totalBoxesParsed++;
       allGames.push(gameData);
     }
@@ -473,6 +498,7 @@ async function main() {
     "\ngamesFound=", totalGamesFound,
     "\nboxesParsed=", totalBoxesParsed,
     "\nboxesFailed=", totalBoxesFailed,
+    "\nsparseBoxes=", totalSparseBoxes,
     "\nsuccessRate=",
     totalGamesFound > 0 ? ((totalBoxesParsed / totalGamesFound) * 100).toFixed(1) + "%" : "0%"
   );
@@ -695,13 +721,19 @@ async function main() {
   );
   console.log(`✅ WROTE public/data/mens_d2_games.json (${gamesLog.length} games)`);
 
-  const successfullyParsedIds = allGames.map(g => g.gameId);
+  // Only cache game IDs with complete box scores - sparse ones will be re-attempted next rebuild
+  const successfullyParsedIds = allGames
+    .map(g => g.gameId)
+    .filter(gid => !sparseGameIds.has(gid));
+  console.log(`Caching ${successfullyParsedIds.length} complete games (${sparseGameIds.size} sparse games excluded from cache)`);
+
   await fs.writeFile(
     "public/data/mens_d2_games_cache.json",
     JSON.stringify({
       generated_at_utc: new Date().toISOString(),
-      note: "Contains ONLY successfully parsed game IDs - not scheduled games",
+      note: "Contains ONLY successfully parsed game IDs with complete box scores",
       total_games: successfullyParsedIds.length,
+      sparse_games_excluded: sparseGameIds.size,
       game_ids: successfullyParsedIds,
     }, null, 2),
     "utf8"
@@ -808,6 +840,7 @@ async function main() {
   console.log(`   - ${gamesLog.length} games parsed`);
   console.log(`   - ${allPlayers.length} players`);
   console.log(`   - ${totalBoxesFailed} games failed`);
+  console.log(`   - ${totalSparseBoxes} sparse box scores (not cached, will retry next rebuild)`);
   console.log(`   - Success rate: ${totalGamesFound > 0 ? ((totalBoxesParsed / totalGamesFound) * 100).toFixed(1) : 0}%`);
 }
 
