@@ -10,6 +10,9 @@ const REQUEST_RETRIES = 3;
 const BOX_CONCURRENCY = 4;
 const MIN_TEAMS = 300;
 
+// Minimum players per team in a box score to be considered complete
+const MIN_PLAYERS_PER_TEAM = 5;
+
 const MENS_D1_CONFERENCES = new Set([
   'acc', 'american', 'america-east', 'asun', 'atlantic-10',
   'big-12', 'big-east', 'big-sky', 'big-south', 'big-ten', 'big-west',
@@ -277,8 +280,16 @@ function parseCompleteGameData(gameId, gameJson, gameDate) {
   };
 }
 
+// ===== SPARSE BOX SCORE DETECTION =====
+function isBoxScoreComplete(playerData, homeId, awayId) {
+  const homeEntry = playerData.find(pd => pd.teamId === homeId);
+  const awayEntry = playerData.find(pd => pd.teamId === awayId);
+  const homePlayers = homeEntry?.players?.length ?? 0;
+  const awayPlayers = awayEntry?.players?.length ?? 0;
+  return homePlayers >= MIN_PLAYERS_PER_TEAM && awayPlayers >= MIN_PLAYERS_PER_TEAM;
+}
+
 async function main() {
-  // Load existing data
   let existingRatings = { rows: [] };
   let existingTeamStats = { teams: [] };
   let existingPlayerStats = { players: [] };
@@ -298,10 +309,10 @@ async function main() {
   const playerStatsMap = new Map();
   for (const p of (existingPlayerStats.players || [])) playerStatsMap.set(p.playerId, { ...p });
 
-  // Check yesterday and 2 days ago
+  // CHANGED: expanded from 2 days to 3 days for more sparse game retry attempts
   const today = new Date();
   const datesToCheck = [];
-  for (let i = 1; i <= 2; i++) {
+  for (let i = 1; i <= 3; i++) {
     const dt = new Date(today);
     dt.setUTCDate(dt.getUTCDate() - i);
     datesToCheck.push(fmtDate(dt));
@@ -315,7 +326,6 @@ async function main() {
   for (const d of datesToCheck) {
     const [Y, M, D] = d.split("-");
 
-    // Fetch both all-conf and all-games to capture every D1 game
     const scoreboardPaths = [
       `/scoreboard/basketball-men/d1/${Y}/${M}/${D}/all-conf`,
       `/scoreboard/basketball-men/d1/${Y}/${M}/${D}/all-games`,
@@ -351,9 +361,9 @@ async function main() {
 
   console.log(`\nNew games to process: ${newGameIds.length}`);
 
-  // Fetch boxscores
   const newGames = [];
   const successfulGameIds = [];
+  let sparseCount = 0;
 
   const boxResults = await mapLimit(newGameIds, BOX_CONCURRENCY, async ({ gid, date }) => {
     try {
@@ -379,18 +389,24 @@ async function main() {
       gameData.isConferenceGame = confInfo.isConferenceGame;
     }
 
+    // Check for sparse box score - still process but don't cache
+    const boxComplete = isBoxScoreComplete(gameData.players, gameData.home.teamId, gameData.away.teamId);
+    if (!boxComplete) {
+      sparseCount++;
+      console.log(`⚠️  Sparse box score for game ${gid} on ${date} (${gameData.home.teamName} vs ${gameData.away.teamName}) - will retry next run`);
+    }
+
     newGames.push(gameData);
-    successfulGameIds.push(gid);
+    if (boxComplete) successfulGameIds.push(gid);
   }
 
-  console.log(`Successfully parsed ${newGames.length} new games`);
+  console.log(`Successfully parsed ${newGames.length} new games, ${sparseCount} sparse (not cached)`);
 
   if (newGames.length === 0) {
     console.log("No games parsed successfully. Exiting.");
     return;
   }
 
-  // Update team stats - only for D1 teams
   for (const game of newGames) {
     const { home, away } = game;
     for (const [team, opp] of [[home, away], [away, home]]) {
@@ -428,7 +444,6 @@ async function main() {
     }
   }
 
-  // Update player stats - only for D1 teams
   for (const game of newGames) {
     if (!game.players) continue;
     for (const playerData of game.players) {
@@ -477,7 +492,6 @@ async function main() {
     }
   }
 
-  // Rebuild ratings
   const ratingsRows = [];
   for (const [teamId, stats] of teamStatsMap) {
     const offPoss = Math.max(1, stats.fga - stats.orb + stats.tov + 0.475 * stats.fta);
@@ -498,7 +512,6 @@ async function main() {
 
   const allPlayers = Array.from(playerStatsMap.values()).filter((p) => p.games > 0);
 
-  // Save JSON files
   await fs.writeFile(
     "public/data/mens_d1_ratings.json",
     JSON.stringify({ generated_at_utc: new Date().toISOString(), season_start: SEASON_START, rows: ratingsRows }, null, 2),
@@ -519,37 +532,29 @@ async function main() {
   );
   console.log(`✅ Updated mens_d1_player_stats.json (${allPlayers.length} players)`);
 
-  // Update cache
   const updatedGameIds = [...knownGameIds, ...successfulGameIds];
   await fs.writeFile(
     "public/data/mens_d1_games_cache.json",
     JSON.stringify({
       generated_at_utc: new Date().toISOString(),
-      note: "Contains ONLY successfully parsed game IDs",
+      note: "Contains ONLY successfully parsed game IDs with complete box scores",
       total_games: updatedGameIds.length,
       game_ids: updatedGameIds,
     }, null, 2),
     "utf8"
   );
 
-  // Write to database
   if (process.env.POSTGRES_URL) {
     console.log("\n📊 Writing to database...");
     db.initDb();
 
     const gameLogEntries = newGames.map(game => ({
-      gameId: game.gameId,
-      date: game.date,
-      division: DIVISION,
-      homeTeam: game.home.teamName,
-      homeId: game.home.teamId,
-      homeScore: game.home.stats.points,
-      homeConf: game.home.conference,
+      gameId: game.gameId, date: game.date, division: DIVISION,
+      homeTeam: game.home.teamName, homeId: game.home.teamId,
+      homeScore: game.home.stats.points, homeConf: game.home.conference,
       homeStats: game.home.stats,
-      awayTeam: game.away.teamName,
-      awayId: game.away.teamId,
-      awayScore: game.away.stats.points,
-      awayConf: game.away.conference,
+      awayTeam: game.away.teamName, awayId: game.away.teamId,
+      awayScore: game.away.stats.points, awayConf: game.away.conference,
       awayStats: game.away.stats,
       isConferenceGame: game.isConferenceGame,
     }));
@@ -596,7 +601,8 @@ async function main() {
     await db.closeDb();
   }
 
-  console.log(`\n✅ Daily update complete. Processed ${newGames.length} new games.`);
+  console.log(`\n✅ Daily update complete. Processed ${newGames.length} new games, ${sparseCount} sparse (not cached).`);
+  if (sparseCount > 0) console.log(`⚠️  ${sparseCount} sparse games will be retried on next run`);
 }
 
 main().catch((e) => {
