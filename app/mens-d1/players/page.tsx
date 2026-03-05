@@ -431,7 +431,7 @@ export default function MensD1PlayersPage() {
                     })}
                   </tr>
                 );
-              }))}
+              })}
             </tbody>
           </table>
         </div>
