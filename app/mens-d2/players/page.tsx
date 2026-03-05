@@ -7,6 +7,8 @@ import SiteNavigation from '@/components/SiteNavigation';
 const ACCENT = "#4f46e5";
 const ACCENT_LIGHT = "#f5f5ff";
 
+type StatMode = 'advanced' | 'perGame' | 'per40';
+
 type Player = {
   playerId: string;
   firstName: string;
@@ -37,10 +39,79 @@ type TeamStats = {
   trb: number; opp_trb: number;
 };
 
-type SortKey = 'name' | 'team' | 'games' | 'starts' | 'minPct' | 'ortg' | 'usagePct' | 'shotPct' | 
-  'efg' | 'ts' | 'orbPct' | 'drbPct' | 'aRate' | 'toRate' | 'blkPct' | 'stlPct' | 'fc40' | 'ftRate' |
-  'ftPct' | '2pPct' | '3pPct' | 'ppg' | 'rpg' | 'apg';
+type SortKey = 'name' | 'team' | 'games' | 'starts' | 'minPct' | 'ortg' | 'usagePct' | 'shotPct' |
+  'efg' | 'ts' | 'orbPct' | 'drbPct' | 'aRate' | 'toRate' | 'blkPct' | 'stlPct' | 'ftRate' |
+  'ftPct' | 'twoPct' | 'threePct' | 'ppg' | 'rpg' | 'orbpg' | 'drbpg' | 'apg' | 'spg' | 'bpg' | 'mpg' |
+  'p40' | 'r40' | 'orb40' | 'drb40' | 'a40' | 's40' | 'b40' | 'fc40' | 'fgPct' |
+  'twopm' | 'twopa' | 'tpm' | 'tpa' | 'ftm' | 'fta';
 type SortOrder = 'asc' | 'desc';
+
+const ADVANCED_COLS: { label: string; key: SortKey }[] = [
+  { label: 'ORtg',    key: 'ortg'     },
+  { label: '%Min',    key: 'minPct'   },
+  { label: '%Usage',  key: 'usagePct' },
+  { label: '%Shots',  key: 'shotPct'  },
+  { label: 'eFG%',   key: 'efg'      },
+  { label: 'TS%',    key: 'ts'       },
+  { label: 'OR%',    key: 'orbPct'   },
+  { label: 'DR%',    key: 'drbPct'   },
+  { label: 'ARate',   key: 'aRate'    },
+  { label: 'TORate',  key: 'toRate'   },
+  { label: 'Blk%',   key: 'blkPct'   },
+  { label: 'Stl%',   key: 'stlPct'   },
+  { label: 'FTRate',  key: 'ftRate'   },
+  { label: '2PM',    key: 'twopm'    },
+  { label: '2PA',    key: 'twopa'    },
+  { label: '2P%',    key: 'twoPct'   },
+  { label: '3PM',    key: 'tpm'      },
+  { label: '3PA',    key: 'tpa'      },
+  { label: '3P%',    key: 'threePct' },
+  { label: 'FTM',    key: 'ftm'      },
+  { label: 'FTA',    key: 'fta'      },
+  { label: 'FT%',    key: 'ftPct'    },
+];
+
+const PER_GAME_COLS: { label: string; key: SortKey }[] = [
+  { label: 'PPG',  key: 'ppg'   },
+  { label: 'RPG',  key: 'rpg'   },
+  { label: 'ORB',  key: 'orbpg' },
+  { label: 'DRB',  key: 'drbpg' },
+  { label: 'APG',  key: 'apg'   },
+  { label: 'SPG',  key: 'spg'   },
+  { label: 'BPG',  key: 'bpg'   },
+  { label: 'MPG',  key: 'mpg'   },
+  { label: 'FG%',  key: 'fgPct'    },
+  { label: '2PM',  key: 'twopm'    },
+  { label: '2PA',  key: 'twopa'    },
+  { label: '2P%',  key: 'twoPct'   },
+  { label: '3PM',  key: 'tpm'      },
+  { label: '3PA',  key: 'tpa'      },
+  { label: '3P%',  key: 'threePct' },
+  { label: 'FTM',  key: 'ftm'      },
+  { label: 'FTA',  key: 'fta'      },
+  { label: 'FT%',  key: 'ftPct'    },
+];
+
+const PER_40_COLS: { label: string; key: SortKey }[] = [
+  { label: 'PTS/40', key: 'p40'   },
+  { label: 'REB/40', key: 'r40'   },
+  { label: 'ORB/40', key: 'orb40' },
+  { label: 'DRB/40', key: 'drb40' },
+  { label: 'AST/40', key: 'a40'   },
+  { label: 'STL/40', key: 's40'   },
+  { label: 'BLK/40', key: 'b40'   },
+  { label: 'FC/40',  key: 'fc40'  },
+  { label: 'FG%',    key: 'fgPct'    },
+  { label: '2PM',    key: 'twopm'    },
+  { label: '2PA',    key: 'twopa'    },
+  { label: '2P%',    key: 'twoPct'   },
+  { label: '3PM',    key: 'tpm'      },
+  { label: '3PA',    key: 'tpa'      },
+  { label: '3P%',    key: 'threePct' },
+  { label: 'FTM',    key: 'ftm'      },
+  { label: 'FTA',    key: 'fta'      },
+  { label: 'FT%',    key: 'ftPct'    },
+];
 
 function formatHeight(inches: number | null | undefined): string {
   if (!inches || inches === 0) return "—";
@@ -54,7 +125,8 @@ export default function MensD2PlayersPage() {
   const [teamStats, setTeamStats] = useState<Map<string, TeamStats>>(new Map());
   const [filteredPlayers, setFilteredPlayers] = useState<Player[]>([]);
   const [loading, setLoading] = useState(true);
-  const [sortKey, setSortKey] = useState<SortKey>('ppg');
+  const [statMode, setStatMode] = useState<StatMode>('advanced');
+  const [sortKey, setSortKey] = useState<SortKey>('usagePct');
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
   const [searchTerm, setSearchTerm] = useState('');
   const [minMinutes, setMinMinutes] = useState(100);
@@ -62,7 +134,7 @@ export default function MensD2PlayersPage() {
   useEffect(() => {
     Promise.all([
       fetch(`/api/mens-d2/players?minMinutes=${minMinutes}`).then(res => res.json()),
-      fetch('/api/mens-d2/teams/stats').then(res => res.json())
+      fetch('/api/mens-d2/teams/stats').then(res => res.json()),
     ]).then(([playersData, teamsData]) => {
       setPlayers(playersData.players);
       setFilteredPlayers(playersData.players);
@@ -140,6 +212,7 @@ export default function MensD2PlayersPage() {
     const ftPct = p.fta > 0 ? (p.ftm / p.fta) * 100 : 0;
     const twoPct = twoPA > 0 ? (twoPM / twoPA) * 100 : 0;
     const threePct = p.tpa > 0 ? (p.tpm / p.tpa) * 100 : 0;
+    const fgPct = p.fga > 0 ? (p.fgm / p.fga) * 100 : 0;
 
     const qAST = ((p.minutes / (teamMinutes / 5)) *
       (1.14 * ((team.ast - p.ast) / team.fgm))) +
@@ -168,25 +241,40 @@ export default function MensD2PlayersPage() {
       (1 - (team.orb / Team_Scoring_Poss) * Team_ORB_Weight * Team_Play_pct) + PProd_ORB_Part;
     const ortg = TotPoss > 0 ? 100 * PProd / TotPoss : 0;
 
-    const ppg = p.games > 0 ? p.points / p.games : 0;
-    const rpg = p.games > 0 ? p.trb / p.games : 0;
-    const apg = p.games > 0 ? p.ast / p.games : 0;
+    const g = p.games || 1;
+    const m = p.minutes || 1;
+    const ppg   = p.points / g;
+    const rpg   = p.trb / g;
+    const orbpg = p.orb / g;
+    const drbpg = p.drb / g;
+    const apg   = p.ast / g;
+    const spg   = p.stl / g;
+    const bpg   = p.blk / g;
+    const mpg   = p.minutes / g;
+    const p40   = p.points / m * 40;
+    const r40   = p.trb    / m * 40;
+    const orb40 = p.orb    / m * 40;
+    const drb40 = p.drb    / m * 40;
+    const a40   = p.ast    / m * 40;
+    const s40   = p.stl    / m * 40;
+    const b40   = p.blk    / m * 40;
 
     return {
-      minPct, ortg, usagePct, shotPct, efg, ts,
-      orbPct, drbPct, aRate, toRate, blkPct, stlPct,
-      fc40, ftRate, ftPct, twoPct, threePct, ppg, rpg, apg,
+      minPct, ortg, usagePct, shotPct, efg, ts, orbPct, drbPct,
+      aRate, toRate, blkPct, stlPct, fc40, ftRate, ftPct, twoPct, threePct,
+      fgPct, ppg, rpg, orbpg, drbpg, apg, spg, bpg, mpg,
+      p40, r40, orb40, drb40, a40, s40, b40,
+      twopm: p.fgm - p.tpm, twopa: p.fga - p.tpa,
+      tpm: p.tpm, tpa: p.tpa, ftm: p.ftm, fta: p.fta,
     };
   };
 
   const handleSort = (key: SortKey) => {
-    if (sortKey === key) {
-      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-    } else {
-      setSortKey(key);
-      setSortOrder('desc');
-    }
+    if (sortKey === key) { setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc'); }
+    else { setSortKey(key); setSortOrder('desc'); }
   };
+
+  const activeCols = statMode === 'advanced' ? ADVANCED_COLS : statMode === 'perGame' ? PER_GAME_COLS : PER_40_COLS;
 
   const sortedPlayers = [...filteredPlayers].sort((a, b) => {
     if (sortKey === 'name') {
@@ -197,77 +285,51 @@ export default function MensD2PlayersPage() {
     if (sortKey === 'team') {
       return sortOrder === 'asc' ? a.teamName.localeCompare(b.teamName) : b.teamName.localeCompare(a.teamName);
     }
+    if (sortKey === 'games') return sortOrder === 'asc' ? a.games - b.games : b.games - a.games;
+    if (sortKey === 'starts') return sortOrder === 'asc' ? a.starts - b.starts : b.starts - a.starts;
     const aStats = calculatePlayerStats(a);
     const bStats = calculatePlayerStats(b);
     if (!aStats || !bStats) return 0;
-    const aVal = sortKey === 'games' ? a.games : sortKey === 'starts' ? a.starts : (aStats as any)[sortKey];
-    const bVal = sortKey === 'games' ? b.games : sortKey === 'starts' ? b.starts : (bStats as any)[sortKey];
+    const aVal = (aStats as any)[sortKey] ?? 0;
+    const bVal = (bStats as any)[sortKey] ?? 0;
     return sortOrder === 'asc' ? aVal - bVal : bVal - aVal;
   });
-const exportCSV = (divisionLabel: string) => {
-    const headers = [
-      'Player', 'Team', 'Year', 'Height', 'G', 'S',
-      '%Min', 'ORtg', '%Usage', '%Shots', 'eFG%', 'TS%',
-      'OR%', 'DR%', 'ARate', 'TORate', 'Blk%', 'Stl%',
-      'FC/40', 'FTRate', 'FT%', '2P%', '3P%', 'PPG', 'RPG', 'APG'
-    ];
 
+  const exportCSV = () => {
+    const exportCols = statMode === 'advanced' ? ADVANCED_COLS : statMode === 'perGame' ? PER_GAME_COLS : PER_40_COLS;
+    const headers = ['Player', 'Team', 'Year', 'Height', 'G', 'S', ...exportCols.map(c => c.label)];
     const rows = sortedPlayers.map(p => {
       const stats = calculatePlayerStats(p);
       const ht = !p.height || p.height === 0 ? '' : `${Math.floor(p.height / 12)}'${p.height % 12}"`;
       if (!stats) return Array(headers.length).fill('');
       return [
         `${p.firstName} ${p.lastName}`,
-        p.teamName,
-        p.year || '',
-        ht,
-        p.games,
-        p.starts || 0,
-        stats.minPct.toFixed(1),
-        stats.ortg.toFixed(1),
-        stats.usagePct.toFixed(1),
-        stats.shotPct.toFixed(1),
-        stats.efg.toFixed(1),
-        stats.ts.toFixed(1),
-        stats.orbPct.toFixed(1),
-        stats.drbPct.toFixed(1),
-        stats.aRate.toFixed(1),
-        stats.toRate.toFixed(1),
-        stats.blkPct.toFixed(1),
-        stats.stlPct.toFixed(1),
-        stats.fc40.toFixed(1),
-        stats.ftRate.toFixed(1),
-        stats.ftPct.toFixed(1),
-        stats.twoPct.toFixed(1),
-        stats.threePct.toFixed(1),
-        stats.ppg.toFixed(1),
-        stats.rpg.toFixed(1),
-        stats.apg.toFixed(1),
+        p.teamName, p.year || '', ht, p.games, p.starts || 0,
+        ...exportCols.map(c => {
+          const val = (stats as any)[c.key];
+          return val != null ? Number(val).toFixed(1) : '';
+        }),
       ];
     });
-
     const csv = [headers, ...rows]
       .map(row => row.map(v => `"${String(v).replace(/"/g, '""')}"`).join(','))
       .join('\n');
-
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${divisionLabel}_players_${new Date().toISOString().slice(0, 10)}.csv`;
+    a.download = `mens-d2_players_${new Date().toISOString().slice(0, 10)}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   };
-  const SortableHeader = ({ label, sortKey: key }: { label: string; sortKey: SortKey }) => (
-    <th
-      onClick={() => handleSort(key)}
-      style={{
-        padding: "6px 4px", textAlign: "right", cursor: "pointer", userSelect: "none",
-        background: sortKey === key ? ACCENT : "transparent",
-        color: sortKey === key ? "#fff" : "inherit", fontWeight: 700, fontSize: 10,
-      }}
-    >
-      {label} {sortKey === key && (sortOrder === 'desc' ? '↓' : '↑')}
+
+  const SortableHeader = ({ label, sk }: { label: string; sk: SortKey }) => (
+    <th onClick={() => handleSort(sk)} style={{
+      padding: "6px 6px", textAlign: "right", cursor: "pointer", userSelect: "none",
+      background: sortKey === sk ? ACCENT : "transparent",
+      color: sortKey === sk ? "#fff" : "inherit", fontWeight: 700, fontSize: 10,
+    }}>
+      {label} {sortKey === sk && (sortOrder === 'desc' ? '↓' : '↑')}
     </th>
   );
 
@@ -282,7 +344,7 @@ const exportCSV = (divisionLabel: string) => {
         <div style={{ marginBottom: 24 }}>
           <h2 style={{ fontSize: 24, fontWeight: 700, marginBottom: 8 }}>Player Database</h2>
           <p style={{ color: "#666", marginBottom: 16 }}>{players.length} players</p>
-          <div style={{ display: "flex", gap: 12, marginBottom: 16, flexWrap: "wrap" }}>
+          <div style={{ display: "flex", gap: 12, marginBottom: 16, flexWrap: "wrap", alignItems: "center" }}>
             <input
               type="text"
               placeholder="Search by player name or team..."
@@ -304,25 +366,35 @@ const exportCSV = (divisionLabel: string) => {
                 <option value="300">300+</option>
               </select>
             </div>
+            {/* Stat mode toggle */}
+            <div style={{ display: 'flex', borderRadius: 6, overflow: 'hidden', border: '1px solid #ddd', marginLeft: 'auto' }}>
+              {(['advanced', 'perGame', 'per40'] as StatMode[]).map(mode => (
+                <button
+                  key={mode}
+                  onClick={() => setStatMode(mode)}
+                  style={{
+                    padding: '7px 16px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
+                    border: 'none', outline: 'none',
+                    background: statMode === mode ? ACCENT : '#fff',
+                    color: statMode === mode ? '#fff' : '#666',
+                    transition: 'background 0.15s, color 0.15s',
+                  }}
+                >
+                  {mode === 'advanced' ? 'Advanced' : mode === 'perGame' ? 'Per Game' : 'Per 40'}
+                </button>
+              ))}
+            </div>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
             <p style={{ fontSize: 12, color: "#666", margin: 0 }}>
               Click column headers to sort. Showing {sortedPlayers.length} players.
             </p>
             <button
-              onClick={() => exportCSV('mens-d2')}
+              onClick={exportCSV}
               style={{
-                padding: "6px 14px",
-                background: ACCENT,
-                color: "#fff",
-                border: "none",
-                borderRadius: 6,
-                fontSize: 12,
-                fontWeight: 600,
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                gap: 6,
+                padding: "6px 14px", background: ACCENT, color: "#fff",
+                border: "none", borderRadius: 6, fontSize: 12, fontWeight: 600,
+                cursor: "pointer", display: "flex", alignItems: "center", gap: 6,
               }}
             >
               ↓ Export CSV
@@ -331,79 +403,53 @@ const exportCSV = (divisionLabel: string) => {
         </div>
 
         <div style={{ overflowX: "auto" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 10, whiteSpace: "nowrap" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12, whiteSpace: "nowrap" }}>
             <thead>
               <tr style={{ borderBottom: `2px solid ${ACCENT}`, background: ACCENT_LIGHT }}>
-                <th onClick={() => handleSort('name')} style={{ padding: "6px 4px", textAlign: "left", position: "sticky", left: 0, background: ACCENT_LIGHT, zIndex: 2, cursor: "pointer" }}>
+                <th onClick={() => handleSort('name')} style={{ padding: "6px 6px", textAlign: "left", position: "sticky", left: 0, background: ACCENT_LIGHT, zIndex: 2, cursor: "pointer" }}>
                   Player {sortKey === 'name' && (sortOrder === 'desc' ? '↓' : '↑')}
                 </th>
-                <th onClick={() => handleSort('team')} style={{ padding: "6px 4px", textAlign: "left", cursor: "pointer" }}>
+                <th onClick={() => handleSort('team')} style={{ padding: "6px 6px", textAlign: "left", cursor: "pointer" }}>
                   Team {sortKey === 'team' && (sortOrder === 'desc' ? '↓' : '↑')}
                 </th>
-                <th style={{ padding: "6px 4px", textAlign: "center" }}>Yr</th>
-                <th style={{ padding: "6px 4px", textAlign: "center" }}>Ht</th>
-                <SortableHeader label="G" sortKey="games" />
-                <SortableHeader label="S" sortKey="starts" />
-                <SortableHeader label="%Min" sortKey="minPct" />
-                <SortableHeader label="ORtg" sortKey="ortg" />
-                <SortableHeader label="%Usage" sortKey="usagePct" />
-                <SortableHeader label="%Shots" sortKey="shotPct" />
-                <SortableHeader label="eFG%" sortKey="efg" />
-                <SortableHeader label="TS%" sortKey="ts" />
-                <SortableHeader label="OR%" sortKey="orbPct" />
-                <SortableHeader label="DR%" sortKey="drbPct" />
-                <SortableHeader label="ARate" sortKey="aRate" />
-                <SortableHeader label="TORate" sortKey="toRate" />
-                <SortableHeader label="Blk%" sortKey="blkPct" />
-                <SortableHeader label="Stl%" sortKey="stlPct" />
-                <SortableHeader label="FC/40" sortKey="fc40" />
-                <SortableHeader label="FTRate" sortKey="ftRate" />
-                <SortableHeader label="FT%" sortKey="ftPct" />
-                <SortableHeader label="2P%" sortKey="2pPct" />
-                <SortableHeader label="3P%" sortKey="3pPct" />
-                <SortableHeader label="PPG" sortKey="ppg" />
-                <SortableHeader label="RPG" sortKey="rpg" />
-                <SortableHeader label="APG" sortKey="apg" />
+                <th style={{ padding: "6px 6px", textAlign: "center" }}>Yr</th>
+                <th style={{ padding: "6px 6px", textAlign: "center" }}>Ht</th>
+                <SortableHeader label="G" sk="games" />
+                <SortableHeader label="S" sk="starts" />
+                {activeCols.map(col => (
+                  <SortableHeader key={col.key} label={col.label} sk={col.key} />
+                ))}
               </tr>
             </thead>
             <tbody>
-              {sortedPlayers.map((p) => {
+              {sortedPlayers.map((p, idx) => {
                 const stats = calculatePlayerStats(p);
                 if (!stats) return null;
                 return (
-                  <tr key={p.playerId} style={{ borderBottom: "1px solid #f0f0f0" }}>
-                    <td style={{ padding: "4px", fontWeight: 600, position: "sticky", left: 0, background: "#fff", zIndex: 1 }}>
+                  <tr key={p.playerId} style={{ borderBottom: "1px solid #e8f2fc", background: idx % 2 === 0 ? "#fff" : "#EAF4FF" }}>
+                    <td style={{ padding: "4px 6px", fontWeight: 600, position: "sticky", left: 0, background: idx % 2 === 0 ? "#fff" : "#EAF4FF", zIndex: 1, maxWidth: 150, overflow: "hidden", textOverflow: "ellipsis" }}>
                       {p.firstName} {p.lastName}
                     </td>
-                    <td style={{ padding: "4px" }}>
+                    <td style={{ padding: "4px 6px", maxWidth: 110, overflow: "hidden", textOverflow: "ellipsis", background: idx % 2 === 0 ? "#fff" : "#EAF4FF" }}>
                       <Link href={`/mens-d2/team/${p.teamId}`} style={{ color: ACCENT, textDecoration: "none" }}>
                         {p.teamName}
                       </Link>
                     </td>
-                    <td style={{ padding: "4px", textAlign: "center" }}>{p.year || "—"}</td>
-                    <td style={{ padding: "4px", textAlign: "center" }}>{formatHeight(p.height)}</td>
-                    <td style={{ padding: "4px", textAlign: "right" }}>{p.games}</td>
-                    <td style={{ padding: "4px", textAlign: "right" }}>{p.starts || 0}</td>
-                    <td style={{ padding: "4px", textAlign: "right" }}>{stats.minPct.toFixed(1)}</td>
-                    <td style={{ padding: "4px", textAlign: "right" }}>{stats.ortg.toFixed(1)}</td>
-                    <td style={{ padding: "4px", textAlign: "right" }}>{stats.usagePct.toFixed(1)}</td>
-                    <td style={{ padding: "4px", textAlign: "right" }}>{stats.shotPct.toFixed(1)}</td>
-                    <td style={{ padding: "4px", textAlign: "right" }}>{stats.efg.toFixed(1)}</td>
-                    <td style={{ padding: "4px", textAlign: "right" }}>{stats.ts.toFixed(1)}</td>
-                    <td style={{ padding: "4px", textAlign: "right" }}>{stats.orbPct.toFixed(1)}</td>
-                    <td style={{ padding: "4px", textAlign: "right" }}>{stats.drbPct.toFixed(1)}</td>
-                    <td style={{ padding: "4px", textAlign: "right" }}>{stats.aRate.toFixed(1)}</td>
-                    <td style={{ padding: "4px", textAlign: "right" }}>{stats.toRate.toFixed(1)}</td>
-                    <td style={{ padding: "4px", textAlign: "right" }}>{stats.blkPct.toFixed(1)}</td>
-                    <td style={{ padding: "4px", textAlign: "right" }}>{stats.stlPct.toFixed(1)}</td>
-                    <td style={{ padding: "4px", textAlign: "right" }}>{stats.fc40.toFixed(1)}</td>
-                    <td style={{ padding: "4px", textAlign: "right" }}>{stats.ftRate.toFixed(1)}</td>
-                    <td style={{ padding: "4px", textAlign: "right" }}>{stats.ftPct.toFixed(1)}</td>
-                    <td style={{ padding: "4px", textAlign: "right" }}>{stats.twoPct.toFixed(1)}</td>
-                    <td style={{ padding: "4px", textAlign: "right" }}>{stats.threePct.toFixed(1)}</td>
-                    <td style={{ padding: "4px", textAlign: "right", fontWeight: 600 }}>{stats.ppg.toFixed(1)}</td>
-                    <td style={{ padding: "4px", textAlign: "right" }}>{stats.rpg.toFixed(1)}</td>
-                    <td style={{ padding: "4px", textAlign: "right" }}>{stats.apg.toFixed(1)}</td>
+                    <td style={{ padding: "4px 6px", textAlign: "center", background: idx % 2 === 0 ? "#fff" : "#EAF4FF" }}>{p.year || "—"}</td>
+                    <td style={{ padding: "4px 6px", textAlign: "center", background: idx % 2 === 0 ? "#fff" : "#EAF4FF" }}>{formatHeight(p.height)}</td>
+                    <td style={{ padding: "4px 6px", textAlign: "right", background: idx % 2 === 0 ? "#fff" : "#EAF4FF" }}>{p.games}</td>
+                    <td style={{ padding: "4px 6px", textAlign: "right", background: idx % 2 === 0 ? "#fff" : "#EAF4FF" }}>{p.starts || 0}</td>
+                    {activeCols.map(col => {
+                      const val = (stats as any)[col.key];
+                      return (
+                        <td key={col.key} style={{
+                          padding: "4px 6px", textAlign: "right",
+                          fontWeight: sortKey === col.key ? 700 : 400,
+                        }}>
+                          {val != null ? (['twopm','twopa','tpm','tpa','ftm','fta'].includes(col.key) ? Math.round(Number(val)) : Number(val).toFixed(1)) : '—'}
+                        </td>
+                      );
+                    })}
                   </tr>
                 );
               })}
