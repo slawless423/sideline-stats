@@ -405,25 +405,25 @@ export default function MensD1PlayersPage() {
                 const stats = calculatePlayerStats(p);
                 if (!stats) return null;
                 return (
-                  <tr key={p.playerId} style={{ borderBottom: "1px solid #e8f2fc", background: idx % 2 === 0 ? "#fff" : "#DCF0FF" }}>
-                    <td style={{ padding: "4px 6px", fontWeight: 600, position: "sticky", left: 0, background: idx % 2 === 0 ? "#fff" : "#DCF0FF", zIndex: 1, maxWidth: 120, overflow: "hidden", textOverflow: "ellipsis" }}>
+                  <tr key={p.playerId} style={{ borderBottom: "1px solid #e8f2fc", background: idx % 2 === 0 ? "#fff" : "#EAF4FF" }}>
+                    <td style={{ padding: "4px 6px", fontWeight: 600, position: "sticky", left: 0, background: idx % 2 === 0 ? "#fff" : "#EAF4FF", zIndex: 1, maxWidth: 120, overflow: "hidden", textOverflow: "ellipsis" }}>
                       {p.firstName} {p.lastName}
                     </td>
-                    <td style={{ padding: "4px 6px", maxWidth: 110, overflow: "hidden", textOverflow: "ellipsis", background: idx % 2 === 0 ? "#fff" : "#DCF0FF" }}>
+                    <td style={{ padding: "4px 6px", maxWidth: 110, overflow: "hidden", textOverflow: "ellipsis", background: idx % 2 === 0 ? "#fff" : "#EAF4FF" }}>
                       <Link href={`/mens-d1/team/${p.teamId}`} style={{ color: ACCENT, textDecoration: "none" }}>
                         {p.teamName}
                       </Link>
                     </td>
-                    <td style={{ padding: "4px 6px", textAlign: "center", background: idx % 2 === 0 ? "#fff" : "#DCF0FF" }}>{p.year || "—"}</td>
-                    <td style={{ padding: "4px 6px", textAlign: "center", background: idx % 2 === 0 ? "#fff" : "#DCF0FF" }}>{formatHeight(p.height)}</td>
-                    <td style={{ padding: "4px 6px", textAlign: "right", background: idx % 2 === 0 ? "#fff" : "#DCF0FF" }}>{p.games}</td>
-                    <td style={{ padding: "4px 6px", textAlign: "right", background: idx % 2 === 0 ? "#fff" : "#DCF0FF" }}>{p.starts || 0}</td>
+                    <td style={{ padding: "4px 6px", textAlign: "center", background: idx % 2 === 0 ? "#fff" : "#EAF4FF" }}>{p.year || "—"}</td>
+                    <td style={{ padding: "4px 6px", textAlign: "center", background: idx % 2 === 0 ? "#fff" : "#EAF4FF" }}>{formatHeight(p.height)}</td>
+                    <td style={{ padding: "4px 6px", textAlign: "right", background: idx % 2 === 0 ? "#fff" : "#EAF4FF" }}>{p.games}</td>
+                    <td style={{ padding: "4px 6px", textAlign: "right", background: idx % 2 === 0 ? "#fff" : "#EAF4FF" }}>{p.starts || 0}</td>
                     {activeCols.map(col => {
                       const val = (stats as any)[col.key];
                       return (
                         <td key={col.key} style={{
                           padding: "4px 6px", textAlign: "right",
-                          fontWeight: col.key === 'usagePct' || col.key === 'ortg' || col.key === 'ppg' || col.key === 'p40' ? 600 : 400,
+                          fontWeight: 400,
                         }}>
                           {val != null ? Number(val).toFixed(1) : '—'}
                         </td>
