@@ -42,7 +42,8 @@ type TeamStats = {
 type SortKey = 'name' | 'team' | 'games' | 'starts' | 'minPct' | 'ortg' | 'usagePct' | 'shotPct' |
   'efg' | 'ts' | 'orbPct' | 'drbPct' | 'aRate' | 'toRate' | 'blkPct' | 'stlPct' | 'ftRate' |
   'ftPct' | 'twoPct' | 'threePct' | 'ppg' | 'rpg' | 'orbpg' | 'drbpg' | 'apg' | 'spg' | 'bpg' | 'mpg' |
-  'p40' | 'r40' | 'orb40' | 'drb40' | 'a40' | 's40' | 'b40' | 'fc40' | 'fgPct';
+  'p40' | 'r40' | 'orb40' | 'drb40' | 'a40' | 's40' | 'b40' | 'fc40' | 'fgPct' |
+  'twopm' | 'twopa' | 'tpm' | 'tpa' | 'ftm' | 'fta';
 type SortOrder = 'asc' | 'desc';
 
 const ADVANCED_COLS: { label: string; key: SortKey }[] = [
@@ -59,8 +60,14 @@ const ADVANCED_COLS: { label: string; key: SortKey }[] = [
   { label: 'Blk%',   key: 'blkPct'   },
   { label: 'Stl%',   key: 'stlPct'   },
   { label: 'FTRate',  key: 'ftRate'   },
-  { label: '2P%',    key: 'twoPct'    },
-  { label: '3P%',    key: 'threePct'    },
+  { label: '2PM',    key: 'twopm'    },
+  { label: '2PA',    key: 'twopa'    },
+  { label: '2P%',    key: 'twoPct'   },
+  { label: '3PM',    key: 'tpm'      },
+  { label: '3PA',    key: 'tpa'      },
+  { label: '3P%',    key: 'threePct' },
+  { label: 'FTM',    key: 'ftm'      },
+  { label: 'FTA',    key: 'fta'      },
   { label: 'FT%',    key: 'ftPct'    },
 ];
 
@@ -73,10 +80,16 @@ const PER_GAME_COLS: { label: string; key: SortKey }[] = [
   { label: 'SPG',  key: 'spg'   },
   { label: 'BPG',  key: 'bpg'   },
   { label: 'MPG',  key: 'mpg'   },
-  { label: 'FG%',  key: 'fgPct' },
-  { label: '2P%',  key: 'twoPct' },
+  { label: 'FG%',  key: 'fgPct'    },
+  { label: '2PM',  key: 'twopm'    },
+  { label: '2PA',  key: 'twopa'    },
+  { label: '2P%',  key: 'twoPct'   },
+  { label: '3PM',  key: 'tpm'      },
+  { label: '3PA',  key: 'tpa'      },
   { label: '3P%',  key: 'threePct' },
-  { label: 'FT%',  key: 'ftPct' },
+  { label: 'FTM',  key: 'ftm'      },
+  { label: 'FTA',  key: 'fta'      },
+  { label: 'FT%',  key: 'ftPct'    },
 ];
 
 const PER_40_COLS: { label: string; key: SortKey }[] = [
@@ -88,10 +101,16 @@ const PER_40_COLS: { label: string; key: SortKey }[] = [
   { label: 'STL/40', key: 's40'   },
   { label: 'BLK/40', key: 'b40'   },
   { label: 'FC/40',  key: 'fc40'  },
-  { label: 'FG%',    key: 'fgPct' },
-  { label: '2P%',    key: 'twoPct' },
+  { label: 'FG%',    key: 'fgPct'    },
+  { label: '2PM',    key: 'twopm'    },
+  { label: '2PA',    key: 'twopa'    },
+  { label: '2P%',    key: 'twoPct'   },
+  { label: '3PM',    key: 'tpm'      },
+  { label: '3PA',    key: 'tpa'      },
   { label: '3P%',    key: 'threePct' },
-  { label: 'FT%',    key: 'ftPct' },
+  { label: 'FTM',    key: 'ftm'      },
+  { label: 'FTA',    key: 'fta'      },
+  { label: 'FT%',    key: 'ftPct'    },
 ];
 
 function formatHeight(inches: number | null | undefined): string {
@@ -245,6 +264,8 @@ export default function MensD1PlayersPage() {
       aRate, toRate, blkPct, stlPct, fc40, ftRate, ftPct, twoPct, threePct,
       fgPct, ppg, rpg, orbpg, drbpg, apg, spg, bpg, mpg,
       p40, r40, orb40, drb40, a40, s40, b40,
+      twopm: p.fgm - p.tpm, twopa: p.fga - p.tpa,
+      tpm: p.tpm, tpa: p.tpa, ftm: p.ftm, fta: p.fta,
     };
   };
 
@@ -423,7 +444,7 @@ export default function MensD1PlayersPage() {
                       return (
                         <td key={col.key} style={{
                           padding: "4px 6px", textAlign: "right",
-                          fontWeight: 400,
+                          fontWeight: sortKey === col.key ? 700 : 400,
                         }}>
                           {val != null ? Number(val).toFixed(1) : '—'}
                         </td>
