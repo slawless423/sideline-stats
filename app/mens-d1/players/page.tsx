@@ -41,7 +41,7 @@ type TeamStats = {
 
 type SortKey = 'name' | 'team' | 'games' | 'starts' | 'minPct' | 'ortg' | 'usagePct' | 'shotPct' |
   'efg' | 'ts' | 'orbPct' | 'drbPct' | 'aRate' | 'toRate' | 'blkPct' | 'stlPct' | 'ftRate' |
-  'ftPct' | '2pPct' | '3pPct' | 'ppg' | 'rpg' | 'orbpg' | 'drbpg' | 'apg' | 'spg' | 'bpg' | 'mpg' |
+  'ftPct' | 'twoPct' | 'threePct' | 'ppg' | 'rpg' | 'orbpg' | 'drbpg' | 'apg' | 'spg' | 'bpg' | 'mpg' |
   'p40' | 'r40' | 'orb40' | 'drb40' | 'a40' | 's40' | 'b40' | 'fc40' | 'fgPct';
 type SortOrder = 'asc' | 'desc';
 
@@ -59,8 +59,8 @@ const ADVANCED_COLS: { label: string; key: SortKey }[] = [
   { label: 'Blk%',   key: 'blkPct'   },
   { label: 'Stl%',   key: 'stlPct'   },
   { label: 'FTRate',  key: 'ftRate'   },
-  { label: '2P%',  key: 'twoPct'   },
-  { label: '3P%',  key: 'threePct' },
+  { label: '2P%',    key: 'twoPct'    },
+  { label: '3P%',    key: 'threePct'    },
   { label: 'FT%',    key: 'ftPct'    },
 ];
 
@@ -74,7 +74,7 @@ const PER_GAME_COLS: { label: string; key: SortKey }[] = [
   { label: 'BPG',  key: 'bpg'   },
   { label: 'MPG',  key: 'mpg'   },
   { label: 'FG%',  key: 'fgPct' },
-  { label: '2P%',  key: 'twoPct'   },
+  { label: '2P%',  key: 'twoPct' },
   { label: '3P%',  key: 'threePct' },
   { label: 'FT%',  key: 'ftPct' },
 ];
@@ -89,8 +89,8 @@ const PER_40_COLS: { label: string; key: SortKey }[] = [
   { label: 'BLK/40', key: 'b40'   },
   { label: 'FC/40',  key: 'fc40'  },
   { label: 'FG%',    key: 'fgPct' },
-  { label: '2P%',  key: 'twoPct'   },
-  { label: '3P%',  key: 'threePct' },
+  { label: '2P%',    key: 'twoPct' },
+  { label: '3P%',    key: 'threePct' },
   { label: 'FT%',    key: 'ftPct' },
 ];
 
