@@ -304,7 +304,7 @@ export default function MensD1PlayersPage() {
 
   const SortableHeader = ({ label, sk }: { label: string; sk: SortKey }) => (
     <th onClick={() => handleSort(sk)} style={{
-      padding: "6px 4px", textAlign: "right", cursor: "pointer", userSelect: "none",
+      padding: "6px 6px", textAlign: "right", cursor: "pointer", userSelect: "none",
       background: sortKey === sk ? ACCENT : "transparent",
       color: sortKey === sk ? "#fff" : "inherit", fontWeight: 700, fontSize: 10,
     }}>
@@ -382,17 +382,17 @@ export default function MensD1PlayersPage() {
         </div>
 
         <div style={{ overflowX: "auto" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 10, whiteSpace: "nowrap" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12, whiteSpace: "nowrap" }}>
             <thead>
               <tr style={{ borderBottom: `2px solid ${ACCENT}`, background: ACCENT_LIGHT }}>
-                <th onClick={() => handleSort('name')} style={{ padding: "6px 4px", textAlign: "left", position: "sticky", left: 0, background: ACCENT_LIGHT, zIndex: 2, cursor: "pointer" }}>
+                <th onClick={() => handleSort('name')} style={{ padding: "6px 6px", textAlign: "left", position: "sticky", left: 0, background: ACCENT_LIGHT, zIndex: 2, cursor: "pointer" }}>
                   Player {sortKey === 'name' && (sortOrder === 'desc' ? '↓' : '↑')}
                 </th>
-                <th onClick={() => handleSort('team')} style={{ padding: "6px 4px", textAlign: "left", cursor: "pointer" }}>
+                <th onClick={() => handleSort('team')} style={{ padding: "6px 6px", textAlign: "left", cursor: "pointer" }}>
                   Team {sortKey === 'team' && (sortOrder === 'desc' ? '↓' : '↑')}
                 </th>
-                <th style={{ padding: "6px 4px", textAlign: "center" }}>Yr</th>
-                <th style={{ padding: "6px 4px", textAlign: "center" }}>Ht</th>
+                <th style={{ padding: "6px 6px", textAlign: "center" }}>Yr</th>
+                <th style={{ padding: "6px 6px", textAlign: "center" }}>Ht</th>
                 <SortableHeader label="G" sk="games" />
                 <SortableHeader label="S" sk="starts" />
                 {activeCols.map(col => (
@@ -406,23 +406,23 @@ export default function MensD1PlayersPage() {
                 if (!stats) return null;
                 return (
                   <tr key={p.playerId} style={{ borderBottom: "1px solid #f0f0f0" }}>
-                    <td style={{ padding: "4px", fontWeight: 600, position: "sticky", left: 0, background: "#fff", zIndex: 1 }}>
+                    <td style={{ padding: "4px 6px", fontWeight: 600, position: "sticky", left: 0, background: "#fff", zIndex: 1, maxWidth: 160, overflow: "hidden", textOverflow: "ellipsis" }}>
                       {p.firstName} {p.lastName}
                     </td>
-                    <td style={{ padding: "4px" }}>
+                    <td style={{ padding: "4px 6px", maxWidth: 140, overflow: "hidden", textOverflow: "ellipsis" }}>
                       <Link href={`/mens-d1/team/${p.teamId}`} style={{ color: ACCENT, textDecoration: "none" }}>
                         {p.teamName}
                       </Link>
                     </td>
-                    <td style={{ padding: "4px", textAlign: "center" }}>{p.year || "—"}</td>
-                    <td style={{ padding: "4px", textAlign: "center" }}>{formatHeight(p.height)}</td>
-                    <td style={{ padding: "4px", textAlign: "right" }}>{p.games}</td>
-                    <td style={{ padding: "4px", textAlign: "right" }}>{p.starts || 0}</td>
+                    <td style={{ padding: "4px 6px", textAlign: "center" }}>{p.year || "—"}</td>
+                    <td style={{ padding: "4px 6px", textAlign: "center" }}>{formatHeight(p.height)}</td>
+                    <td style={{ padding: "4px 6px", textAlign: "right" }}>{p.games}</td>
+                    <td style={{ padding: "4px 6px", textAlign: "right" }}>{p.starts || 0}</td>
                     {activeCols.map(col => {
                       const val = (stats as any)[col.key];
                       return (
                         <td key={col.key} style={{
-                          padding: "4px", textAlign: "right",
+                          padding: "4px 6px", textAlign: "right",
                           fontWeight: col.key === 'usagePct' || col.key === 'ortg' || col.key === 'ppg' || col.key === 'p40' ? 600 : 400,
                         }}>
                           {val != null ? Number(val).toFixed(1) : '—'}
