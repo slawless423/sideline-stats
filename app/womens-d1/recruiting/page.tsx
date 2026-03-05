@@ -78,10 +78,10 @@ function calcStats(p: TransferPlayer, team: TeamStats | undefined) {
   const opp_drb     = team.opp_trb - team.opp_orb;
   const drb         = team.trb - team.orb;
 
-  const Team_ORB_pct     = team.orb / (team.orb + opp_drb);
+  const Team_ORB_pct      = team.orb / (team.orb + opp_drb);
   const Team_Scoring_Poss = team.fgm + (1 - Math.pow(1 - team.ftm / team.fta, 2)) * team.fta * 0.4;
-  const Team_Play_pct    = Team_Scoring_Poss / (team.fga + team.fta * 0.4 + team.tov);
-  const Team_ORB_Weight  =
+  const Team_Play_pct     = Team_Scoring_Poss / (team.fga + team.fta * 0.4 + team.tov);
+  const Team_ORB_Weight   =
     ((1 - Team_ORB_pct) * Team_Play_pct) /
     ((1 - Team_ORB_pct) * Team_Play_pct + Team_ORB_pct * (1 - Team_Play_pct));
 
@@ -145,11 +145,11 @@ function calcStats(p: TransferPlayer, team: TeamStats | undefined) {
 
   // Per 40
   const m = p.minutes || 1;
-  const p40 = p.points  / m * 40;
-  const r40 = p.trb     / m * 40;
-  const a40 = p.ast     / m * 40;
-  const s40 = p.stl     / m * 40;
-  const b40 = p.blk     / m * 40;
+  const p40 = p.points / m * 40;
+  const r40 = p.trb    / m * 40;
+  const a40 = p.ast    / m * 40;
+  const s40 = p.stl    / m * 40;
+  const b40 = p.blk    / m * 40;
 
   return {
     ortg, usagePct, efg, ts, orbPct, drbPct, aRate, toRate, blkPct, stlPct, ftRate,
@@ -161,37 +161,37 @@ function calcStats(p: TransferPlayer, team: TeamStats | undefined) {
 // ── Stat Mode Column Definitions ─────────────────────────────
 
 const ADVANCED_COLS: { label: string; key: SortKey }[] = [
-  { label: 'ORtg',    key: 'ortg'     },
-  { label: '%Usage',  key: 'usagePct' },
-  { label: 'eFG%',    key: 'efg'      },
-  { label: 'TS%',     key: 'ts'       },
-  { label: 'OR%',     key: 'orbPct'   },
-  { label: 'DR%',     key: 'drbPct'   },
-  { label: 'ARate',   key: 'aRate'    },
-  { label: 'TORate',  key: 'toRate'   },
-  { label: 'Blk%',   key: 'blkPct'   },
-  { label: 'Stl%',   key: 'stlPct'   },
-  { label: 'FTRate',  key: 'ftRate'   },
+  { label: 'ORtg',   key: 'ortg'     },
+  { label: '%Usage', key: 'usagePct' },
+  { label: 'eFG%',   key: 'efg'      },
+  { label: 'TS%',    key: 'ts'       },
+  { label: 'OR%',    key: 'orbPct'   },
+  { label: 'DR%',    key: 'drbPct'   },
+  { label: 'ARate',  key: 'aRate'    },
+  { label: 'TORate', key: 'toRate'   },
+  { label: 'Blk%',  key: 'blkPct'   },
+  { label: 'Stl%',  key: 'stlPct'   },
+  { label: 'FTRate', key: 'ftRate'   },
 ];
 
 const PER_GAME_COLS: { label: string; key: SortKey }[] = [
-  { label: 'PPG',  key: 'ppg'   },
-  { label: 'RPG',  key: 'rpg'   },
-  { label: 'APG',  key: 'apg'   },
-  { label: 'SPG',  key: 'spg'   },
-  { label: 'BPG',  key: 'bpg'   },
-  { label: 'MPG',  key: 'mpg'   },
-  { label: 'FG%',  key: 'fgPct' },
-  { label: '3P%',  key: 'tpPct' },
-  { label: 'FT%',  key: 'ftPct' },
+  { label: 'PPG', key: 'ppg'   },
+  { label: 'RPG', key: 'rpg'   },
+  { label: 'APG', key: 'apg'   },
+  { label: 'SPG', key: 'spg'   },
+  { label: 'BPG', key: 'bpg'   },
+  { label: 'MPG', key: 'mpg'   },
+  { label: 'FG%', key: 'fgPct' },
+  { label: '3P%', key: 'tpPct' },
+  { label: 'FT%', key: 'ftPct' },
 ];
 
 const PER_40_COLS: { label: string; key: SortKey }[] = [
-  { label: 'PTS/40', key: 'p40' },
-  { label: 'REB/40', key: 'r40' },
-  { label: 'AST/40', key: 'a40' },
-  { label: 'STL/40', key: 's40' },
-  { label: 'BLK/40', key: 'b40' },
+  { label: 'PTS/40', key: 'p40'   },
+  { label: 'REB/40', key: 'r40'   },
+  { label: 'AST/40', key: 'a40'   },
+  { label: 'STL/40', key: 's40'   },
+  { label: 'BLK/40', key: 'b40'   },
   { label: 'FG%',    key: 'fgPct' },
   { label: '3P%',    key: 'tpPct' },
   { label: 'FT%',    key: 'ftPct' },
@@ -255,6 +255,39 @@ export default function WomensRecruitingPage() {
       return sortOrder === 'asc' ? av - bv : bv - av;
     });
   }, [filteredPlayers, sortKey, sortOrder, teamStats]);
+
+  const exportCSV = () => {
+    const activeCols = statMode === 'advanced' ? ADVANCED_COLS : statMode === 'perGame' ? PER_GAME_COLS : PER_40_COLS;
+    const headers = ['Player', 'Team', 'Division', 'Year', 'Height', 'G',
+      ...activeCols.map(c => c.label)];
+    const rows = sortedPlayers.map(p => {
+      const stats = calcStats(p, teamStats.get(p.teamId));
+      const ht = !p.height || p.height === 0 ? '' : `${Math.floor(p.height / 12)}'${p.height % 12}"`;
+      if (!stats) return Array(headers.length).fill('');
+      return [
+        `${p.firstName} ${p.lastName}`,
+        p.teamName,
+        divLabel(p.division),
+        p.year || '',
+        ht,
+        p.games,
+        ...activeCols.map(c => {
+          const val = stats[c.key as keyof typeof stats] as number | undefined;
+          return val != null ? val.toFixed(1) : '';
+        }),
+      ];
+    });
+    const csv = [headers, ...rows]
+      .map(row => row.map(v => `"${String(v).replace(/"/g, '""')}"`).join(','))
+      .join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `womens-transfers_${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   const SortableHeader = ({ label, sk }: { label: string; sk: SortKey }) => (
     <th
@@ -373,6 +406,21 @@ export default function WomensRecruitingPage() {
               </button>
             ))}
           </div>
+
+          {/* Export */}
+          <button
+            onClick={exportCSV}
+            disabled={players.length === 0}
+            style={{
+              padding: '7px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
+              fontFamily: "'Outfit', sans-serif", border: `1px solid ${ICE}`,
+              borderRadius: 6, background: '#fff', color: NAVY,
+              opacity: players.length === 0 ? 0.4 : 1,
+              display: 'flex', alignItems: 'center', gap: 6,
+            }}
+          >
+            ↓ Export CSV
+          </button>
         </div>
 
         {/* ── Table or Empty State ── */}
@@ -389,7 +437,6 @@ export default function WomensRecruitingPage() {
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11, whiteSpace: 'nowrap' }}>
                 <thead>
                   <tr style={{ borderBottom: `2px solid ${ACCENT}`, background: FROST }}>
-                    {/* Fixed columns */}
                     <th
                       onClick={() => handleSort('name')}
                       style={{ padding: '6px 8px', textAlign: 'left', cursor: 'pointer', fontWeight: 700, fontSize: 10, position: 'sticky', left: 0, background: FROST, zIndex: 2 }}
@@ -411,7 +458,6 @@ export default function WomensRecruitingPage() {
                     <th style={{ padding: '6px 8px', textAlign: 'center', fontWeight: 700, fontSize: 10 }}>Yr</th>
                     <th style={{ padding: '6px 8px', textAlign: 'center', fontWeight: 700, fontSize: 10 }}>Ht</th>
                     <SortableHeader label="G" sk="games" />
-                    {/* Dynamic stat columns */}
                     {activeCols.map(col => (
                       <SortableHeader key={col.key} label={col.label} sk={col.key} />
                     ))}
