@@ -427,7 +427,7 @@ export default function MensD1PlayersPage() {
                 if (!stats) return null;
                 return (
                   <tr key={p.playerId} style={{ borderBottom: "1px solid #e8f2fc", background: idx % 2 === 0 ? "#fff" : "#EAF4FF" }}>
-                    <td style={{ padding: "4px 6px", fontWeight: 600, position: "sticky", left: 0, background: idx % 2 === 0 ? "#fff" : "#EAF4FF", zIndex: 1, maxWidth: 120, overflow: "hidden", textOverflow: "ellipsis" }}>
+                    <td style={{ padding: "4px 6px", fontWeight: 600, position: "sticky", left: 0, background: idx % 2 === 0 ? "#fff" : "#EAF4FF", zIndex: 1, maxWidth: 150, overflow: "hidden", textOverflow: "ellipsis" }}>
                       {p.firstName} {p.lastName}
                     </td>
                     <td style={{ padding: "4px 6px", maxWidth: 110, overflow: "hidden", textOverflow: "ellipsis", background: idx % 2 === 0 ? "#fff" : "#EAF4FF" }}>
@@ -446,7 +446,7 @@ export default function MensD1PlayersPage() {
                           padding: "4px 6px", textAlign: "right",
                           fontWeight: sortKey === col.key ? 700 : 400,
                         }}>
-                          {val != null ? Number(val).toFixed(1) : '—'}
+                          {val != null ? (['twopm','twopa','tpm','tpa','ftm','fta'].includes(col.key) ? Math.round(Number(val)) : Number(val).toFixed(1)) : '—'}
                         </td>
                       );
                     })}
