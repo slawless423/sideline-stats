@@ -428,7 +428,7 @@ export default function MensD1PlayersPage() {
                           {val != null ? Number(val).toFixed(1) : '—'}
                         </td>
                       );
-                    }))}
+                    })}
                   </tr>
                 );
               }))}
