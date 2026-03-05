@@ -401,15 +401,15 @@ export default function MensD1PlayersPage() {
               </tr>
             </thead>
             <tbody>
-              {sortedPlayers.map((p) => {
+              {sortedPlayers.map((p, idx) => {
                 const stats = calculatePlayerStats(p);
                 if (!stats) return null;
                 return (
-                  <tr key={p.playerId} style={{ borderBottom: "1px solid #f0f0f0" }}>
-                    <td style={{ padding: "4px 6px", fontWeight: 600, position: "sticky", left: 0, background: "#fff", zIndex: 1, maxWidth: 160, overflow: "hidden", textOverflow: "ellipsis" }}>
+                  <tr key={p.playerId} style={{ borderBottom: "1px solid #e8f2fc", background: idx % 2 === 0 ? "#fff" : "#F0F7FF" }}>
+                    <td style={{ padding: "4px 6px", fontWeight: 600, position: "sticky", left: 0, background: idx % 2 === 0 ? "#fff" : "#F0F7FF", zIndex: 1, maxWidth: 120, overflow: "hidden", textOverflow: "ellipsis" }}>
                       {p.firstName} {p.lastName}
                     </td>
-                    <td style={{ padding: "4px 6px", maxWidth: 140, overflow: "hidden", textOverflow: "ellipsis" }}>
+                    <td style={{ padding: "4px 6px", maxWidth: 110, overflow: "hidden", textOverflow: "ellipsis" }}>
                       <Link href={`/mens-d1/team/${p.teamId}`} style={{ color: ACCENT, textDecoration: "none" }}>
                         {p.teamName}
                       </Link>
