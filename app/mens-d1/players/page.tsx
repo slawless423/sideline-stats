@@ -200,7 +200,60 @@ export default function MensD1PlayersPage() {
     const bVal = sortKey === 'games' ? b.games : sortKey === 'starts' ? b.starts : bStats[sortKey as keyof typeof bStats] as number;
     return sortOrder === 'asc' ? aVal - bVal : bVal - aVal;
   });
+const exportCSV = (divisionLabel: string) => {
+    const headers = [
+      'Player', 'Team', 'Year', 'Height', 'G', 'S',
+      '%Min', 'ORtg', '%Usage', '%Shots', 'eFG%', 'TS%',
+      'OR%', 'DR%', 'ARate', 'TORate', 'Blk%', 'Stl%',
+      'FC/40', 'FTRate', 'FT%', '2P%', '3P%', 'PPG', 'RPG', 'APG'
+    ];
 
+    const rows = sortedPlayers.map(p => {
+      const stats = calculatePlayerStats(p);
+      const ht = !p.height || p.height === 0 ? '' : `${Math.floor(p.height / 12)}'${p.height % 12}"`;
+      if (!stats) return Array(headers.length).fill('');
+      return [
+        `${p.firstName} ${p.lastName}`,
+        p.teamName,
+        p.year || '',
+        ht,
+        p.games,
+        p.starts || 0,
+        stats.minPct.toFixed(1),
+        stats.ortg.toFixed(1),
+        stats.usagePct.toFixed(1),
+        stats.shotPct.toFixed(1),
+        stats.efg.toFixed(1),
+        stats.ts.toFixed(1),
+        stats.orbPct.toFixed(1),
+        stats.drbPct.toFixed(1),
+        stats.aRate.toFixed(1),
+        stats.toRate.toFixed(1),
+        stats.blkPct.toFixed(1),
+        stats.stlPct.toFixed(1),
+        stats.fc40.toFixed(1),
+        stats.ftRate.toFixed(1),
+        stats.ftPct.toFixed(1),
+        stats.twoPct.toFixed(1),
+        stats.threePct.toFixed(1),
+        stats.ppg.toFixed(1),
+        stats.rpg.toFixed(1),
+        stats.apg.toFixed(1),
+      ];
+    });
+
+    const csv = [headers, ...rows]
+      .map(row => row.map(v => `"${String(v).replace(/"/g, '""')}"`).join(','))
+      .join('\n');
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${divisionLabel}_players_${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
   const SortableHeader = ({ label, sortKey: key }: { label: string; sortKey: SortKey }) => (
     <th onClick={() => handleSort(key)} style={{
       padding: "6px 4px", textAlign: "right", cursor: "pointer", userSelect: "none",
@@ -245,7 +298,29 @@ export default function MensD1PlayersPage() {
               </select>
             </div>
           </div>
-          <p style={{ fontSize: 12, color: "#666" }}>Click column headers to sort. Showing {sortedPlayers.length} players.</p>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+            <p style={{ fontSize: 12, color: "#666", margin: 0 }}>
+              Click column headers to sort. Showing {sortedPlayers.length} players.
+            </p>
+            <button
+              onClick={() => exportCSV('mens-d1')}
+              style={{
+                padding: "6px 14px",
+                background: ACCENT,
+                color: "#fff",
+                border: "none",
+                borderRadius: 6,
+                fontSize: 12,
+                fontWeight: 600,
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+              }}
+            >
+              ↓ Export CSV
+            </button>
+          </div>
         </div>
 
         <div style={{ overflowX: "auto" }}>
