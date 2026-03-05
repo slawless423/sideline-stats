@@ -255,7 +255,41 @@ export default function MensRecruitingPage() {
       return sortOrder === 'asc' ? av - bv : bv - av;
     });
   }, [filteredPlayers, sortKey, sortOrder, teamStats]);
+  const exportCSV = () => {
+    const activeCols = statMode === 'advanced' ? ADVANCED_COLS : statMode === 'perGame' ? PER_GAME_COLS : PER_40_COLS;
+    const headers = ['Player', 'Team', 'Division', 'Year', 'Height', 'G',
+      ...activeCols.map(c => c.label)];
 
+    const rows = sortedPlayers.map(p => {
+      const stats = calcStats(p, teamStats.get(p.teamId));
+      const ht = !p.height || p.height === 0 ? '' : `${Math.floor(p.height / 12)}'${p.height % 12}"`;
+      if (!stats) return Array(headers.length).fill('');
+      return [
+        `${p.firstName} ${p.lastName}`,
+        p.teamName,
+        divLabel(p.division),
+        p.year || '',
+        ht,
+        p.games,
+        ...activeCols.map(c => {
+          const val = stats[c.key as keyof typeof stats] as number | undefined;
+          return val != null ? val.toFixed(1) : '';
+        }),
+      ];
+    });
+
+    const csv = [headers, ...rows]
+      .map(row => row.map(v => `"${String(v).replace(/"/g, '""')}"`).join(','))
+      .join('\n');
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `mens-transfers_${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
   const SortableHeader = ({ label, sk }: { label: string; sk: SortKey }) => (
     <th
       onClick={() => handleSort(sk)}
