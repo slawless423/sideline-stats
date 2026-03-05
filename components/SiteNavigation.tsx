@@ -28,6 +28,14 @@ const ALL_DIVISIONS: Division[] = [
   { id: 'mens-d3',   label: "Men's D3",   path: '/mens-d3',   enabled: false },
 ];
 
+// Map each division to the gender-shared recruiting path
+const RECRUITING_PATH: Record<string, string> = {
+  'womens-d1': '/womens-d1/recruiting',
+  'womens-d2': '/womens-d1/recruiting', // shared — resolves to same page
+  'mens-d1':   '/mens-d1/recruiting',
+  'mens-d2':   '/mens-d1/recruiting',   // shared — resolves to same page
+};
+
 function Wordmark({ size = 'md' }: { size?: 'sm' | 'md' }) {
   const topSize = size === 'sm' ? 16 : 22;
   const divH    = size === 'sm' ? 1.5 : 2;
@@ -126,10 +134,13 @@ function DivisionSwitcher({ currentDivision }: { currentDivision: string }) {
   );
 }
 
-function SectionNav({ currentPage, divisionPath }: { currentPage: string; divisionPath: string }) {
+function SectionNav({ currentPage, divisionPath, currentDivision }: { currentPage: string; divisionPath: string; currentDivision: string }) {
+  const recruitingPath = RECRUITING_PATH[currentDivision] ?? `${divisionPath}/recruiting`;
+
   const pages = [
-    { id: 'rankings', label: 'Rankings', path: divisionPath },
-    { id: 'players',  label: 'Players',  path: `${divisionPath}/players` },
+    { id: 'rankings',   label: 'Rankings',   path: divisionPath },
+    { id: 'players',    label: 'Players',     path: `${divisionPath}/players` },
+    { id: 'recruiting', label: 'Recruiting',  path: recruitingPath },
   ];
 
   return (
@@ -180,7 +191,7 @@ export default function SiteNavigation({
         </div>
         <div style={{ background: '#fff', borderBottom: `1px solid ${FROST}` }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', paddingLeft: 20, paddingRight: 20 }}>
-            <SectionNav currentPage={currentPage} divisionPath={divisionPath} />
+            <SectionNav currentPage={currentPage} divisionPath={divisionPath} currentDivision={currentDivision} />
           </div>
         </div>
       </div>
