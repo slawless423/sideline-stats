@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-03-05T12:03:25.198Z",
+  "generated_at_utc": "2026-03-06T11:56:18.010Z",
   "season_start": "2025-11-14",
   "rows": [
     {
@@ -46,11 +46,11 @@
       "teamId": "1858",
       "team": "UAH",
       "conference": "gulf-south",
-      "games": 29,
-      "adjO": 115.22718762508555,
-      "adjD": 86.61213501760199,
-      "adjEM": 28.61505260748356,
-      "adjT": 66.7646551724138
+      "games": 30,
+      "adjO": 115.80477049508919,
+      "adjD": 87.0077900573278,
+      "adjEM": 28.7969804377614,
+      "adjT": 66.52
     },
     {
       "teamId": "1836",
@@ -83,16 +83,6 @@
       "adjT": 68.242
     },
     {
-      "teamId": "2372",
-      "team": "Nova Southeastern",
-      "conference": "sunshine-state",
-      "games": 29,
-      "adjO": 101.28602173114271,
-      "adjD": 77.20704567028794,
-      "adjEM": 24.078976060854774,
-      "adjT": 82.11637931034483
-    },
-    {
       "teamId": "988",
       "team": "West Tex. A&M",
       "conference": "lone-star",
@@ -113,6 +103,16 @@
       "adjT": 69.71388888888889
     },
     {
+      "teamId": "2372",
+      "team": "Nova Southeastern",
+      "conference": "sunshine-state",
+      "games": 30,
+      "adjO": 101.01440887074664,
+      "adjD": 77.5760048969598,
+      "adjEM": 23.438403973786837,
+      "adjT": 82.06750000000001
+    },
+    {
       "teamId": "1598",
       "team": "Lincoln Memorial",
       "conference": "sac",
@@ -126,21 +126,21 @@
       "teamId": "202131",
       "team": "Union (TN)",
       "conference": "gulf-south",
-      "games": 28,
-      "adjO": 105.99492200059872,
-      "adjD": 83.18828536456637,
-      "adjEM": 22.80663663603235,
-      "adjT": 80.52946428571428
+      "games": 29,
+      "adjO": 106.26456122184828,
+      "adjD": 83.40884526785811,
+      "adjEM": 22.855715953990174,
+      "adjT": 79.9241379310345
     },
     {
       "teamId": "956",
       "team": "Southern Conn. St.",
       "conference": "ne10",
-      "games": 27,
-      "adjO": 99.30555555555556,
-      "adjD": 77.02189155917144,
-      "adjEM": 22.283663996384117,
-      "adjT": 69.33333333333333
+      "games": 28,
+      "adjO": 99.50248756218905,
+      "adjD": 77.03619617656923,
+      "adjEM": 22.466291385619808,
+      "adjT": 69.27321428571429
     },
     {
       "teamId": "1762",
@@ -151,26 +151,6 @@
       "adjD": 74.35975424295881,
       "adjEM": 21.76744289802287,
       "adjT": 73.45178571428572
-    },
-    {
-      "teamId": "380",
-      "team": "Eckerd",
-      "conference": "sunshine-state",
-      "games": 28,
-      "adjO": 103.5436563853661,
-      "adjD": 81.80676227363134,
-      "adjEM": 21.736894111734784,
-      "adjT": 68.43214285714285
-    },
-    {
-      "teamId": "1388513",
-      "team": "Westmont",
-      "conference": "pacwest",
-      "games": 28,
-      "adjO": 101.06739545196722,
-      "adjD": 79.73664007911206,
-      "adjEM": 21.330755372855148,
-      "adjT": 69.26071428571429
     },
     {
       "teamId": "895",
@@ -196,11 +176,11 @@
       "teamId": "392",
       "team": "Fla. Southern",
       "conference": "sunshine-state",
-      "games": 28,
-      "adjO": 105.18086492523422,
-      "adjD": 84.3142622502053,
-      "adjEM": 20.86660267502891,
-      "adjT": 71.95089285714286
+      "games": 29,
+      "adjO": 105.72285542891422,
+      "adjD": 84.87808398792266,
+      "adjEM": 20.84477144099155,
+      "adjT": 71.85344827586206
     },
     {
       "teamId": "1701",
@@ -213,14 +193,44 @@
       "adjT": 65.04821428571428
     },
     {
+      "teamId": "1388513",
+      "team": "Westmont",
+      "conference": "pacwest",
+      "games": 29,
+      "adjO": 100.79179323738859,
+      "adjD": 80.12776177961094,
+      "adjEM": 20.664031457777654,
+      "adjT": 69.2448275862069
+    },
+    {
+      "teamId": "6",
+      "team": "Central Mo.",
+      "conference": "mid-america-intercollegiate",
+      "games": 29,
+      "adjO": 104.2747161175578,
+      "adjD": 83.9868832836677,
+      "adjEM": 20.287832833890118,
+      "adjT": 69.31293103448276
+    },
+    {
+      "teamId": "380",
+      "team": "Eckerd",
+      "conference": "sunshine-state",
+      "games": 29,
+      "adjO": 103.46434283267641,
+      "adjD": 83.19337281693164,
+      "adjEM": 20.27097001574476,
+      "adjT": 68.45603448275861
+    },
+    {
       "teamId": "837",
       "team": "Bentley",
       "conference": "ne10",
-      "games": 24,
-      "adjO": 100.08595764632335,
-      "adjD": 80.19281332164768,
-      "adjEM": 19.89314432467568,
-      "adjT": 66.65104166666667
+      "games": 25,
+      "adjO": 100.05242267655208,
+      "adjD": 80.1139344876696,
+      "adjEM": 19.938488188882488,
+      "adjT": 66.765
     },
     {
       "teamId": "2565",
@@ -231,16 +241,6 @@
       "adjD": 82.54612642152654,
       "adjEM": 19.473498727738836,
       "adjT": 68.78928571428571
-    },
-    {
-      "teamId": "6",
-      "team": "Central Mo.",
-      "conference": "mid-america-intercollegiate",
-      "games": 28,
-      "adjO": 103.51950934729332,
-      "adjD": 84.05782190441894,
-      "adjEM": 19.461687442874375,
-      "adjT": 69.58660714285715
     },
     {
       "teamId": "1198",
@@ -273,16 +273,6 @@
       "adjT": 81.325
     },
     {
-      "teamId": "1541",
-      "team": "Mo.-St. Louis",
-      "conference": "glvc",
-      "games": 26,
-      "adjO": 100.98421593613156,
-      "adjD": 82.47950819672131,
-      "adjEM": 18.504707739410243,
-      "adjT": 68.28942307692309
-    },
-    {
       "teamId": "202135",
       "team": "Young Harris",
       "conference": "conference-carolinas",
@@ -291,6 +281,16 @@
       "adjD": 75.71183813331159,
       "adjEM": 18.395296325607656,
       "adjT": 70.87666666666668
+    },
+    {
+      "teamId": "1541",
+      "team": "Mo.-St. Louis",
+      "conference": "glvc",
+      "games": 27,
+      "adjO": 100.96127735838809,
+      "adjD": 82.57207911557347,
+      "adjEM": 18.38919824281462,
+      "adjT": 68.1962962962963
     },
     {
       "teamId": "1526",
@@ -313,14 +313,14 @@
       "adjT": 69.33035714285714
     },
     {
-      "teamId": "798",
-      "team": "Maryville (MO)",
-      "conference": "glvc",
+      "teamId": "2",
+      "team": "Cal State LA",
+      "conference": "ccaa",
       "games": 28,
-      "adjO": 97.51495742409573,
-      "adjD": 79.59634340418708,
-      "adjEM": 17.918614019908652,
-      "adjT": 71.93035714285715
+      "adjO": 99.85040709824028,
+      "adjD": 81.80539192697907,
+      "adjEM": 18.045015171261202,
+      "adjT": 78.18839285714286
     },
     {
       "teamId": "1388163",
@@ -336,61 +336,41 @@
       "teamId": "1106",
       "team": "Ferris St.",
       "conference": "gliac",
-      "games": 27,
-      "adjO": 103.59747502604645,
-      "adjD": 85.92647149082428,
-      "adjEM": 17.671003535222173,
-      "adjT": 75.54166666666667
-    },
-    {
-      "teamId": "202125",
-      "team": "Northwestern Okla.",
-      "conference": "gac",
       "games": 28,
-      "adjO": 101.18445947697172,
-      "adjD": 83.78511582060129,
-      "adjEM": 17.399343656370437,
-      "adjT": 68.89821428571429
+      "adjO": 103.73223378740799,
+      "adjD": 86.16983583323491,
+      "adjEM": 17.562397954173083,
+      "adjT": 75.57232142857143
     },
     {
-      "teamId": "2",
-      "team": "Cal State LA",
-      "conference": "ccaa",
-      "games": 27,
-      "adjO": 99.8038891382936,
-      "adjD": 82.78475017759887,
-      "adjEM": 17.019138960694736,
-      "adjT": 78.37592592592593
-    },
-    {
-      "teamId": "1750",
-      "team": "Fort Hays St.",
-      "conference": "mid-america-intercollegiate",
-      "games": 28,
-      "adjO": 101.74888375489293,
-      "adjD": 84.8441247002398,
-      "adjEM": 16.90475905465312,
-      "adjT": 74.58839285714285
-    },
-    {
-      "teamId": "1429",
-      "team": "West Va. Wesleyan",
-      "conference": "mec",
-      "games": 24,
-      "adjO": 109.22587486744433,
-      "adjD": 92.49607258739411,
-      "adjEM": 16.729802280050222,
-      "adjT": 70.72500000000001
+      "teamId": "798",
+      "team": "Maryville (MO)",
+      "conference": "glvc",
+      "games": 29,
+      "adjO": 97.49237223493516,
+      "adjD": 80.5811321649069,
+      "adjEM": 16.911240070028256,
+      "adjT": 72.33103448275861
     },
     {
       "teamId": "155",
       "team": "Carson-Newman",
       "conference": "sac",
-      "games": 28,
-      "adjO": 104.55228205461793,
-      "adjD": 87.90228907322452,
-      "adjEM": 16.649992981393403,
-      "adjT": 75.49196428571429
+      "games": 29,
+      "adjO": 104.27395320689222,
+      "adjD": 87.42699325395029,
+      "adjEM": 16.84695995294192,
+      "adjT": 75.49741379310345
+    },
+    {
+      "teamId": "202125",
+      "team": "Northwestern Okla.",
+      "conference": "gac",
+      "games": 29,
+      "adjO": 101.55630763811129,
+      "adjD": 84.75645132810332,
+      "adjEM": 16.799856310007975,
+      "adjT": 68.5198275862069
     },
     {
       "teamId": "2513",
@@ -413,14 +393,24 @@
       "adjT": 71.2375
     },
     {
-      "teamId": "1931",
-      "team": "Saint Martin's",
-      "conference": "great-northwest",
+      "teamId": "1750",
+      "team": "Fort Hays St.",
+      "conference": "mid-america-intercollegiate",
+      "games": 29,
+      "adjO": 101.1030047370423,
+      "adjD": 85.14072895407428,
+      "adjEM": 15.962275782968028,
+      "adjT": 74.79568965517241
+    },
+    {
+      "teamId": "1429",
+      "team": "West Va. Wesleyan",
+      "conference": "mec",
       "games": 25,
-      "adjO": 96.41889504064083,
-      "adjD": 80.69232710377486,
-      "adjEM": 15.726567936865976,
-      "adjT": 67.91199999999999
+      "adjO": 108.95866645912635,
+      "adjD": 93.24640871503965,
+      "adjEM": 15.712257744086699,
+      "adjT": 70.669
     },
     {
       "teamId": "202148",
@@ -451,16 +441,6 @@
       "adjD": 83.1297026588924,
       "adjEM": 15.389363008375689,
       "adjT": 73.73482142857142
-    },
-    {
-      "teamId": "53321",
-      "team": "Embry-Riddle (FL)",
-      "conference": "sunshine-state",
-      "games": 27,
-      "adjO": 103.43518213806546,
-      "adjD": 88.11742182514358,
-      "adjEM": 15.31776031292188,
-      "adjT": 73.15370370370371
     },
     {
       "teamId": "202122",
@@ -501,6 +481,26 @@
       "adjD": 89.39356239679704,
       "adjEM": 14.999927722943108,
       "adjT": 73.63166666666666
+    },
+    {
+      "teamId": "1931",
+      "team": "Saint Martin's",
+      "conference": "great-northwest",
+      "games": 26,
+      "adjO": 95.96473380807052,
+      "adjD": 81.28530972947588,
+      "adjEM": 14.67942407859464,
+      "adjT": 68.05384615384615
+    },
+    {
+      "teamId": "53321",
+      "team": "Embry-Riddle (FL)",
+      "conference": "sunshine-state",
+      "games": 28,
+      "adjO": 102.85102656417241,
+      "adjD": 88.31028733941355,
+      "adjEM": 14.54073922475887,
+      "adjT": 73.40714285714286
     },
     {
       "teamId": "202149",
@@ -613,14 +613,14 @@
       "adjT": 69.91428571428571
     },
     {
-      "teamId": "527",
-      "team": "Harding",
-      "conference": "gac",
-      "games": 26,
-      "adjO": 102.1418668477492,
-      "adjD": 89.64332855500518,
-      "adjEM": 12.49853829274401,
-      "adjT": 67.9673076923077
+      "teamId": "160",
+      "team": "Coker",
+      "conference": "sac",
+      "games": 29,
+      "adjO": 94.14139991313635,
+      "adjD": 81.75774435381206,
+      "adjEM": 12.383655559324303,
+      "adjT": 73.44051724137931
     },
     {
       "teamId": "217",
@@ -631,16 +631,6 @@
       "adjD": 88.68177316945301,
       "adjEM": 12.174929164162396,
       "adjT": 74.36293103448276
-    },
-    {
-      "teamId": "160",
-      "team": "Coker",
-      "conference": "sac",
-      "games": 28,
-      "adjO": 94.46218477191874,
-      "adjD": 82.42701774470521,
-      "adjEM": 12.035167027213534,
-      "adjT": 73.53660714285715
     },
     {
       "teamId": "1028",
@@ -656,11 +646,21 @@
       "teamId": "17532",
       "team": "Glenville St.",
       "conference": "mec",
+      "games": 28,
+      "adjO": 99.46369636963696,
+      "adjD": 87.68957394933675,
+      "adjEM": 11.774122420300227,
+      "adjT": 86.57142857142857
+    },
+    {
+      "teamId": "527",
+      "team": "Harding",
+      "conference": "gac",
       "games": 27,
-      "adjO": 99.42082879186167,
-      "adjD": 87.69751209694685,
-      "adjEM": 11.723316694914821,
-      "adjT": 86.65
+      "adjO": 101.50985010415106,
+      "adjD": 89.8815049418446,
+      "adjEM": 11.628345162306463,
+      "adjT": 68.0101851851852
     },
     {
       "teamId": "517",
@@ -703,16 +703,6 @@
       "adjT": 73.25192307692308
     },
     {
-      "teamId": "1561",
-      "team": "Benedict",
-      "conference": "siac",
-      "games": 25,
-      "adjO": 85.55068195320499,
-      "adjD": 75.02045440241677,
-      "adjEM": 10.530227550788219,
-      "adjT": 79.111
-    },
-    {
       "teamId": "1521",
       "team": "Lewis",
       "conference": "glvc",
@@ -733,6 +723,16 @@
       "adjT": 76.41875
     },
     {
+      "teamId": "1561",
+      "team": "Benedict",
+      "conference": "siac",
+      "games": 26,
+      "adjO": 84.81286279843586,
+      "adjD": 74.70493724253735,
+      "adjEM": 10.1079255558985,
+      "adjT": 79.17884615384615
+    },
+    {
       "teamId": "683",
       "team": "Chowan",
       "conference": "conference-carolinas",
@@ -743,24 +743,24 @@
       "adjT": 73.72800000000001
     },
     {
+      "teamId": "361",
+      "team": "Clark Atlanta",
+      "conference": "siac",
+      "games": 28,
+      "adjO": 94.24967496179374,
+      "adjD": 84.48908018491949,
+      "adjEM": 9.760594776874266,
+      "adjT": 78.28750000000001
+    },
+    {
       "teamId": "17618",
       "team": "Dominican (CA)",
       "conference": "pacwest",
-      "games": 28,
-      "adjO": 95.72981276782517,
-      "adjD": 85.65917594292486,
-      "adjEM": 10.070636824900303,
-      "adjT": 77.30089285714287
-    },
-    {
-      "teamId": "202133",
-      "team": "Azusa Pacific",
-      "conference": "pacwest",
       "games": 29,
-      "adjO": 94.00492935744784,
-      "adjD": 84.27069887516136,
-      "adjEM": 9.734230482286488,
-      "adjT": 74.50086206896552
+      "adjO": 95.59985209586877,
+      "adjD": 85.887360100885,
+      "adjEM": 9.712491994983763,
+      "adjT": 76.93706896551724
     },
     {
       "teamId": "863",
@@ -773,24 +773,14 @@
       "adjT": 76.75961538461539
     },
     {
-      "teamId": "361",
-      "team": "Clark Atlanta",
-      "conference": "siac",
-      "games": 27,
-      "adjO": 94.3636106794745,
-      "adjD": 84.83408419888724,
-      "adjEM": 9.529526480587268,
-      "adjT": 78.65555555555555
-    },
-    {
-      "teamId": "782",
-      "team": "Lane",
-      "conference": "siac",
-      "games": 25,
-      "adjO": 86.16700201207243,
-      "adjD": 76.96017463258625,
-      "adjEM": 9.206827379486192,
-      "adjT": 79.52
+      "teamId": "202133",
+      "team": "Azusa Pacific",
+      "conference": "pacwest",
+      "games": 30,
+      "adjO": 93.55651346358394,
+      "adjD": 84.08060509518663,
+      "adjEM": 9.475908368397313,
+      "adjT": 74.42916666666666
     },
     {
       "teamId": "696",
@@ -801,6 +791,16 @@
       "adjD": 86.87216549850847,
       "adjEM": 8.897560006915894,
       "adjT": 71.0396551724138
+    },
+    {
+      "teamId": "782",
+      "team": "Lane",
+      "conference": "siac",
+      "games": 26,
+      "adjO": 85.40323943321988,
+      "adjD": 76.55829036072609,
+      "adjEM": 8.84494907249379,
+      "adjT": 79.66730769230769
     },
     {
       "teamId": "163",
@@ -863,26 +863,6 @@
       "adjT": 72.96160714285715
     },
     {
-      "teamId": "2083",
-      "team": "Wheeling",
-      "conference": "mec",
-      "games": 28,
-      "adjO": 94.80901077375123,
-      "adjD": 86.55916802353065,
-      "adjEM": 8.249842750220582,
-      "adjT": 68.37053571428571
-    },
-    {
-      "teamId": "202139",
-      "team": "Trevecca Nazarene",
-      "conference": "gulf-south",
-      "games": 29,
-      "adjO": 96.23758500905132,
-      "adjD": 87.99441771640531,
-      "adjEM": 8.243167292646014,
-      "adjT": 70.4793103448276
-    },
-    {
       "teamId": "866",
       "team": "Bluefield St.",
       "conference": "ciaa",
@@ -933,16 +913,6 @@
       "adjT": 68.76574074074074
     },
     {
-      "teamId": "598",
-      "team": "Saint Michael's",
-      "conference": "ne10",
-      "games": 27,
-      "adjO": 93.42168643328603,
-      "adjD": 85.9405225555183,
-      "adjEM": 7.481163877767727,
-      "adjT": 71.12314814814815
-    },
-    {
       "teamId": "2525",
       "team": "American Int'l",
       "conference": "ne10",
@@ -953,14 +923,14 @@
       "adjT": 70.96388888888889
     },
     {
-      "teamId": "1256",
-      "team": "Wingate",
-      "conference": "sac",
-      "games": 28,
-      "adjO": 94.0674777373636,
-      "adjD": 86.8170426065163,
-      "adjEM": 7.25043513084731,
-      "adjT": 71.1875
+      "teamId": "2083",
+      "team": "Wheeling",
+      "conference": "mec",
+      "games": 29,
+      "adjO": 94.440867138871,
+      "adjD": 87.14740702204064,
+      "adjEM": 7.293460116830364,
+      "adjT": 68.27844827586208
     },
     {
       "teamId": "2519",
@@ -971,16 +941,6 @@
       "adjD": 83.00063038453457,
       "adjEM": 7.228504128109381,
       "adjT": 72.89134615384616
-    },
-    {
-      "teamId": "886",
-      "team": "Northwest Nazarene",
-      "conference": "great-northwest",
-      "games": 26,
-      "adjO": 94.06726092957855,
-      "adjD": 86.91391138391705,
-      "adjEM": 7.153349545661502,
-      "adjT": 74.5375
     },
     {
       "teamId": "2732",
@@ -1003,16 +963,6 @@
       "adjT": 72.6801724137931
     },
     {
-      "teamId": "9",
-      "team": "Chico St.",
-      "conference": "ccaa",
-      "games": 29,
-      "adjO": 89.91240658041258,
-      "adjD": 82.82682600185434,
-      "adjEM": 7.085580578558249,
-      "adjT": 75.09224137931035
-    },
-    {
       "teamId": "1184",
       "team": "Assumption",
       "conference": "ne10",
@@ -1021,6 +971,16 @@
       "adjD": 78.4165677920397,
       "adjEM": 7.045029513128531,
       "adjT": 68.99351851851851
+    },
+    {
+      "teamId": "202139",
+      "team": "Trevecca Nazarene",
+      "conference": "gulf-south",
+      "games": 30,
+      "adjO": 96.33174601289649,
+      "adjD": 89.31290445374952,
+      "adjEM": 7.01884155914696,
+      "adjT": 70.17416666666666
     },
     {
       "teamId": "2486",
@@ -1043,14 +1003,44 @@
       "adjT": 75.87857142857142
     },
     {
+      "teamId": "886",
+      "team": "Northwest Nazarene",
+      "conference": "great-northwest",
+      "games": 27,
+      "adjO": 93.78023668345449,
+      "adjD": 86.94573950996924,
+      "adjEM": 6.834497173485243,
+      "adjT": 74.64259259259259
+    },
+    {
+      "teamId": "9",
+      "team": "Chico St.",
+      "conference": "ccaa",
+      "games": 30,
+      "adjO": 89.74245508452074,
+      "adjD": 83.15586206896552,
+      "adjEM": 6.586593015555231,
+      "adjT": 75.32666666666667
+    },
+    {
+      "teamId": "598",
+      "team": "Saint Michael's",
+      "conference": "ne10",
+      "games": 28,
+      "adjO": 92.88890005274925,
+      "adjD": 86.40223102014393,
+      "adjEM": 6.4866690326053185,
+      "adjT": 71.09107142857142
+    },
+    {
       "teamId": "2443",
       "team": "Mont. St. Billings",
       "conference": "great-northwest",
-      "games": 28,
-      "adjO": 92.17356246535302,
-      "adjD": 85.89003358617306,
-      "adjEM": 6.283528879179956,
-      "adjT": 70.86785714285715
+      "games": 29,
+      "adjO": 92.27478243959357,
+      "adjD": 85.86588312429426,
+      "adjEM": 6.4088993152992995,
+      "adjT": 70.92758620689655
     },
     {
       "teamId": "1657",
@@ -1061,6 +1051,16 @@
       "adjD": 84.35251139320928,
       "adjEM": 6.2552504434081,
       "adjT": 70.48189655172413
+    },
+    {
+      "teamId": "1256",
+      "team": "Wingate",
+      "conference": "sac",
+      "games": 29,
+      "adjO": 92.9939241058976,
+      "adjD": 86.74815442333293,
+      "adjEM": 6.2457696825646725,
+      "adjT": 71.08362068965518
     },
     {
       "teamId": "2203",
@@ -1093,16 +1093,6 @@
       "adjT": 76.195
     },
     {
-      "teamId": "1905",
-      "team": "Fairmont St.",
-      "conference": "mec",
-      "games": 28,
-      "adjO": 90.48795552810377,
-      "adjD": 84.59133839872734,
-      "adjEM": 5.896617129376425,
-      "adjT": 80.95
-    },
-    {
       "teamId": "2726",
       "team": "N.M. Highlands",
       "conference": "rmac",
@@ -1131,6 +1121,16 @@
       "adjD": 84.58133182631629,
       "adjEM": 5.58337405603665,
       "adjT": 73.27586206896552
+    },
+    {
+      "teamId": "1905",
+      "team": "Fairmont St.",
+      "conference": "mec",
+      "games": 29,
+      "adjO": 89.87949237496001,
+      "adjD": 84.33696038229313,
+      "adjEM": 5.542531992666888,
+      "adjT": 80.83620689655173
     },
     {
       "teamId": "1389249",
@@ -1176,11 +1176,11 @@
       "teamId": "1215",
       "team": "Concord",
       "conference": "mec",
-      "games": 29,
-      "adjO": 96.56306528531492,
-      "adjD": 91.61645759940298,
-      "adjEM": 4.946607685911941,
-      "adjT": 78.63362068965517
+      "games": 30,
+      "adjO": 95.92835086006556,
+      "adjD": 90.97373308569912,
+      "adjEM": 4.954617774366444,
+      "adjT": 78.53083333333333
     },
     {
       "teamId": "328",
@@ -1193,24 +1193,14 @@
       "adjT": 72.275
     },
     {
-      "teamId": "2436",
-      "team": "Delta St.",
-      "conference": "gulf-south",
-      "games": 28,
-      "adjO": 91.74830929054488,
-      "adjD": 87.20251226285329,
-      "adjEM": 4.54579702769159,
-      "adjT": 69.44464285714285
-    },
-    {
       "teamId": "685",
       "team": "Missouri Western",
       "conference": "mid-america-intercollegiate",
-      "games": 27,
-      "adjO": 94.81920684292379,
-      "adjD": 90.30794478231489,
-      "adjEM": 4.511262060608912,
-      "adjT": 76.2074074074074
+      "games": 28,
+      "adjO": 94.7320479732807,
+      "adjD": 90.08548596915071,
+      "adjEM": 4.646562004129984,
+      "adjT": 76.45625
     },
     {
       "teamId": "1388740",
@@ -1253,14 +1243,24 @@
       "adjT": 71.51388888888889
     },
     {
+      "teamId": "511",
+      "team": "Charleston (WV)",
+      "conference": "mec",
+      "games": 29,
+      "adjO": 91.93412669792042,
+      "adjD": 87.91737305967368,
+      "adjEM": 4.016753638246751,
+      "adjT": 71.71551724137932
+    },
+    {
       "teamId": "53324",
       "team": "CUI",
       "conference": "pacwest",
-      "games": 27,
-      "adjO": 93.56245191074635,
-      "adjD": 89.43131654115814,
-      "adjEM": 4.131135369588201,
-      "adjT": 72.20370370370371
+      "games": 28,
+      "adjO": 93.00717434523294,
+      "adjD": 89.09577796130841,
+      "adjEM": 3.911396383924537,
+      "adjT": 72.30625
     },
     {
       "teamId": "1668",
@@ -1316,21 +1316,21 @@
       "teamId": "2406",
       "team": "East Central",
       "conference": "gac",
-      "games": 26,
-      "adjO": 93.77209054056004,
-      "adjD": 90.13164491684454,
-      "adjEM": 3.6404456237155047,
-      "adjT": 66.65096153846153
+      "games": 27,
+      "adjO": 94.5441322498986,
+      "adjD": 90.89648670382387,
+      "adjEM": 3.6476455460747292,
+      "adjT": 66.20462962962964
     },
     {
-      "teamId": "511",
-      "team": "Charleston (WV)",
-      "conference": "mec",
-      "games": 28,
-      "adjO": 91.53556750313521,
-      "adjD": 88.05453123253994,
-      "adjEM": 3.4810362705952613,
-      "adjT": 71.90803571428572
+      "teamId": "2436",
+      "team": "Delta St.",
+      "conference": "gulf-south",
+      "games": 29,
+      "adjO": 91.72849957671431,
+      "adjD": 88.11148389691006,
+      "adjEM": 3.6170156798042474,
+      "adjT": 69.2448275862069
     },
     {
       "teamId": "1196",
@@ -1376,11 +1376,11 @@
       "teamId": "894",
       "team": "Western Ore.",
       "conference": "great-northwest",
-      "games": 27,
-      "adjO": 94.5090649164988,
-      "adjD": 91.40663502191786,
-      "adjEM": 3.102429894580927,
-      "adjT": 71.24537037037037
+      "games": 28,
+      "adjO": 94.24698607033544,
+      "adjD": 91.22080772060198,
+      "adjEM": 3.026178349733455,
+      "adjT": 71.46875
     },
     {
       "teamId": "1469",
@@ -1391,16 +1391,6 @@
       "adjD": 84.88881106636316,
       "adjEM": 2.90211459045413,
       "adjT": 74.74655172413793
-    },
-    {
-      "teamId": "2551",
-      "team": "Wis.-Parkside",
-      "conference": "gliac",
-      "games": 26,
-      "adjO": 94.33220658753243,
-      "adjD": 91.50343992949132,
-      "adjEM": 2.828766658041104,
-      "adjT": 73.39038461538462
     },
     {
       "teamId": "1759",
@@ -1423,16 +1413,6 @@
       "adjT": 70.993
     },
     {
-      "teamId": "2274",
-      "team": "Southern N.H.",
-      "conference": "ne10",
-      "games": 26,
-      "adjO": 87.27064070630273,
-      "adjD": 84.79737643476224,
-      "adjEM": 2.4732642715404873,
-      "adjT": 73.73173076923078
-    },
-    {
       "teamId": "2369",
       "team": "Texas-Dallas",
       "conference": "lone-star",
@@ -1451,6 +1431,16 @@
       "adjD": 85.77444048242037,
       "adjEM": 2.2266261971757406,
       "adjT": 73.65982142857142
+    },
+    {
+      "teamId": "2551",
+      "team": "Wis.-Parkside",
+      "conference": "gliac",
+      "games": 27,
+      "adjO": 94.25255560724747,
+      "adjD": 92.11508061966488,
+      "adjEM": 2.1374749875825994,
+      "adjT": 73.63981481481481
     },
     {
       "teamId": "459",
@@ -1503,6 +1493,16 @@
       "adjT": 72.19464285714285
     },
     {
+      "teamId": "2274",
+      "team": "Southern N.H.",
+      "conference": "ne10",
+      "games": 27,
+      "adjO": 86.9247901750324,
+      "adjD": 85.48297883039172,
+      "adjEM": 1.4418113446406866,
+      "adjT": 73.58425925925927
+    },
+    {
       "teamId": "2483",
       "team": "Ky. Wesleyan",
       "conference": "g-mac",
@@ -1521,16 +1521,6 @@
       "adjD": 87.26426528336647,
       "adjEM": 1.2036601733036778,
       "adjT": 67.74583333333334
-    },
-    {
-      "teamId": "202127",
-      "team": "UVA Wise",
-      "conference": "sac",
-      "games": 30,
-      "adjO": 93.7116892173072,
-      "adjD": 92.68254200804662,
-      "adjEM": 1.0291472092605725,
-      "adjT": 74.0925
     },
     {
       "teamId": "2583",
@@ -1603,6 +1593,16 @@
       "adjT": 76.52327586206897
     },
     {
+      "teamId": "202127",
+      "team": "UVA Wise",
+      "conference": "sac",
+      "games": 31,
+      "adjO": 93.05863432868257,
+      "adjD": 92.80833487723275,
+      "adjEM": 0.25029945144982024,
+      "adjT": 74.21612903225805
+    },
+    {
       "teamId": "202153",
       "team": "Okla. Christian",
       "conference": "lone-star",
@@ -1663,16 +1663,6 @@
       "adjT": 75.5
     },
     {
-      "teamId": "521",
-      "team": "Emporia St.",
-      "conference": "mid-america-intercollegiate",
-      "games": 29,
-      "adjO": 92.74584715618525,
-      "adjD": 92.99440554435606,
-      "adjEM": -0.24855838817080533,
-      "adjT": 71.98017241379311
-    },
-    {
       "teamId": "2056",
       "team": "Palm Beach Atl.",
       "conference": "sunshine-state",
@@ -1693,6 +1683,16 @@
       "adjT": 73.64
     },
     {
+      "teamId": "2302",
+      "team": "Quincy",
+      "conference": "glvc",
+      "games": 28,
+      "adjO": 94.33606279008339,
+      "adjD": 94.7136563876652,
+      "adjEM": -0.37759359758181565,
+      "adjT": 70.98482142857144
+    },
+    {
       "teamId": "1610",
       "team": "Tiffin",
       "conference": "g-mac",
@@ -1711,36 +1711,6 @@
       "adjD": 94.71466315871618,
       "adjEM": -0.6115968417269357,
       "adjT": 75.30749999999999
-    },
-    {
-      "teamId": "2302",
-      "team": "Quincy",
-      "conference": "glvc",
-      "games": 27,
-      "adjO": 93.88907121759107,
-      "adjD": 94.6161281053264,
-      "adjEM": -0.7270568877353334,
-      "adjT": 70.5324074074074
-    },
-    {
-      "teamId": "320",
-      "team": "Cal St. Monterey Bay",
-      "conference": "ccaa",
-      "games": 28,
-      "adjO": 86.27421250142147,
-      "adjD": 87.46016490464868,
-      "adjEM": -1.1859524032272084,
-      "adjT": 70.66339285714285
-    },
-    {
-      "teamId": "2676",
-      "team": "Tuskegee",
-      "conference": "siac",
-      "games": 27,
-      "adjO": 77.65746139552765,
-      "adjD": 78.87671338463316,
-      "adjEM": -1.2192519891055187,
-      "adjT": 72.25462962962963
     },
     {
       "teamId": "1155",
@@ -1766,11 +1736,31 @@
       "teamId": "740",
       "team": "Frostburg St.",
       "conference": "mec",
-      "games": 29,
-      "adjO": 95.21125437422204,
-      "adjD": 97.09078573350332,
-      "adjEM": -1.8795313592812835,
-      "adjT": 73.41206896551724
+      "games": 30,
+      "adjO": 95.73100679080456,
+      "adjD": 97.25810106503512,
+      "adjEM": -1.527094274230567,
+      "adjT": 73.26083333333332
+    },
+    {
+      "teamId": "521",
+      "team": "Emporia St.",
+      "conference": "mid-america-intercollegiate",
+      "games": 30,
+      "adjO": 92.43228148561855,
+      "adjD": 93.99877171230257,
+      "adjEM": -1.5664902266840253,
+      "adjT": 71.61999999999999
+    },
+    {
+      "teamId": "2676",
+      "team": "Tuskegee",
+      "conference": "siac",
+      "games": 28,
+      "adjO": 77.53203700954926,
+      "adjD": 79.27820593966021,
+      "adjEM": -1.7461689301109473,
+      "adjT": 72.18214285714285
     },
     {
       "teamId": "2577",
@@ -1833,16 +1823,6 @@
       "adjT": 74.1148148148148
     },
     {
-      "teamId": "636",
-      "team": "Upper Iowa",
-      "conference": "glvc",
-      "games": 28,
-      "adjO": 91.79069129708573,
-      "adjD": 94.10177284141878,
-      "adjEM": -2.311081544333049,
-      "adjT": 71.63035714285715
-    },
-    {
       "teamId": "1583",
       "team": "Central Okla.",
       "conference": "mid-america-intercollegiate",
@@ -1863,14 +1843,34 @@
       "adjT": 75.06666666666666
     },
     {
-      "teamId": "2263",
-      "team": "West Liberty",
-      "conference": "mec",
+      "teamId": "636",
+      "team": "Upper Iowa",
+      "conference": "glvc",
       "games": 29,
-      "adjO": 92.10823362466539,
-      "adjD": 95.1111493313841,
-      "adjEM": -3.0029157067187118,
-      "adjT": 80.19051724137931
+      "adjO": 91.57615254646392,
+      "adjD": 94.30036771821172,
+      "adjEM": -2.7242151717478014,
+      "adjT": 71.43103448275862
+    },
+    {
+      "teamId": "320",
+      "team": "Cal St. Monterey Bay",
+      "conference": "ccaa",
+      "games": 29,
+      "adjO": 85.10534648642066,
+      "adjD": 87.95014694942745,
+      "adjEM": -2.8448004630067913,
+      "adjT": 70.78448275862068
+    },
+    {
+      "teamId": "202129",
+      "team": "Southern Nazarene",
+      "conference": "gac",
+      "games": 27,
+      "adjO": 88.17909897089245,
+      "adjD": 91.15913555992141,
+      "adjEM": -2.980036589028956,
+      "adjT": 70.26944444444445
     },
     {
       "teamId": "1079",
@@ -1893,14 +1893,14 @@
       "adjT": 72.7601851851852
     },
     {
-      "teamId": "202129",
-      "team": "Southern Nazarene",
-      "conference": "gac",
-      "games": 26,
-      "adjO": 87.88442596038087,
-      "adjD": 91.37731874702725,
-      "adjEM": -3.4928927866463844,
-      "adjT": 70.28461538461539
+      "teamId": "2263",
+      "team": "West Liberty",
+      "conference": "mec",
+      "games": 30,
+      "adjO": 91.94543851459986,
+      "adjD": 95.30527145613344,
+      "adjEM": -3.3598329415335693,
+      "adjT": 80.3375
     },
     {
       "teamId": "2695",
@@ -2213,6 +2213,16 @@
       "adjT": 71.92884615384615
     },
     {
+      "teamId": "1054",
+      "team": "Cal St. Dom. Hills",
+      "conference": "ccaa",
+      "games": 28,
+      "adjO": 85.20933662065947,
+      "adjD": 94.29205441892347,
+      "adjEM": -9.082717798264007,
+      "adjT": 77.49821428571428
+    },
+    {
       "teamId": "53327",
       "team": "Westminster (UT)",
       "conference": "rmac",
@@ -2251,16 +2261,6 @@
       "adjD": 87.5144993706656,
       "adjEM": -9.699458594495225,
       "adjT": 72.14910714285715
-    },
-    {
-      "teamId": "1054",
-      "team": "Cal St. Dom. Hills",
-      "conference": "ccaa",
-      "games": 27,
-      "adjO": 84.94541275617698,
-      "adjD": 94.65139875344254,
-      "adjEM": -9.705985997265564,
-      "adjT": 77.34814814814816
     },
     {
       "teamId": "2637",
