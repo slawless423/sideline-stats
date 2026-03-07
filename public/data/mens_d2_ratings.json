@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-03-07T11:45:10.960Z",
+  "generated_at_utc": "2026-03-07T13:50:56.179Z",
   "season_start": "2025-11-14",
   "rows": [
     {
@@ -603,6 +603,16 @@
       "adjT": 79.99166666666666
     },
     {
+      "teamId": "2713",
+      "team": "Flagler",
+      "conference": "peach-belt",
+      "games": 34,
+      "adjO": 105.91402372339532,
+      "adjD": 96.47768218251342,
+      "adjEM": 9.436341540881887,
+      "adjT": 69.9235294117647
+    },
+    {
       "teamId": "1470",
       "team": "East Stroudsburg",
       "conference": "psac",
@@ -631,16 +641,6 @@
       "adjD": 104.22424003158311,
       "adjEM": 9.106219325604247,
       "adjT": 69.58999999999999
-    },
-    {
-      "teamId": "2713",
-      "team": "Flagler",
-      "conference": "peach-belt",
-      "games": 33,
-      "adjO": 105.51174278533668,
-      "adjD": 96.41685345807751,
-      "adjEM": 9.094889327259171,
-      "adjT": 69.93333333333334
     },
     {
       "teamId": "2634",
@@ -913,6 +913,16 @@
       "adjT": 65.6351851851852
     },
     {
+      "teamId": "1388510",
+      "team": "Westmont",
+      "conference": "pacwest",
+      "games": 30,
+      "adjO": 113.19336573633312,
+      "adjD": 106.90155647865474,
+      "adjEM": 6.291809257678382,
+      "adjT": 66.52333333333334
+    },
+    {
       "teamId": "1818",
       "team": "UIndy",
       "conference": "glvc",
@@ -921,16 +931,6 @@
       "adjD": 106.60683121416106,
       "adjEM": 6.0853425258259985,
       "adjT": 69.30689655172414
-    },
-    {
-      "teamId": "1388510",
-      "team": "Westmont",
-      "conference": "pacwest",
-      "games": 29,
-      "adjO": 112.76141146001943,
-      "adjD": 106.7087363575234,
-      "adjEM": 6.05267510249603,
-      "adjT": 66.57327586206897
     },
     {
       "teamId": "445",
@@ -1363,16 +1363,6 @@
       "adjT": 64.50555555555556
     },
     {
-      "teamId": "1388732",
-      "team": "USC Beaufort",
-      "conference": "peach-belt",
-      "games": 33,
-      "adjO": 108.88257742121239,
-      "adjD": 106.14639470632376,
-      "adjEM": 2.736182714888624,
-      "adjT": 77.62045454545455
-    },
-    {
       "teamId": "1048",
       "team": "Northeastern St.",
       "conference": "mid-america-intercollegiate",
@@ -1393,6 +1383,16 @@
       "adjT": 71.06428571428572
     },
     {
+      "teamId": "2067",
+      "team": "Hawaii Pacific",
+      "conference": "pacwest",
+      "games": 33,
+      "adjO": 110.25524510401542,
+      "adjD": 107.98526069592462,
+      "adjEM": 2.269984408090786,
+      "adjT": 68.35378787878788
+    },
+    {
       "teamId": "2316",
       "team": "Saginaw Valley",
       "conference": "gliac",
@@ -1403,14 +1403,14 @@
       "adjT": 71.81517857142858
     },
     {
-      "teamId": "2067",
-      "team": "Hawaii Pacific",
-      "conference": "pacwest",
-      "games": 32,
-      "adjO": 110.51059268887823,
-      "adjD": 108.49244119350772,
-      "adjEM": 2.0181514953705237,
-      "adjT": 68.5171875
+      "teamId": "1388732",
+      "team": "USC Beaufort",
+      "conference": "peach-belt",
+      "games": 34,
+      "adjO": 108.60089456140851,
+      "adjD": 106.49259466588232,
+      "adjEM": 2.108299895526189,
+      "adjT": 77.42867647058823
     },
     {
       "teamId": "1993",
@@ -1573,16 +1573,6 @@
       "adjT": 73.373
     },
     {
-      "teamId": "1388724",
-      "team": "Vanguard",
-      "conference": "pacwest",
-      "games": 31,
-      "adjO": 102.56774514330363,
-      "adjD": 101.83193475948468,
-      "adjEM": 0.7358103838189356,
-      "adjT": 68.12177419354839
-    },
-    {
       "teamId": "44",
       "team": "Eckerd",
       "conference": "sunshine-state",
@@ -1653,16 +1643,6 @@
       "adjT": 73.32155172413792
     },
     {
-      "teamId": "53226",
-      "team": "CUI",
-      "conference": "pacwest",
-      "games": 30,
-      "adjO": 103.0739871886813,
-      "adjD": 102.49865004172598,
-      "adjEM": 0.5753371469553237,
-      "adjT": 68.55916666666667
-    },
-    {
       "teamId": "1754",
       "team": "UCCS",
       "conference": "rmac",
@@ -1681,6 +1661,16 @@
       "adjD": 108.19254947906825,
       "adjEM": 0.4623204697224992,
       "adjT": 68.01034482758621
+    },
+    {
+      "teamId": "1388724",
+      "team": "Vanguard",
+      "conference": "pacwest",
+      "games": 32,
+      "adjO": 102.21660732743769,
+      "adjD": 101.819016468698,
+      "adjEM": 0.3975908587396937,
+      "adjT": 68.0234375
     },
     {
       "teamId": "1971",
@@ -1711,6 +1701,16 @@
       "adjD": 108.31443407567139,
       "adjEM": 0.1472772423980695,
       "adjT": 71.51964285714286
+    },
+    {
+      "teamId": "53226",
+      "team": "CUI",
+      "conference": "pacwest",
+      "games": 31,
+      "adjO": 103.3666026419052,
+      "adjD": 103.22642025521185,
+      "adjEM": 0.14018238669335492,
+      "adjT": 68.43790322580645
     },
     {
       "teamId": "480",
@@ -1863,6 +1863,16 @@
       "adjT": 74.42666666666668
     },
     {
+      "teamId": "1460",
+      "team": "Davis & Elkins",
+      "conference": "mec",
+      "games": 35,
+      "adjO": 108.68337687942041,
+      "adjD": 110.3854186443896,
+      "adjEM": -1.7020417649691977,
+      "adjT": 74.63357142857143
+    },
+    {
       "teamId": "1960",
       "team": "Northwest Mo. St.",
       "conference": "mid-america-intercollegiate",
@@ -1901,16 +1911,6 @@
       "adjD": 106.64899379325288,
       "adjEM": -1.8681781525013763,
       "adjT": 70.14642857142857
-    },
-    {
-      "teamId": "1460",
-      "team": "Davis & Elkins",
-      "conference": "mec",
-      "games": 34,
-      "adjO": 108.5869746702417,
-      "adjD": 110.54874540436697,
-      "adjEM": -1.9617707341252677,
-      "adjT": 74.8654411764706
     },
     {
       "teamId": "1924",
@@ -2706,11 +2706,11 @@
       "teamId": "1388963",
       "team": "Point Park",
       "conference": "mec",
-      "games": 31,
-      "adjO": 106.3313629685311,
-      "adjD": 118.64348345725546,
-      "adjEM": -12.312120488724364,
-      "adjT": 70.80725806451613
+      "games": 32,
+      "adjO": 106.27166162608448,
+      "adjD": 118.45640951308438,
+      "adjEM": -12.184747886999903,
+      "adjT": 70.7796875
     },
     {
       "teamId": "2447",
