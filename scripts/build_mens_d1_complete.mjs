@@ -779,6 +779,8 @@ async function main() {
       }
       console.log(`✅ Wrote ${allPlayers.length} players to database`);
 
+      await db.dedupePlayers(DIVISION);
+
       console.log("Writing player game stats...");
       const validTeamIds = new Set(teamSeasonStats.keys());
       const playerGameRows = [];
