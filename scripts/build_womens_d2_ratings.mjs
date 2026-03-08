@@ -1,5 +1,5 @@
 import fs from "node:fs/promises";
-import { initDb, insertGame, upsertTeam, upsertPlayer, insertPlayerGamesBatch, closeDb } from './db_writer.mjs';
+import { initDb, insertGame, upsertTeam, upsertPlayer, insertPlayerGamesBatch, closeDb, dedupePlayers } from './db_writer.mjs';
 
 const NCAA_API_BASE = "https://ncaa-api.henrygd.me";
 const DIVISION = "womens-d2";
@@ -658,6 +658,8 @@ async function main() {
       } catch (err) { console.error(`Failed to update team ${t.teamId}:`, err.message); }
     }
     console.log(`✅ Updated ${teamsToUpdate.length} teams`);
+
+    await dedupePlayers(DIVISION);
 
     await closeDb();
     console.log("✅ Database updates complete");
