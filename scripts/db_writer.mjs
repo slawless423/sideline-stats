@@ -333,3 +333,62 @@ export async function insertPlayerGamesBatch(rows, batchSize = 500) {
 
   return totalInserted;
 }
+// Merge duplicate players (same first_name + last_name + team_name + division)
+// caused by jersey number inconsistencies in source data
+export async function dedupePlayers(division) {
+  const db = initDb();
+
+  // Step 1: Merge stats into the keeper row (highest game count)
+  await db.query(`
+    WITH dupes AS (
+      SELECT 
+        first_name, last_name, team_name, division,
+        array_agg(player_id ORDER BY games DESC) as all_ids,
+        (array_agg(player_id ORDER BY games DESC))[1] as keep_id
+      FROM players
+      WHERE division = $1
+      GROUP BY first_name, last_name, team_name, division
+      HAVING COUNT(*) > 1
+    ),
+    totals AS (
+      SELECT 
+        d.keep_id,
+        SUM(p.games) as games, SUM(p.starts) as starts, SUM(p.minutes) as minutes,
+        SUM(p.fgm) as fgm, SUM(p.fga) as fga,
+        SUM(p.tpm) as tpm, SUM(p.tpa) as tpa,
+        SUM(p.ftm) as ftm, SUM(p.fta) as fta,
+        SUM(p.orb) as orb, SUM(p.drb) as drb, SUM(p.trb) as trb,
+        SUM(p.ast) as ast, SUM(p.stl) as stl, SUM(p.blk) as blk,
+        SUM(p.tov) as tov, SUM(p.pf) as pf, SUM(p.points) as points
+      FROM dupes d
+      JOIN players p ON p.player_id = ANY(d.all_ids)
+      GROUP BY d.keep_id
+    )
+    UPDATE players p
+    SET 
+      games = t.games, starts = t.starts, minutes = t.minutes,
+      fgm = t.fgm, fga = t.fga, tpm = t.tpm, tpa = t.tpa,
+      ftm = t.ftm, fta = t.fta, orb = t.orb, drb = t.drb, trb = t.trb,
+      ast = t.ast, stl = t.stl, blk = t.blk, tov = t.tov, pf = t.pf, points = t.points
+    FROM totals t
+    WHERE p.player_id = t.keep_id
+  `, [division]);
+
+  // Step 2: Delete the duplicate rows
+  const result = await db.query(`
+    DELETE FROM players
+    WHERE division = $1
+      AND player_id IN (
+        SELECT unnest(all_ids[2:])
+        FROM (
+          SELECT array_agg(player_id ORDER BY games DESC) as all_ids
+          FROM players
+          WHERE division = $1
+          GROUP BY first_name, last_name, team_name, division
+          HAVING COUNT(*) > 1
+        ) sub
+      )
+  `, [division, division]);
+
+  console.log(`✅ dedupePlayers: removed ${result.rowCount} duplicate rows for ${division}`);
+}
