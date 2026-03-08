@@ -598,6 +598,8 @@ async function main() {
     for (const player of allPlayers) await db.upsertPlayer(player);
     console.log(`✅ Updated ${allPlayers.length} players`);
 
+    await db.dedupePlayers(DIVISION);
+
     await db.closeDb();
   }
 
