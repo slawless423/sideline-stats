@@ -132,10 +132,18 @@ function toInt(x, d = 0) { const n = parseInt(String(x ?? ""), 10); return Numbe
 function toFloat(x, d = 0) { const n = parseFloat(String(x ?? "")); return Number.isFinite(n) ? n : d; }
 function pick(obj, keys) { for (const k of keys) { if (obj && obj[k] != null) return obj[k]; } return null; }
 
+function fixEncoding(str) {
+  try {
+    return decodeURIComponent(escape(str));
+  } catch {
+    return str;
+  }
+}
+
 function buildPlayerId(teamId, p) {
   const ncaaId = p.id ?? p.ncaaId ?? 0;
-  const first = (p.firstName || "").toLowerCase().replace(/\s+/g, "");
-  const last = (p.lastName || "").toLowerCase().replace(/\s+/g, "");
+  const first = fixEncoding(p.firstName || "").toLowerCase().replace(/\s+/g, "");
+  const last = fixEncoding(p.lastName || "").toLowerCase().replace(/\s+/g, "");
   return `${teamId}_${ncaaId}_${first}_${last}`;
 }
 
