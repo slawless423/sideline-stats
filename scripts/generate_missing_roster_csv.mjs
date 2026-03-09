@@ -6,22 +6,18 @@
  *   POSTGRES_URL=your_url node scripts/generate_missing_roster_csv.mjs
  *
  * FLAGS:
- *   --division womens-d1     only export one division (womens-d1, mens-d1, mens-d2, womens-d2)
- *   --team "Alabama St."     only export one team (exact DB name)
- *   --out roster_missing.csv custom output filename (default: missing_rosters_YYYY-MM-DD.csv)
+ *   --division womens-d1       only export one division (womens-d1, mens-d1, mens-d2, womens-d2)
+ *   --division mens-transfers  export transfers table (D1 Men + D2 Men) missing height/year
+ *   --team "Alabama St."       only export one team (exact DB name)
+ *   --out roster_missing.csv   custom output filename (default: missing_rosters_YYYY-MM-DD.csv)
  *
  * OUTPUT:
  *   CSV file with columns:
  *     division, team_name, first_name, last_name, height, year
- *
- *   height = blank if missing (fill in as inches, e.g. 72 for 6'0")
- *            OR as feet-inches string, e.g. 6-0 or 6'0"
- *   year   = blank if missing (fill in as: Fr, So, Jr, Sr, Grad, RS Fr, RS So)
  */
 
 import pg from 'pg';
 import fs from 'fs';
-import path from 'path';
 
 const { Pool } = pg;
 
@@ -47,13 +43,95 @@ const OUT_FILE        = getArg('--out') ?? `missing_rosters_${new Date().toISOSt
 
 const ALL_DIVISIONS = ['womens-d1', 'mens-d1', 'mens-d2', 'womens-d2'];
 
-const divisions = DIVISION_FILTER
-  ? [DIVISION_FILTER]
-  : ALL_DIVISIONS;
+// ─── CSV HELPER ────────────────────────────────────────────────────────────────
 
-// ─── MAIN ──────────────────────────────────────────────────────────────────────
+function csvEscape(val) {
+  const s = String(val);
+  if (s.includes(',') || s.includes('"') || s.includes('\n')) {
+    return `"${s.replace(/"/g, '""')}"`;
+  }
+  return s;
+}
 
-async function run() {
+// ─── TRANSFERS BRANCH ──────────────────────────────────────────────────────────
+
+async function runTransfers() {
+  console.log('Querying transfers table (D1 Men + D2 Men) for players missing height or year...\n');
+
+  let query = `
+    SELECT name, previous_school, division, height, year
+    FROM transfers
+    WHERE division IN ('D1 Men', 'D2 Men')
+      AND match_status != 'unmatched'
+      AND (height IS NULL OR height = '' OR year IS NULL OR year = '')
+    ORDER BY division, previous_school, name
+  `;
+  const params = [];
+
+  if (TEAM_FILTER) {
+    query = `
+      SELECT name, previous_school, division, height, year
+      FROM transfers
+      WHERE division IN ('D1 Men', 'D2 Men')
+        AND match_status != 'unmatched'
+        AND LOWER(previous_school) = LOWER($1)
+        AND (height IS NULL OR height = '' OR year IS NULL OR year = '')
+      ORDER BY name
+    `;
+    params.push(TEAM_FILTER);
+  }
+
+  const res = await pool.query(query, params);
+  await pool.end();
+
+  console.log(`  Found ${res.rows.length} transfer players missing height or year`);
+
+  if (res.rows.length === 0) {
+    console.log('\n✅ No transfers missing height or year!');
+    return;
+  }
+
+  // Map transfers.division ("D1 Men" / "D2 Men") to the division string
+  // used by import_roster_csv so the CSV can be fed straight back in
+  const divMap = {
+    'D1 Men': 'mens-d1',
+    'D2 Men': 'mens-d2',
+  };
+
+  const header = 'division,team_name,first_name,last_name,height,year';
+  const lines = res.rows.map(r => {
+    const nameParts = r.name.trim().split(/\s+/);
+    const firstName = nameParts[0] || '';
+    const lastName  = nameParts.slice(1).join(' ') || '';
+    const division  = divMap[r.division] || r.division;
+    const teamName  = r.previous_school || '';
+    const height    = r.height || '';
+    const year      = r.year   || '';
+    return [
+      csvEscape(division),
+      csvEscape(teamName),
+      csvEscape(firstName),
+      csvEscape(lastName),
+      csvEscape(height),
+      csvEscape(year),
+    ].join(',');
+  });
+
+  const csv = [header, ...lines].join('\n') + '\n';
+  fs.writeFileSync(OUT_FILE, csv, 'utf8');
+
+  console.log(`\n✅ Exported ${res.rows.length} players to: ${OUT_FILE}`);
+  console.log(`\nInstructions:`);
+  console.log(`  1. Open ${OUT_FILE} in Excel or Google Sheets`);
+  console.log(`  2. Fill in the 'height' column (e.g. 6'3") and/or 'year' column`);
+  console.log(`     Valid year values: Fr, So, Jr, Sr`);
+  console.log(`  3. Save as CSV and re-import via the Import Roster CSV workflow`);
+}
+
+// ─── PLAYERS BRANCH ────────────────────────────────────────────────────────────
+
+async function runPlayers() {
+  const divisions = DIVISION_FILTER ? [DIVISION_FILTER] : ALL_DIVISIONS;
   const rows = [];
 
   for (const division of divisions) {
@@ -83,13 +161,13 @@ async function run() {
     console.log(`  ${division}: ${res.rows.length} players missing height/year`);
   }
 
+  await pool.end();
+
   if (rows.length === 0) {
     console.log('\n✅ No players missing height or year! Database is complete.');
-    await pool.end();
     return;
   }
 
-  // Build CSV
   const header = 'division,team_name,first_name,last_name,height,year';
   const lines = rows.map(r => {
     const div       = csvEscape(r.division);
@@ -111,19 +189,12 @@ async function run() {
   console.log(`     Valid year values: Fr, So, Jr, Sr, Grad, RS Fr, RS So`);
   console.log(`  3. Save as CSV (keep the same filename)`);
   console.log(`  4. Run: node scripts/import_roster_csv.mjs --file ${OUT_FILE}`);
-
-  await pool.end();
 }
 
-function csvEscape(val) {
-  const s = String(val);
-  if (s.includes(',') || s.includes('"') || s.includes('\n')) {
-    return `"${s.replace(/"/g, '""')}"`;
-  }
-  return s;
-}
+// ─── ENTRY POINT ───────────────────────────────────────────────────────────────
 
-run().catch(err => {
-  console.error('Error:', err.message);
-  process.exit(1);
-});
+if (DIVISION_FILTER === 'mens-transfers') {
+  runTransfers().catch(err => { console.error('Error:', err.message); process.exit(1); });
+} else {
+  runPlayers().catch(err => { console.error('Error:', err.message); process.exit(1); });
+}
