@@ -288,13 +288,15 @@ export default function MensTransfersPage() {
               }}>{val==='all'?'All':val}</button>
             ))}
           </div>
-<button onClick={exportCSV} style={{
-  padding: '7px 16px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
-  fontFamily: "'Outfit', sans-serif", border: `1px solid ${ICE}`, borderRadius: 6,
-  background: '#fff', color: MUTED, transition: 'background 0.15s',
-}}>
-  Export CSV
-</button>
+<div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', marginTop: -8, marginBottom: 4 }}>
+  <button onClick={exportCSV} style={{
+    padding: '7px 16px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
+    fontFamily: "'Outfit', sans-serif", border: 'none', borderRadius: 6,
+    background: ACCENT, color: '#fff', transition: 'background 0.15s',
+  }}>
+    Export to Excel
+  </button>
+</div>
           <div style={{ display: 'flex', borderRadius: 6, overflow: 'hidden', border: `1px solid ${ICE}`, marginLeft: 'auto' }}>
             {([{key:'advanced',label:'Advanced'},{key:'perGame',label:'Per Game'},{key:'per40',label:'Per 40'}] as {key:StatMode;label:string}[]).map(({key,label}) => (
               <button key={key} onClick={() => setStatMode(key)} style={{
