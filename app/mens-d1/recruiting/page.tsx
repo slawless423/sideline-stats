@@ -177,7 +177,7 @@ export default function MensTransfersPage() {
   const [statMode, setStatMode]     = useState<StatMode>('advanced');
   const [divFilter, setDivFilter]   = useState<'all' | 'D1 Men' | 'D2 Men'>('all');
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortKey, setSortKey]       = useState<SortKey>('usagePct');
+  const [sortKey, setSortKey] = useState<SortKey>('minPct');
   const [sortOrder, setSortOrder]   = useState<'asc' | 'desc'>('desc');
 
   useEffect(() => {
