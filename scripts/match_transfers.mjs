@@ -270,7 +270,7 @@ async function main() {
     if (overrideMap.has(overrideKey)) {
       const playerId = overrideMap.get(overrideKey);
       const player = dbPlayers.find(p => p.player_id === playerId);
-      results.push({ ...base, matchStatus: "override", player: player || null });
+      results.push({ ...base, previousSchool: player?.team_name || base.previousSchool, matchStatus: "override", player: player || null });
       continue;
     }
 
@@ -287,13 +287,13 @@ async function main() {
     const exactMatches = playerIndex.get(`${nameKey}|${teamKey}`) || [];
 
     if (exactMatches.length === 1) {
-      results.push({ ...base, matchStatus: "confident", player: exactMatches[0] });
+      results.push({ ...base, previousSchool: exactMatches[0].team_name, matchStatus: "confident", player: exactMatches[0] });
       continue;
     }
 
     if (exactMatches.length > 1) {
       // Multiple players with same name at same school - very rare, flag for review
-      results.push({ ...base, matchStatus: "fuzzy", player: exactMatches[0] });
+      results.push({ ...base, previousSchool: exactMatches[0].team_name, matchStatus: "fuzzy", player: exactMatches[0] });
       needsReview.push({ ...base, issue: `Multiple players named ${t.name} at ${prevDbName}`, candidates: exactMatches.map(p => p.player_id) });
       continue;
     }
@@ -303,7 +303,7 @@ async function main() {
     const divMatches = nameOnlyMatches.filter(p => p.division === dbDivision);
 
     if (divMatches.length === 1) {
-      results.push({ ...base, matchStatus: "fuzzy", player: divMatches[0] });
+      results.push({ ...base, previousSchool: divMatches[0].team_name, matchStatus: "fuzzy", player: divMatches[0] });
       needsReview.push({
         ...base,
         issue: `Name matched but school differs: Excel="${t.previousSchool}" DB="${divMatches[0].team_name}"`,
