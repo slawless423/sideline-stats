@@ -367,7 +367,7 @@ export default function MensTransfersPage() {
                           return (
                             <td key={col.key} style={{
                               padding: '5px 8px', textAlign: 'right',
-                              fontWeight: col.key==='usagePct'||col.key==='ortg'||col.key==='ppg'||col.key==='p40' ? 600 : 400,
+                              fontWeight: col.key === sortKey ? 600 : 400,
                               color: !stats ? MUTED : 'inherit',
                             }}>
                               {val!=null ? (INTEGER_KEYS.has(col.key) ? Math.round(val) : val.toFixed(1)) : '—'}
