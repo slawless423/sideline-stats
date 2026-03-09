@@ -186,7 +186,7 @@ async function main() {
 
   // Load Excel
   const { default: XLSX } = await import("xlsx");
-  const wb = XLSX.readFile("/mnt/user-data/uploads/Book2.xlsx");
+  const wb = XLSX.readFile("scripts/Book2.xlsx");
   const ws = wb.Sheets[wb.SheetNames[0]];
   const rows = XLSX.utils.sheet_to_json(ws, { header: 1 }).slice(1);
 
