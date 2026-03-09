@@ -6,7 +6,6 @@ import pg from "pg";
 const { Pool } = pg;
 
 // ===== SCHOOL NAME ALIAS MAP =====
-// Maps Excel school names -> DB team_name values
 const SCHOOL_ALIASES = {
   // D1
   "Arkansas–Pine Bluff": "Ark.-Pine Bluff",
@@ -57,8 +56,8 @@ const SCHOOL_ALIASES = {
   "UIC": "UIC",
   "Lipscomb": "Lipscomb",
 
-  // D2 - full name -> abbreviated DB name
-  "Alaska": "Alas. Anchorage", // flag as fuzzy - could be either Alaska campus
+  // D2
+  "Alaska": "Alas. Anchorage",
   "Albany State": "Albany St. (GA)",
   "American International": "American Int'l",
   "Angelo State": "Angelo St.",
@@ -107,8 +106,8 @@ const SCHOOL_ALIASES = {
   "Texas–Permian Basin": "UT Permian Basin",
   "Texas-Permian Basin": "UT Permian Basin",
   "Truman State": "Truman St.",
-  "USCB": "USC Beaufort", // not in DB yet
-  "USC Beaufort": "USC Beaufort", // not in DB yet
+  "USCB": "USC Beaufort",
+  "USC Beaufort": "USC Beaufort",
   "West Texas A&M": "West Tex. A&M",
   "Western Colorado": "Western Colo.",
   "Western Oregon": "Western Ore.",
@@ -117,21 +116,19 @@ const SCHOOL_ALIASES = {
   "Winona State": "Winona St.",
   "Saint Michael's": "Saint Michael's",
 
-  // Schools not in DB yet (no stats available)
-  "Bloomfield": null,        // left D2
-  "Life University": null,   // NAIA
-  "South Plains College": null, // not D2
-  "Jamestown": "Jamestown",  // D2 but no players in DB yet
-  "Middle Georgia": "Middle Georgia", // D2 but no players in DB yet
-  "Roosevelt": "Roosevelt",  // D2 but no players in DB yet
+  // Schools not in DB yet
+  "Bloomfield": null,
+  "Life University": null,
+  "South Plains College": null,
+  "Jamestown": "Jamestown",
+  "Middle Georgia": "Middle Georgia",
+  "Roosevelt": "Roosevelt",
 };
 
-// Schools with no stats (skip matching, mark as no-stats)
 const NO_STATS_SCHOOLS = new Set([
   "Jamestown", "Middle Georgia", "Roosevelt", "USC Beaufort",
 ]);
 
-// Schools to skip entirely
 const SKIP_SCHOOLS = new Set([
   "Bloomfield", "Life University", "South Plains College",
 ]);
@@ -139,10 +136,11 @@ const SKIP_SCHOOLS = new Set([
 function cleanStr(s) {
   if (!s) return "";
   return s
-    .replace(/\xc2/g, "")     // strip bare Â (UTF-8 artifact)
-    .replace(/\xa0/g, " ")    // non-breaking space -> space
-    .replace(/\u2013/g, "-")  // em-dash -> hyphen
-    .replace(/\s+/g, " ")     // collapse whitespace
+    .replace(/\xc2/g, "")
+    .replace(/\xa0/g, " ")
+    .replace(/\u2013/g, "-")
+    .replace(/\u2014/g, "-")
+    .replace(/\s+/g, " ")
     .trim();
 }
 
@@ -157,22 +155,10 @@ function resolveSchool(excelName) {
     const mapped = SCHOOL_ALIASES[cleaned];
     return { dbName: mapped, skip: false, noStats: NO_STATS_SCHOOLS.has(mapped) };
   }
-  // Direct match
   return { dbName: cleaned, skip: false, noStats: NO_STATS_SCHOOLS.has(cleaned) };
 }
 
-function splitName(fullName) {
-  const cleaned = cleanStr(fullName);
-  // Handle "Last, Jr." suffix cases
-  const parts = cleaned.split(" ");
-  if (parts.length < 2) return { first: cleaned, last: "" };
-  const last = parts[parts.length - 1];
-  const first = parts.slice(0, parts.length - 1).join(" ");
-  return { first, last };
-}
-
 async function main() {
-  // Load overrides file
   let overrides = [];
   try {
     const raw = await fs.readFile("scripts/transfer_overrides.json", "utf8");
@@ -189,7 +175,6 @@ async function main() {
     overrideMap.set(key, o.player_id);
   }
 
-  // Load Excel
   const { default: XLSX } = await import("xlsx");
   const wb = XLSX.readFile("scripts/Book2.xlsx");
   const ws = wb.Sheets[wb.SheetNames[0]];
@@ -207,7 +192,6 @@ async function main() {
 
   console.log(`Loaded ${transfers.length} transfers from Excel`);
 
-  // Connect to DB
   if (!process.env.POSTGRES_URL) {
     console.error("No POSTGRES_URL set");
     process.exit(1);
@@ -218,10 +202,10 @@ async function main() {
     ssl: { rejectUnauthorized: false },
   });
 
-  // Load all players from DB for mens-d1 and mens-d2
+  // Include height and year so they carry through to the transfers table
   const { rows: dbPlayers } = await pool.query(`
     SELECT player_id, first_name, last_name, team_name, division,
-           position, year, games, starts, minutes,
+           position, year, height, games, starts, minutes,
            fgm, fga, tpm, tpa, ftm, fta,
            orb, drb, trb, ast, stl, blk, tov, pf, points
     FROM players
@@ -229,17 +213,15 @@ async function main() {
   `);
   console.log(`Loaded ${dbPlayers.length} players from DB`);
 
-  // Index players by normalized name+team for fast lookup
   const playerIndex = new Map();
   for (const p of dbPlayers) {
-    const nameKey = `${normalizeName(p.first_name + p.last_name)}`;
+    const nameKey = normalizeName(p.first_name + p.last_name);
     const teamKey = normalizeName(p.team_name);
     const key = `${nameKey}|${teamKey}`;
     if (!playerIndex.has(key)) playerIndex.set(key, []);
     playerIndex.get(key).push(p);
   }
 
-  // Also index by name only (for fuzzy school matching)
   const nameOnlyIndex = new Map();
   for (const p of dbPlayers) {
     const nameKey = normalizeName(p.first_name + p.last_name);
@@ -260,12 +242,11 @@ async function main() {
 
     const base = {
       name: t.name,
-      previousSchool: cleanStr(t.previousSchool), // fallback, overridden below when matched
+      previousSchool: cleanStr(t.previousSchool),
       newSchool: t.newSchool ? cleanStr(t.newSchool) : null,
       division: transferDiv,
     };
 
-    // Check override first
     const overrideKey = `${normalizeName(t.name)}|${normalizeName(t.previousSchool)}`;
     if (overrideMap.has(overrideKey)) {
       const playerId = overrideMap.get(overrideKey);
@@ -274,15 +255,13 @@ async function main() {
       continue;
     }
 
-    // No stats available for this school yet
     if (noStats || !prevDbName) {
       results.push({ ...base, matchStatus: "no_stats", player: null });
       needsReview.push({ ...base, issue: "School not in DB yet - no stats available" });
       continue;
     }
 
-    // Try exact name + school match
-    const nameKey = normalizeName(t.name.replace(/,.*/, "")); // strip suffixes like Jr.
+    const nameKey = normalizeName(t.name.replace(/,.*/, ""));
     const teamKey = normalizeName(prevDbName);
     const exactMatches = playerIndex.get(`${nameKey}|${teamKey}`) || [];
 
@@ -292,13 +271,11 @@ async function main() {
     }
 
     if (exactMatches.length > 1) {
-      // Multiple players with same name at same school - very rare, flag for review
       results.push({ ...base, previousSchool: exactMatches[0].team_name, matchStatus: "fuzzy", player: exactMatches[0] });
       needsReview.push({ ...base, issue: `Multiple players named ${t.name} at ${prevDbName}`, candidates: exactMatches.map(p => p.player_id) });
       continue;
     }
 
-    // Try name-only match (school name might differ)
     const nameOnlyMatches = nameOnlyIndex.get(nameKey) || [];
     const divMatches = nameOnlyMatches.filter(p => p.division === dbDivision);
 
@@ -322,7 +299,6 @@ async function main() {
       continue;
     }
 
-    // No match found
     results.push({ ...base, matchStatus: "unmatched", player: null });
     needsReview.push({ ...base, issue: `No player found named ${t.name} from ${t.previousSchool}` });
   }
@@ -340,6 +316,7 @@ async function main() {
       team_name TEXT,
       position TEXT,
       year TEXT,
+      height TEXT,
       games INTEGER,
       starts INTEGER,
       minutes NUMERIC,
@@ -354,7 +331,6 @@ async function main() {
     )
   `);
 
-  // Clear and repopulate
   await pool.query("DELETE FROM transfers");
 
   let written = 0;
@@ -363,10 +339,10 @@ async function main() {
     await pool.query(`
       INSERT INTO transfers (
         player_id, name, previous_school, new_school, division, match_status,
-        team_name, position, year, games, starts, minutes,
+        team_name, position, year, height, games, starts, minutes,
         fgm, fga, tpm, tpa, ftm, fta,
         orb, drb, trb, ast, stl, blk, tov, pf, points
-      ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27)
+      ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28)
       ON CONFLICT (name, previous_school) DO UPDATE SET
         player_id = EXCLUDED.player_id,
         new_school = EXCLUDED.new_school,
@@ -374,6 +350,7 @@ async function main() {
         team_name = EXCLUDED.team_name,
         position = EXCLUDED.position,
         year = EXCLUDED.year,
+        height = EXCLUDED.height,
         games = EXCLUDED.games, starts = EXCLUDED.starts, minutes = EXCLUDED.minutes,
         fgm = EXCLUDED.fgm, fga = EXCLUDED.fga,
         tpm = EXCLUDED.tpm, tpa = EXCLUDED.tpa,
@@ -385,7 +362,7 @@ async function main() {
     `, [
       p?.player_id || null,
       r.name, r.previousSchool, r.newSchool, r.division, r.matchStatus,
-      p?.team_name || null, p?.position || null, p?.year || null,
+      p?.team_name || null, p?.position || null, p?.year || null, p?.height || null,
       p?.games || null, p?.starts || null, p?.minutes || null,
       p?.fgm || null, p?.fga || null,
       p?.tpm || null, p?.tpa || null,
@@ -399,7 +376,6 @@ async function main() {
 
   console.log(`\n✅ Wrote ${written} transfers to database`);
 
-  // Summary
   const confident = results.filter(r => r.matchStatus === "confident").length;
   const fuzzy = results.filter(r => r.matchStatus === "fuzzy").length;
   const unmatched = results.filter(r => r.matchStatus === "unmatched").length;
@@ -414,7 +390,6 @@ async function main() {
   console.log(`   🔒 Override:  ${overrideCount}`);
   console.log(`   📋 Needs review: ${needsReview.length}`);
 
-  // Write review file
   if (needsReview.length > 0) {
     await fs.writeFile(
       "scripts/transfer_review.json",
