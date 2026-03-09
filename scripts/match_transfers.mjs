@@ -260,7 +260,7 @@ async function main() {
 
     const base = {
       name: t.name,
-      previousSchool: cleanStr(t.previousSchool),
+      previousSchool: cleanStr(t.previousSchool), // fallback, overridden below when matched
       newSchool: t.newSchool ? cleanStr(t.newSchool) : null,
       division: transferDiv,
     };
