@@ -238,7 +238,28 @@ export default function MensTransfersPage() {
       {label} {sortKey===sk && (sortOrder==='desc'?'↓':'↑')}
     </th>
   );
-
+  const exportCSV = () => {
+    const headers = ['Name', 'From', 'To', 'Div', 'Yr', 'Ht', 'G',
+      ...activeCols.map(c => c.label)];
+    const rows = sorted.map(t => {
+      const stats = calcStats(t, teamMap.get(t.teamName ?? ''));
+      return [
+        t.name, t.previousSchool, t.newSchool ?? '', t.division,
+        t.year ?? '', t.height ?? '', t.games ?? '',
+        ...activeCols.map(c => {
+          const val = stats ? (stats as Record<string, number>)[c.key] : undefined;
+          if (val == null) return '';
+          return INTEGER_KEYS.has(c.key) ? Math.round(val) : val.toFixed(1);
+        }),
+      ];
+    });
+    const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'transfers.csv'; a.click();
+    URL.revokeObjectURL(url);
+  };
   const withStats = transfers.filter(hasStats).length;
   const withoutStats = transfers.length - withStats;
 
@@ -267,7 +288,13 @@ export default function MensTransfersPage() {
               }}>{val==='all'?'All':val}</button>
             ))}
           </div>
-
+<button onClick={exportCSV} style={{
+  padding: '7px 16px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
+  fontFamily: "'Outfit', sans-serif", border: `1px solid ${ICE}`, borderRadius: 6,
+  background: '#fff', color: MUTED, transition: 'background 0.15s',
+}}>
+  Export CSV
+</button>
           <div style={{ display: 'flex', borderRadius: 6, overflow: 'hidden', border: `1px solid ${ICE}`, marginLeft: 'auto' }}>
             {([{key:'advanced',label:'Advanced'},{key:'perGame',label:'Per Game'},{key:'per40',label:'Per 40'}] as {key:StatMode;label:string}[]).map(({key,label}) => (
               <button key={key} onClick={() => setStatMode(key)} style={{
