@@ -307,7 +307,7 @@ export default function MensTransfersPage() {
                     const bg = idx%2===0 ? '#fff' : '#fafafa';
                     return (
                       <tr key={`${t.name}-${t.previousSchool}`} style={{ borderBottom: '1px solid #f0f0f0', background: bg }}>
-                        <td style={{ padding: '5px 8px', fontWeight: 600, position: 'sticky', left: 0, background: bg, zIndex: 1, minWidth: 160, maxWidth: 160, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        <td style={{ padding: '5px 8px', fontWeight: 600, position: 'sticky', left: 0, background: bg, zIndex: 1, minWidth: 140, maxWidth: 140, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                           {t.name}
                         </td>
                         <td style={{ padding: '5px 8px', color: MUTED, minWidth: 130, maxWidth: 130, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
