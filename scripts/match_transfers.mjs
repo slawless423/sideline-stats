@@ -260,8 +260,8 @@ async function main() {
 
     const base = {
       name: t.name,
-      previousSchool: t.previousSchool,
-      newSchool: t.newSchool || null,
+      previousSchool: cleanStr(t.previousSchool),
+      newSchool: t.newSchool ? cleanStr(t.newSchool) : null,
       division: transferDiv,
     };
 
