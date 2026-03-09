@@ -186,7 +186,7 @@ async function main() {
 
   // Load Excel
   const { default: XLSX } = await import("xlsx");
-  const wb = XLSX.readFile("scripts/Book2.xlsx");
+  const wb = XLSX.readFile("/mnt/user-data/uploads/Book2.xlsx");
   const ws = wb.Sheets[wb.SheetNames[0]];
   const rows = XLSX.utils.sheet_to_json(ws, { header: 1 }).slice(1);
 
@@ -332,6 +332,7 @@ async function main() {
       new_school TEXT,
       division TEXT,
       match_status TEXT,
+      team_name TEXT,
       position TEXT,
       year TEXT,
       games INTEGER,
@@ -357,14 +358,15 @@ async function main() {
     await pool.query(`
       INSERT INTO transfers (
         player_id, name, previous_school, new_school, division, match_status,
-        position, year, games, starts, minutes,
+        team_name, position, year, games, starts, minutes,
         fgm, fga, tpm, tpa, ftm, fta,
         orb, drb, trb, ast, stl, blk, tov, pf, points
-      ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27)
+      ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28)
       ON CONFLICT (name, previous_school) DO UPDATE SET
         player_id = EXCLUDED.player_id,
         new_school = EXCLUDED.new_school,
         match_status = EXCLUDED.match_status,
+        team_name = EXCLUDED.team_name,
         position = EXCLUDED.position,
         year = EXCLUDED.year,
         games = EXCLUDED.games, starts = EXCLUDED.starts, minutes = EXCLUDED.minutes,
@@ -378,7 +380,7 @@ async function main() {
     `, [
       p?.player_id || null,
       r.name, r.previousSchool, r.newSchool, r.division, r.matchStatus,
-      p?.position || null, p?.year || null,
+      p?.team_name || null, p?.position || null, p?.year || null,
       p?.games || null, p?.starts || null, p?.minutes || null,
       p?.fgm || null, p?.fga || null,
       p?.tpm || null, p?.tpa || null,
