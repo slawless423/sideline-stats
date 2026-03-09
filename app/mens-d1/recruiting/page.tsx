@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState, useMemo } from 'react';
-import Link from 'next/link';
 import SiteNavigation from '@/components/SiteNavigation';
 
 const ACCENT  = "#3B9EFF";
@@ -15,73 +14,87 @@ const MUTED   = "#6B7E9A";
 
 type StatMode = 'advanced' | 'perGame' | 'per40';
 
-type TransferPlayer = {
-  playerId: string;
-  firstName: string;
-  lastName: string;
-  teamId: string;
-  teamName: string;
-  division: 'mens-d1' | 'mens-d2';
-  conference: string;
-  year: string;
-  height: number | null;
-  position: string;
-  games: number;
-  starts: number;
-  minutes: number;
-  fgm: number; fga: number;
-  tpm: number; tpa: number;
-  ftm: number; fta: number;
-  orb: number; drb: number; trb: number;
-  ast: number; stl: number; blk: number;
-  tov: number; pf: number; points: number;
+type Transfer = {
+  playerId: string | null;
+  name: string;
+  previousSchool: string;
+  newSchool: string | null;
+  division: 'D1 Men' | 'D2 Men';
+  matchStatus: string;
+  teamName: string | null;
+  position: string | null;
+  year: string | null;
+  games: number | null;
+  starts: number | null;
+  minutes: number | null;
+  fgm: number | null; fga: number | null;
+  tpm: number | null; tpa: number | null;
+  ftm: number | null; fta: number | null;
+  orb: number | null; drb: number | null; trb: number | null;
+  ast: number | null; stl: number | null; blk: number | null;
+  tov: number | null; pf: number | null; points: number | null;
 };
 
-type TeamStats = {
+type TeamRow = {
+  teamId: string;
+  teamName: string;
+  division: string;
   games: number;
-  fga: number; fgm: number; tpm: number;
-  orb: number; tov: number; fta: number; ftm: number;
-  ast: number; points: number;
-  opp_fga: number; opp_tpa: number; opp_tpm: number;
-  opp_orb: number; opp_tov: number; opp_fta: number; opp_ftm: number;
-  opp_points: number;
-  trb: number; opp_trb: number;
+  fgm: number; fga: number; tpm: number; tpa: number; ftm: number; fta: number;
+  orb: number; drb: number; trb: number; ast: number; stl: number; blk: number;
+  tov: number; pf: number; points: number;
+  opp_fgm: number; opp_fga: number; opp_tpm: number; opp_tpa: number;
+  opp_ftm: number; opp_fta: number;
+  opp_orb: number; opp_drb: number; opp_trb: number;
+  opp_ast: number; opp_stl: number; opp_blk: number; opp_tov: number;
+  opp_pf: number; opp_points: number;
 };
 
 type SortKey =
-  | 'name' | 'team' | 'division' | 'games'
+  | 'name' | 'previousSchool' | 'newSchool' | 'division' | 'games'
   | 'ortg' | 'usagePct' | 'efg' | 'ts' | 'orbPct' | 'drbPct'
   | 'aRate' | 'toRate' | 'blkPct' | 'stlPct' | 'ftRate'
-  | 'ppg' | 'rpg' | 'apg' | 'spg' | 'bpg'
-  | 'fgPct' | 'tpPct' | 'ftPct' | 'mpg'
-  | 'p40' | 'r40' | 'a40' | 's40' | 'b40' | 'min40';
+  | 'ppg' | 'rpg' | 'apg' | 'spg' | 'bpg' | 'mpg'
+  | 'fgPct' | 'tpPct' | 'ftPct'
+  | 'p40' | 'r40' | 'a40' | 's40' | 'b40';
 
 // ── Helpers ───────────────────────────────────────────────────
 
-function formatHeight(inches: number | null | undefined): string {
-  if (!inches || inches === 0) return "—";
-  const feet = Math.floor(inches / 12);
-  const rem  = inches % 12;
-  return `${feet}'${rem}"`;
+function hasStats(t: Transfer): boolean {
+  return t.games != null && t.games > 0 && t.minutes != null && t.minutes > 0;
 }
 
 function divLabel(div: string) {
-  return div === 'mens-d1' ? 'D1' : 'D2';
+  return div === 'D1 Men' ? 'D1' : 'D2';
+}
+
+function dbDivision(div: string) {
+  return div === 'D1 Men' ? 'mens-d1' : 'mens-d2';
 }
 
 // ── Stat Calculator ───────────────────────────────────────────
 
-function calcStats(p: TransferPlayer, team: TeamStats | undefined) {
-  if (!team) return null;
+function calcStats(t: Transfer, team: TeamRow | undefined) {
+  if (!team || !hasStats(t)) return null;
+
+  const p = {
+    games:   t.games!,
+    minutes: t.minutes!,
+    fgm: t.fgm!, fga: t.fga!, tpm: t.tpm!, tpa: t.tpa!,
+    ftm: t.ftm!, fta: t.fta!,
+    orb: t.orb!, drb: t.drb!, trb: t.trb!,
+    ast: t.ast!, stl: t.stl!, blk: t.blk!,
+    tov: t.tov!, pf: t.pf!, points: t.points!,
+  };
 
   const teamMinutes = team.games * 200;
   const opp_drb     = team.opp_trb - team.opp_orb;
   const drb         = team.trb - team.orb;
 
-  const Team_ORB_pct     = team.orb / (team.orb + opp_drb);
+  const Team_ORB_pct      = team.orb / (team.orb + opp_drb);
   const Team_Scoring_Poss = team.fgm + (1 - Math.pow(1 - team.ftm / team.fta, 2)) * team.fta * 0.4;
-  const Team_Play_pct    = Team_Scoring_Poss / (team.fga + team.fta * 0.4 + team.tov);
-  const Team_ORB_Weight  =
+  const Team_Play_pct     = Team_Scoring_Poss / (team.fga + team.fta * 0.4 + team.tov);
+  const Team_ORB_Weight   =
     ((1 - Team_ORB_pct) * Team_Play_pct) /
     ((1 - Team_ORB_pct) * Team_Play_pct + Team_ORB_pct * (1 - Team_Play_pct));
 
@@ -111,16 +124,16 @@ function calcStats(p: TransferPlayer, team: TeamStats | undefined) {
     ((((team.ast / teamMinutes) * p.minutes * 5 - p.ast) /
       ((team.fgm / teamMinutes) * p.minutes * 5 - p.fgm)) *
       (1 - p.minutes / (teamMinutes / 5)));
-  const FG_Part   = p.fgm * (1 - 0.5 * ((p.points - p.ftm) / (2 * p.fga)) * qAST);
-  const AST_Part  = 0.5 * (((team.points - team.ftm) - (p.points - p.ftm)) / (2 * (team.fga - p.fga))) * p.ast;
-  const FT_Part   = (1 - Math.pow(1 - p.ftm / p.fta, 2)) * 0.4 * p.fta;
-  const ORB_Part  = p.orb * Team_ORB_Weight * Team_Play_pct;
-  const ScPoss    = (FG_Part + AST_Part + FT_Part) *
+  const FG_Part  = p.fgm * (1 - 0.5 * ((p.points - p.ftm) / (2 * p.fga)) * qAST);
+  const AST_Part = 0.5 * (((team.points - team.ftm) - (p.points - p.ftm)) / (2 * (team.fga - p.fga))) * p.ast;
+  const FT_Part  = (1 - Math.pow(1 - p.ftm / p.fta, 2)) * 0.4 * p.fta;
+  const ORB_Part = p.orb * Team_ORB_Weight * Team_Play_pct;
+  const ScPoss   = (FG_Part + AST_Part + FT_Part) *
     (1 - (team.orb / Team_Scoring_Poss) * Team_ORB_Weight * Team_Play_pct) + ORB_Part;
-  const FGxPoss   = (p.fga - p.fgm) * (1 - 1.07 * Team_ORB_pct);
-  const FTxPoss   = Math.pow(1 - p.ftm / p.fta, 2) * 0.4 * p.fta;
-  const TotPoss   = ScPoss + FGxPoss + FTxPoss + p.tov;
-  const PProd_FG  = 2 * (p.fgm + 0.5 * p.tpm) *
+  const FGxPoss  = (p.fga - p.fgm) * (1 - 1.07 * Team_ORB_pct);
+  const FTxPoss  = Math.pow(1 - p.ftm / p.fta, 2) * 0.4 * p.fta;
+  const TotPoss  = ScPoss + FGxPoss + FTxPoss + p.tov;
+  const PProd_FG = 2 * (p.fgm + 0.5 * p.tpm) *
     (1 - 0.5 * ((p.points - p.ftm) / (2 * p.fga)) * qAST);
   const PProd_AST = 2 *
     ((team.fgm - p.fgm + 0.5 * (team.tpm - p.tpm)) / (team.fgm - p.fgm)) *
@@ -131,7 +144,6 @@ function calcStats(p: TransferPlayer, team: TeamStats | undefined) {
     (1 - (team.orb / Team_Scoring_Poss) * Team_ORB_Weight * Team_Play_pct) + PProd_ORB;
   const ortg = TotPoss > 0 ? 100 * PProd / TotPoss : 0;
 
-  // Per game
   const g   = p.games || 1;
   const ppg = p.points / g;
   const rpg = p.trb / g;
@@ -143,13 +155,12 @@ function calcStats(p: TransferPlayer, team: TeamStats | undefined) {
   const tpPct = p.tpa > 0 ? (p.tpm / p.tpa) * 100 : 0;
   const ftPct = p.fta > 0 ? (p.ftm / p.fta) * 100 : 0;
 
-  // Per 40
-  const m = p.minutes || 1;
-  const p40 = p.points  / m * 40;
-  const r40 = p.trb     / m * 40;
-  const a40 = p.ast     / m * 40;
-  const s40 = p.stl     / m * 40;
-  const b40 = p.blk     / m * 40;
+  const m   = p.minutes || 1;
+  const p40 = p.points / m * 40;
+  const r40 = p.trb    / m * 40;
+  const a40 = p.ast    / m * 40;
+  const s40 = p.stl    / m * 40;
+  const b40 = p.blk    / m * 40;
 
   return {
     ortg, usagePct, efg, ts, orbPct, drbPct, aRate, toRate, blkPct, stlPct, ftRate,
@@ -158,20 +169,20 @@ function calcStats(p: TransferPlayer, team: TeamStats | undefined) {
   };
 }
 
-// ── Stat Mode Column Definitions ─────────────────────────────
+// ── Column Definitions ────────────────────────────────────────
 
 const ADVANCED_COLS: { label: string; key: SortKey }[] = [
-  { label: 'ORtg',    key: 'ortg'     },
-  { label: '%Usage',  key: 'usagePct' },
-  { label: 'eFG%',    key: 'efg'      },
-  { label: 'TS%',     key: 'ts'       },
-  { label: 'OR%',     key: 'orbPct'   },
-  { label: 'DR%',     key: 'drbPct'   },
-  { label: 'ARate',   key: 'aRate'    },
-  { label: 'TORate',  key: 'toRate'   },
-  { label: 'Blk%',   key: 'blkPct'   },
-  { label: 'Stl%',   key: 'stlPct'   },
-  { label: 'FTRate',  key: 'ftRate'   },
+  { label: 'ORtg',   key: 'ortg'     },
+  { label: '%Usage', key: 'usagePct' },
+  { label: 'eFG%',   key: 'efg'      },
+  { label: 'TS%',    key: 'ts'       },
+  { label: 'OR%',    key: 'orbPct'   },
+  { label: 'DR%',    key: 'drbPct'   },
+  { label: 'ARate',  key: 'aRate'    },
+  { label: 'TORate', key: 'toRate'   },
+  { label: 'Blk%',  key: 'blkPct'   },
+  { label: 'Stl%',  key: 'stlPct'   },
+  { label: 'FTRate', key: 'ftRate'   },
 ];
 
 const PER_GAME_COLS: { label: string; key: SortKey }[] = [
@@ -187,11 +198,11 @@ const PER_GAME_COLS: { label: string; key: SortKey }[] = [
 ];
 
 const PER_40_COLS: { label: string; key: SortKey }[] = [
-  { label: 'PTS/40', key: 'p40' },
-  { label: 'REB/40', key: 'r40' },
-  { label: 'AST/40', key: 'a40' },
-  { label: 'STL/40', key: 's40' },
-  { label: 'BLK/40', key: 'b40' },
+  { label: 'PTS/40', key: 'p40'   },
+  { label: 'REB/40', key: 'r40'   },
+  { label: 'AST/40', key: 'a40'   },
+  { label: 'STL/40', key: 's40'   },
+  { label: 'BLK/40', key: 'b40'   },
   { label: 'FG%',    key: 'fgPct' },
   { label: '3P%',    key: 'tpPct' },
   { label: 'FT%',    key: 'ftPct' },
@@ -199,24 +210,27 @@ const PER_40_COLS: { label: string; key: SortKey }[] = [
 
 // ── Main Page ─────────────────────────────────────────────────
 
-export default function MensRecruitingPage() {
-  const [players, setPlayers]       = useState<TransferPlayer[]>([]);
-  const [teamStats, setTeamStats]   = useState<Map<string, TeamStats>>(new Map());
+export default function MensTransfersPage() {
+  const [transfers, setTransfers]   = useState<Transfer[]>([]);
+  const [teamMap, setTeamMap]       = useState<Map<string, TeamRow>>(new Map());
   const [loading, setLoading]       = useState(true);
   const [statMode, setStatMode]     = useState<StatMode>('advanced');
-  const [divFilter, setDivFilter]   = useState<'all' | 'mens-d1' | 'mens-d2'>('all');
+  const [divFilter, setDivFilter]   = useState<'all' | 'D1 Men' | 'D2 Men'>('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [sortKey, setSortKey]       = useState<SortKey>('usagePct');
   const [sortOrder, setSortOrder]   = useState<'asc' | 'desc'>('desc');
 
   useEffect(() => {
-    // When data is available, fetch from API:
-    // Promise.all([
-    //   fetch('/api/recruiting/mens/transfers').then(r => r.json()),
-    //   fetch('/api/mens-d1/teams/stats').then(r => r.json()),
-    //   fetch('/api/mens-d2/teams/stats').then(r => r.json()),
-    // ]).then(([transferData, d1Teams, d2Teams]) => { ... });
-    setLoading(false);
+    fetch('/api/recruiting/mens/transfers')
+      .then(r => r.json())
+      .then(({ transfers, teams }) => {
+        setTransfers(transfers ?? []);
+        const map = new Map<string, TeamRow>();
+        for (const t of (teams ?? [])) map.set(t.teamName, t);
+        setTeamMap(map);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
   }, []);
 
   const handleSort = (key: SortKey) => {
@@ -226,75 +240,62 @@ export default function MensRecruitingPage() {
 
   const activeCols = statMode === 'advanced' ? ADVANCED_COLS : statMode === 'perGame' ? PER_GAME_COLS : PER_40_COLS;
 
-  const filteredPlayers = useMemo(() => {
-    return players.filter(p => {
-      if (divFilter !== 'all' && p.division !== divFilter) return false;
+  const filtered = useMemo(() => {
+    return transfers.filter(t => {
+      if (divFilter !== 'all' && t.division !== divFilter) return false;
       if (searchTerm) {
-        const name = `${p.firstName} ${p.lastName}`.toLowerCase();
-        if (!name.includes(searchTerm.toLowerCase()) && !p.teamName.toLowerCase().includes(searchTerm.toLowerCase())) return false;
+        const q = searchTerm.toLowerCase();
+        if (!t.name.toLowerCase().includes(q) &&
+            !t.previousSchool.toLowerCase().includes(q) &&
+            !(t.newSchool ?? '').toLowerCase().includes(q)) return false;
       }
       return true;
     });
-  }, [players, divFilter, searchTerm]);
+  }, [transfers, divFilter, searchTerm]);
 
-  const sortedPlayers = useMemo(() => {
-    return [...filteredPlayers].sort((a, b) => {
+  const sorted = useMemo(() => {
+    return [...filtered].sort((a, b) => {
       if (sortKey === 'name') {
-        const an = `${a.lastName} ${a.firstName}`, bn = `${b.lastName} ${b.firstName}`;
+        return sortOrder === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
+      }
+      if (sortKey === 'previousSchool') {
+        return sortOrder === 'asc'
+          ? a.previousSchool.localeCompare(b.previousSchool)
+          : b.previousSchool.localeCompare(a.previousSchool);
+      }
+      if (sortKey === 'newSchool') {
+        const an = a.newSchool ?? '', bn = b.newSchool ?? '';
         return sortOrder === 'asc' ? an.localeCompare(bn) : bn.localeCompare(an);
       }
-      if (sortKey === 'team') return sortOrder === 'asc' ? a.teamName.localeCompare(b.teamName) : b.teamName.localeCompare(a.teamName);
-      if (sortKey === 'division') return sortOrder === 'asc' ? a.division.localeCompare(b.division) : b.division.localeCompare(a.division);
-      if (sortKey === 'games') return sortOrder === 'asc' ? a.games - b.games : b.games - a.games;
+      if (sortKey === 'division') {
+        return sortOrder === 'asc' ? a.division.localeCompare(b.division) : b.division.localeCompare(a.division);
+      }
+      if (sortKey === 'games') {
+        const ag = a.games ?? 0, bg = b.games ?? 0;
+        return sortOrder === 'asc' ? ag - bg : bg - ag;
+      }
 
-      const as = calcStats(a, teamStats.get(a.teamId));
-      const bs = calcStats(b, teamStats.get(b.teamId));
-      if (!as || !bs) return 0;
-      const av = as[sortKey as keyof typeof as] as number ?? 0;
-      const bv = bs[sortKey as keyof typeof bs] as number ?? 0;
+      const aTeam = teamMap.get(a.teamName ?? '');
+      const bTeam = teamMap.get(b.teamName ?? '');
+      const as_ = calcStats(a, aTeam);
+      const bs_ = calcStats(b, bTeam);
+
+      // Push no-stats rows to bottom regardless of sort direction
+      if (!as_ && !bs_) return 0;
+      if (!as_) return 1;
+      if (!bs_) return -1;
+
+      const av = as_[sortKey as keyof typeof as_] as number ?? 0;
+      const bv = bs_[sortKey as keyof typeof bs_] as number ?? 0;
       return sortOrder === 'asc' ? av - bv : bv - av;
     });
-  }, [filteredPlayers, sortKey, sortOrder, teamStats]);
-  const exportCSV = () => {
-    const activeCols = statMode === 'advanced' ? ADVANCED_COLS : statMode === 'perGame' ? PER_GAME_COLS : PER_40_COLS;
-    const headers = ['Player', 'Team', 'Division', 'Year', 'Height', 'G',
-      ...activeCols.map(c => c.label)];
+  }, [filtered, sortKey, sortOrder, teamMap]);
 
-    const rows = sortedPlayers.map(p => {
-      const stats = calcStats(p, teamStats.get(p.teamId));
-      const ht = !p.height || p.height === 0 ? '' : `${Math.floor(p.height / 12)}'${p.height % 12}"`;
-      if (!stats) return Array(headers.length).fill('');
-      return [
-        `${p.firstName} ${p.lastName}`,
-        p.teamName,
-        divLabel(p.division),
-        p.year || '',
-        ht,
-        p.games,
-        ...activeCols.map(c => {
-          const val = stats[c.key as keyof typeof stats] as number | undefined;
-          return val != null ? val.toFixed(1) : '';
-        }),
-      ];
-    });
-
-    const csv = [headers, ...rows]
-      .map(row => row.map(v => `"${String(v).replace(/"/g, '""')}"`).join(','))
-      .join('\n');
-
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `mens-transfers_${new Date().toISOString().slice(0, 10)}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
-  const SortableHeader = ({ label, sk }: { label: string; sk: SortKey }) => (
+  const SortableHeader = ({ label, sk, align = 'right' }: { label: string; sk: SortKey; align?: 'left' | 'right' | 'center' }) => (
     <th
       onClick={() => handleSort(sk)}
       style={{
-        padding: '6px 8px', textAlign: 'right', cursor: 'pointer', userSelect: 'none',
+        padding: '6px 8px', textAlign: align, cursor: 'pointer', userSelect: 'none',
         fontWeight: 700, fontSize: 10, whiteSpace: 'nowrap',
         background: sortKey === sk ? ACCENT : 'transparent',
         color: sortKey === sk ? '#fff' : 'inherit',
@@ -305,37 +306,15 @@ export default function MensRecruitingPage() {
     </th>
   );
 
-  // ── Empty State ──────────────────────────────────────────────
-
-  const EmptyState = () => (
-    <div style={{
-      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-      padding: '80px 20px', gap: 16,
-    }}>
-      <div style={{
-        width: 64, height: 64, borderRadius: '50%',
-        background: FROST, display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontSize: 28,
-      }}>
-        📋
-      </div>
-      <div style={{ textAlign: 'center' }}>
-        <h3 style={{ fontSize: 18, fontWeight: 700, color: NAVY, margin: '0 0 8px' }}>
-          Transfer Portal Coming Soon
-        </h3>
-        <p style={{ fontSize: 14, color: MUTED, maxWidth: 380, lineHeight: 1.6, margin: 0 }}>
-          Men's transfer portal data is being compiled. Check back soon — players and their season stats will appear here once available.
-        </p>
-      </div>
-    </div>
-  );
+  const withStats    = transfers.filter(hasStats).length;
+  const withoutStats = transfers.length - withStats;
 
   return (
     <>
       <SiteNavigation currentDivision="mens-d1" currentPage="recruiting" divisionPath="/mens-d1" />
       <main style={{ maxWidth: '100%', margin: '0 auto', padding: 20 }}>
 
-        {/* ── Sub-nav: Transfers tab ── */}
+        {/* Sub-nav */}
         <div style={{ display: 'flex', gap: 0, borderBottom: `2px solid ${FROST}`, marginBottom: 24 }}>
           <div style={{
             padding: '10px 20px',
@@ -350,13 +329,11 @@ export default function MensRecruitingPage() {
           </div>
         </div>
 
-        {/* ── Controls bar ── */}
+        {/* Controls */}
         <div style={{ display: 'flex', gap: 12, marginBottom: 20, flexWrap: 'wrap', alignItems: 'center' }}>
-
-          {/* Search */}
           <input
             type="text"
-            placeholder="Search player or team..."
+            placeholder="Search player, previous school, or destination..."
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
             style={{
@@ -368,7 +345,7 @@ export default function MensRecruitingPage() {
 
           {/* Division filter */}
           <div style={{ display: 'flex', borderRadius: 6, overflow: 'hidden', border: `1px solid ${ICE}` }}>
-            {(['all', 'mens-d1', 'mens-d2'] as const).map(val => (
+            {(['all', 'D1 Men', 'D2 Men'] as const).map(val => (
               <button
                 key={val}
                 onClick={() => setDivFilter(val)}
@@ -380,12 +357,12 @@ export default function MensRecruitingPage() {
                   transition: 'background 0.15s, color 0.15s',
                 }}
               >
-                {val === 'all' ? 'All' : val === 'mens-d1' ? 'D1' : 'D2'}
+                {val === 'all' ? 'All' : val}
               </button>
             ))}
           </div>
 
-          {/* Stat mode toggle */}
+          {/* Stat mode */}
           <div style={{ display: 'flex', borderRadius: 6, overflow: 'hidden', border: `1px solid ${ICE}`, marginLeft: 'auto' }}>
             {([
               { key: 'advanced', label: 'Advanced' },
@@ -409,82 +386,78 @@ export default function MensRecruitingPage() {
           </div>
         </div>
 
-        {/* ── Table or Empty State ── */}
         {loading ? (
           <div style={{ padding: 40, textAlign: 'center', color: MUTED }}>Loading...</div>
-        ) : players.length === 0 ? (
-          <EmptyState />
         ) : (
           <>
             <p style={{ fontSize: 12, color: MUTED, marginBottom: 12 }}>
-              Showing {sortedPlayers.length} of {players.length} transfers
+              Showing {sorted.length} of {transfers.length} transfers
+              {withoutStats > 0 && (
+                <span style={{ marginLeft: 8, color: MUTED }}>
+                  · {withStats} with stats, {withoutStats} stats pending
+                </span>
+              )}
             </p>
+
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11, whiteSpace: 'nowrap' }}>
                 <thead>
                   <tr style={{ borderBottom: `2px solid ${ACCENT}`, background: FROST }}>
-                    {/* Fixed columns */}
-                    <th
-                      onClick={() => handleSort('name')}
-                      style={{ padding: '6px 8px', textAlign: 'left', cursor: 'pointer', fontWeight: 700, fontSize: 10, position: 'sticky', left: 0, background: FROST, zIndex: 2 }}
-                    >
-                      Player {sortKey === 'name' && (sortOrder === 'desc' ? '↓' : '↑')}
-                    </th>
-                    <th
-                      onClick={() => handleSort('team')}
-                      style={{ padding: '6px 8px', textAlign: 'left', cursor: 'pointer', fontWeight: 700, fontSize: 10 }}
-                    >
-                      Team {sortKey === 'team' && (sortOrder === 'desc' ? '↓' : '↑')}
-                    </th>
-                    <th
-                      onClick={() => handleSort('division')}
-                      style={{ padding: '6px 8px', textAlign: 'center', cursor: 'pointer', fontWeight: 700, fontSize: 10 }}
-                    >
-                      Div {sortKey === 'division' && (sortOrder === 'desc' ? '↓' : '↑')}
-                    </th>
+                    <SortableHeader label="Player" sk="name" align="left" />
+                    <SortableHeader label="From" sk="previousSchool" align="left" />
+                    <SortableHeader label="To" sk="newSchool" align="left" />
+                    <SortableHeader label="Div" sk="division" align="center" />
+                    <th style={{ padding: '6px 8px', textAlign: 'center', fontWeight: 700, fontSize: 10 }}>Pos</th>
                     <th style={{ padding: '6px 8px', textAlign: 'center', fontWeight: 700, fontSize: 10 }}>Yr</th>
-                    <th style={{ padding: '6px 8px', textAlign: 'center', fontWeight: 700, fontSize: 10 }}>Ht</th>
                     <SortableHeader label="G" sk="games" />
-                    {/* Dynamic stat columns */}
                     {activeCols.map(col => (
                       <SortableHeader key={col.key} label={col.label} sk={col.key} />
                     ))}
                   </tr>
                 </thead>
                 <tbody>
-                  {sortedPlayers.map((p, idx) => {
-                    const stats = calcStats(p, teamStats.get(p.teamId));
-                    if (!stats) return null;
+                  {sorted.map((t, idx) => {
+                    const team  = teamMap.get(t.teamName ?? '');
+                    const stats = calcStats(t, team);
+                    const bg    = idx % 2 === 0 ? '#fff' : '#fafafa';
                     return (
-                      <tr
-                        key={p.playerId}
-                        style={{ borderBottom: '1px solid #f0f0f0', background: idx % 2 === 0 ? '#fff' : '#fafafa' }}
-                      >
-                        <td style={{ padding: '5px 8px', fontWeight: 600, position: 'sticky', left: 0, background: idx % 2 === 0 ? '#fff' : '#fafafa', zIndex: 1 }}>
-                          {p.firstName} {p.lastName}
+                      <tr key={`${t.name}-${t.previousSchool}`} style={{ borderBottom: '1px solid #f0f0f0', background: bg }}>
+                        <td style={{ padding: '5px 8px', fontWeight: 600, position: 'sticky', left: 0, background: bg, zIndex: 1 }}>
+                          {t.name}
                         </td>
+                        <td style={{ padding: '5px 8px', color: MUTED }}>{t.previousSchool || '—'}</td>
                         <td style={{ padding: '5px 8px' }}>
-                          <Link href={`/${p.division}/team/${p.teamId}`} style={{ color: ACCENT, textDecoration: 'none' }}>
-                            {p.teamName}
-                          </Link>
+                          {t.newSchool ? (
+                            <span style={{
+                              display: 'inline-block', padding: '1px 6px', borderRadius: 4,
+                              fontSize: 10, fontWeight: 600,
+                              background: '#e8f5e9', color: '#2e7d32',
+                            }}>
+                              {t.newSchool}
+                            </span>
+                          ) : (
+                            <span style={{ color: MUTED, fontSize: 10 }}>Uncommitted</span>
+                          )}
                         </td>
                         <td style={{ padding: '5px 8px', textAlign: 'center' }}>
                           <span style={{
-                            display: 'inline-block', padding: '2px 6px', borderRadius: 4, fontSize: 10, fontWeight: 700,
-                            background: p.division === 'mens-d1' ? NAVY : SKY, color: '#fff',
+                            display: 'inline-block', padding: '2px 6px', borderRadius: 4,
+                            fontSize: 10, fontWeight: 700,
+                            background: t.division === 'D1 Men' ? NAVY : SKY, color: '#fff',
                           }}>
-                            {divLabel(p.division)}
+                            {divLabel(t.division)}
                           </span>
                         </td>
-                        <td style={{ padding: '5px 8px', textAlign: 'center' }}>{p.year || '—'}</td>
-                        <td style={{ padding: '5px 8px', textAlign: 'center' }}>{formatHeight(p.height)}</td>
-                        <td style={{ padding: '5px 8px', textAlign: 'right' }}>{p.games}</td>
+                        <td style={{ padding: '5px 8px', textAlign: 'center' }}>{t.position || '—'}</td>
+                        <td style={{ padding: '5px 8px', textAlign: 'center' }}>{t.year || '—'}</td>
+                        <td style={{ padding: '5px 8px', textAlign: 'right' }}>{t.games ?? '—'}</td>
                         {activeCols.map(col => {
-                          const val = stats[col.key as keyof typeof stats] as number | undefined;
+                          const val = stats ? stats[col.key as keyof typeof stats] as number | undefined : undefined;
                           return (
                             <td key={col.key} style={{
                               padding: '5px 8px', textAlign: 'right',
                               fontWeight: col.key === 'usagePct' || col.key === 'ortg' || col.key === 'ppg' || col.key === 'p40' ? 600 : 400,
+                              color: !stats ? MUTED : 'inherit',
                             }}>
                               {val != null ? val.toFixed(1) : '—'}
                             </td>
