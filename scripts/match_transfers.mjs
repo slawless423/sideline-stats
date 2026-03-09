@@ -136,6 +136,7 @@ const SKIP_SCHOOLS = new Set([
 function cleanStr(s) {
   if (!s) return "";
   return s
+    .normalize("NFC")
     .replace(/\xc2/g, "")
     .replace(/\xa0/g, " ")
     .replace(/\u2013/g, "-")
