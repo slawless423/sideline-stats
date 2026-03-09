@@ -8,7 +8,6 @@ const pool = new Pool({
 
 export async function GET() {
   try {
-    // Fetch all transfers
     const transfersResult = await pool.query(`
       SELECT
         t.player_id       AS "playerId",
@@ -20,16 +19,14 @@ export async function GET() {
         t.team_name       AS "teamName",
         t.position,
         t.year,
-        t.games,
-        t.starts,
-        t.minutes,
+        t.height,
+        t.games, t.starts, t.minutes,
         t.fgm, t.fga, t.tpm, t.tpa, t.ftm, t.fta,
         t.orb, t.drb, t.trb, t.ast, t.stl, t.blk, t.tov, t.pf, t.points
       FROM transfers t
       ORDER BY t.division, t.name
     `);
 
-    // Fetch team stats for both divisions (needed for advanced stat calculations)
     const teamsResult = await pool.query(`
       SELECT
         team_id   AS "teamId",
