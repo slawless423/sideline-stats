@@ -64,7 +64,7 @@ async function main() {
 
     // Determine division label matching what import_roster_csv expects
     // transfers.division is stored as "D1 Men" / "D2 Men" — map to db division strings
-    const divMap: Record<string, string> = {
+    const divMap = {
       'D1 Men': 'mens-d1',
       'D2 Men': 'mens-d2',
       'D1 Women': 'womens-d1',
