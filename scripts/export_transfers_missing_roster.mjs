@@ -79,7 +79,7 @@ async function main() {
     const year   = r.year   ?? '';
 
     // Quote fields that might contain commas (school names like "Davis & Elkins")
-    const q = (v: string) => (v.includes(',') ? `"${v}"` : v);
+    const q = (v) => (v.includes(',') ? `"${v}"` : v);
 
     csvLines.push([
       q(division),
