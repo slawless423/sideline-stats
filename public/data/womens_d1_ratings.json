@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2026-03-08T20:35:15.221Z",
-  "season_start": "2025-11-03",
+  "generated_at_utc": "2026-03-09T12:00:27.040Z",
+  "season_start": "2025-11-04",
   "rows": [
     {
       "teamId": "2430",
@@ -53,16 +53,6 @@
       "adjT": 73.39632352941176
     },
     {
-      "teamId": "1347",
-      "team": "TCU",
-      "conference": "big-12",
-      "games": 33,
-      "adjO": 110.03043394981592,
-      "adjD": 78.92579144083227,
-      "adjEM": 31.104642508983645,
-      "adjT": 71.19242424242424
-    },
-    {
       "teamId": "2284",
       "team": "North Dakota St.",
       "conference": "summit-league",
@@ -71,6 +61,16 @@
       "adjD": 84.654622497035,
       "adjEM": 30.210941994042898,
       "adjT": 67.90546875
+    },
+    {
+      "teamId": "1347",
+      "team": "TCU",
+      "conference": "big-12",
+      "games": 34,
+      "adjO": 109.40610484406106,
+      "adjD": 79.5298808090037,
+      "adjEM": 29.876224035057362,
+      "adjT": 70.91764705882352
     },
     {
       "teamId": "384",
@@ -153,16 +153,6 @@
       "adjT": 72.69375
     },
     {
-      "teamId": "304",
-      "team": "West Virginia",
-      "conference": "big-12",
-      "games": 32,
-      "adjO": 104.99305035817386,
-      "adjD": 80.25315910705444,
-      "adjEM": 24.739891251119417,
-      "adjT": 73.0703125
-    },
-    {
       "teamId": "797",
       "team": "Maryland",
       "conference": "big-ten",
@@ -171,6 +161,16 @@
       "adjD": 85.01317487340194,
       "adjEM": 24.69019581643869,
       "adjT": 74.98225806451612
+    },
+    {
+      "teamId": "304",
+      "team": "West Virginia",
+      "conference": "big-12",
+      "games": 33,
+      "adjO": 104.94605722624695,
+      "adjD": 80.39421262319144,
+      "adjEM": 24.551844603055514,
+      "adjT": 72.6780303030303
     },
     {
       "teamId": "442",
@@ -253,16 +253,6 @@
       "adjT": 68.39545454545456
     },
     {
-      "teamId": "1725",
-      "team": "High Point",
-      "conference": "big-south",
-      "games": 31,
-      "adjO": 101.09253652757668,
-      "adjD": 79.43858727187134,
-      "adjEM": 21.653949255705342,
-      "adjT": 73.51935483870967
-    },
-    {
       "teamId": "352",
       "team": "UC Irvine",
       "conference": "big-west",
@@ -271,6 +261,16 @@
       "adjD": 83.0575201198481,
       "adjEM": 21.52564161457562,
       "adjT": 68.53629032258064
+    },
+    {
+      "teamId": "1725",
+      "team": "High Point",
+      "conference": "big-south",
+      "games": 32,
+      "adjO": 101.01117502578442,
+      "adjD": 79.89720827006191,
+      "adjEM": 21.113966755722515,
+      "adjT": 73.47578125
     },
     {
       "teamId": "1305",
@@ -443,24 +443,14 @@
       "adjT": 70.60241935483872
     },
     {
-      "teamId": "1086",
-      "team": "Colorado St.",
-      "conference": "mountain-west",
-      "games": 31,
-      "adjO": 100.98605916354981,
-      "adjD": 83.4097270604916,
-      "adjEM": 17.576332103058206,
-      "adjT": 66.40967741935484
-    },
-    {
       "teamId": "2327",
       "team": "Santa Clara",
       "conference": "wcc",
-      "games": 31,
-      "adjO": 106.0091539937989,
-      "adjD": 88.55964306759827,
-      "adjEM": 17.44951092620063,
-      "adjT": 76.46935483870968
+      "games": 32,
+      "adjO": 105.99914385306887,
+      "adjD": 88.50062109271592,
+      "adjEM": 17.498522760352955,
+      "adjT": 76.6515625
     },
     {
       "teamId": "1943",
@@ -493,14 +483,24 @@
       "adjT": 70.40703125
     },
     {
+      "teamId": "1086",
+      "team": "Colorado St.",
+      "conference": "mountain-west",
+      "games": 32,
+      "adjO": 100.58163445155984,
+      "adjD": 83.48113988411966,
+      "adjEM": 17.10049456744018,
+      "adjT": 66.48828125
+    },
+    {
       "teamId": "638",
       "team": "Villanova",
       "conference": "big-east",
-      "games": 30,
-      "adjO": 101.85088117785466,
-      "adjD": 85.04395412470164,
-      "adjEM": 16.806927053153018,
-      "adjT": 71.5425
+      "games": 31,
+      "adjO": 101.69414851507543,
+      "adjD": 84.71396605112673,
+      "adjEM": 16.980182463948694,
+      "adjT": 71.30806451612904
     },
     {
       "teamId": "2165",
@@ -1003,16 +1003,6 @@
       "adjT": 67.38416666666667
     },
     {
-      "teamId": "2304",
-      "team": "Radford",
-      "conference": "big-south",
-      "games": 33,
-      "adjO": 91.95449674387932,
-      "adjD": 81.92979209081375,
-      "adjEM": 10.02470465306557,
-      "adjT": 73.52121212121212
-    },
-    {
       "teamId": "2151",
       "team": "Hawaii",
       "conference": "big-west",
@@ -1063,6 +1053,16 @@
       "adjT": 76.19396551724138
     },
     {
+      "teamId": "2304",
+      "team": "Radford",
+      "conference": "big-south",
+      "games": 34,
+      "adjO": 92.03227938084464,
+      "adjD": 82.40545641558235,
+      "adjEM": 9.626822965262292,
+      "adjT": 73.43970588235294
+    },
+    {
       "teamId": "409",
       "team": "Idaho St.",
       "conference": "big-sky",
@@ -1071,16 +1071,6 @@
       "adjD": 82.81485671191554,
       "adjEM": 9.54029608862433,
       "adjT": 71.53793103448275
-    },
-    {
-      "teamId": "1954",
-      "team": "New Mexico",
-      "conference": "mountain-west",
-      "games": 31,
-      "adjO": 96.09540737343042,
-      "adjD": 86.61417322834647,
-      "adjEM": 9.481234145083945,
-      "adjT": 70.32661290322581
     },
     {
       "teamId": "1343",
@@ -1101,6 +1091,16 @@
       "adjD": 86.32504417532215,
       "adjEM": 9.286358274773448,
       "adjT": 70.9310606060606
+    },
+    {
+      "teamId": "1954",
+      "team": "New Mexico",
+      "conference": "mountain-west",
+      "games": 32,
+      "adjO": 95.91920719838949,
+      "adjD": 86.72558471701481,
+      "adjEM": 9.193622481374675,
+      "adjT": 70.24140625
     },
     {
       "teamId": "80",
@@ -1153,14 +1153,14 @@
       "adjT": 73.83629032258065
     },
     {
-      "teamId": "473",
-      "team": "Boise St.",
+      "teamId": "1265",
+      "team": "UNLV",
       "conference": "mountain-west",
-      "games": 32,
-      "adjO": 97.20566238158209,
-      "adjD": 88.75668986180617,
-      "adjEM": 8.448972519775921,
-      "adjT": 72.0765625
+      "games": 31,
+      "adjO": 99.8319013821442,
+      "adjD": 91.34265241395512,
+      "adjEM": 8.489248968189074,
+      "adjT": 69.08387096774193
     },
     {
       "teamId": "2092",
@@ -1203,6 +1203,16 @@
       "adjT": 74.53879310344827
     },
     {
+      "teamId": "473",
+      "team": "Boise St.",
+      "conference": "mountain-west",
+      "games": 33,
+      "adjO": 97.00439972212281,
+      "adjD": 88.79889475959966,
+      "adjEM": 8.20550496252315,
+      "adjT": 71.97424242424243
+    },
+    {
       "teamId": "1510",
       "team": "Jacksonville",
       "conference": "asun",
@@ -1221,16 +1231,6 @@
       "adjD": 87.44207169176462,
       "adjEM": 8.152026159646198,
       "adjT": 73.16287878787878
-    },
-    {
-      "teamId": "1265",
-      "team": "UNLV",
-      "conference": "mountain-west",
-      "games": 30,
-      "adjO": 99.22413377668546,
-      "adjD": 91.14501224806577,
-      "adjEM": 8.079121528619694,
-      "adjT": 69.17
     },
     {
       "teamId": "1182",
@@ -1413,16 +1413,6 @@
       "adjT": 69.00689655172414
     },
     {
-      "teamId": "264",
-      "team": "Seton Hall",
-      "conference": "big-east",
-      "games": 30,
-      "adjO": 96.82206883554385,
-      "adjD": 90.22274325908558,
-      "adjEM": 6.59932557645827,
-      "adjT": 70.74833333333332
-    },
-    {
       "teamId": "2136",
       "team": "FIU",
       "conference": "cusa",
@@ -1491,6 +1481,16 @@
       "adjD": 92.0040001739206,
       "adjEM": 5.903089761723763,
       "adjT": 74.56048387096774
+    },
+    {
+      "teamId": "264",
+      "team": "Seton Hall",
+      "conference": "big-east",
+      "games": 31,
+      "adjO": 96.13824157990378,
+      "adjD": 90.4052531551934,
+      "adjEM": 5.732988424710371,
+      "adjT": 70.56370967741935
     },
     {
       "teamId": "16",
@@ -1643,16 +1643,6 @@
       "adjT": 70.29032258064517
     },
     {
-      "teamId": "1056",
-      "team": "Fresno St.",
-      "conference": "mountain-west",
-      "games": 32,
-      "adjO": 88.42378340350221,
-      "adjD": 84.3863359891284,
-      "adjEM": 4.0374474143738155,
-      "adjT": 71.07109375
-    },
-    {
       "teamId": "2613",
       "team": "Northwestern St.",
       "conference": "southland",
@@ -1701,6 +1691,16 @@
       "adjD": 89.88337401681584,
       "adjEM": 3.372066558475254,
       "adjT": 61.76583333333333
+    },
+    {
+      "teamId": "1056",
+      "team": "Fresno St.",
+      "conference": "mountain-west",
+      "games": 33,
+      "adjO": 88.68099830198956,
+      "adjD": 85.36104869711522,
+      "adjEM": 3.3199496048743384,
+      "adjT": 70.93863636363636
     },
     {
       "teamId": "1708",
@@ -1973,16 +1973,6 @@
       "adjT": 75.61048387096774
     },
     {
-      "teamId": "607",
-      "team": "San Francisco",
-      "conference": "wcc",
-      "games": 31,
-      "adjO": 90.39137542337569,
-      "adjD": 89.55160203080335,
-      "adjEM": 0.8397733925723401,
-      "adjT": 75.4782258064516
-    },
-    {
       "teamId": "1571",
       "team": "William & Mary",
       "conference": "caa",
@@ -2003,16 +1993,6 @@
       "adjT": 69.375
     },
     {
-      "teamId": "166",
-      "team": "Grand Canyon",
-      "conference": "mountain-west",
-      "games": 31,
-      "adjO": 89.73644930603515,
-      "adjD": 89.02978374364032,
-      "adjEM": 0.7066655623948321,
-      "adjT": 72.39838709677419
-    },
-    {
       "teamId": "1706",
       "team": "Towson",
       "conference": "caa",
@@ -2021,6 +2001,16 @@
       "adjD": 91.65218810853672,
       "adjEM": 0.6941338481265404,
       "adjT": 71.68666666666667
+    },
+    {
+      "teamId": "166",
+      "team": "Grand Canyon",
+      "conference": "mountain-west",
+      "games": 32,
+      "adjO": 89.6132107077628,
+      "adjD": 89.01413298341471,
+      "adjEM": 0.599077724348092,
+      "adjT": 72.28984375
     },
     {
       "teamId": "1992",
@@ -2091,6 +2081,16 @@
       "adjD": 98.98597626752967,
       "adjEM": 0.35969622376572374,
       "adjT": 74.81209677419355
+    },
+    {
+      "teamId": "607",
+      "team": "San Francisco",
+      "conference": "wcc",
+      "games": 32,
+      "adjO": 90.27124773960217,
+      "adjD": 90.0997444563515,
+      "adjEM": 0.1715032832506722,
+      "adjT": 75.60546875
     },
     {
       "teamId": "1620",
