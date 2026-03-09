@@ -177,7 +177,7 @@ export default function MensTransfersPage() {
   const [statMode, setStatMode]     = useState<StatMode>('advanced');
   const [divFilter, setDivFilter]   = useState<'all' | 'D1 Men' | 'D2 Men'>('all');
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortKey, setSortKey] = useState<SortKey>('minPct');
+  const [sortKey, setSortKey]       = useState<SortKey>('minPct');
   const [sortOrder, setSortOrder]   = useState<'asc' | 'desc'>('desc');
 
   useEffect(() => {
@@ -238,6 +238,7 @@ export default function MensTransfersPage() {
       {label} {sortKey===sk && (sortOrder==='desc'?'↓':'↑')}
     </th>
   );
+
   const exportCSV = () => {
     const headers = ['Name', 'From', 'To', 'Div', 'Yr', 'Ht', 'G',
       ...activeCols.map(c => c.label)];
@@ -260,8 +261,8 @@ export default function MensTransfersPage() {
     a.href = url; a.download = 'transfers.csv'; a.click();
     URL.revokeObjectURL(url);
   };
+
   const withStats = transfers.filter(hasStats).length;
-  const withoutStats = transfers.length - withStats;
 
   return (
     <>
@@ -273,11 +274,11 @@ export default function MensTransfersPage() {
           </div>
         </div>
 
-        <div style={{ display: 'flex', gap: 12, marginBottom: 20, flexWrap: 'wrap', alignItems: 'center' }}>
+        {/* Row 1: Search + Division filter + Stat mode toggle */}
+        <div style={{ display: 'flex', gap: 12, marginBottom: 8, flexWrap: 'wrap', alignItems: 'center' }}>
           <input type="text" placeholder="Search player, previous school, or destination..." value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
             style={{ padding: '8px 12px', border: `1px solid ${ICE}`, borderRadius: 6, fontSize: 13, flex: 1, minWidth: 200, outline: 'none', fontFamily: "'Outfit', sans-serif" }} />
-
           <div style={{ display: 'flex', borderRadius: 6, overflow: 'hidden', border: `1px solid ${ICE}` }}>
             {(['all','D1 Men','D2 Men'] as const).map(val => (
               <button key={val} onClick={() => setDivFilter(val)} style={{
@@ -288,16 +289,7 @@ export default function MensTransfersPage() {
               }}>{val==='all'?'All':val}</button>
             ))}
           </div>
-<div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', marginTop: -8, marginBottom: 4 }}>
-  <button onClick={exportCSV} style={{
-    padding: '7px 16px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
-    fontFamily: "'Outfit', sans-serif", border: 'none', borderRadius: 6,
-    background: ACCENT, color: '#fff', transition: 'background 0.15s',
-  }}>
-    Export to Excel
-  </button>
-</div>
-          <div style={{ display: 'flex', borderRadius: 6, overflow: 'hidden', border: `1px solid ${ICE}`, marginLeft: 'auto' }}>
+          <div style={{ display: 'flex', borderRadius: 6, overflow: 'hidden', border: `1px solid ${ICE}` }}>
             {([{key:'advanced',label:'Advanced'},{key:'perGame',label:'Per Game'},{key:'per40',label:'Per 40'}] as {key:StatMode;label:string}[]).map(({key,label}) => (
               <button key={key} onClick={() => setStatMode(key)} style={{
                 padding: '7px 16px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
@@ -309,13 +301,23 @@ export default function MensTransfersPage() {
           </div>
         </div>
 
+        {/* Row 2: Export button */}
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 12 }}>
+          <button onClick={exportCSV} style={{
+            padding: '7px 16px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
+            fontFamily: "'Outfit', sans-serif", border: 'none', borderRadius: 6,
+            background: ACCENT, color: '#fff', transition: 'background 0.15s',
+          }}>
+            Export to Excel
+          </button>
+        </div>
+
         {loading ? (
           <div style={{ padding: 40, textAlign: 'center', color: MUTED }}>Loading...</div>
         ) : (
           <>
             <p style={{ fontSize: 12, color: MUTED, marginBottom: 12 }}>
-              Showing {sorted.length} of {transfers.length} transfers
-              {withoutStats > 0 && <span style={{ marginLeft: 8, color: MUTED }}>· {withStats} with stats, {withoutStats} stats pending</span>}
+              Showing {sorted.length} of {withStats} transfers with stats
             </p>
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11, whiteSpace: 'nowrap' }}>
