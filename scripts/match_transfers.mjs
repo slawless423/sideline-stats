@@ -159,6 +159,15 @@ function resolveSchool(excelName) {
   return { dbName: cleaned, skip: false, noStats: NO_STATS_SCHOOLS.has(cleaned) };
 }
 
+function formatHeight(inches) {
+  if (inches === null || inches === undefined) return null;
+  const n = Number(inches);
+  if (isNaN(n) || n <= 0) return null;
+  const feet = Math.floor(n / 12);
+  const remaining = n % 12;
+  return `${feet}'${remaining}"`;
+}
+
 async function main() {
   let overrides = [];
   try {
@@ -363,7 +372,8 @@ async function main() {
     `, [
       p?.player_id || null,
       r.name, r.previousSchool, r.newSchool, r.division, r.matchStatus,
-      p?.team_name || null, p?.position || null, p?.year || null, p?.height || null,
+      p?.team_name || null, p?.position || null, p?.year || null,
+      p?.height ? formatHeight(p.height) : null,
       p?.games || null, p?.starts || null, p?.minutes || null,
       p?.fgm || null, p?.fga || null,
       p?.tpm || null, p?.tpa || null,
