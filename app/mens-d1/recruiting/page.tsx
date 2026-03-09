@@ -54,11 +54,22 @@ type SortKey =
   | 'p40' | 'r40' | 'orb40' | 'drb40' | 'a40' | 's40' | 'b40' | 'fc40'
   | 'twopm40' | 'twopa40' | 'twopPct40' | 'tpm40' | 'tpa40' | 'tpPct40' | 'ftm40' | 'fta40' | 'ftPct40';
 
+const MIN_MINUTES_OPTIONS = [0, 50, 100, 150, 200, 300];
+
 function hasStats(t: Transfer): boolean {
   return t.games != null && t.games > 0 && t.minutes != null && t.minutes > 0;
 }
 
 function divLabel(div: string) { return div === 'D1 Men' ? 'D1' : 'D2'; }
+
+// Wrap a CSV field value — quotes it if it contains a comma, quote, or newline
+function csvField(val: string | number | null | undefined): string {
+  const s = val == null ? '' : String(val);
+  if (s.includes(',') || s.includes('"') || s.includes('\n')) {
+    return `"${s.replace(/"/g, '""')}"`;
+  }
+  return s;
+}
 
 function calcStats(t: Transfer, team: TeamRow | undefined) {
   if (!team || !hasStats(t)) return null;
@@ -177,6 +188,7 @@ export default function MensTransfersPage() {
   const [statMode, setStatMode]     = useState<StatMode>('advanced');
   const [divFilter, setDivFilter]   = useState<'all' | 'D1 Men' | 'D2 Men'>('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [minMinutes, setMinMinutes] = useState(0);
   const [sortKey, setSortKey]       = useState<SortKey>('minPct');
   const [sortOrder, setSortOrder]   = useState<'asc' | 'desc'>('desc');
 
@@ -203,6 +215,7 @@ export default function MensTransfersPage() {
   const filtered = useMemo(() => transfers.filter(t => {
     if (!hasStats(t)) return false;
     if (divFilter !== 'all' && t.division !== divFilter) return false;
+    if (minMinutes > 0 && (t.minutes ?? 0) < minMinutes) return false;
     if (searchTerm) {
       const q = searchTerm.toLowerCase();
       if (!t.name.toLowerCase().includes(q) &&
@@ -210,7 +223,7 @@ export default function MensTransfersPage() {
           !(t.newSchool ?? '').toLowerCase().includes(q)) return false;
     }
     return true;
-  }), [transfers, divFilter, searchTerm]);
+  }), [transfers, divFilter, searchTerm, minMinutes]);
 
   const sorted = useMemo(() => [...filtered].sort((a, b) => {
     if (sortKey === 'name') return sortOrder === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
@@ -245,16 +258,21 @@ export default function MensTransfersPage() {
     const rows = sorted.map(t => {
       const stats = calcStats(t, teamMap.get(t.teamName ?? ''));
       return [
-        t.name, t.previousSchool, t.newSchool ?? '', t.division,
-        t.year ?? '', t.height ?? '', t.games ?? '',
+        csvField(t.name),
+        csvField(t.previousSchool),
+        csvField(t.newSchool ?? ''),
+        csvField(t.division),
+        csvField(t.year ?? ''),
+        csvField(t.height ?? ''),
+        csvField(t.games ?? ''),
         ...activeCols.map(c => {
           const val = stats ? (stats as Record<string, number>)[c.key] : undefined;
           if (val == null) return '';
-          return INTEGER_KEYS.has(c.key) ? Math.round(val) : val.toFixed(1);
+          return INTEGER_KEYS.has(c.key) ? String(Math.round(val)) : val.toFixed(1);
         }),
       ];
     });
-    const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
+    const csv = [headers.map(csvField), ...rows].map(r => r.join(',')).join('\n');
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -301,8 +319,21 @@ export default function MensTransfersPage() {
           </div>
         </div>
 
-        {/* Row 2: Export button */}
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 12 }}>
+        {/* Row 2: Min minutes filter + Export button */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, flexWrap: 'wrap', gap: 8 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span style={{ fontSize: 12, color: MUTED, fontFamily: "'Outfit', sans-serif", fontWeight: 600 }}>Min. Minutes:</span>
+            <div style={{ display: 'flex', borderRadius: 6, overflow: 'hidden', border: `1px solid ${ICE}` }}>
+              {MIN_MINUTES_OPTIONS.map(val => (
+                <button key={val} onClick={() => setMinMinutes(val)} style={{
+                  padding: '5px 10px', fontSize: 11, fontWeight: 600, cursor: 'pointer',
+                  fontFamily: "'Outfit', sans-serif", border: 'none', outline: 'none',
+                  background: minMinutes===val ? ACCENT : '#fff', color: minMinutes===val ? '#fff' : MUTED,
+                  transition: 'background 0.15s, color 0.15s',
+                }}>{val === 0 ? 'All' : val}</button>
+              ))}
+            </div>
+          </div>
           <button onClick={exportCSV} style={{
             padding: '7px 16px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
             fontFamily: "'Outfit', sans-serif", border: 'none', borderRadius: 6,
