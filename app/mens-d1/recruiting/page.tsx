@@ -131,7 +131,7 @@ function calcStats(t: Transfer, team: TeamRow | undefined) {
 }
 
 const ADVANCED_COLS: { label: string; key: SortKey }[] = [
-  { label: 'ORtg',   key: 'ortg'     }, { label: '%Usage', key: 'usagePct' },
+  { label: 'ORtg',   key: 'ortg'     }, { label: '%Usg',   key: 'usagePct' },
   { label: '%Min',   key: 'minPct'   }, { label: '%Shots', key: 'shotsPct' },
   { label: 'eFG%',   key: 'efg'      }, { label: 'TS%',    key: 'ts'       },
   { label: 'OR%',    key: 'orbPct'   }, { label: 'DR%',    key: 'drbPct'   },
