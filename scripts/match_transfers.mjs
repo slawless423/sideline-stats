@@ -138,7 +138,12 @@ const SKIP_SCHOOLS = new Set([
 
 function cleanStr(s) {
   if (!s) return "";
-  return s.replace(/\xa0/g, " ").replace(/\u2013/g, "-").replace(/\s+/g, " ").trim();
+  return s
+    .replace(/\xc2/g, "")     // strip bare Â (UTF-8 artifact)
+    .replace(/\xa0/g, " ")    // non-breaking space -> space
+    .replace(/\u2013/g, "-")  // em-dash -> hyphen
+    .replace(/\s+/g, " ")     // collapse whitespace
+    .trim();
 }
 
 function normalizeName(s) {
