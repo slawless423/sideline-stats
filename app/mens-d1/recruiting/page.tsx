@@ -307,13 +307,13 @@ export default function MensTransfersPage() {
                     const bg = idx%2===0 ? '#fff' : '#fafafa';
                     return (
                       <tr key={`${t.name}-${t.previousSchool}`} style={{ borderBottom: '1px solid #f0f0f0', background: bg }}>
-                        <td style={{ padding: '5px 8px', fontWeight: 600, position: 'sticky', left: 0, background: bg, zIndex: 1, minWidth: 160, maxWidth: 160, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        <td style={{ padding: '5px 8px', fontWeight: 600, position: 'sticky', left: 0, background: bg, zIndex: 1, minWidth: 160, maxWidth: 160, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                           {t.name}
                         </td>
-                        <td style={{ padding: '5px 8px', color: MUTED, minWidth: 150, maxWidth: 150, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        <td style={{ padding: '5px 8px', color: MUTED, minWidth: 150, maxWidth: 150, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                           {t.previousSchool || '—'}
                         </td>
-                        <td style={{ padding: '5px 8px', minWidth: 120, maxWidth: 120, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        <td style={{ padding: '5px 8px', minWidth: 120, maxWidth: 120, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                           {t.newSchool ? (
                             <span style={{ display: 'inline-block', padding: '1px 6px', borderRadius: 4, fontSize: 10, fontWeight: 600, background: '#e8f5e9', color: '#2e7d32' }}>
                               {t.newSchool}
