@@ -201,6 +201,7 @@ export default function MensTransfersPage() {
   const activeCols = statMode === 'advanced' ? ADVANCED_COLS : statMode === 'perGame' ? PER_GAME_COLS : PER_40_COLS;
 
   const filtered = useMemo(() => transfers.filter(t => {
+    if (!hasStats(t)) return false;
     if (divFilter !== 'all' && t.division !== divFilter) return false;
     if (searchTerm) {
       const q = searchTerm.toLowerCase();
