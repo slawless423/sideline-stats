@@ -295,7 +295,6 @@ export default function MensTransfersPage() {
                     <SortableHeader label="From" sk="previousSchool" align="left" />
                     <SortableHeader label="To" sk="newSchool" align="left" />
                     <SortableHeader label="Div" sk="division" align="center" />
-                    <th style={{ padding: '6px 8px', textAlign: 'center', fontWeight: 700, fontSize: 10 }}>Pos</th>
                     <th style={{ padding: '6px 8px', textAlign: 'center', fontWeight: 700, fontSize: 10 }}>Yr</th>
                     <th style={{ padding: '6px 8px', textAlign: 'center', fontWeight: 700, fontSize: 10 }}>Ht</th>
                     <SortableHeader label="G" sk="games" />
@@ -314,8 +313,7 @@ export default function MensTransfersPage() {
                         <td style={{ padding: '5px 8px', color: MUTED, minWidth: 150, maxWidth: 150, overflow: 'hidden', textOverflow: 'ellipsis' }}>
                           {t.previousSchool || '—'}
                         </td>
-                        <td style={{ padding: '5px 8px', minWidth: 150, maxWidth: 150, overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                          {t.newSchool ? (
+                        <td style={{ padding: '5px 8px', minWidth: 120, maxWidth: 120, overflow: 'hidden', textOverflow: 'ellipsis' }}>
                             <span style={{ display: 'inline-block', padding: '1px 6px', borderRadius: 4, fontSize: 10, fontWeight: 600, background: '#e8f5e9', color: '#2e7d32' }}>
                               {t.newSchool}
                             </span>
@@ -328,7 +326,6 @@ export default function MensTransfersPage() {
                             {divLabel(t.division)}
                           </span>
                         </td>
-                        <td style={{ padding: '5px 8px', textAlign: 'center' }}>{t.position || '—'}</td>
                         <td style={{ padding: '5px 8px', textAlign: 'center' }}>{t.year || '—'}</td>
                         <td style={{ padding: '5px 8px', textAlign: 'center' }}>{t.height || '—'}</td>
                         <td style={{ padding: '5px 8px', textAlign: 'right' }}>{t.games ?? '—'}</td>
