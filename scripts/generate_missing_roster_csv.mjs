@@ -43,7 +43,7 @@ const OUT_FILE        = getArg('--out') ?? `missing_rosters_${new Date().toISOSt
 
 const ALL_DIVISIONS = ['womens-d1', 'mens-d1', 'mens-d2', 'womens-d2'];
 
-// ─── NAME NORMALIZER ───────────────────────────────────────────────────────────
+// ─── NAME NORMALIZER ───────────────────────────────────────────────────----------------------------------------------------------------
 // Strips accents/diacritics to ASCII and removes suffixes after a comma.
 // e.g. "Zundrá" → "Zundra", "Raye, Jr." → "Raye"
 function normalizeName(name) {
@@ -71,8 +71,10 @@ async function runTransfers() {
   console.log('Querying transfers table (D1 Men + D2 Men) for players missing height or year...\n');
 
   // Join against players table to get correct first_name/last_name split.
-  // Strips periods before comparing so "CJ Yao" matches "C.J. Yao".
-  // Also handles multi-word names (Juan Pedro), suffixes, etc.
+  // Strips periods AND commas before comparing so:
+  //   "CJ Yao" matches "C.J. Yao"
+  //   "AJ Reed Jr" matches "A.J. Reed, Jr."
+  //   "Juan Pedro Rodriguez" matches correctly via multi-word first name
   let query = `
     SELECT
       t.previous_school,
@@ -84,7 +86,7 @@ async function runTransfers() {
     FROM transfers t
     JOIN players p
       ON LOWER(p.team_name) = LOWER(t.previous_school)
-      AND LOWER(REPLACE(CONCAT(p.first_name, ' ', p.last_name), '.', '')) = LOWER(REPLACE(t.name, '.', ''))
+      AND LOWER(REPLACE(REPLACE(CONCAT(p.first_name, ' ', p.last_name), '.', ''), ',', '')) = LOWER(REPLACE(REPLACE(t.name, '.', ''), ',', ''))
       AND p.division = CASE t.division
         WHEN 'D1 Men' THEN 'mens-d1'
         WHEN 'D2 Men' THEN 'mens-d2'
@@ -108,7 +110,7 @@ async function runTransfers() {
       FROM transfers t
       JOIN players p
         ON LOWER(p.team_name) = LOWER(t.previous_school)
-        AND LOWER(REPLACE(CONCAT(p.first_name, ' ', p.last_name), '.', '')) = LOWER(REPLACE(t.name, '.', ''))
+        AND LOWER(REPLACE(REPLACE(CONCAT(p.first_name, ' ', p.last_name), '.', ''), ',', '')) = LOWER(REPLACE(REPLACE(t.name, '.', ''), ',', ''))
         AND p.division = CASE t.division
           WHEN 'D1 Men' THEN 'mens-d1'
           WHEN 'D2 Men' THEN 'mens-d2'
