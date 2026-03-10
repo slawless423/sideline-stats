@@ -138,7 +138,7 @@ function SectionNav({ currentPage, divisionPath, currentDivision }: { currentPag
   const recruitingPath = RECRUITING_PATH[currentDivision] ?? `${divisionPath}/recruiting`;
 
   const pages = [
-    { id: 'rankings',   label: 'Rankings',   path: divisionPath },
+    { id: 'rankings',   label: 'Teams',   path: divisionPath },
     { id: 'players',    label: 'Players',     path: `${divisionPath}/players` },
     { id: 'recruiting', label: 'Recruiting',  path: recruitingPath },
   ];
