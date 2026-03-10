@@ -261,7 +261,9 @@ async function main() {
     if (overrideMap.has(overrideKey)) {
       const playerId = overrideMap.get(overrideKey);
       const player = dbPlayers.find(p => p.player_id === playerId);
-      results.push({ ...base, previousSchool: player?.team_name || base.previousSchool, matchStatus: "override", player: player || null });
+      // Use DB name if player found, otherwise fall back to Excel name
+      const displayName = player ? `${player.first_name} ${player.last_name}` : t.name;
+      results.push({ ...base, name: displayName, previousSchool: player?.team_name || base.previousSchool, matchStatus: "override", player: player || null });
       continue;
     }
 
@@ -276,12 +278,16 @@ async function main() {
     const exactMatches = playerIndex.get(`${nameKey}|${teamKey}`) || [];
 
     if (exactMatches.length === 1) {
-      results.push({ ...base, previousSchool: exactMatches[0].team_name, matchStatus: "confident", player: exactMatches[0] });
+      const player = exactMatches[0];
+      const displayName = `${player.first_name} ${player.last_name}`;
+      results.push({ ...base, name: displayName, previousSchool: player.team_name, matchStatus: "confident", player });
       continue;
     }
 
     if (exactMatches.length > 1) {
-      results.push({ ...base, previousSchool: exactMatches[0].team_name, matchStatus: "fuzzy", player: exactMatches[0] });
+      const player = exactMatches[0];
+      const displayName = `${player.first_name} ${player.last_name}`;
+      results.push({ ...base, name: displayName, previousSchool: player.team_name, matchStatus: "fuzzy", player });
       needsReview.push({ ...base, issue: `Multiple players named ${t.name} at ${prevDbName}`, candidates: exactMatches.map(p => p.player_id) });
       continue;
     }
@@ -290,11 +296,13 @@ async function main() {
     const divMatches = nameOnlyMatches.filter(p => p.division === dbDivision);
 
     if (divMatches.length === 1) {
-      results.push({ ...base, previousSchool: divMatches[0].team_name, matchStatus: "fuzzy", player: divMatches[0] });
+      const player = divMatches[0];
+      const displayName = `${player.first_name} ${player.last_name}`;
+      results.push({ ...base, name: displayName, previousSchool: player.team_name, matchStatus: "fuzzy", player });
       needsReview.push({
         ...base,
-        issue: `Name matched but school differs: Excel="${t.previousSchool}" DB="${divMatches[0].team_name}"`,
-        suggestedPlayerId: divMatches[0].player_id,
+        issue: `Name matched but school differs: Excel="${t.previousSchool}" DB="${player.team_name}"`,
+        suggestedPlayerId: player.player_id,
       });
       continue;
     }
