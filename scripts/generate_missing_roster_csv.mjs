@@ -70,25 +70,53 @@ function csvEscape(val) {
 async function runTransfers() {
   console.log('Querying transfers table (D1 Men + D2 Men) for players missing height or year...\n');
 
+  // Join against players table to get correct first_name/last_name split.
+  // This handles initials (C.J.), multi-word names (Juan Pedro), suffixes, etc.
   let query = `
-    SELECT name, previous_school, division, height, year
-    FROM transfers
-    WHERE division IN ('D1 Men', 'D2 Men')
-      AND match_status != 'unmatched'
-      AND (height IS NULL OR height = '' OR year IS NULL OR year = '')
-    ORDER BY division, previous_school, name
+    SELECT
+      t.previous_school,
+      t.division,
+      t.height,
+      t.year,
+      p.first_name,
+      p.last_name
+    FROM transfers t
+    JOIN players p
+      ON LOWER(p.team_name) = LOWER(t.previous_school)
+      AND LOWER(CONCAT(p.first_name, ' ', p.last_name)) = LOWER(t.name)
+      AND p.division = CASE t.division
+        WHEN 'D1 Men' THEN 'mens-d1'
+        WHEN 'D2 Men' THEN 'mens-d2'
+      END
+    WHERE t.division IN ('D1 Men', 'D2 Men')
+      AND t.match_status != 'unmatched'
+      AND (t.height IS NULL OR t.height = '' OR t.year IS NULL OR t.year = '')
+    ORDER BY t.division, t.previous_school, t.name
   `;
   const params = [];
 
   if (TEAM_FILTER) {
     query = `
-      SELECT name, previous_school, division, height, year
-      FROM transfers
-      WHERE division IN ('D1 Men', 'D2 Men')
-        AND match_status != 'unmatched'
-        AND LOWER(previous_school) = LOWER($1)
-        AND (height IS NULL OR height = '' OR year IS NULL OR year = '')
-      ORDER BY name
+      SELECT
+        t.previous_school,
+        t.division,
+        t.height,
+        t.year,
+        p.first_name,
+        p.last_name
+      FROM transfers t
+      JOIN players p
+        ON LOWER(p.team_name) = LOWER(t.previous_school)
+        AND LOWER(CONCAT(p.first_name, ' ', p.last_name)) = LOWER(t.name)
+        AND p.division = CASE t.division
+          WHEN 'D1 Men' THEN 'mens-d1'
+          WHEN 'D2 Men' THEN 'mens-d2'
+        END
+      WHERE t.division IN ('D1 Men', 'D2 Men')
+        AND t.match_status != 'unmatched'
+        AND LOWER(t.previous_school) = LOWER($1)
+        AND (t.height IS NULL OR t.height = '' OR t.year IS NULL OR t.year = '')
+      ORDER BY t.name
     `;
     params.push(TEAM_FILTER);
   }
@@ -112,9 +140,8 @@ async function runTransfers() {
 
   const header = 'division,team_name,first_name,last_name,height,year';
   const lines = res.rows.map(r => {
-    const nameParts = r.name.trim().split(/\s+/);
-    const firstName = normalizeName(nameParts[0] || '');
-    const lastName  = normalizeName(nameParts.slice(1).join(' ') || '');
+    const firstName = normalizeName(r.first_name || '');
+    const lastName  = normalizeName(r.last_name  || '');
     const division  = divMap[r.division] || r.division;
     const teamName  = r.previous_school || '';
     const height    = r.height || '';
