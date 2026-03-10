@@ -46,9 +46,21 @@ function ContactForm() {
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({ name: '', email: '', message: '' });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+const [error, setError] = useState('');
+
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setError('');
+  const res = await fetch('/api/contact', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(form),
+  });
+  if (res.ok) {
     setSubmitted(true);
+  } else {
+    setError('Something went wrong. Please try again.');
+  }
   };
 
   const inputStyle = {
@@ -105,6 +117,7 @@ function ContactForm() {
       }}>
         Send Message →
       </button>
+      {error && <p style={{ color: 'red', fontFamily: "'Outfit', sans-serif", fontSize: 14 }}>{error}</p>}
     </form>
   );
 }
