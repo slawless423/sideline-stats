@@ -43,6 +43,18 @@ const OUT_FILE        = getArg('--out') ?? `missing_rosters_${new Date().toISOSt
 
 const ALL_DIVISIONS = ['womens-d1', 'mens-d1', 'mens-d2', 'womens-d2'];
 
+// ─── NAME NORMALIZER ───────────────────────────────────────────────────────────
+// Strips accents/diacritics to ASCII and removes suffixes after a comma.
+// e.g. "Zundrá" → "Zundra", "Raye, Jr." → "Raye"
+function normalizeName(name) {
+  if (!name) return '';
+  return name
+    .normalize('NFD')                          // decompose accented chars
+    .replace(/[\u0300-\u036f]/g, '')           // strip diacritic marks
+    .replace(/,\s*(Jr\.?|Sr\.?|II|III|IV|V)$/i, '') // strip suffixes
+    .trim();
+}
+
 // ─── CSV HELPER ────────────────────────────────────────────────────────────────
 
 function csvEscape(val) {
@@ -101,8 +113,8 @@ async function runTransfers() {
   const header = 'division,team_name,first_name,last_name,height,year';
   const lines = res.rows.map(r => {
     const nameParts = r.name.trim().split(/\s+/);
-    const firstName = nameParts[0] || '';
-    const lastName  = nameParts.slice(1).join(' ') || '';
+    const firstName = normalizeName(nameParts[0] || '');
+    const lastName  = normalizeName(nameParts.slice(1).join(' ') || '');
     const division  = divMap[r.division] || r.division;
     const teamName  = r.previous_school || '';
     const height    = r.height || '';
@@ -172,8 +184,8 @@ async function runPlayers() {
   const lines = rows.map(r => {
     const div       = csvEscape(r.division);
     const team      = csvEscape(r.team_name);
-    const firstName = csvEscape(r.first_name ?? '');
-    const lastName  = csvEscape(r.last_name ?? '');
+    const firstName = csvEscape(normalizeName(r.first_name ?? ''));
+    const lastName  = csvEscape(normalizeName(r.last_name ?? ''));
     const height    = r.height && r.height !== 0 ? r.height : '';
     const year      = r.year ?? '';
     return `${div},${team},${firstName},${lastName},${height},${year}`;
