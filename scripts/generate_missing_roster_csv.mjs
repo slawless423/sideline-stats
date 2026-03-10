@@ -71,7 +71,8 @@ async function runTransfers() {
   console.log('Querying transfers table (D1 Men + D2 Men) for players missing height or year...\n');
 
   // Join against players table to get correct first_name/last_name split.
-  // This handles initials (C.J.), multi-word names (Juan Pedro), suffixes, etc.
+  // Strips periods before comparing so "CJ Yao" matches "C.J. Yao".
+  // Also handles multi-word names (Juan Pedro), suffixes, etc.
   let query = `
     SELECT
       t.previous_school,
@@ -83,7 +84,7 @@ async function runTransfers() {
     FROM transfers t
     JOIN players p
       ON LOWER(p.team_name) = LOWER(t.previous_school)
-      AND LOWER(CONCAT(p.first_name, ' ', p.last_name)) = LOWER(t.name)
+      AND LOWER(REPLACE(CONCAT(p.first_name, ' ', p.last_name), '.', '')) = LOWER(REPLACE(t.name, '.', ''))
       AND p.division = CASE t.division
         WHEN 'D1 Men' THEN 'mens-d1'
         WHEN 'D2 Men' THEN 'mens-d2'
@@ -107,7 +108,7 @@ async function runTransfers() {
       FROM transfers t
       JOIN players p
         ON LOWER(p.team_name) = LOWER(t.previous_school)
-        AND LOWER(CONCAT(p.first_name, ' ', p.last_name)) = LOWER(t.name)
+        AND LOWER(REPLACE(CONCAT(p.first_name, ' ', p.last_name), '.', '')) = LOWER(REPLACE(t.name, '.', ''))
         AND p.division = CASE t.division
           WHEN 'D1 Men' THEN 'mens-d1'
           WHEN 'D2 Men' THEN 'mens-d2'
