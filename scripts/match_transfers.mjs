@@ -55,6 +55,7 @@ const SCHOOL_ALIASES = {
   "SIUE": "SIUE",
   "UIC": "UIC",
   "Lipscomb": "Lipscomb",
+  "Albany": "UAlbany",
 
   // D2
   "Alaska": "Alas. Anchorage",
@@ -75,12 +76,18 @@ const SCHOOL_ALIASES = {
   "Colorado Christian": "Colo. Christian",
   "Colorado Colorado Springs": "UCCS",
   "Columbus State": "Columbus St.",
+  "Central Oklahoma": "Central Okla.",
+  "Concordia Irvine": "CUI",
   "Delta State": "Delta St.",
   "District of Columbia": "Dist. Columbia",
   "Elizabeth City State": "Elizabeth City St.",
+  "Emporia State": "Emporia St.",
   "Frostburg State": "Frostburg St.",
   "Georgia Southwestern": "Ga. Southwestern",
+  "Indianapolis": "UIndy",
   "Kentucky State": "Kentucky St.",
+  "Kentucky Wesleyan": "Ky. Wesleyan",
+  "Lake Superior State": "Lake Superior St.",
   "LeMoyne–Owen": "LeMoyne-Owen",
   "LeMoyne-Owen": "LeMoyne-Owen",
   "Lees–McRae": "Lees-McRae",
@@ -90,12 +97,15 @@ const SCHOOL_ALIASES = {
   "Midwestern State": "Midwestern St.",
   "Mississippi College": "Mississippi Col.",
   "Montana State Billings": "Mont. St. Billings",
+  "Northeastern State": "Northeastern St.",
   "Northern State": "Northern St.",
   "Northwestern Oklahoma State": "Northwestern Okla.",
   "Parkside": "Wis.-Parkside",
   "Pitt-Johnstown": "Pitt.-Johnstown",
   "Pittsburg State": "Pittsburg St.",
+  "Saginaw Valley State": "Saginaw Valley",
   "Salem": "Salem (WV)",
+  "Savannah State": "Savannah St.",
   "South Dakota School of Mines": "South Dakota Mines",
   "Southern Arkansas": "Southern Ark.",
   "Southern Connecticut State": "Southern Conn. St.",
@@ -103,14 +113,19 @@ const SCHOOL_ALIASES = {
   "Southwest Minnesota State": "Southwest Minn. St.",
   "Sul Ross State": "Sul Ross St.",
   "Texas A&M International": "Tex. A&M Int'l",
+  "Texas A&M-Kingsville": "Tex. A&M-Kingsville",
   "Texas–Permian Basin": "UT Permian Basin",
   "Texas-Permian Basin": "UT Permian Basin",
   "Truman State": "Truman St.",
   "USCB": "USC Beaufort",
   "USC Beaufort": "USC Beaufort",
+  "Wayne State (MI)": "Wayne St. (MI)",
   "West Texas A&M": "West Tex. A&M",
+  "West Virginia State": "West Virginia St.",
+  "West Virginia Wesleyan": "West Va. Wesleyan",
   "Western Colorado": "Western Colo.",
   "Western Oregon": "Western Ore.",
+  "Western Washington": "Western Wash.",
   "Westminster": "Westminster (UT)",
   "Wilmington": "Wilmington (DE)",
   "Winona State": "Winona St.",
@@ -212,7 +227,6 @@ async function main() {
     ssl: { rejectUnauthorized: false },
   });
 
-  // Include height and year so they carry through to the transfers table
   const { rows: dbPlayers } = await pool.query(`
     SELECT player_id, first_name, last_name, team_name, division,
            position, year, height, games, starts, minutes,
@@ -261,7 +275,6 @@ async function main() {
     if (overrideMap.has(overrideKey)) {
       const playerId = overrideMap.get(overrideKey);
       const player = dbPlayers.find(p => p.player_id === playerId);
-      // Use DB name if player found, otherwise fall back to Excel name
       const displayName = player ? `${player.first_name} ${player.last_name}` : t.name;
       results.push({ ...base, name: displayName, previousSchool: player?.team_name || base.previousSchool, matchStatus: "override", player: player || null });
       continue;
