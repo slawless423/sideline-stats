@@ -1,3 +1,5 @@
+import { Analytics } from '@vercel/analytics/react';
+
 export const metadata = {
   title: "Sideline Stats",
   description: "Advanced college basketball efficiency ratings and data-driven analytics.",
@@ -12,6 +14,7 @@ export default function RootLayout({
     <html lang="en">
       <body style={{ margin: 0, fontFamily: "system-ui" }}>
         {children}
+        <Analytics />
       </body>
     </html>
   );
