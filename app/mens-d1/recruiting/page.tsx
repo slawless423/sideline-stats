@@ -62,7 +62,6 @@ function hasStats(t: Transfer): boolean {
 
 function divLabel(div: string) { return div === 'D1 Men' ? 'D1' : 'D2'; }
 
-// Wrap a CSV field value — quotes it if it contains a comma, quote, or newline
 function csvField(val: string | number | null | undefined): string {
   const s = val == null ? '' : String(val);
   if (s.includes(',') || s.includes('"') || s.includes('\n')) {
@@ -89,7 +88,8 @@ function calcStats(t: Transfer, team: TeamRow | undefined) {
   const teamPossTotal = team.fga + 0.44 * team.fta + team.tov;
   const usagePct = 100 * (p.fga + 0.44 * p.fta + p.tov) / (teamPossTotal / teamMinutes * p.minutes) / 5;
   const minPct = 100 * p.minutes / teamMinutes * 5;
-  const shotsPct = (team.fga + 0.44 * team.fta) > 0 ? 100 * (p.fga + 0.44 * p.fta) / ((teamMinutes / 5 / p.minutes) * (team.fga + 0.44 * team.fta)) : 0;
+  const shotsPct = team.fga > 0 && p.minutes > 0
+    ? (p.fga / team.fga) / (p.minutes / teamMinutes) / 5 * 100 : 0;
   const efg = p.fga > 0 ? ((p.fgm + 0.5 * p.tpm) / p.fga) * 100 : 0;
   const ts = (p.fga + 0.475 * p.fta) > 0 ? (p.points / (2 * (p.fga + 0.475 * p.fta))) * 100 : 0;
   const orbPct = p.minutes > 0 && (team.orb + opp_drb) > 0 ? (p.orb / p.minutes) * (teamMinutes / 5) / (team.orb + opp_drb) * 100 : 0;
@@ -108,6 +108,7 @@ function calcStats(t: Transfer, team: TeamRow | undefined) {
   const twopPct = twopa > 0 ? (twopm / twopa) * 100 : 0;
   const tpPct = p.tpa > 0 ? (p.tpm / p.tpa) * 100 : 0;
   const ftPct = p.fta > 0 ? (p.ftm / p.fta) * 100 : 0;
+  const fgPct = p.fga > 0 ? (p.fgm / p.fga) * 100 : 0;
   const qAST = ((p.minutes / (teamMinutes / 5)) * (1.14 * ((team.ast - p.ast) / team.fgm))) +
     ((((team.ast / teamMinutes) * p.minutes * 5 - p.ast) / ((team.fgm / teamMinutes) * p.minutes * 5 - p.fgm)) * (1 - p.minutes / (teamMinutes / 5)));
   const FG_Part = p.fgm * (1 - 0.5 * ((p.points - p.ftm) / (2 * p.fga)) * qAST);
@@ -129,10 +130,9 @@ function calcStats(t: Transfer, team: TeamRow | undefined) {
   const m = p.minutes || 1;
   return {
     ortg, usagePct, minPct, shotsPct, efg, ts, orbPct, drbPct, aRate, toRate, blkPct, stlPct, ftRate,
-    twopm, twopa, twopPct, tpm: p.tpm, tpa: p.tpa, tpPct, ftm: p.ftm, fta: p.fta, ftPct,
+    twopm, twopa, twopPct, tpm: p.tpm, tpa: p.tpa, tpPct, ftm: p.ftm, fta: p.fta, ftPct, fgPct,
     ppg: p.points/g, rpg: p.trb/g, orbpg: p.orb/g, drbpg: p.drb/g,
     apg: p.ast/g, spg: p.stl/g, bpg: p.blk/g, mpg: p.minutes/g,
-    fgPct: p.fga > 0 ? (p.fgm/p.fga)*100 : 0,
     p40: p.points/m*40, r40: p.trb/m*40, orb40: p.orb/m*40, drb40: p.drb/m*40,
     a40: p.ast/m*40, s40: p.stl/m*40, b40: p.blk/m*40, fc40: p.pf/m*40,
     twopm40: twopm/m*40, twopa40: twopa/m*40, twopPct40: twopPct,
