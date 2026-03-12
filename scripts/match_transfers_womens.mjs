@@ -55,6 +55,14 @@ const SCHOOL_ALIASES = {
   "Lipscomb": "Lipscomb",
   "Albany": "UAlbany",
 
+  // Women's D1 specific
+  "Boston U": "Boston U.",
+  "Grambling State": "Grambling",
+  "Nicholls State": "Nicholls",
+  "Prairie View A&M": "Prairie View",
+  "Southern": "Southern U.",
+  "Southern Illinois": "Southern Ill.",
+
   // D2
   "Alaska": "Alas. Anchorage",
   "Albany State": "Albany St. (GA)",
