@@ -1,7 +1,12 @@
 [
   {
-  "transfer_name": "Kamrun McLaurin",
-  "previous_school": "Houston Christian",
-  "player_id": "2155_4_kamryn_mclaurin"
-}
+    "transfer_name": "Kamrun McLaurin",
+    "previous_school": "Houston Christian",
+    "player_id": "2155_4_kamryn_mclaurin"
+  },
+  {
+    "transfer_name": "Audrey Erickson",
+    "previous_school": "Boston U",
+    "player_id": "475_21_audrey_ericksen"
+  }
 ]
