@@ -1,7 +1,8 @@
 {
-  "generated_at_utc": "2026-03-13T11:57:47.357Z",
+  "generated_at_utc": "2026-03-13T15:20:53.758Z",
   "note": "Contains ONLY successfully parsed game IDs with complete box scores",
-  "total_games": 5842,
+  "total_games": 5844,
+  "sparse_games_excluded": 1,
   "game_ids": [
     "6515920",
     "6516194",
@@ -5844,6 +5845,8 @@
     "6593898",
     "6594481",
     "6594458",
-    "6594480"
+    "6594480",
+    "6594416",
+    "6593904"
   ]
 }
