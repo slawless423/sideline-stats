@@ -189,10 +189,9 @@ function fixEncoding(str) {
 }
 
 function buildPlayerId(teamId, p) {
-  const ncaaId = p.id ?? p.ncaaId ?? 0;
   const first = fixEncoding(p.firstName || "").toLowerCase().replace(/\s+/g, "");
   const last = fixEncoding(p.lastName || "").toLowerCase().replace(/\s+/g, "");
-  return `${teamId}_${ncaaId}_${first}_${last}`;
+  return `${teamId}_${first}_${last}`;
 }
 
 function extractCompleteStats(raw) {
