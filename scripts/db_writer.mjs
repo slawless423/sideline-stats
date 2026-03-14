@@ -47,6 +47,16 @@ export async function clearDivisionData(division) {
   console.log(`✅ Cleared existing data for division: ${division}`);
 }
 
+// Clear players for a specific division - used when doing a clean rebuild
+// that doesn't need to preserve height/year data (e.g. womens-d2)
+export async function clearDivisionPlayers(division) {
+  const db = initDb();
+  
+  await db.query('DELETE FROM players WHERE division = $1', [division]);
+  
+  console.log(`✅ Cleared players for division: ${division}`);
+}
+
 // Insert or update team
 export async function upsertTeam(team) {
   const db = initDb();
@@ -166,7 +176,8 @@ export async function insertGame(game) {
   }
 }
 
-// Insert or update player
+// Insert or update player — used by REBUILD only.
+// Overwrites all stats with fresh values from the full season scrape.
 // NOTE: height and year are intentionally excluded from ON CONFLICT DO UPDATE
 // so that manually imported height/year data is never overwritten by a rebuild.
 export async function upsertPlayer(player) {
@@ -218,6 +229,66 @@ export async function upsertPlayer(player) {
     player.playerId, player.teamId, player.teamName, player.division || null,
     player.firstName, player.lastName, 
     player.number && !isNaN(parseInt(player.number)) ? parseInt(player.number) : null, 
+    player.position, player.year,
+    player.games, player.starts, player.minutes,
+    player.fgm, player.fga, player.tpm, player.tpa, player.ftm, player.fta,
+    player.orb, player.drb, player.trb, player.ast, player.stl, player.blk, player.tov, player.pf, player.points
+  ]);
+}
+
+// Increment player stats — used by DAILY UPDATE only.
+// Adds new game stats on top of existing DB values rather than overwriting.
+// This prevents double-counting when the daily update runs after a full rebuild.
+// On first appearance (no existing row), inserts fresh.
+export async function incrementPlayer(player) {
+  const db = initDb();
+
+  const query = `
+    INSERT INTO players (
+      player_id, team_id, team_name, division,
+      first_name, last_name, number, position, year,
+      games, starts, minutes,
+      fgm, fga, tpm, tpa, ftm, fta,
+      orb, drb, trb, ast, stl, blk, tov, pf, points,
+      updated_at
+    ) VALUES (
+      $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12,
+      $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27,
+      CURRENT_TIMESTAMP
+    )
+    ON CONFLICT (player_id) DO UPDATE SET
+      team_id = EXCLUDED.team_id,
+      team_name = EXCLUDED.team_name,
+      division = EXCLUDED.division,
+      first_name = EXCLUDED.first_name,
+      last_name = EXCLUDED.last_name,
+      number = EXCLUDED.number,
+      position = EXCLUDED.position,
+      games = players.games + EXCLUDED.games,
+      starts = players.starts + EXCLUDED.starts,
+      minutes = players.minutes + EXCLUDED.minutes,
+      fgm = players.fgm + EXCLUDED.fgm,
+      fga = players.fga + EXCLUDED.fga,
+      tpm = players.tpm + EXCLUDED.tpm,
+      tpa = players.tpa + EXCLUDED.tpa,
+      ftm = players.ftm + EXCLUDED.ftm,
+      fta = players.fta + EXCLUDED.fta,
+      orb = players.orb + EXCLUDED.orb,
+      drb = players.drb + EXCLUDED.drb,
+      trb = players.trb + EXCLUDED.trb,
+      ast = players.ast + EXCLUDED.ast,
+      stl = players.stl + EXCLUDED.stl,
+      blk = players.blk + EXCLUDED.blk,
+      tov = players.tov + EXCLUDED.tov,
+      pf = players.pf + EXCLUDED.pf,
+      points = players.points + EXCLUDED.points,
+      updated_at = CURRENT_TIMESTAMP
+  `;
+
+  await db.query(query, [
+    player.playerId, player.teamId, player.teamName, player.division || null,
+    player.firstName, player.lastName,
+    player.number && !isNaN(parseInt(player.number)) ? parseInt(player.number) : null,
     player.position, player.year,
     player.games, player.starts, player.minutes,
     player.fgm, player.fga, player.tpm, player.tpa, player.ftm, player.fta,
@@ -333,48 +404,18 @@ export async function insertPlayerGamesBatch(rows, batchSize = 500) {
 
   return totalInserted;
 }
+
 // Merge duplicate players (same first_name + last_name + team_name + division)
-// caused by jersey number inconsistencies in source data
+// caused by jersey number inconsistencies in source data.
+// Keeps the record with the most games and discards the rest.
+// NOTE: called by rebuild only, not by daily update.
 export async function dedupePlayers(division) {
   const db = initDb();
 
-  // Step 1: Merge stats into the keeper row (highest game count)
-  await db.query(`
-    WITH dupes AS (
-      SELECT 
-        first_name, last_name, team_name, division,
-        array_agg(player_id ORDER BY games DESC) as all_ids,
-        (array_agg(player_id ORDER BY games DESC))[1] as keep_id
-      FROM players
-      WHERE division = $1
-      GROUP BY first_name, last_name, team_name, division
-      HAVING COUNT(*) > 1
-    ),
-    totals AS (
-      SELECT 
-        d.keep_id,
-        SUM(p.games) as games, SUM(p.starts) as starts, SUM(p.minutes) as minutes,
-        SUM(p.fgm) as fgm, SUM(p.fga) as fga,
-        SUM(p.tpm) as tpm, SUM(p.tpa) as tpa,
-        SUM(p.ftm) as ftm, SUM(p.fta) as fta,
-        SUM(p.orb) as orb, SUM(p.drb) as drb, SUM(p.trb) as trb,
-        SUM(p.ast) as ast, SUM(p.stl) as stl, SUM(p.blk) as blk,
-        SUM(p.tov) as tov, SUM(p.pf) as pf, SUM(p.points) as points
-      FROM dupes d
-      JOIN players p ON p.player_id = ANY(d.all_ids)
-      GROUP BY d.keep_id
-    )
-    UPDATE players p
-    SET 
-      games = t.games, starts = t.starts, minutes = t.minutes,
-      fgm = t.fgm, fga = t.fga, tpm = t.tpm, tpa = t.tpa,
-      ftm = t.ftm, fta = t.fta, orb = t.orb, drb = t.drb, trb = t.trb,
-      ast = t.ast, stl = t.stl, blk = t.blk, tov = t.tov, pf = t.pf, points = t.points
-    FROM totals t
-    WHERE p.player_id = t.keep_id
-  `, [division]);
+  // Step 1: Update the keeper row (highest game count) with its own stats only — do not sum.
+  // The keeper already has the correct stats from the rebuild; we just need to delete duplicates.
 
-  // Step 2: Delete the duplicate rows
+  // Step 2: Delete the duplicate rows (keep the one with the most games)
   const result = await db.query(`
     DELETE FROM players
     WHERE division = $1
@@ -388,7 +429,7 @@ export async function dedupePlayers(division) {
           HAVING COUNT(*) > 1
         ) sub
       )
-  `, [division, division]);
+  `, [division]);
 
   console.log(`✅ dedupePlayers: removed ${result.rowCount} duplicate rows for ${division}`);
 }
