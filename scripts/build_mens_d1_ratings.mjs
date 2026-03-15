@@ -10,9 +10,6 @@ const REQUEST_RETRIES = 3;
 const BOX_CONCURRENCY = 4;
 const MIN_TEAMS = 300;
 
-// Minimum players per team in a box score to be considered complete
-const MIN_PLAYERS_PER_TEAM = 5;
-
 const MENS_D1_CONFERENCES = new Set([
   'acc', 'american', 'america-east', 'asun', 'atlantic-10',
   'big-12', 'big-east', 'big-sky', 'big-south', 'big-ten', 'big-west',
@@ -27,22 +24,11 @@ function isD1Conference(conf) {
 
 console.log("START build_mens_d1_ratings (daily update)", new Date().toISOString());
 
-function toDate(s) {
-  const [y, m, d] = s.split("-").map(Number);
-  return new Date(Date.UTC(y, m - 1, d));
-}
-
 function fmtDate(dt) {
   const y = dt.getUTCFullYear();
   const m = String(dt.getUTCMonth() + 1).padStart(2, "0");
   const d = String(dt.getUTCDate()).padStart(2, "0");
   return `${y}-${m}-${d}`;
-}
-
-function addDays(dt, days) {
-  const x = new Date(dt);
-  x.setUTCDate(x.getUTCDate() + days);
-  return x;
 }
 
 function sleep(ms) {
@@ -132,11 +118,30 @@ function toInt(x, d = 0) { const n = parseInt(String(x ?? ""), 10); return Numbe
 function toFloat(x, d = 0) { const n = parseFloat(String(x ?? "")); return Number.isFinite(n) ? n : d; }
 function pick(obj, keys) { for (const k of keys) { if (obj && obj[k] != null) return obj[k]; } return null; }
 
-function buildPlayerId(teamId, p) {
-  const ncaaId = p.id ?? p.ncaaId ?? 0;
-  const first = (p.firstName || "").toLowerCase().replace(/\s+/g, "");
-  const last = (p.lastName || "").toLowerCase().replace(/\s+/g, "");
-  return `${teamId}_${ncaaId}_${first}_${last}`;
+function fixEncoding(str) {
+  try {
+    return decodeURIComponent(escape(str));
+  } catch {
+    return str;
+  }
+}
+
+function buildPlayerId(teamId, p, playerStatsMap) {
+  const first = fixEncoding(p.firstName || "").toLowerCase().replace(/\s+/g, "");
+  const last = fixEncoding(p.lastName || "").toLowerCase().replace(/\s+/g, "");
+  const number = String(p.number || "").trim();
+  const teamIdStr = String(teamId);
+
+  for (const [existingId, existing] of playerStatsMap) {
+    if (existing.teamId !== teamIdStr) continue;
+    const existingLast = existing.lastName.toLowerCase().replace(/\s+/g, "");
+    if (existingLast !== last) continue;
+    const existingFirst = existing.firstName.toLowerCase().replace(/\s+/g, "");
+    if (existingFirst === first) return existingId;
+    if (number && String(existing.number || "").trim() === number) return existingId;
+  }
+
+  return `${teamIdStr}_${first}_${last}`;
 }
 
 function extractCompleteStats(raw) {
@@ -280,22 +285,11 @@ function parseCompleteGameData(gameId, gameJson, gameDate) {
   };
 }
 
-// ===== SPARSE BOX SCORE DETECTION =====
-function isBoxScoreComplete(playerData, homeId, awayId) {
-  const homeEntry = playerData.find(pd => pd.teamId === homeId);
-  const awayEntry = playerData.find(pd => pd.teamId === awayId);
-  const homePlayers = homeEntry?.players?.length ?? 0;
-  const awayPlayers = awayEntry?.players?.length ?? 0;
-  return homePlayers >= MIN_PLAYERS_PER_TEAM && awayPlayers >= MIN_PLAYERS_PER_TEAM;
-}
-
 async function main() {
-  let existingRatings = { rows: [] };
   let existingTeamStats = { teams: [] };
   let existingPlayerStats = { players: [] };
   let existingGamesCache = { game_ids: [] };
 
-  try { existingRatings = JSON.parse(await fs.readFile("public/data/mens_d1_ratings.json", "utf8")); } catch {}
   try { existingTeamStats = JSON.parse(await fs.readFile("public/data/mens_d1_team_stats.json", "utf8")); } catch {}
   try { existingPlayerStats = JSON.parse(await fs.readFile("public/data/mens_d1_player_stats.json", "utf8")); } catch {}
   try { existingGamesCache = JSON.parse(await fs.readFile("public/data/mens_d1_games_cache.json", "utf8")); } catch {}
@@ -309,7 +303,6 @@ async function main() {
   const playerStatsMap = new Map();
   for (const p of (existingPlayerStats.players || [])) playerStatsMap.set(p.playerId, { ...p });
 
-  // CHANGED: expanded from 2 days to 3 days for more sparse game retry attempts
   const today = new Date();
   const datesToCheck = [];
   for (let i = 1; i <= 3; i++) {
@@ -363,7 +356,6 @@ async function main() {
 
   const newGames = [];
   const successfulGameIds = [];
-  let sparseCount = 0;
 
   const boxResults = await mapLimit(newGameIds, BOX_CONCURRENCY, async ({ gid, date }) => {
     try {
@@ -389,24 +381,18 @@ async function main() {
       gameData.isConferenceGame = confInfo.isConferenceGame;
     }
 
-    // Check for sparse box score - still process but don't cache
-    const boxComplete = isBoxScoreComplete(gameData.players, gameData.home.teamId, gameData.away.teamId);
-    if (!boxComplete) {
-      sparseCount++;
-      console.log(`⚠️  Sparse box score for game ${gid} on ${date} (${gameData.home.teamName} vs ${gameData.away.teamName}) - will retry next run`);
-    }
-
     newGames.push(gameData);
-    if (boxComplete) successfulGameIds.push(gid);
+    successfulGameIds.push(gid);
   }
 
-  console.log(`Successfully parsed ${newGames.length} new games, ${sparseCount} sparse (not cached)`);
+  console.log(`Successfully parsed ${newGames.length} new games`);
 
   if (newGames.length === 0) {
     console.log("No games parsed successfully. Exiting.");
     return;
   }
 
+  // Update team stats
   for (const game of newGames) {
     const { home, away } = game;
     for (const [team, opp] of [[home, away], [away, home]]) {
@@ -444,6 +430,7 @@ async function main() {
     }
   }
 
+  // Update player stats (JSON baseline)
   for (const game of newGames) {
     if (!game.players) continue;
     for (const playerData of game.players) {
@@ -455,7 +442,7 @@ async function main() {
       if (!isD1Conference(teamConf)) continue;
 
       for (const p of playerData.players) {
-        const playerId = buildPlayerId(teamId, p);
+        const playerId = buildPlayerId(teamId, p, playerStatsMap);
         if (!playerStatsMap.has(playerId)) {
           playerStatsMap.set(playerId, {
             playerId, teamId, teamName, division: DIVISION,
@@ -492,6 +479,7 @@ async function main() {
     }
   }
 
+  // Build ratings
   const ratingsRows = [];
   for (const [teamId, stats] of teamStatsMap) {
     const offPoss = Math.max(1, stats.fga - stats.orb + stats.tov + 0.475 * stats.fta);
@@ -512,6 +500,7 @@ async function main() {
 
   const allPlayers = Array.from(playerStatsMap.values()).filter((p) => p.games > 0);
 
+  // Write JSON files
   await fs.writeFile(
     "public/data/mens_d1_ratings.json",
     JSON.stringify({ generated_at_utc: new Date().toISOString(), season_start: SEASON_START, rows: ratingsRows }, null, 2),
@@ -544,6 +533,7 @@ async function main() {
     "utf8"
   );
 
+  // Write to database
   if (process.env.POSTGRES_URL) {
     console.log("\n📊 Writing to database...");
     db.initDb();
@@ -562,6 +552,7 @@ async function main() {
     for (const game of gameLogEntries) await db.insertGame(game);
     console.log(`✅ Wrote ${gameLogEntries.length} new games`);
 
+    // Build player game rows
     const playerGameRows = [];
     for (const game of newGames) {
       if (!game.players) continue;
@@ -569,7 +560,7 @@ async function main() {
         const teamConf = teamData.teamId === game.home.teamId ? game.home.conference : game.away.conference;
         if (!isD1Conference(teamConf)) continue;
         for (const p of teamData.players) {
-          const playerId = buildPlayerId(teamData.teamId, p);
+          const playerId = buildPlayerId(teamData.teamId, p, playerStatsMap);
           playerGameRows.push({
             gameId: game.gameId, playerId, teamId: teamData.teamId, division: DIVISION,
             minutes: parseFloat(p.minutesPlayed || p.minutes || 0),
@@ -589,22 +580,45 @@ async function main() {
     const playerGameCount = await db.insertPlayerGamesBatch(playerGameRows);
     console.log(`✅ Wrote ${playerGameCount} player game records`);
 
+    // Build player deltas and increment
+    const playerDeltaMap = new Map();
+    for (const row of playerGameRows) {
+      const existing = playerDeltaMap.get(row.playerId);
+      const p = playerStatsMap.get(row.playerId);
+      if (!existing) {
+        playerDeltaMap.set(row.playerId, {
+          playerId: row.playerId, teamId: row.teamId,
+          teamName: p?.teamName || '', division: DIVISION,
+          firstName: p?.firstName || '', lastName: p?.lastName || '',
+          number: p?.number || '', position: p?.position || '', year: p?.year || '',
+          games: 1, starts: 0, minutes: row.minutes,
+          fgm: row.fgm, fga: row.fga, tpm: row.tpm, tpa: row.tpa,
+          ftm: row.ftm, fta: row.fta, orb: row.orb, drb: row.drb, trb: row.trb,
+          ast: row.ast, stl: row.stl, blk: row.blk, tov: row.tov, pf: row.pf, points: row.points,
+        });
+      } else {
+        existing.games++;
+        existing.minutes += row.minutes;
+        for (const key of ['fgm','fga','tpm','tpa','ftm','fta','orb','drb','trb','ast','stl','blk','tov','pf','points']) {
+          existing[key] += row[key];
+        }
+      }
+    }
+
+    const playerDeltas = [...playerDeltaMap.values()];
+    for (const player of playerDeltas) await db.incrementPlayer(player);
+    console.log(`✅ Incremented ${playerDeltas.length} players`);
+
     for (const [teamId, stats] of teamStatsMap) {
       const row = ratingsRows.find(r => r.teamId === teamId);
       if (row) await db.upsertTeam({ ...stats, ...row, teamName: stats.teamName, division: DIVISION });
     }
     console.log(`✅ Updated ${teamStatsMap.size} teams`);
 
-    for (const player of allPlayers) await db.upsertPlayer(player);
-    console.log(`✅ Updated ${allPlayers.length} players`);
-
-    await db.dedupePlayers(DIVISION);
-
     await db.closeDb();
   }
 
-  console.log(`\n✅ Daily update complete. Processed ${newGames.length} new games, ${sparseCount} sparse (not cached).`);
-  if (sparseCount > 0) console.log(`⚠️  ${sparseCount} sparse games will be retried on next run`);
+  console.log(`\n✅ Daily update complete. Processed ${newGames.length} new games.`);
 }
 
 main().catch((e) => {
