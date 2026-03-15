@@ -1,5 +1,5 @@
 import fs from "node:fs/promises";
-import { initDb, insertGame, upsertTeam, upsertPlayer, insertPlayerGamesBatch, closeDb, dedupePlayers } from './db_writer.mjs';
+import { initDb, insertGame, upsertTeam, incrementPlayer, insertPlayerGamesBatch, closeDb } from './db_writer.mjs';
 
 const NCAA_API_BASE = "https://ncaa-api.henrygd.me";
 const DIVISION = "mens-d2";
@@ -9,10 +9,6 @@ const REQUEST_TIMEOUT_MS = 20000;
 const REQUEST_RETRIES = 3;
 const BOX_CONCURRENCY = 4;
 const MIN_TEAMS_REQUIRED = 200;
-
-// Minimum players per team in a box score to be considered complete.
-// Games below this threshold are NOT cached so they get re-attempted on next daily run.
-const MIN_PLAYERS_PER_TEAM = 5;
 
 const dbEnabled = !!process.env.POSTGRES_URL;
 if (dbEnabled) {
@@ -149,11 +145,22 @@ function fixEncoding(str) {
   }
 }
 
-function buildPlayerId(teamId, p) {
-  const ncaaId = p.id ?? p.ncaaId ?? 0;
+function buildPlayerId(teamId, p, playerSeasonStats) {
   const first = fixEncoding(p.firstName || "").toLowerCase().replace(/\s+/g, "");
   const last = fixEncoding(p.lastName || "").toLowerCase().replace(/\s+/g, "");
-  return `${teamId}_${ncaaId}_${first}_${last}`;
+  const number = String(p.number || "").trim();
+  const teamIdStr = String(teamId);
+
+  for (const [existingId, existing] of playerSeasonStats) {
+    if (existing.teamId !== teamIdStr) continue;
+    const existingLast = existing.lastName.toLowerCase().replace(/\s+/g, "");
+    if (existingLast !== last) continue;
+    const existingFirst = existing.firstName.toLowerCase().replace(/\s+/g, "");
+    if (existingFirst === first) return existingId;
+    if (number && String(existing.number || "").trim() === number) return existingId;
+  }
+
+  return `${teamIdStr}_${first}_${last}`;
 }
 
 function extractCompleteStats(raw) {
@@ -304,17 +311,6 @@ function parseBoxscore(gameId, gameJson, gameDate, confInfo) {
   };
 }
 
-// ===== SPARSE BOX SCORE DETECTION =====
-// Returns true if the box score has enough player data to be considered complete.
-// Games that fail this check are NOT cached so they get re-attempted on the next daily run.
-function isBoxScoreComplete(playerData, homeId, awayId) {
-  const homeEntry = playerData.find(pd => pd.teamId === homeId);
-  const awayEntry = playerData.find(pd => pd.teamId === awayId);
-  const homePlayers = homeEntry?.players?.length ?? 0;
-  const awayPlayers = awayEntry?.players?.length ?? 0;
-  return homePlayers >= MIN_PLAYERS_PER_TEAM && awayPlayers >= MIN_PLAYERS_PER_TEAM;
-}
-
 // ===== CACHE & FILE HELPERS =====
 
 async function loadKnownGameIds() {
@@ -383,7 +379,6 @@ async function loadExistingPlayerStats() {
 async function main() {
   const today = new Date();
 
-  // CHANGED: expanded from 2 days to 3 days so recently-sparse games get more retry attempts
   const datesToCheck = [
     fmtDate(new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate() - 1))),
     fmtDate(new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate() - 2))),
@@ -437,8 +432,7 @@ async function main() {
 
   let newGamesProcessed = 0;
   let failed = 0;
-  let sparseCount = 0;
-  const processedGameIds = []; // Only complete box scores go here
+  const processedGameIds = [];
   const newGamesForDb = [];
   const newPlayerGameRows = [];
 
@@ -468,14 +462,6 @@ async function main() {
     }
 
     const { home, away } = gameData;
-
-    // Check if box score is complete - sparse games still get written to DB
-    // but are NOT added to the cache so they get re-attempted next run
-    const boxComplete = isBoxScoreComplete(gameData.players, home.teamId, away.teamId);
-    if (!boxComplete) {
-      sparseCount++;
-      console.log(`⚠️  Sparse box score for game ${gid} on ${gameDate} (${home.teamName} vs ${away.teamName}) - will retry next run`);
-    }
 
     newGamesForDb.push({
       gameId: gameData.gameId,
@@ -508,7 +494,7 @@ async function main() {
       },
     });
 
-    // Update team season stats
+    // Update team season stats (JSON only - for next day's baseline)
     for (const side of [home, away]) {
       const opp = side === home ? away : home;
       const existing = teamSeasonStats.get(side.teamId);
@@ -553,7 +539,7 @@ async function main() {
       }
     }
 
-    // Update player stats and collect game rows - only for known D2 teams
+    // Build player delta (new games only) for DB increment and collect game rows
     if (gameData.players && Array.isArray(gameData.players)) {
       for (const playerData of gameData.players) {
         if (!playerData.teamId || !playerData.players) continue;
@@ -562,7 +548,7 @@ async function main() {
         const teamName = teamId === home.teamId ? home.teamName : away.teamName;
 
         for (const p of playerData.players) {
-          const playerId = buildPlayerId(teamId, p);
+          const playerId = buildPlayerId(teamId, p, playerSeasonStats);
           const mins = parseFloat(p.minutesPlayed || p.minutes || 0);
           if (mins <= 0 && parseInt(p.points || 0) <= 0) continue;
 
@@ -584,6 +570,7 @@ async function main() {
             points: parseInt(p.points || 0),
           };
 
+          // Update JSON baseline
           const existing = playerSeasonStats.get(playerId);
           if (!existing) {
             playerSeasonStats.set(playerId, {
@@ -602,6 +589,7 @@ async function main() {
             }
           }
 
+          // DB delta: only this game's stats, incrementPlayer will add to existing DB totals
           newPlayerGameRows.push({
             gameId: gid, playerId, teamId, division: DIVISION, minutes: mins, ...pg,
           });
@@ -609,14 +597,11 @@ async function main() {
       }
     }
 
-    // Only cache games with complete box scores
-    if (boxComplete) {
-      processedGameIds.push(gid);
-    }
+    processedGameIds.push(gid);
     newGamesProcessed++;
   }
 
-  console.log(`Successfully processed ${newGamesProcessed} new games, ${failed} failed, ${sparseCount} sparse (not cached)`);
+  console.log(`Successfully processed ${newGamesProcessed} new games, ${failed} failed`);
 
   // ===== WRITE TO DATABASE =====
   if (dbEnabled) {
@@ -632,13 +617,47 @@ async function main() {
       console.log(`✅ Wrote ${inserted} player game records`);
     }
 
-    const updatedPlayerIds = new Set(newPlayerGameRows.map(r => r.playerId));
-    const playersToUpdate = [...playerSeasonStats.values()].filter(p => updatedPlayerIds.has(p.playerId));
-    console.log(`Updating ${playersToUpdate.length} player season totals...`);
-    for (const player of playersToUpdate) {
-      try { await upsertPlayer(player); } catch (err) { console.error(`Failed to upsert player ${player.playerId}:`, err.message); }
+    // Build per-player delta objects and increment into DB
+    const playerDeltaMap = new Map();
+    for (const row of newPlayerGameRows) {
+      const existing = playerDeltaMap.get(row.playerId);
+      const p = playerSeasonStats.get(row.playerId);
+      if (!existing) {
+        playerDeltaMap.set(row.playerId, {
+          playerId: row.playerId,
+          teamId: row.teamId,
+          teamName: p?.teamName || '',
+          division: DIVISION,
+          firstName: p?.firstName || '',
+          lastName: p?.lastName || '',
+          number: p?.number || '',
+          position: p?.position || '',
+          year: p?.year || '',
+          games: 1,
+          starts: 0,
+          minutes: row.minutes,
+          fgm: row.fgm, fga: row.fga,
+          tpm: row.tpm, tpa: row.tpa,
+          ftm: row.ftm, fta: row.fta,
+          orb: row.orb, drb: row.drb, trb: row.trb,
+          ast: row.ast, stl: row.stl, blk: row.blk,
+          tov: row.tov, pf: row.pf, points: row.points,
+        });
+      } else {
+        existing.games++;
+        existing.minutes += row.minutes;
+        for (const key of ['fgm','fga','tpm','tpa','ftm','fta','orb','drb','trb','ast','stl','blk','tov','pf','points']) {
+          existing[key] += row[key];
+        }
+      }
     }
-    console.log(`✅ Updated ${playersToUpdate.length} players`);
+
+    const playerDeltas = [...playerDeltaMap.values()];
+    console.log(`Incrementing ${playerDeltas.length} player season totals in database...`);
+    for (const player of playerDeltas) {
+      try { await incrementPlayer(player); } catch (err) { console.error(`Failed to increment player ${player.playerId}:`, err.message); }
+    }
+    console.log(`✅ Incremented ${playerDeltas.length} players`);
 
     const teamsToUpdate = [...teamSeasonStats.values()].filter(t =>
       newGamesForDb.some(g => g.homeId === t.teamId || g.awayId === t.teamId)
@@ -666,8 +685,6 @@ async function main() {
       } catch (err) { console.error(`Failed to update team ${t.teamId}:`, err.message); }
     }
     console.log(`✅ Updated ${teamsToUpdate.length} teams`);
-
-    await dedupePlayers(DIVISION);
 
     await closeDb();
     console.log("✅ Database updates complete");
@@ -718,9 +735,8 @@ async function main() {
 
   await saveKnownGameIds(processedGameIds);
 
-  console.log(`\n✅ Done! Processed ${newGamesProcessed} new games, ${failed} failed, ${sparseCount} sparse (not cached)`);
+  console.log(`\n✅ Done! Processed ${newGamesProcessed} new games, ${failed} failed`);
   if (failed > 0) console.log(`⚠️  ${failed} games failed - check logs`);
-  if (sparseCount > 0) console.log(`⚠️  ${sparseCount} sparse games will be retried on next run`);
 }
 
 main().catch((e) => {
