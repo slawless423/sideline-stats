@@ -1,4 +1,4 @@
-build_complete_stats.mjsimport fs from "node:fs/promises";
+import fs from "node:fs/promises";
 import * as db from "./db_writer.mjs";
 
 const NCAA_API_BASE = "https://ncaa-api.henrygd.me";
