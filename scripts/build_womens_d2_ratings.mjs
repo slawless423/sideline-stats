@@ -145,11 +145,22 @@ function fixEncoding(str) {
   }
 }
 
-function buildPlayerId(teamId, p) {
-  const ncaaId = p.id ?? p.ncaaId ?? 0;
+function buildPlayerId(teamId, p, playerSeasonStats) {
   const first = fixEncoding(p.firstName || "").toLowerCase().replace(/\s+/g, "");
   const last = fixEncoding(p.lastName || "").toLowerCase().replace(/\s+/g, "");
-  return `${teamId}_${ncaaId}_${first}_${last}`;
+  const number = String(p.number || "").trim();
+  const teamIdStr = String(teamId);
+
+  for (const [existingId, existing] of playerSeasonStats) {
+    if (existing.teamId !== teamIdStr) continue;
+    const existingLast = existing.lastName.toLowerCase().replace(/\s+/g, "");
+    if (existingLast !== last) continue;
+    const existingFirst = existing.firstName.toLowerCase().replace(/\s+/g, "");
+    if (existingFirst === first) return existingId;
+    if (number && String(existing.number || "").trim() === number) return existingId;
+  }
+
+  return `${teamIdStr}_${first}_${last}`;
 }
 
 function extractCompleteStats(raw) {
@@ -537,7 +548,7 @@ async function main() {
         const teamName = teamId === home.teamId ? home.teamName : away.teamName;
 
         for (const p of playerData.players) {
-          const playerId = buildPlayerId(teamId, p);
+          const playerId = buildPlayerId(teamId, p, playerSeasonStats);
           const mins = parseFloat(p.minutesPlayed || p.minutes || 0);
           if (mins <= 0 && parseInt(p.points || 0) <= 0) continue;
 
