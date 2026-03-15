@@ -1,0 +1,532 @@
+division,team_name,first_name,last_name,height,year
+mens-d2,Alas. Fairbanks,Joel,Amaro,"6'7""",Jr
+mens-d2,Albany St. (GA),Kendale,Johnson,"6'5""",Sr
+mens-d2,American Int'l,Aguibou,Balde,"6'6""",Jr
+mens-d2,American Int'l,Chase,Nelson,"6'5""",Jr
+mens-d2,American Int'l,Coleman,Hopson,"6'4""",So
+mens-d2,Angelo St.,Kailon,Nicholls,"6'0""",Jr
+mens-d2,Angelo St.,Zyon,Little,"6'6""",Jr
+mens-d2,Angelo St.,Quadir,Pettaway,"6'2""",Jr
+mens-d2,Ark.-Fort Smith,Antwan,Robinson,"6'4""",Jr
+mens-d2,Ark.-Fort Smith,Rex,Krout,"6'4""",So
+mens-d2,Ark.-Monticello,Ashton,Price,"6'4""",Jr
+mens-d2,Arkansas Tech,Brian,Kitenge,"6'9""",Jr
+mens-d2,Augusta,Tobias,Prall,"6'2""",Jr
+mens-d2,Augusta,Camryn,Pacheco,"6'3""",Fr
+mens-d2,Augusta,DaRon,Dunbar,"6'4""",Fr
+mens-d2,Augusta,Elias,Palsson,"6'7""",So
+mens-d2,Augustana (SD),Tameron,Ferguson,"6'2""",So
+mens-d2,Augustana (SD),Caden,Hinker,"6'7""",Jr
+mens-d2,AUM,Elhadji,Thiam,"6'8""",Jr
+mens-d2,Azusa Pacific,Parker,Christensen,"6'5""",Jr
+mens-d2,Barry,Marko,Sarenac,"6'10""",Jr
+mens-d2,Barry,Noah,Jaid,"6'8""",So
+mens-d2,Bemidji St.,Isaak,Eenhuis,"6'8""",Fr
+mens-d2,Bemidji St.,Luke,Diem,"6'7""",Fr
+mens-d2,Biola,Joe,Ofori,"6'7""",Jr
+mens-d2,Biola,Tyus,Parrish-Tillman,"6'8""",Sr
+mens-d2,Bloomsburg,Kodi,Johnson,"6'6""",Fr
+mens-d2,Bloomsburg,Courtney,Davis II,"6'2""",Jr
+mens-d2,Bloomsburg,George,Sabatini,"6'6""",So
+mens-d2,Bridgeport,Isaiah,Sullivan,"6'7""",Sr
+mens-d2,Bridgeport,Malikai,Delgado,"6'5""",Jr
+mens-d2,Cal Poly Pomona,Malcolm,Bell,"6'5""",Jr
+mens-d2,Cal Poly Pomona,Shyheim,Parm,"6'1""",Jr
+mens-d2,Cal St. Monterey Bay,Michael,Mora,"6'6""",So
+mens-d2,Cal St. Monterey Bay,Jaden,Tengan,"5'11""",Jr
+mens-d2,Cal St. San Marcos,Chanel,Mballa,"6'7""",Jr
+mens-d2,Cal St. San Marcos,Nate,Simon,"6'0""",Jr
+mens-d2,Cal State LA,Martin,Zarzuela,"6'0""",Jr
+mens-d2,Cameron,Arzhonte,Dallas,"5'10""",Jr
+mens-d2,Cameron,C.J.,Yao,"6'6""",Jr
+mens-d2,Cameron,Jaden,Juarez,"6'0""",Jr
+mens-d2,Cameron,Michael,Jones,"6'8""",Jr
+mens-d2,Cameron,Thomas,Tangle,"6'6""",Jr
+mens-d2,Cameron,C.J.,Yao,"6'6""",Jr
+mens-d2,Cameron,C.J.,Yao,"6'6""",Jr
+mens-d2,Cameron,CJ,Yao,"6'6""",Jr
+mens-d2,Cameron,CJ,Yao,"6'6""",Jr
+mens-d2,Cameron,Jean Paul,El Shamee,"6'9""",Fr
+mens-d2,Cameron,Kelen,Smith,"6'3""",Fr
+mens-d2,Carson-Newman,Rylan,Houck,"6'5""",Jr
+mens-d2,Carson-Newman,Shamir,Caruthers,"5'11""",Jr
+mens-d2,Carson-Newman,David,Gorianskii,"7'0""",Jr
+mens-d2,Carson-Newman,Caiden,Botts,"6'6""",Fr
+mens-d2,Cedarville,Anthony,Ruffolo,"6'0""",Jr
+mens-d2,Cedarville,Curtis,Blair III,"6'6""",So
+mens-d2,Cedarville,Sam,Johnson,"6'7""",So
+mens-d2,Central Okla.,Connor,Newton,"5'7""",Jr
+mens-d2,Central Okla.,Matthew,Willenborg,"6'7""",Jr
+mens-d2,Central Okla.,Parker,Hannah,"6'2""",Jr
+mens-d2,Central St. (OH),JaMonte,Williams,"6'2""",Jr
+mens-d2,Central St. (OH),Micah,Bays,"6'2""",So
+mens-d2,Central Wash.,Bradley,Swillie,"6'5""",Jr
+mens-d2,Chadron St.,Jadon,Cool,"6'3""",Jr
+mens-d2,Chadron St.,Ethan,Russell,"6'6""",So
+mens-d2,Chadron St.,Luka,Djurovic,"6'8""",Fr
+mens-d2,Chadron St.,Mackenzie,Keighran,"6'2""",Jr
+mens-d2,Chestnut Hill,Alejandro,Cybak,"6'8""",Sr
+mens-d2,Chestnut Hill,Jeremiah,Gorham,"6'0""",Fr
+mens-d2,Christian Brothers,Daniel,Lans,"6'0""",Jr
+mens-d2,Claflin,Alex,Atkinson,"6'8""",So
+mens-d2,Claflin,Braylon,Jackson,"6'5""",Jr
+mens-d2,Claflin,Xavier,Tubbs-Matthews,"6'1""",Jr
+mens-d2,Claflin,Ramere,Draper,"6'4""",Jr
+mens-d2,Claflin,Horaces,Jacques Jr.,"6'0""",Jr
+mens-d2,Claflin,Cristian,Sanon,"6'6""",Jr
+mens-d2,Clarion,Gavin,Cote,"6'5""",Jr
+mens-d2,Clarion,Jeremy,Thomas II,"6'5""",Jr
+mens-d2,Clayton St.,Andre,Young,"6'0""",Jr
+mens-d2,Clayton St.,Dez'Mond,Perkins,"6'8""",Sr
+mens-d2,Clayton St.,Eddie,Page,"6'9""",Jr
+mens-d2,Clayton St.,Jamil,Aleem,"6'5""",Fr
+mens-d2,Clayton St.,Jeremiah,Barze,"6'6""",Sr
+mens-d2,Clayton St.,Dez'Mond,Perkins,"6'8""",Sr
+mens-d2,Clayton St.,Dez'Mond,Perkins,"6'8""",Sr
+mens-d2,Clayton St.,Dezmond,Perkins,"6'8""",Sr
+mens-d2,Coker,Cyncier,Harrison,"5'11""",Jr
+mens-d2,Coker,Xavier,Moultrie,"6'1""",Jr
+mens-d2,Coker,Zundrá,Jackson,"6'1""",Fr
+mens-d2,Coker,Adonis,Thomas,"6'3""",Jr
+mens-d2,Coker,Isayah,Owens,"6'3""",Jr
+mens-d2,Coker,Zundrá,Jackson,"6'1""",Fr
+mens-d2,Coker,Zundra,Jackson,"6'1""",Fr
+mens-d2,Coker,Aaron,Hall,"6'8""",Jr
+mens-d2,Coker,Jonah,Vaysbakh,"6'1""",So
+mens-d2,Coker,Predrag,Panisic,"6'7""",Jr
+mens-d2,Colo. Christian,Bobby,McWard,"6'4""",Jr
+mens-d2,Colo. Christian,Lincoln,Cantrall,"6'9""",So
+mens-d2,Colo. Christian,Porter,Bazil,"6'7""",Jr
+mens-d2,Colo. Christian,Joshua,Reid,"6'7""",Sr
+mens-d2,Colo. Sch. of Mines,Markus,Pastorcic-Straun,"6'7""",Jr
+mens-d2,Columbus St.,Demetrius,Gibson,"6'5""",So
+mens-d2,Concordia-St. Paul,Ben,Kopetzki,"6'0""",Jr
+mens-d2,Converse,Will,Fowler,"6'2""",Fr
+mens-d2,CSU Pueblo,Dylan,Sanders,"6'4""",Jr
+mens-d2,CSU Pueblo,Kohlman,Dutton,"6'3""",Fr
+mens-d2,CSU Pueblo,Jordan,Blair,"6'6""",So
+mens-d2,CSUSB,Kaylon,Mason,"6'7""",Jr
+mens-d2,CUI,MaCarhy,Morris,"6'0""",Jr
+mens-d2,CUI,Kaden,Minter,"6'7""",Jr
+mens-d2,CUI,Nicholas,Corbett,"6'7""",So
+mens-d2,CUI,Roman,Rose,"6'2""",Fr
+mens-d2,CUI,Marcellus,Edwards,"6'3""",Jr
+mens-d2,Daemen,Ivan,Yhomby,"6'0""",Fr
+mens-d2,Davenport,Bernie,Varnesdeel,"6'1""",Fr
+mens-d2,Davenport,Alden,Ritt,"6'8""",Jr
+mens-d2,Davenport,Curtis,Jackson,"6'0""",Jr
+mens-d2,Davenport,Dylan,Smith,"6'8""",So
+mens-d2,Davenport,Ken,Walker,"5'11""",Jr
+mens-d2,Davis & Elkins,Ladislav,Novák,"6'7""",Jr
+mens-d2,Davis & Elkins,Ron,Haas,"5'10""",Jr
+mens-d2,Davis & Elkins,Ladislav,Novák,"6'7""",Jr
+mens-d2,Davis & Elkins,Ladislav,Novak,"6'7""",Jr
+mens-d2,Davis & Elkins,Noah,Adamczyk,"6'0""",So
+mens-d2,Delta St.,Jackson,Twombly,"6'7""",Jr
+mens-d2,Delta St.,DaCory,Porter,"6'4""",Jr
+mens-d2,Dist. Columbia,Kevon,Corley,"6'6""",Jr
+mens-d2,Dist. Columbia,ReJuan,Gray,"6'7""",Jr
+mens-d2,Dist. Columbia,Tyvone,Williams,"6'2""",Jr
+mens-d2,Dist. Columbia,Oliver,Spence,"6'10""",Fr
+mens-d2,Dominican (CA),Michael,Wilson,"6'2""",Jr
+mens-d2,Drury,Zach,Howell,"6'5""",Jr
+mens-d2,East Central,Jaden,Miller,"6'1""",So
+mens-d2,Eckerd,Miquel,Llompart,"6'4""",Jr
+mens-d2,Eckerd,Tyler,Greene,"6'2""",Fr
+mens-d2,Eckerd,Wyatt,Triestman,"6'6""",Jr
+mens-d2,Edinboro,Rocco,Spadafora,"6'1""",Jr
+mens-d2,Edinboro,Tavion,Spencer,"6'3""",Jr
+mens-d2,Edinboro,DaJuan,Young,"6'3""",So
+mens-d2,Elizabeth City St.,C.J.,McCord,"6'5""",Jr
+mens-d2,Elizabeth City St.,C.J.,McCord,"6'2""",Jr
+mens-d2,Elizabeth City St.,C.J.,McCord,"6'2""",Jr
+mens-d2,Elizabeth City St.,CJ,McCord,"6'2""",Jr
+mens-d2,Elizabeth City St.,CJ,McCord,"6'2""",Jr
+mens-d2,Elizabeth City St.,Leslie,Minter,"6'6""",So
+mens-d2,Embry-Riddle (FL),Jared,Berry,"5'10""",Jr
+mens-d2,Emporia St.,Devin,Conley,"6'1""",So
+mens-d2,Emporia St.,Justin,Mack,"6'1""",So
+mens-d2,Emporia St.,Andrew,Pengel,"6'2""",Jr
+mens-d2,Erskine,Jed,Moor,"6'3""",Fr
+mens-d2,Erskine,Rubén,Salazar,"6'6""",Fr
+mens-d2,Erskine,Rubén,Salazar,"6'6""",Fr
+mens-d2,Erskine,Ruben,Salazar,"6'6""",Fr
+mens-d2,Ferris St.,Chang,Hoth,"6'2""",Jr
+mens-d2,Findlay,Steele,Meister,"6'4""",So
+mens-d2,Findlay,Luke,Denbow,"6'1""",Sr
+mens-d2,Florida Tech,Konstantinos,Lagos,"6'7""",Sr
+mens-d2,Florida Tech,Ben,Csernak,"6'8""",So
+mens-d2,Fort Hays St.,Tory,Homan,"6'7""",Fr
+mens-d2,Fort Hays St.,Dan,Mukuna,"6'8""",Jr
+mens-d2,Fort Lewis,Jaxon,Smith,"6'2""",So
+mens-d2,Fort Lewis,Stewart,Erhart,"6'2""",So
+mens-d2,Franklin Pierce,Caelan,Zeilenga,"6'0""",Fr
+mens-d2,Franklin Pierce,Fabrice,Salvant,"6'2""",So
+mens-d2,Franklin Pierce,Jalen,Duff,"5'11""",Jr
+mens-d2,Franklin Pierce,Anthony,Parker,"6'2""",So
+mens-d2,Franklin Pierce,Enmanuel,Ferreras,"6'5""",Jr
+mens-d2,Fresno Pacific,Amar,Hot,"6'0""",Jr
+mens-d2,Frostburg St.,Mike,Montano,"6'8""",Jr
+mens-d2,Frostburg St.,Christopher,Meakin,"6'8""",So
+mens-d2,Frostburg St.,D.J.,Daniel,"6'6""",Fr
+mens-d2,Frostburg St.,Trey,Simmons,"6'1""",So
+mens-d2,Frostburg St.,Zane,McCarty,"6'1""",Jr
+mens-d2,Frostburg St.,D.J.,Daniel,"6'6""",Fr
+mens-d2,Frostburg St.,DJ,Daniel,"6'6""",Fr
+mens-d2,Frostburg St.,DJ,Daniel,"6'6""",Fr
+mens-d2,Frostburg St.,Max,McFarland,"6'8""",Fr
+mens-d2,Frostburg St.,Will,Koehl,"6'2""",Fr
+mens-d2,Ga. Southwestern,Amir,Reaves,"6'2""",Jr
+mens-d2,Ga. Southwestern,Hasani,Rivera,"6'9""",Jr
+mens-d2,Ga. Southwestern,J.R.,Jacobs,"5'11""",Jr
+mens-d2,Ga. Southwestern,Matthew,Webster,"6'7""",Jr
+mens-d2,Ga. Southwestern,J.R.,Jacobs,"5'11""",Jr
+mens-d2,Ga. Southwestern,JR,Jacobs,"5'11""",Jr
+mens-d2,Ga. Southwestern,JR,Jacobs,"5'11""",Jr
+mens-d2,Ga. Southwestern,Deonte,Williams,"6'6""",Sr
+mens-d2,Ga. Southwestern,Keshawn,Brown Jr,"5'11""",Jr
+mens-d2,Georgia College,Khalil,Green,"6'2""",So
+mens-d2,Glenville St.,Prince,Mosengo,"6'8""",Jr
+mens-d2,Holy Family,Elijah,Hernandez,"6'6""",Jr
+mens-d2,Holy Family,R.J.,Delahaye,"6'1""",Sr
+mens-d2,Holy Family,R.J.,Delahaye,"6'1""",Sr
+mens-d2,Holy Family,R.J.,Delahaye,"6'1""",Sr
+mens-d2,Holy Family,RJ,Delahaye,"6'1""",Sr
+mens-d2,Holy Family,RJ,Delahaye,"6'1""",Sr
+mens-d2,Holy Family,CJ,Mundell,"6'5""",So
+mens-d2,Jamestown,Jackson,Beauchamp,"6'7""",Fr
+mens-d2,Jamestown,Luke,Wherley,"6'5""",Fr
+mens-d2,Jamestown,Thomas,Diew,"6'8""",Jr
+mens-d2,Jamestown,Vlad,Karasev,"6'8""",Jr
+mens-d2,Jamestown,Jackson,Beauchamp,"6'7""",Fr
+mens-d2,Jamestown,Luke,Wherley,"6'5""",Fr
+mens-d2,Jamestown,Thomas,Diew,"6'8""",Jr
+mens-d2,Jamestown,Turo,Moni,"6'9""",Fr
+mens-d2,Jamestown,Vlad,Karasev,"6'8""",Jr
+mens-d2,Jamestown,Jackson,Beauchamp,"6'7""",Fr
+mens-d2,Jamestown,Luke,Wherley,"6'5""",Fr
+mens-d2,Jamestown,Thomas,Diew,"6'8""",Jr
+mens-d2,Jamestown,Turo,Moni,"6'9""",Fr
+mens-d2,Jamestown,Vlad,Karasev,"6'8""",Jr
+mens-d2,Jefferson,Jaden,Colzie,"6'0""",So
+mens-d2,Jefferson,Jeremiah,Dorsey,"5'11""",Jr
+mens-d2,Johnson C. Smith,Jeremee,Bryant,"6'4""",Sr
+mens-d2,Johnson C. Smith,Marc,"Raye, Jr.","5'10""",Jr
+mens-d2,Johnson C. Smith,Trey,Pettigrew,"6'4""",Jr
+mens-d2,Johnson C. Smith,Marc,"Raye, Jr.","5'10""",Jr
+mens-d2,Johnson C. Smith,Marc,Raye,"5'10""",Jr
+mens-d2,Johnson C. Smith,Jessiah,Pierre Johnson,"6'3""",Fr
+mens-d2,Kentucky St.,Deavion,Scales,"6'1""",Jr
+mens-d2,King (TN),Jeremias,Berchal,"6'3""",So
+mens-d2,Kutztown,Omari,Banks,"6'3""",Jr
+mens-d2,Ky. Wesleyan,J.J.,Faulkner,"6'0""",Jr
+mens-d2,Ky. Wesleyan,J.J.,Faulkner,"6'0""",Jr
+mens-d2,Ky. Wesleyan,JJ,Faulkner,"6'0""",Jr
+mens-d2,Ky. Wesleyan,JJ,Faulkner,"6'0""",Jr
+mens-d2,Ky. Wesleyan,Jorge,Sanchez-Ramos,"6'3""",Jr
+mens-d2,Ky. Wesleyan,Lavonte,Harris,"6'7""",Sr
+mens-d2,Lake Superior St.,Omar,Suleiman,"6'6""",So
+mens-d2,Lane,Elijah,Lewis,"6'1""",So
+mens-d2,Lee,Ben,Ritger,"6'7""",So
+mens-d2,Lee,Willie,Walton,"6'4""",Jr
+mens-d2,Lee,Tylon,Chatman,"6'0""",Jr
+mens-d2,Lees-McRae,Brent,Randleman,"6'3""",Jr
+mens-d2,Lees-McRae,Caden,Kreger,"6'7""",Fr
+mens-d2,Lees-McRae,Cedric,Patterson,"6'1""",Jr
+mens-d2,Lees-McRae,Chase,McDuffie,"6'5""",Jr
+mens-d2,Lees-McRae,Isajah,Deburgo,"6'3""",Jr
+mens-d2,Lees-McRae,Jack,Carter,"6'7""",Jr
+mens-d2,Lees-McRae,Kenny,Vera,"6'3""",Fr
+mens-d2,Lees-McRae,Kwynsie,Pittsnogle,"6'10""",Fr
+mens-d2,Lees-McRae,Daniel,Agu,"6'8""",So
+mens-d2,Lees-McRae,Gavin,Bullock,"6'2""",So
+mens-d2,LeMoyne-Owen,Kyle,Houston,"6'2""",Jr
+mens-d2,LeMoyne-Owen,LaDricus,Pittman,"6'0""",Jr
+mens-d2,Lewis,Reid,Loewen,"6'10""",Jr
+mens-d2,Lewis,Arius,Alijosius,"6'4""",So
+mens-d2,Lincoln (MO),Amar,Kadić,"6'9""",Jr
+mens-d2,Lincoln (MO),Amar,Kadić,"6'9""",Jr
+mens-d2,Lincoln (MO),Robin,Discamps,"6'6""",Fr
+mens-d2,Lincoln (MO),Amar,Kadic,"6'9""",Jr
+mens-d2,Lincoln (PA),Ginuwine,Tropnas,"6'10""",Jr
+mens-d2,Lincoln (PA),Kesean,Shillingford,"7'0""",So
+mens-d2,Lincoln (PA),Bonard,Johnson,"6'2""",Jr
+mens-d2,Lynn,John,Roland,"6'7""",So
+mens-d2,Malone,Kellen,Leake,"6'3""",So
+mens-d2,Mansfield,Sterling,Scott,"6'5""",Sr
+mens-d2,Mars Hill,Christian,Foy,"6'6""",So
+mens-d2,Mars Hill,Juan,Pedro Rodriguez,"6'7""",Jr
+mens-d2,Mars Hill,Juan,Pedro Rodriguez,"6'7""",Jr
+mens-d2,Mars Hill,Juan,Pedro Rodriguez,"6'7""",Jr
+mens-d2,Mars Hill,Juan Pedro,Rodriguez,"6'7""",Jr
+mens-d2,Mars Hill,Juan Pedro,Rodriguez,"6'7""",Jr
+mens-d2,Mary,Alex,Dvorak,"6'1""",So
+mens-d2,Mary,Amare,Jackson,"6'4""",Jr
+mens-d2,Mary,Kelton,Coleman,"6'2""",Jr
+mens-d2,Mary,Kenny,Gonzalez,"6'0""",Jr
+mens-d2,Mary,Noah,Thomas,"6'2""",Sr
+mens-d2,Mary,Relja,Nagulić,"6'7""",So
+mens-d2,Mary,Relja,Nagulić,"6'7""",So
+mens-d2,Mary,Relja,Nagulic,"6'7""",So
+mens-d2,Maryville (MO),Preston,Clark,"6'6""",Jr
+mens-d2,Maryville (MO),Gabriel,Clemmons,"6'10""",Fr
+mens-d2,Maryville (MO),Noah,Courtney,"6'5""",Jr
+mens-d2,Menlo,Max,Sheridan,"6'0""",Jr
+mens-d2,Middle Georgia,Krishen,Atwal,"6'6""",So
+mens-d2,Middle Georgia,Krishen,Atwal,"6'6""",So
+mens-d2,Middle Georgia,Krishen,Atwal,"6'6""",So
+mens-d2,Midwestern St.,Antwan,Taylor,"6'5""",Jr
+mens-d2,Midwestern St.,Davyon,Butler,"6'4""",Jr
+mens-d2,Midwestern St.,Terrance,Ramirez,"6'2""",Jr
+mens-d2,Miles,Blake,Wilson,"6'5""",Jr
+mens-d2,Minn.-Crookston,Chandler,Meeks,"6'1""",Jr
+mens-d2,Minot St.,Isaiah,Alexander,"6'7""",Jr
+mens-d2,Mississippi Col.,Avaughn,Johnson,"6'7""",Jr
+mens-d2,Missouri S&T,Cameron,Stovall,"6'5""",Jr
+mens-d2,Mo. Southern St.,Tyrone,"Wright, Jr.","6'9""",Sr
+mens-d2,Mo. Southern St.,Tyrone,Wright,"6'9""",Sr
+mens-d2,Mo.-St. Louis,Demetris,Phillips,"6'6""",Jr
+mens-d2,Mont. St. Billings,Miles,Gurske,"6'1""",Jr
+mens-d2,Mont. St. Billings,Cam,Malray,"6'9""",Jr
+mens-d2,Mont. St. Billings,Gabe,Hatler,"6'5""",Jr
+mens-d2,Mount Olive,Jefferson,McLamb,"6'5""",Jr
+mens-d2,Mount Olive,Kahlif,Barnes,"6'8""",Jr
+mens-d2,Mount Olive,Raúl,Pérez,"6'5""",So
+mens-d2,Mount Olive,Raúl,Pérez,"6'5""",So
+mens-d2,Mount Olive,Raul,Perez,"6'5""",So
+mens-d2,Mount Olive,Christian,Ananaba,"6'6""",Fr
+mens-d2,Mount Olive,Jaevian,Alston,"6'6""",Fr
+mens-d2,MSU Denver,Landon,Braun,"6'6""",Fr
+mens-d2,MSU Denver,Logan,Threatt,"6'3""",Jr
+mens-d2,MSU Denver,Jackson,McAdams,"6'3""",Fr
+mens-d2,MSU Denver,Garrett,Falls,"6'6""",Jr
+mens-d2,MSU Moorhead,Dominic,Gooden,"6'1""",Jr
+mens-d2,MSU Moorhead,Nic,Smith,"6'0""",So
+mens-d2,Newberry,Gyterson,Louissaint,"6'7""",Jr
+mens-d2,Newman,Deacon,Courtney,"6'8""",Fr
+mens-d2,Newman,Devin,Walker,"6'1""",Jr
+mens-d2,Newman,Jayden,Schoen,"6'3""",So
+mens-d2,Newman,Terrell,Wright,"6'10""",Jr
+mens-d2,Newman,Cyrus,Shaw,"6'3""",So
+mens-d2,Newman,Syris,Williams,"6'2""",Jr
+mens-d2,Northeastern St.,A.J.,"Reed, Jr.","6'1""",Jr
+mens-d2,Northeastern St.,Ethan,Blackmon,"6'7""",Jr
+mens-d2,Northeastern St.,Nehemiah,Weber,"6'2""",Jr
+mens-d2,Northeastern St.,Pierce,Ross,"6'4""",Jr
+mens-d2,Northeastern St.,A.J.,Reed,"6'1""",Jr
+mens-d2,Northeastern St.,AJ,Reed Jr,"6'1""",Jr
+mens-d2,Northeastern St.,Dalen,Fuller,"6'4""",So
+mens-d2,Northern St.,Cameron,Mercadel,"6'2""",Fr
+mens-d2,Northern St.,Marshawn,Smith,"6'5""",Jr
+mens-d2,Northwestern Okla.,Justin,Norris,"6'7""",Jr
+mens-d2,Northwestern Okla.,Liam,Canty,"6'8""",Jr
+mens-d2,Northwestern Okla.,Max,Alexander,"5'11""",Jr
+mens-d2,Northwestern Okla.,Mikey,Hawkins,"6'0""",Sr
+mens-d2,Ohio Dominican,Derek,Goodman,"6'4""",So
+mens-d2,Okla. Christian,Miles,Gibson,"6'5""",Jr
+mens-d2,Okla. Christian,David,Oyona Ibandzo,"6'10""",Fr
+mens-d2,Okla. Christian,Elijah,Bailey,"5'11""",Sr
+mens-d2,Ouachita Baptist,Devon,Hancock,"6'3""",Sr
+mens-d2,Pace,Ethan,Robertson,"6'6""",So
+mens-d2,Pace,Nathan,Robertson,"6'4""",So
+mens-d2,Pace,Paxton,Davidson,"6'3""",Jr
+mens-d2,Pitt.-Johnstown,Craig,Jarvis,"6'2""",Fr
+mens-d2,Pittsburg St.,Evan,Jackson,"6'7""",So
+mens-d2,Pittsburg St.,Donald,Coats,"6'7""",Jr
+mens-d2,Pittsburg St.,Tane,Prictor,"6'11""",Sr
+mens-d2,Post,Anthony,Chinn,"6'5""",So
+mens-d2,Post,Taquan,Williams,"6'0""",Jr
+mens-d2,Purdue Northwest,Zach,Hayslett,"6'3""",Jr
+mens-d2,Queens (NY),David,Teele,"6'4""",Jr
+mens-d2,Queens (NY),Dontae,Prescott,"5'11""",Jr
+mens-d2,Queens (NY),Henri,Mennander,"6'9""",Fr
+mens-d2,Queens (NY),Jaden,Pena,"6'7""",Sr
+mens-d2,Quincy,Max,Booher,"6'4""",So
+mens-d2,Quincy,Tiernan,Stynes,"6'6""",So
+mens-d2,Quincy,Lorenzo,McMillion Jr,"6'5""",Jr
+mens-d2,Regis (CO),Luke,Soden,"6'4""",Fr
+mens-d2,Regis (CO),Myles,Shields,"6'3""",So
+mens-d2,Roberts Wesleyan,Hadi,Alshami,"6'9""",Fr
+mens-d2,Roberts Wesleyan,Trey,Kleitz,"6'0""",Jr
+mens-d2,Roosevelt,Broden,Steiner,"6'5""",Fr
+mens-d2,Roosevelt,Broden,Steiner,"6'5""",Fr
+mens-d2,Roosevelt,Broden,Steiner,"6'5""",Fr
+mens-d2,Saginaw Valley,Kevonne,Taylor,"6'10""",Jr
+mens-d2,Saginaw Valley,Xavier,Thomas,"6'5""",So
+mens-d2,Saginaw Valley,Marquese,Josephs,"6'1""",Jr
+mens-d2,Saint Leo,Aeris,Lawson,"6'4""",Fr
+mens-d2,Saint Leo,Camden,Cerese,"6'4""",So
+mens-d2,Saint Leo,Donovan,Hill,"6'8""",Sr
+mens-d2,Saint Leo,Owen,Pawlikowski,"6'4""",Sr
+mens-d2,Saint Leo,Paul,Lanzi,"6'5""",Jr
+mens-d2,Saint Michael's,Kalvin,Catchings,"6'7""",Fr
+mens-d2,San Fran. St.,Diego,Martinez,"6'7""",So
+mens-d2,San Fran. St.,Brandon,Lucas,"6'4""",Jr
+mens-d2,Savannah St.,Javonte,Landy,"5'11""",Sr
+mens-d2,Savannah St.,Kasai,Fontanez,"6'4""",Sr
+mens-d2,Seattle Pacific,Isaiah,Sonntag,"6'2""",Fr
+mens-d2,Seattle Pacific,Julian,Mora,"5'11""",Jr
+mens-d2,Seton Hill,Kedrick,Curtis,"6'7""",Jr
+mens-d2,Seton Hill,Noah,Wright,"5'10""",Jr
+mens-d2,Seton Hill,Rashaad,Williams,"6'1""",Fr
+mens-d2,Seton Hill,Dimitrios,Sklavenitis,"6'3""",Jr
+mens-d2,Seton Hill,Edir,Ortiz,"6'9""",So
+mens-d2,Seton Hill,Brandon,Coury,"6'2""",Sr
+mens-d2,Shaw,Isaiah,Buckley,"6'0""",So
+mens-d2,Shepherd,Marcus,Banks,"6'2""",Jr
+mens-d2,Shorter,Michael,Johnson,"6'8""",Sr
+mens-d2,Sioux Falls,Brogan,Madson,"6'1""",Fr
+mens-d2,Sioux Falls,Brandon,Hrncir,"6'8""",So
+mens-d2,Sioux Falls,James,Spencer III,"6'7""",Jr
+mens-d2,Sioux Falls,Reed,Pfaltzgraff,"6'4""",Fr
+mens-d2,South Dakota Mines,Abel,Hutchinson,"6'5""",Jr
+mens-d2,South Dakota Mines,Alec,Wendt,"6'9""",Fr
+mens-d2,South Dakota Mines,Jason,Lee,"6'1""",Jr
+mens-d2,South Dakota Mines,Guido,Wanschelbaum,"6'9""",Jr
+mens-d2,Southeastern Okla.,Andrija,Brzovic,"6'8""",So
+mens-d2,Southern Ark.,John Carter,Metz,"6'0""",Jr
+mens-d2,Southern Conn. St.,Jahlil,Bethea,"6'2""",Jr
+mens-d2,Southern Conn. St.,Kazell,Stewart,"6'5""",Sr
+mens-d2,Southern N.H.,Levi,Lawal,"6'7""",Jr
+mens-d2,Southern Wesleyan,Ashton,Williams,"6'3""",Fr
+mens-d2,Southern Wesleyan,Jaquay,Randolph,"6'10""",Jr
+mens-d2,Southern Wesleyan,Nathanael,Lewis,"6'7""",Jr
+mens-d2,Southwest Baptist,Jevin,Sullivan,"6'5""",Jr
+mens-d2,Southwest Baptist,Eli,Kennedy,"6'2""",So
+mens-d2,Southwest Baptist,Leo,Gayman,"6'6""",Fr
+mens-d2,Southwest Baptist,Brandon,Moore,"6'3""",So
+mens-d2,Southwest Baptist,Zac,Reedus,"6'5""",Jr
+mens-d2,Southwest Minn. St.,Ethan,Koltz,"6'10""",So
+mens-d2,Southwest Minn. St.,Isaiah,Schafer,"6'0""",Fr
+mens-d2,Southwest Minn. St.,Reece,Kircher,"6'0""",Fr
+mens-d2,Spring Hill,Alvin,Cole,"6'7""",Jr
+mens-d2,Spring Hill,Amaan,Sanni,"6'2""",So
+mens-d2,Spring Hill,Brian,Harris,"6'6""",So
+mens-d2,Spring Hill,Miles,Hannah,"6'0""",Fr
+mens-d2,Spring Hill,Rocco,Lamuno,"6'4""",So
+mens-d2,Spring Hill,Ruben,Bos,"6'10""",So
+mens-d2,Spring Hill,Stephon,MacDonald,"6'7""",Jr
+mens-d2,Stanislaus St.,Malachi,Johnson,"6'10""",Fr
+mens-d2,Stanislaus St.,Malik,Johnson,"6'10""",Fr
+mens-d2,Staten Island,Aaron,Goldstein,"6'0""",Jr
+mens-d2,Sul Ross St.,Camren,Roper,"6'2""",Jr
+mens-d2,Sul Ross St.,Chianti,"Clay, Jr.","5'11""",Sr
+mens-d2,Sul Ross St.,Jackson,Thoele,"6'6""",Jr
+mens-d2,Sul Ross St.,Julien,Barclay,"6'1""",Fr
+mens-d2,Sul Ross St.,Kevon,Zilaee,"6'7""",Jr
+mens-d2,Sul Ross St.,Chianti,"Clay, Jr.","5'11""",Sr
+mens-d2,Sul Ross St.,Chianti,Clay,"5'11""",Sr
+mens-d2,Sul Ross St.,Stipano,Yosia,"6'4""",Fr
+mens-d2,Tampa,Ryan,Blount,"6'6""",So
+mens-d2,Tex. A&M Int'l,Jamyier,Patton,"6'0""",Jr
+mens-d2,Tex. A&M Int'l,Aidan,Williams,"6'7""",Fr
+mens-d2,Tex. A&M Int'l,Tyland,Holdman,"6'3""",Jr
+mens-d2,Tex. A&M-Kingsville,Bryson,Goldsmith,"6'1""",Jr
+mens-d2,Tex. A&M-Kingsville,KJ,Manuel,"6'3""",So
+mens-d2,Tex. A&M-Kingsville,Marc,Eyman,"6'4""",Jr
+mens-d2,Thomas More,Kai,Simpson,"6'2""",Jr
+mens-d2,Tiffin,T.J.,Pangonas,"6'6""",Jr
+mens-d2,Tiffin,T.J.,Pangonas,"6'6""",Jr
+mens-d2,Tiffin,T.J.,Pangonas,"6'6""",Jr
+mens-d2,Tiffin,TJ,Pangonas,"6'6""",Jr
+mens-d2,Tiffin,TJ,Pangonas,"6'6""",Jr
+mens-d2,Tiffin,Caleb,Jewell,"6'1""",Fr
+mens-d2,Tiffin,John,Bardelli,"6'0""",Fr
+mens-d2,Tiffin,Marquel,Newsome,"5'10""",Jr
+mens-d2,Trevecca Nazarene,Jax,Abernathy,"6'4""",Fr
+mens-d2,Truman St.,Drew,Kingery,"6'5""",So
+mens-d2,Truman St.,Justin,Duff,"6'4""",Jr
+mens-d2,Truman St.,Titus,Miller,"6'7""",Fr
+mens-d2,Truman St.,Marquis,Carver-Smith,"6'6""",So
+mens-d2,Tusculum,Bryce,Jackson,"6'3""",Jr
+mens-d2,Tusculum,Damjan,Vukčević,"7'1""",Jr
+mens-d2,Tusculum,Denaj,Kimber,"6'3""",So
+mens-d2,Tusculum,J3,Swindell,"6'4""",Fr
+mens-d2,Tusculum,Johny,Mathiang,"7'1""",Fr
+mens-d2,Tusculum,T.J.,Printup,"6'6""",Fr
+mens-d2,Tusculum,Taj,Kimber,"6'4""",So
+mens-d2,Tusculum,T.J.,Printup,"6'6""",Fr
+mens-d2,Tusculum,T.J.,Printup,"6'6""",Fr
+mens-d2,Tusculum,TJ,Printup,"6'6""",Fr
+mens-d2,Tusculum,TJ,Printup,"6'6""",Fr
+mens-d2,UCCS,Gavin,Carter,"6'2""",So
+mens-d2,UCCS,Derik,Pranger,"6'9""",Jr
+mens-d2,UCCS,Mario,Williams Jr.,"6'5""",So
+mens-d2,UCCS,Marzouq,Ibn Abdur-Razaaq,"6'6""",So
+mens-d2,UCCS,Xavier,Martinez,"6'0""",Jr
+mens-d2,UIndy,Kelvin,Amoako,"6'11""",So
+mens-d2,UIndy,Pierce,Thomas,"6'5""",Sr
+mens-d2,Union (TN),Ryan,Lewis,"6'2""",Fr
+mens-d2,USC Aiken,Cam,Perkins,"5'11""",So
+mens-d2,USC Aiken,Chase,Allen,"6'7""",Fr
+mens-d2,USC Aiken,Josiah,Harding,"6'1""",Jr
+mens-d2,USC Aiken,Jackson,Roberts,"6'11""",Fr
+mens-d2,USC Aiken,William,Vasser Jr,"6'4""",Jr
+mens-d2,USCB,Qurahn,Anderson,"6'5""",Jr
+mens-d2,USCB,Nolan,Paladugu,"6'3""",Jr
+mens-d2,USCB,Qurahn,Anderson,"6'5""",Jr
+mens-d2,USCB,Nolan,Paladugu,"6'3""",Jr
+mens-d2,USCB,Qurahn,Anderson,"6'5""",Jr
+mens-d2,UT Permian Basin,Connor,Morris,"6'6""",Jr
+mens-d2,UT Permian Basin,Rashad,Kee,"6'4""",Jr
+mens-d2,UT Tyler,Heath,Tenner,"6'10""",Fr
+mens-d2,UT Tyler,Jacob,Bell,"6'5""",Fr
+mens-d2,UT Tyler,John,Barbee,"6'3""",Jr
+mens-d2,UT Tyler,Kyle,Morgan,"6'4""",Jr
+mens-d2,UT Tyler,Noah,Suarjaya,"6'3""",Fr
+mens-d2,UT Tyler,Sean,Emfinger,"6'6""",Jr
+mens-d2,UT Tyler,Spencer,Gaze,"6'7""",Fr
+mens-d2,UT Tyler,Xavier,Williams,"6'1""",Jr
+mens-d2,UT Tyler,Christopher,Carpenter,"5'11""",Jr
+mens-d2,UVA Wise,Evan,Ramsey,"7'0""",Jr
+mens-d2,UVA Wise,Yoro,Diallo,"6'8""",Jr
+mens-d2,Wayne St. (MI),Devin,Belle,"6'4""",Jr
+mens-d2,Wayne St. (MI),Jotham,Nweke,"6'7""",Jr
+mens-d2,Wayne St. (MI),Chase,Kuiper,"6'6""",So
+mens-d2,Wayne St. (MI),Jordan,Briggs,"6'0""",Jr
+mens-d2,West Tex. A&M,Jaden,Holt,"5'9""",Fr
+mens-d2,West Tex. A&M,Brock,Mishak,"6'3""",Jr
+mens-d2,West Tex. A&M,Fontaine,Williams,"6'2""",Jr
+mens-d2,West Va. Wesleyan,Adrijus,Janciauskas,"6'2""",Fr
+mens-d2,West Va. Wesleyan,Jerell,Baptiste,"5'10""",So
+mens-d2,West Va. Wesleyan,Lethaniel,Foster Jr.,"6'4""",So
+mens-d2,West Va. Wesleyan,Isaiah,Baker,"6'3""",Jr
+mens-d2,West Virginia St.,Trey,Harris,"6'7""",Jr
+mens-d2,West Virginia St.,Hassan,Belkhaddar,"6'9""",Jr
+mens-d2,West Virginia St.,Jaylen,Subject,"6'5""",Jr
+mens-d2,West Virginia St.,Blake,Goodman,"6'7""",Sr
+mens-d2,West Virginia St.,Norris,Bourne Jr,"6'4""",Sr
+mens-d2,Western Colo.,Aidan,McDowell,"6'4""",So
+mens-d2,Western Colo.,David,Shelia,"6'10""",Fr
+mens-d2,Western Colo.,Tyler,Halligan,"6'4""",Jr
+mens-d2,Western Ore.,Braydon,Olson,"6'3""",So
+mens-d2,Western Ore.,Parker,Bauman,"6'5""",Jr
+mens-d2,Western Ore.,AB,Gilchrist,"6'1""",Jr
+mens-d2,Western Ore.,Trevon,Chambers,"6'4""",Jr
+mens-d2,Western Wash.,Nehemiah,Pollard,"6'4""",Jr
+mens-d2,Western Wash.,Aidan,Rice,"6'2""",So
+mens-d2,Western Wash.,Trevor,White,"6'7""",So
+mens-d2,Westminster (UT),Boston,Painter,"6'8""",Jr
+mens-d2,Westminster (UT),Mitch,Jeppesen,"6'6""",Jr
+mens-d2,Westminster (UT),Peter,Amakasu,"6'4""",So
+mens-d2,Westminster (UT),Colin,Hayes,"6'6""",Jr
+mens-d2,Westminster (UT),Keiren,Brown,"6'3""",Jr
+mens-d2,Wheeling,Ayden,Goll,"6'2""",Fr
+mens-d2,Wheeling,Tee,Harris,"6'7""",Jr
+mens-d2,Wilmington (DE),Jaylin,Horsey,"6'4""",So
+mens-d2,Wilmington (DE),Tre,Hawkins,"6'7""",So
+mens-d2,Wilmington (DE),Zavion,Bianchini,"6'7""",Jr
+mens-d2,Wilmington (DE),Arnaldo,Rodriguez,"6'1""",So
+mens-d2,Wilmington (DE),Jadyn,Humber,"6'6""",Fr
+mens-d2,Wilmington (DE),Elson,Berhanu,"7'1""",Jr
+mens-d2,Wingate,Isaiah,Vick,"6'7""",Fr
+mens-d2,Winona St.,Jackson,Hayes,"6'7""",So
+mens-d2,Winona St.,Kellen,Little,"6'4""",Fr
+mens-d2,Wis.-Parkside,Andrew,Soenksen,"6'8""",So
+mens-d2,Wis.-Parkside,Braden,McGlothlin,"6'3""",So
+mens-d2,Wis.-Parkside,Jake,Dunham,"6'5""",So
+mens-d2,Wis.-Parkside,Matas,Castillo,"6'0""",Jr
+mens-d2,Wis.-Parkside,Paxton,Warden,"6'4""",Sr
+mens-d2,Wis.-Parkside,Alex,Daniels,"6'4""",Fr
+mens-d2,Wis.-Parkside,Luka,Mateski,"6'7""",Jr
+mens-d2,Wis.-Parkside,Raphael,Nagau Trouart,"6'5""",Jr
