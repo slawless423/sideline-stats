@@ -51,8 +51,8 @@ type SortKey = 'name' | 'team' | 'games' | 'starts' | 'minPct' | 'ortg' | 'usage
 type SortOrder = 'asc' | 'desc';
 
 const ADVANCED_COLS: { label: string; key: SortKey }[] = [
-  { label: 'ORtg',    key: 'ortg'     },
   { label: '%Min',    key: 'minPct'   },
+  { label: 'ORtg',    key: 'ortg'     },
   { label: '%Usage',  key: 'usagePct' },
   { label: '%Shots',  key: 'shotPct'  },
   { label: 'eFG%',    key: 'efg'      },
@@ -130,7 +130,7 @@ export default function MensD1PlayersPage() {
   const [filteredPlayers, setFilteredPlayers] = useState<Player[]>([]);
   const [loading, setLoading] = useState(true);
   const [statMode, setStatMode] = useState<StatMode>('advanced');
-  const [sortKey, setSortKey] = useState<SortKey>('usagePct');
+  const [sortKey, setSortKey] = useState<SortKey>('minPct');
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
   const [searchTerm, setSearchTerm] = useState('');
   const [minMinutes, setMinMinutes] = useState(100);
