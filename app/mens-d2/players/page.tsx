@@ -34,7 +34,6 @@ type Player = {
 
 type TeamStats = {
   games: number;
-  totalMinutes: number;
   fga: number; fgm: number; tpm: number;
   orb: number; tov: number; fta: number; ftm: number;
   ast: number; points: number;
@@ -147,7 +146,6 @@ export default function MensD2PlayersPage() {
       teamsData.teams.forEach((t: any) => {
         statsMap.set(t.teamId, {
           games: t.games,
-          totalMinutes: Number(t.totalMinutes) || t.games * 200,
           fga: t.fga, fgm: t.fgm, tpm: t.tpm,
           orb: t.orb, tov: t.tov, fta: t.fta, ftm: t.ftm,
           ast: t.ast, points: t.points,
@@ -176,7 +174,7 @@ export default function MensD2PlayersPage() {
     const team = teamStats.get(p.teamId);
     if (!team) return null;
 
-    const teamMinutes = team.totalMinutes;
+    const teamMinutes = team.games * 200;
     const opp_drb = team.opp_trb - team.opp_orb;
     const drb = team.trb - team.orb;
     const twoPA = p.fga - p.tpa;
