@@ -34,9 +34,9 @@ export async function GET() {
         t.opp_blk as "opp_blk",
         t.opp_tov as "opp_tov",
         t.opp_pf as "opp_pf",
-        COALESCE(SUM(pg.minutes), t.games * 200) as "totalMinutes"
+        COALESCE(SUM(pgames.minutes), t.games * 200) as "totalMinutes"
       FROM teams t
-      LEFT JOIN player_games pg ON pg.team_id = t.team_id
+      LEFT JOIN player_games pgames ON pgames.team_id = t.team_id
       WHERE t.division = 'mens-d1'
         AND t.conference IS NOT NULL
         AND t.conference != ''
