@@ -328,7 +328,13 @@ export default async function WomensD2TeamPage({
         </div>
 
         {playersData.players && playersData.players.length > 0 && (
-          <PlayerStats players={playersData.players} team={team} />
+          <PlayerStats
+            players={playersData.players}
+            team={{
+              ...team,
+              totalMinutes: Number(allTeamStatsData.teams?.find((t: any) => t.teamId === teamId)?.totalMinutes ?? team.games * 200),
+            }}
+          />
         )}
 
         <div style={{ marginBottom: 32 }}>
