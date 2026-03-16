@@ -15,7 +15,6 @@ type TeamStats = {
   opp_fgm: number; opp_fga: number; opp_tpm: number; opp_tpa: number; opp_ftm: number; opp_fta: number;
   opp_orb: number; opp_drb: number; opp_trb: number; opp_ast: number; opp_stl: number; opp_blk: number; opp_tov: number; opp_pf: number;
   adjO?: number; adjD?: number; adjEM?: number; adjT?: number;
-  totalMinutes?: number;
 };
 
 function coerceTeamStats(t: any): TeamStats {
@@ -25,7 +24,7 @@ function coerceTeamStats(t: any): TeamStats {
     'orb','drb','trb','ast','stl','blk','tov','pf',
     'opp_fgm','opp_fga','opp_tpm','opp_tpa','opp_ftm','opp_fta',
     'opp_orb','opp_drb','opp_trb','opp_ast','opp_stl','opp_blk','opp_tov','opp_pf',
-    'adjO','adjD','adjEM','adjT','totalMinutes',
+    'adjO','adjD','adjEM','adjT',
   ];
   const result = { ...t };
   for (const f of numFields) {
@@ -328,13 +327,7 @@ export default async function MensD2TeamPage({
         </div>
 
         {playersData.players && playersData.players.length > 0 && (
-          <PlayerStats
-            players={playersData.players}
-            team={{
-              ...team,
-              totalMinutes: Number(allTeamStatsData.teams?.find((t: any) => t.teamId === teamId)?.totalMinutes) || team.games * 200,
-            }}
-          />
+          <PlayerStats players={playersData.players} team={team} />
         )}
 
         <div style={{ marginBottom: 32 }}>
@@ -387,7 +380,7 @@ function formatHeight(inches: number | null | undefined): string {
 }
 
 function PlayerStats({ players, team }: { players: any[]; team: any }) {
-  const teamMinutes = team.totalMinutes ?? team.games * 200;
+  const teamMinutes = team.games * 200;
   const opp_drb = team.opp_trb - team.opp_orb;
   const drb = team.trb - team.orb;
 
