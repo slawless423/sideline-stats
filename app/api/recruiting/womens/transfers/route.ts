@@ -41,9 +41,15 @@ export async function GET() {
       WHERE division IN ('womens-d1', 'womens-d2')
     `);
 
+    const metaResult = await pool.query(`
+      SELECT value FROM site_metadata WHERE key = 'womens_transfers_last_updated'
+    `);
+    const lastUpdated = metaResult.rows[0]?.value ?? null;
+
     return NextResponse.json({
       transfers: transfersResult.rows,
       teams: teamsResult.rows,
+      lastUpdated,
     });
   } catch (error) {
     console.error('Women\'s Transfers API error:', error);
