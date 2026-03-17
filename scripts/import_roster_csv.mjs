@@ -99,6 +99,7 @@ function parseCSV(content) {
   const lines = content.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
   if (lines.length < 2) return [];
   const header = lines[0].split(',').map(h => h.trim().toLowerCase());
+  const pidIdx  = header.indexOf('player_id');
   const divIdx   = header.indexOf('division');
   const teamIdx  = header.indexOf('team_name');
   const fIdx     = header.indexOf('first_name');
@@ -117,6 +118,7 @@ function parseCSV(content) {
     const fields = splitCSVLine(line);
     if (fields.length < 6) continue;
     rows.push({
+      player_id:  pidIdx !== -1 ? (fields[pidIdx]?.trim() ?? '') : '',
       division:   fields[divIdx]?.trim()  ?? '',
       team_name:  fields[teamIdx]?.trim() ?? '',
       first_name: fields[fIdx]?.trim()    ?? '',
@@ -191,18 +193,33 @@ async function run() {
       updated++;
       continue;
     }
-    const res = await pool.query(`
-      UPDATE players
-      SET
-        height = CASE WHEN $1::int IS NOT NULL THEN $1::int ELSE height END,
-        year   = CASE WHEN $2::text IS NOT NULL THEN $2::text ELSE year  END
-      WHERE
-        LOWER(first_name) = LOWER($3)
-        AND LOWER(last_name) = LOWER($4)
-        AND division = $5
-        AND LOWER(team_name) = LOWER($6)
-      RETURNING player_id
-    `, [height, year, firstName, lastName, row.division, row.team_name]);
+
+    let res;
+    if (row.player_id) {
+      // Primary path: look up by player_id (exact, no name ambiguity)
+      res = await pool.query(`
+        UPDATE players
+        SET
+          height = CASE WHEN $1::int IS NOT NULL THEN $1::int ELSE height END,
+          year   = CASE WHEN $2::text IS NOT NULL THEN $2::text ELSE year  END
+        WHERE player_id = $3
+        RETURNING player_id
+      `, [height, year, row.player_id]);
+    } else {
+      // Fallback: match by division + team + name (old CSVs without player_id)
+      res = await pool.query(`
+        UPDATE players
+        SET
+          height = CASE WHEN $1::int IS NOT NULL THEN $1::int ELSE height END,
+          year   = CASE WHEN $2::text IS NOT NULL THEN $2::text ELSE year  END
+        WHERE
+          LOWER(first_name) = LOWER($3)
+          AND LOWER(last_name) = LOWER($4)
+          AND division = $5
+          AND LOWER(team_name) = LOWER($6)
+        RETURNING player_id
+      `, [height, year, firstName, lastName, row.division, row.team_name]);
+    }
     if (res.rowCount === 0) {
       noMatch++;
       noMatchRows.push(`${row.division} | ${row.team_name} | ${firstName} ${lastName}`);
