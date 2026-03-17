@@ -464,6 +464,14 @@
     "previous_school": "West Virginia State",
     "player_id": "1250_norris_bournejr"
   },
+  { "transfer_name": "Jayme Mitchell, Jr.", "previous_school": "Jackson State", "player_id": "763_jayme_mitchelljr." },
+  { "transfer_name": "Aaron Davis III", "previous_school": "Bryant", "player_id": "484_aaron_davis" },
+  { "transfer_name": "Ridvan Tutić", "previous_school": "Stonehill", "player_id": "960_ridvan_tutic" },
+  { "transfer_name": "Max Żylicz", "previous_school": "Cal State San Bernardino", "player_id": "1437_max_zylicz" },
+  { "transfer_name": "Tarrance Warren", "previous_school": "Barry", "player_id": "834_tarrance_warrenjr" },
+  { "transfer_name": "Petar Mijatović", "previous_school": "King", "player_id": "52014_petar_mijatovic" },
+  { "transfer_name": "Eric Gordon, Jr.", "previous_school": "Chowan", "player_id": "1035_eric_gordonjr." },
+  { "transfer_name": "Darin Smith, Jr.", "previous_school": "Central Connecticut State", "player_id": "1450_darin_smith,jr." },
   {
     "transfer_name": "Parker Baumann",
     "previous_school": "Western Oregon",
