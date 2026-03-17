@@ -1,58 +1,48 @@
-import { NextResponse } from 'next/server';
-import { Pool } from 'pg';
-
-const pool = new Pool({
-  connectionString: process.env.POSTGRES_URL,
-  ssl: { rejectUnauthorized: false }
-});
-
-export async function GET() {
-  try {
-    const transfersResult = await pool.query(`
-      SELECT
-        t.player_id       AS "playerId",
-        t.name,
-        t.previous_school AS "previousSchool",
-        t.new_school      AS "newSchool",
-        t.division,
-        t.match_status    AS "matchStatus",
-        t.team_name       AS "teamName",
-        t.position,
-        t.year,
-        t.height,
-        t.games, t.starts, t.minutes,
-        t.fgm, t.fga, t.tpm, t.tpa, t.ftm, t.fta,
-        t.orb, t.drb, t.trb, t.ast, t.stl, t.blk, t.tov, t.pf, t.points
-      FROM womens_transfers t
-      ORDER BY t.division, t.name
-    `);
-
-    const teamsResult = await pool.query(`
-      SELECT
-        team_id   AS "teamId",
-        team_name AS "teamName",
-        division,
-        games,
-        fgm, fga, tpm, tpa, ftm, fta,
-        orb, drb, trb, ast, stl, blk, tov, pf, points,
-        opp_fgm, opp_fga, opp_tpm, opp_tpa, opp_ftm, opp_fta,
-        opp_orb, opp_drb, opp_trb, opp_ast, opp_stl, opp_blk, opp_tov, opp_pf, opp_points
-      FROM teams
-      WHERE division IN ('womens-d1', 'womens-d2')
-    `);
-
-    const metaResult = await pool.query(`
-      SELECT value FROM site_metadata WHERE key = 'womens_transfers_last_updated'
-    `);
-    const lastUpdated = metaResult.rows[0]?.value ?? null;
-
-    return NextResponse.json({
-      transfers: transfersResult.rows,
-      teams: teamsResult.rows,
-      lastUpdated,
-    });
-  } catch (error) {
-    console.error('Women\'s Transfers API error:', error);
-    return NextResponse.json({ error: 'Failed to fetch transfers' }, { status: 500 });
-  }
-}
+name: Generate Missing Roster CSV
+on:
+  workflow_dispatch:
+    inputs:
+      division:
+        description: 'Division to export (leave blank for all)'
+        required: false
+        type: choice
+        options:
+          - ''
+          - womens-d1
+          - mens-d1
+          - mens-d2
+          - womens-d2
+          - mens-transfers
+          - womens-transfers
+      team:
+        description: 'Team name to export (leave blank for all teams in division)'
+        required: false
+        type: string
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        run: npm install
+      - name: Generate missing roster CSV
+        env:
+          POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+        run: |
+          ARGS=""
+          if [ -n "${{ github.event.inputs.division }}" ]; then
+            ARGS="$ARGS --division ${{ github.event.inputs.division }}"
+          fi
+          if [ -n "${{ github.event.inputs.team }}" ]; then
+            ARGS="$ARGS --team \"${{ github.event.inputs.team }}\""
+          fi
+          eval node scripts/generate_missing_roster_csv.mjs $ARGS
+      - name: Upload CSV as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: missing-rosters
+          path: missing_rosters_*.csv
+          retention-days: 30
