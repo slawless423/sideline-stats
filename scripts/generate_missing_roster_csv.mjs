@@ -147,7 +147,7 @@ async function runTransfers() {
 
   const header = 'player_id,division,team_name,first_name,last_name,height,year';
   const lines = res.rows.map(r => {
-    const playerId = csvEscape(r.player_id || '');
+    const playerId = (r.player_id || '').replace(/,/g, '_');
     const firstName = normalizeName(r.first_name || '');
     const lastName  = normalizeName(r.last_name  || '');
     const division  = divMap[r.division] || r.division;
@@ -218,7 +218,7 @@ async function runPlayers() {
 
   const header = 'player_id,division,team_name,first_name,last_name,height,year';
   const lines = rows.map(r => {
-    const playerId = csvEscape(r.player_id ?? '');
+    const playerId = (r.player_id ?? '').replace(/,/g, '_');
     const div       = csvEscape(r.division);
     const team      = csvEscape(r.team_name);
     const firstName = csvEscape(normalizeName(r.first_name ?? ''));
