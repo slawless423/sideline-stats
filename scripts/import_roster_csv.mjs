@@ -204,7 +204,7 @@ async function run() {
           year   = CASE WHEN $2::text IS NOT NULL THEN $2::text ELSE year  END
         WHERE player_id = $3
         RETURNING player_id
-      `, [height, year, row.player_id]);
+      `, [height, year, row.player_id.replace(/,/g, '_')]);
     } else {
       // Fallback: match by division + team + name (old CSVs without player_id)
       res = await pool.query(`
