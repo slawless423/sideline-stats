@@ -191,15 +191,17 @@ export default function MensTransfersPage() {
   const [minMinutes, setMinMinutes] = useState(0);
   const [sortKey, setSortKey]       = useState<SortKey>('minPct');
   const [sortOrder, setSortOrder]   = useState<'asc' | 'desc'>('desc');
+  const [lastUpdated, setLastUpdated] = useState<string | null>(null);
 
   useEffect(() => {
     fetch('/api/recruiting/mens/transfers')
       .then(r => r.json())
-      .then(({ transfers, teams }) => {
+      .then(({ transfers, teams, lastUpdated }) => {
         setTransfers(transfers ?? []);
         const map = new Map<string, TeamRow>();
         for (const t of (teams ?? [])) map.set(t.teamName, t);
         setTeamMap(map);
+        setLastUpdated(lastUpdated ?? null);
         setLoading(false);
       })
       .catch(() => setLoading(false));
@@ -347,9 +349,14 @@ export default function MensTransfersPage() {
           <div style={{ padding: 40, textAlign: 'center', color: MUTED }}>Loading...</div>
         ) : (
           <>
-            <p style={{ fontSize: 12, color: MUTED, marginBottom: 12 }}>
+            <p style={{ fontSize: 12, color: MUTED, marginBottom: 4 }}>
               Showing {sorted.length} of {withStats} transfers with stats
             </p>
+            {lastUpdated && (
+              <p style={{ fontSize: 11, color: MUTED, marginBottom: 12, fontFamily: "'Outfit', sans-serif" }}>
+                Database updated: {new Date(lastUpdated).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+              </p>
+            )}
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11, whiteSpace: 'nowrap' }}>
                 <thead>
