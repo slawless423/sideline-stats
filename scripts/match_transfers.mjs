@@ -432,7 +432,12 @@ async function main() {
     console.log(`   For each fuzzy match, verify and add to scripts/transfer_overrides.json:`);
     console.log(`   { "transfer_name": "...", "previous_school": "...", "player_id": "..." }`);
   }
-
+await pool.query(`
+  INSERT INTO site_metadata (key, value, updated_at)
+  VALUES ('transfers_last_updated', NOW()::TEXT, NOW())
+  ON CONFLICT (key) DO UPDATE SET value = NOW()::TEXT, updated_at = NOW()
+`);
+console.log("📅 Updated transfers_last_updated in site_metadata");
   await pool.end();
   console.log("\n🎉 Done!");
 }
