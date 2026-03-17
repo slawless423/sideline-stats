@@ -6,10 +6,11 @@
  *   POSTGRES_URL=your_url node scripts/generate_missing_roster_csv.mjs
  *
  * FLAGS:
- *   --division womens-d1       only export one division (womens-d1, mens-d1, mens-d2, womens-d2)
- *   --division mens-transfers  export transfers table (D1 Men + D2 Men) missing height/year
- *   --team "Alabama St."       only export one team (exact DB name)
- *   --out roster_missing.csv   custom output filename (default: missing_rosters_YYYY-MM-DD.csv)
+ *   --division womens-d1          only export one division (womens-d1, mens-d1, mens-d2, womens-d2)
+ *   --division mens-transfers     export transfers table (D1 Men + D2 Men) missing height/year
+ *   --division womens-transfers   export womens_transfers table (D1 Women + D2 Women) missing height/year
+ *   --team "Alabama St."          only export one team (exact DB name)
+ *   --out roster_missing.csv      custom output filename (default: missing_rosters_YYYY-MM-DD.csv)
  *
  * OUTPUT:
  *   CSV file with columns:
@@ -43,17 +44,12 @@ const OUT_FILE        = getArg('--out') ?? `missing_rosters_${new Date().toISOSt
 
 const ALL_DIVISIONS = ['womens-d1', 'mens-d1', 'mens-d2', 'womens-d2'];
 
-// ─── NAME NORMALIZER ───────────────────────────────────────────────────----------------------------------------------------------------
-// Strips accents/diacritics to ASCII and removes suffixes after a comma.
-// e.g. "Zundrá" → "Zundra", "Raye, Jr." → "Raye"
+// ─── NAME NORMALIZER ──────────────────────────────────────────────────────────
 function normalizeName(name) {
   if (!name) return '';
-  // Preserve suffixes (Jr., Sr., etc.) so the exported name exactly matches
-  // what is stored in the DB — the importer will look up by player_id anyway,
-  // but keeping names intact makes the CSV human-readable and correct.
   return name
-    .normalize('NFD')                          // decompose accented chars
-    .replace(/[\u0300-\u036f]/g, '')           // strip diacritic marks
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
     .trim();
 }
 
@@ -67,16 +63,11 @@ function csvEscape(val) {
   return s;
 }
 
-// ─── TRANSFERS BRANCH ──────────────────────────────────────────────────────────
+// ─── MENS TRANSFERS BRANCH ────────────────────────────────────────────────────
 
 async function runTransfers() {
   console.log('Querying transfers table (D1 Men + D2 Men) for players missing height or year...\n');
 
-  // Join against players table to get correct first_name/last_name split.
-  // Strips periods AND commas before comparing so:
-  //   "CJ Yao" matches "C.J. Yao"
-  //   "AJ Reed Jr" matches "A.J. Reed, Jr."
-  //   "Juan Pedro Rodriguez" matches correctly via multi-word first name
   let query = `
     SELECT
       p.player_id,
@@ -138,12 +129,7 @@ async function runTransfers() {
     return;
   }
 
-  // Map transfers.division ("D1 Men" / "D2 Men") to the division string
-  // used by import_roster_csv so the CSV can be fed straight back in
-  const divMap = {
-    'D1 Men': 'mens-d1',
-    'D2 Men': 'mens-d2',
-  };
+  const divMap = { 'D1 Men': 'mens-d1', 'D2 Men': 'mens-d2' };
 
   const header = 'player_id,division,team_name,first_name,last_name,height,year';
   const lines = res.rows.map(r => {
@@ -155,13 +141,102 @@ async function runTransfers() {
     const height    = r.height || '';
     const year      = r.year   || '';
     return [
-      csvEscape(playerId),
-      csvEscape(division),
-      csvEscape(teamName),
-      csvEscape(firstName),
-      csvEscape(lastName),
-      csvEscape(height),
-      csvEscape(year),
+      csvEscape(playerId), csvEscape(division), csvEscape(teamName),
+      csvEscape(firstName), csvEscape(lastName), csvEscape(height), csvEscape(year),
+    ].join(',');
+  });
+
+  const csv = [header, ...lines].join('\n') + '\n';
+  fs.writeFileSync(OUT_FILE, csv, 'utf8');
+
+  console.log(`\n✅ Exported ${res.rows.length} players to: ${OUT_FILE}`);
+  console.log(`\nInstructions:`);
+  console.log(`  1. Open ${OUT_FILE} in Excel or Google Sheets`);
+  console.log(`  2. Fill in the 'height' column (e.g. 6'3") and/or 'year' column`);
+  console.log(`     Valid year values: Fr, So, Jr, Sr`);
+  console.log(`  3. Save as CSV and re-import via the Import Roster CSV workflow`);
+}
+
+// ─── WOMENS TRANSFERS BRANCH ──────────────────────────────────────────────────
+
+async function runWomensTransfers() {
+  console.log('Querying womens_transfers table (D1 Women + D2 Women) for players missing height or year...\n');
+
+  let query = `
+    SELECT
+      p.player_id,
+      t.previous_school,
+      t.division,
+      t.height,
+      t.year,
+      p.first_name,
+      p.last_name
+    FROM womens_transfers t
+    JOIN players p
+      ON LOWER(p.team_name) = LOWER(t.previous_school)
+      AND LOWER(REPLACE(REPLACE(CONCAT(p.first_name, ' ', p.last_name), '.', ''), ',', '')) = LOWER(REPLACE(REPLACE(t.name, '.', ''), ',', ''))
+      AND p.division = CASE t.division
+        WHEN 'D1 Women' THEN 'womens-d1'
+        WHEN 'D2 Women' THEN 'womens-d2'
+      END
+    WHERE t.division IN ('D1 Women', 'D2 Women')
+      AND t.match_status != 'unmatched'
+      AND (t.height IS NULL OR t.height = '' OR t.year IS NULL OR t.year = '')
+    ORDER BY t.division, t.previous_school, t.name
+  `;
+  const params = [];
+
+  if (TEAM_FILTER) {
+    query = `
+      SELECT
+        p.player_id,
+        t.previous_school,
+        t.division,
+        t.height,
+        t.year,
+        p.first_name,
+        p.last_name
+      FROM womens_transfers t
+      JOIN players p
+        ON LOWER(p.team_name) = LOWER(t.previous_school)
+        AND LOWER(REPLACE(REPLACE(CONCAT(p.first_name, ' ', p.last_name), '.', ''), ',', '')) = LOWER(REPLACE(REPLACE(t.name, '.', ''), ',', ''))
+        AND p.division = CASE t.division
+          WHEN 'D1 Women' THEN 'womens-d1'
+          WHEN 'D2 Women' THEN 'womens-d2'
+        END
+      WHERE t.division IN ('D1 Women', 'D2 Women')
+        AND t.match_status != 'unmatched'
+        AND LOWER(t.previous_school) = LOWER($1)
+        AND (t.height IS NULL OR t.height = '' OR t.year IS NULL OR t.year = '')
+      ORDER BY t.name
+    `;
+    params.push(TEAM_FILTER);
+  }
+
+  const res = await pool.query(query, params);
+  await pool.end();
+
+  console.log(`  Found ${res.rows.length} womens transfer players missing height or year`);
+
+  if (res.rows.length === 0) {
+    console.log('\n✅ No womens transfers missing height or year!');
+    return;
+  }
+
+  const divMap = { 'D1 Women': 'womens-d1', 'D2 Women': 'womens-d2' };
+
+  const header = 'player_id,division,team_name,first_name,last_name,height,year';
+  const lines = res.rows.map(r => {
+    const playerId = (r.player_id || '').replace(/,/g, '_');
+    const firstName = normalizeName(r.first_name || '');
+    const lastName  = normalizeName(r.last_name  || '');
+    const division  = divMap[r.division] || r.division;
+    const teamName  = r.previous_school || '';
+    const height    = r.height || '';
+    const year      = r.year   || '';
+    return [
+      csvEscape(playerId), csvEscape(division), csvEscape(teamName),
+      csvEscape(firstName), csvEscape(lastName), csvEscape(height), csvEscape(year),
     ].join(',');
   });
 
@@ -244,6 +319,8 @@ async function runPlayers() {
 
 if (DIVISION_FILTER === 'mens-transfers') {
   runTransfers().catch(err => { console.error('Error:', err.message); process.exit(1); });
+} else if (DIVISION_FILTER === 'womens-transfers') {
+  runWomensTransfers().catch(err => { console.error('Error:', err.message); process.exit(1); });
 } else {
   runPlayers().catch(err => { console.error('Error:', err.message); process.exit(1); });
 }
