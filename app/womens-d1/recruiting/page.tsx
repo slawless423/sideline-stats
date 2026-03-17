@@ -191,15 +191,17 @@ export default function WomensTransfersPage() {
   const [minMinutes, setMinMinutes] = useState(0);
   const [sortKey, setSortKey]       = useState<SortKey>('minPct');
   const [sortOrder, setSortOrder]   = useState<'asc' | 'desc'>('desc');
+  const [lastUpdated, setLastUpdated] = useState<string | null>(null);
 
   useEffect(() => {
     fetch('/api/recruiting/womens/transfers')
       .then(r => r.json())
-      .then(({ transfers, teams }) => {
+      .then(({ transfers, teams, lastUpdated }) => {
         setTransfers(transfers ?? []);
         const map = new Map<string, TeamRow>();
         for (const t of (teams ?? [])) map.set(t.teamName, t);
         setTeamMap(map);
+        setLastUpdated(lastUpdated ?? null);
         setLoading(false);
       })
       .catch(() => setLoading(false));
@@ -292,32 +294,42 @@ export default function WomensTransfersPage() {
           </div>
         </div>
 
-        <div style={{ display: 'flex', gap: 12, marginBottom: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+        {/* Row 1: Search + Division filter + Stat mode toggle */}
+        <div style={{ display: 'flex', gap: 12, marginBottom: 8, flexWrap: 'wrap', alignItems: 'flex-end' }}>
           <input type="text" placeholder="Search player, previous school, or destination..." value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
             style={{ padding: '8px 12px', border: `1px solid ${ICE}`, borderRadius: 6, fontSize: 13, flex: 1, minWidth: 200, outline: 'none', fontFamily: "'Outfit', sans-serif" }} />
-          <div style={{ display: 'flex', borderRadius: 6, overflow: 'hidden', border: `1px solid ${ICE}` }}>
-            {(['all','D1 Women','D2 Women'] as const).map(val => (
-              <button key={val} onClick={() => setDivFilter(val)} style={{
-                padding: '7px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
-                fontFamily: "'Outfit', sans-serif", border: 'none', outline: 'none',
-                background: divFilter===val ? NAVY : '#fff', color: divFilter===val ? '#fff' : MUTED,
-                transition: 'background 0.15s, color 0.15s',
-              }}>{val==='all'?'All':val}</button>
-            ))}
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <span style={{ fontSize: 10, color: MUTED, fontFamily: "'Outfit', sans-serif", fontWeight: 600 }}>Division</span>
+            <div style={{ display: 'flex', borderRadius: 6, overflow: 'hidden', border: `1px solid ${ICE}` }}>
+              {(['all','D1 Women','D2 Women'] as const).map(val => (
+                <button key={val} onClick={() => setDivFilter(val)} style={{
+                  padding: '7px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
+                  fontFamily: "'Outfit', sans-serif", border: 'none', outline: 'none',
+                  background: divFilter===val ? NAVY : '#fff', color: divFilter===val ? '#fff' : MUTED,
+                  transition: 'background 0.15s, color 0.15s',
+                }}>{val==='all'?'All':val}</button>
+              ))}
+            </div>
           </div>
-          <div style={{ display: 'flex', borderRadius: 6, overflow: 'hidden', border: `1px solid ${ICE}` }}>
-            {([{key:'advanced',label:'Advanced'},{key:'perGame',label:'Per Game'},{key:'per40',label:'Per 40'}] as {key:StatMode;label:string}[]).map(({key,label}) => (
-              <button key={key} onClick={() => setStatMode(key)} style={{
-                padding: '7px 16px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
-                fontFamily: "'Outfit', sans-serif", border: 'none', outline: 'none',
-                background: statMode===key ? ACCENT : '#fff', color: statMode===key ? '#fff' : MUTED,
-                transition: 'background 0.15s, color 0.15s',
-              }}>{label}</button>
-            ))}
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <span style={{ fontSize: 10, color: MUTED, fontFamily: "'Outfit', sans-serif", fontWeight: 600 }}>Stat Mode</span>
+            <div style={{ display: 'flex', borderRadius: 6, overflow: 'hidden', border: `1px solid ${ICE}` }}>
+              {([{key:'advanced',label:'Advanced'},{key:'perGame',label:'Per Game'},{key:'per40',label:'Per 40'}] as {key:StatMode;label:string}[]).map(({key,label}) => (
+                <button key={key} onClick={() => setStatMode(key)} style={{
+                  padding: '7px 16px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
+                  fontFamily: "'Outfit', sans-serif", border: 'none', outline: 'none',
+                  background: statMode===key ? ACCENT : '#fff', color: statMode===key ? '#fff' : MUTED,
+                  transition: 'background 0.15s, color 0.15s',
+                }}>{label}</button>
+              ))}
+            </div>
           </div>
         </div>
 
+        {/* Row 2: Min minutes filter + Export button */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, flexWrap: 'wrap', gap: 8 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <span style={{ fontSize: 12, color: MUTED, fontFamily: "'Outfit', sans-serif", fontWeight: 600 }}>Min. Minutes:</span>
@@ -345,9 +357,14 @@ export default function WomensTransfersPage() {
           <div style={{ padding: 40, textAlign: 'center', color: MUTED }}>Loading...</div>
         ) : (
           <>
-            <p style={{ fontSize: 12, color: MUTED, marginBottom: 12 }}>
+            <p style={{ fontSize: 12, color: MUTED, marginBottom: 4 }}>
               Showing {sorted.length} of {withStats} transfers with stats
             </p>
+            {lastUpdated && (
+              <p style={{ fontSize: 11, color: MUTED, marginBottom: 12, fontFamily: "'Outfit', sans-serif" }}>
+                Database updated: {new Date(lastUpdated).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+              </p>
+            )}
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11, whiteSpace: 'nowrap' }}>
                 <thead>
