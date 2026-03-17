@@ -48,10 +48,12 @@ const ALL_DIVISIONS = ['womens-d1', 'mens-d1', 'mens-d2', 'womens-d2'];
 // e.g. "Zundrá" → "Zundra", "Raye, Jr." → "Raye"
 function normalizeName(name) {
   if (!name) return '';
+  // Preserve suffixes (Jr., Sr., etc.) so the exported name exactly matches
+  // what is stored in the DB — the importer will look up by player_id anyway,
+  // but keeping names intact makes the CSV human-readable and correct.
   return name
     .normalize('NFD')                          // decompose accented chars
     .replace(/[\u0300-\u036f]/g, '')           // strip diacritic marks
-    .replace(/,\s*(Jr\.?|Sr\.?|II|III|IV|V)$/i, '') // strip suffixes
     .trim();
 }
 
@@ -77,6 +79,7 @@ async function runTransfers() {
   //   "Juan Pedro Rodriguez" matches correctly via multi-word first name
   let query = `
     SELECT
+      p.player_id,
       t.previous_school,
       t.division,
       t.height,
@@ -101,6 +104,7 @@ async function runTransfers() {
   if (TEAM_FILTER) {
     query = `
       SELECT
+        p.player_id,
         t.previous_school,
         t.division,
         t.height,
@@ -141,8 +145,9 @@ async function runTransfers() {
     'D2 Men': 'mens-d2',
   };
 
-  const header = 'division,team_name,first_name,last_name,height,year';
+  const header = 'player_id,division,team_name,first_name,last_name,height,year';
   const lines = res.rows.map(r => {
+    const playerId = csvEscape(r.player_id || '');
     const firstName = normalizeName(r.first_name || '');
     const lastName  = normalizeName(r.last_name  || '');
     const division  = divMap[r.division] || r.division;
@@ -150,6 +155,7 @@ async function runTransfers() {
     const height    = r.height || '';
     const year      = r.year   || '';
     return [
+      csvEscape(playerId),
       csvEscape(division),
       csvEscape(teamName),
       csvEscape(firstName),
@@ -178,7 +184,7 @@ async function runPlayers() {
 
   for (const division of divisions) {
     let query = `
-      SELECT division, team_name, first_name, last_name, height, year
+      SELECT player_id, division, team_name, first_name, last_name, height, year
       FROM players
       WHERE division = $1
         AND (height IS NULL OR year IS NULL OR year = '' OR height = 0)
@@ -188,7 +194,7 @@ async function runPlayers() {
 
     if (TEAM_FILTER) {
       query = `
-        SELECT division, team_name, first_name, last_name, height, year
+        SELECT player_id, division, team_name, first_name, last_name, height, year
         FROM players
         WHERE division = $1
           AND LOWER(team_name) = LOWER($2)
@@ -210,15 +216,16 @@ async function runPlayers() {
     return;
   }
 
-  const header = 'division,team_name,first_name,last_name,height,year';
+  const header = 'player_id,division,team_name,first_name,last_name,height,year';
   const lines = rows.map(r => {
+    const playerId = csvEscape(r.player_id ?? '');
     const div       = csvEscape(r.division);
     const team      = csvEscape(r.team_name);
     const firstName = csvEscape(normalizeName(r.first_name ?? ''));
     const lastName  = csvEscape(normalizeName(r.last_name ?? ''));
     const height    = r.height && r.height !== 0 ? r.height : '';
     const year      = r.year ?? '';
-    return `${div},${team},${firstName},${lastName},${height},${year}`;
+    return `${playerId},${div},${team},${firstName},${lastName},${height},${year}`;
   });
 
   const csv = [header, ...lines].join('\n');
