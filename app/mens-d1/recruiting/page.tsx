@@ -295,29 +295,37 @@ export default function MensTransfersPage() {
         </div>
 
         {/* Row 1: Search + Division filter + Stat mode toggle */}
-        <div style={{ display: 'flex', gap: 12, marginBottom: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: 12, marginBottom: 8, flexWrap: 'wrap', alignItems: 'flex-end' }}>
           <input type="text" placeholder="Search player, previous school, or destination..." value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
             style={{ padding: '8px 12px', border: `1px solid ${ICE}`, borderRadius: 6, fontSize: 13, flex: 1, minWidth: 200, outline: 'none', fontFamily: "'Outfit', sans-serif" }} />
-          <div style={{ display: 'flex', borderRadius: 6, overflow: 'hidden', border: `1px solid ${ICE}` }}>
-            {(['all','D1 Men','D2 Men'] as const).map(val => (
-              <button key={val} onClick={() => setDivFilter(val)} style={{
-                padding: '7px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
-                fontFamily: "'Outfit', sans-serif", border: 'none', outline: 'none',
-                background: divFilter===val ? NAVY : '#fff', color: divFilter===val ? '#fff' : MUTED,
-                transition: 'background 0.15s, color 0.15s',
-              }}>{val==='all'?'All':val}</button>
-            ))}
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <span style={{ fontSize: 10, color: MUTED, fontFamily: "'Outfit', sans-serif", fontWeight: 600 }}>Division</span>
+            <div style={{ display: 'flex', borderRadius: 6, overflow: 'hidden', border: `1px solid ${ICE}` }}>
+              {(['all','D1 Men','D2 Men'] as const).map(val => (
+                <button key={val} onClick={() => setDivFilter(val)} style={{
+                  padding: '7px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
+                  fontFamily: "'Outfit', sans-serif", border: 'none', outline: 'none',
+                  background: divFilter===val ? NAVY : '#fff', color: divFilter===val ? '#fff' : MUTED,
+                  transition: 'background 0.15s, color 0.15s',
+                }}>{val==='all'?'All':val}</button>
+              ))}
+            </div>
           </div>
-          <div style={{ display: 'flex', borderRadius: 6, overflow: 'hidden', border: `1px solid ${ICE}` }}>
-            {([{key:'advanced',label:'Advanced'},{key:'perGame',label:'Per Game'},{key:'per40',label:'Per 40'}] as {key:StatMode;label:string}[]).map(({key,label}) => (
-              <button key={key} onClick={() => setStatMode(key)} style={{
-                padding: '7px 16px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
-                fontFamily: "'Outfit', sans-serif", border: 'none', outline: 'none',
-                background: statMode===key ? ACCENT : '#fff', color: statMode===key ? '#fff' : MUTED,
-                transition: 'background 0.15s, color 0.15s',
-              }}>{label}</button>
-            ))}
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <span style={{ fontSize: 10, color: MUTED, fontFamily: "'Outfit', sans-serif", fontWeight: 600 }}>Stat Mode</span>
+            <div style={{ display: 'flex', borderRadius: 6, overflow: 'hidden', border: `1px solid ${ICE}` }}>
+              {([{key:'advanced',label:'Advanced'},{key:'perGame',label:'Per Game'},{key:'per40',label:'Per 40'}] as {key:StatMode;label:string}[]).map(({key,label}) => (
+                <button key={key} onClick={() => setStatMode(key)} style={{
+                  padding: '7px 16px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
+                  fontFamily: "'Outfit', sans-serif", border: 'none', outline: 'none',
+                  background: statMode===key ? ACCENT : '#fff', color: statMode===key ? '#fff' : MUTED,
+                  transition: 'background 0.15s, color 0.15s',
+                }}>{label}</button>
+              ))}
+            </div>
           </div>
         </div>
 
