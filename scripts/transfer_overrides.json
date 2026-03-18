@@ -464,17 +464,94 @@
     "previous_school": "West Virginia State",
     "player_id": "1250_norris_bournejr"
   },
-  { "transfer_name": "Jayme Mitchell, Jr.", "previous_school": "Jackson State", "player_id": "763_jayme_mitchelljr." },
-  { "transfer_name": "Aaron Davis III", "previous_school": "Bryant", "player_id": "484_aaron_davis" },
-  { "transfer_name": "Ridvan Tutić", "previous_school": "Stonehill", "player_id": "960_ridvan_tutic" },
-  { "transfer_name": "Max Żylicz", "previous_school": "Cal State San Bernardino", "player_id": "1437_max_zylicz" },
-  { "transfer_name": "Tarrance Warren", "previous_school": "Barry", "player_id": "834_tarrance_warrenjr" },
-  { "transfer_name": "Petar Mijatović", "previous_school": "King", "player_id": "52014_petar_mijatovic" },
-  { "transfer_name": "Eric Gordon, Jr.", "previous_school": "Chowan", "player_id": "1035_eric_gordonjr." },
-  { "transfer_name": "Darin Smith, Jr.", "previous_school": "Central Connecticut State", "player_id": "1450_darin_smith,jr." },
+  {
+    "transfer_name": "Jayme Mitchell, Jr.",
+    "previous_school": "Jackson State",
+    "player_id": "763_jayme_mitchelljr."
+  },
+  {
+    "transfer_name": "Aaron Davis III",
+    "previous_school": "Bryant",
+    "player_id": "484_aaron_davis"
+  },
+  {
+    "transfer_name": "Ridvan Tutić",
+    "previous_school": "Stonehill",
+    "player_id": "960_ridvan_tutic"
+  },
+  {
+    "transfer_name": "Max Żylicz",
+    "previous_school": "Cal State San Bernardino",
+    "player_id": "1437_max_zylicz"
+  },
+  {
+    "transfer_name": "Tarrance Warren",
+    "previous_school": "Barry",
+    "player_id": "834_tarrance_warrenjr"
+  },
+  {
+    "transfer_name": "Petar Mijatović",
+    "previous_school": "King",
+    "player_id": "52014_petar_mijatovic"
+  },
+  {
+    "transfer_name": "Eric Gordon, Jr.",
+    "previous_school": "Chowan",
+    "player_id": "1035_eric_gordonjr."
+  },
+  {
+    "transfer_name": "Darin Smith, Jr.",
+    "previous_school": "Central Connecticut State",
+    "player_id": "1450_darin_smith,jr."
+  },
   {
     "transfer_name": "Parker Baumann",
     "previous_school": "Western Oregon",
     "player_id": "893_parker_bauman"
+  },
+  {
+    "transfer_name": "Jamie Kaiser, Jr.",
+    "previous_school": "Butler",
+    "player_id": "488_jamie_kaiser,jr."
+  },
+  {
+    "transfer_name": "Keyon Kensie, Jr.",
+    "previous_school": "Portland State",
+    "player_id": "1295_keyon_kensiejr."
+  },
+  {
+    "transfer_name": "Melian Martínez",
+    "previous_school": "Louisiana Tech",
+    "player_id": "2494_melian_martinez"
+  },
+  {
+    "transfer_name": "Donte Hickman",
+    "previous_school": "Claflin",
+    "player_id": "1011_donte_hickman,jr."
+  },
+  {
+    "transfer_name": "Fatih Hüyük",
+    "previous_school": "Kentucky Wesleyan",
+    "player_id": "423_fatih_huyuk"
+  },
+  {
+    "transfer_name": "Henry Sanchez",
+    "previous_school": "Maryville",
+    "player_id": "2187_henry_sanchezperez"
+  },
+  {
+    "transfer_name": "Jovan Jovanović",
+    "previous_school": "Chadron State",
+    "player_id": "2242_jovan_jovanovic"
+  },
+  {
+    "transfer_name": "William Landram II",
+    "previous_school": "St. Thomas Aquinas",
+    "player_id": "1934_will_landramii"
+  },
+  {
+    "transfer_name": "Elija Langston",
+    "previous_school": "Ferris State",
+    "player_id": "1790_elija_langston-jones"
   }
 ]
