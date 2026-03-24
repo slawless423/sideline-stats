@@ -577,5 +577,8 @@
   { "transfer_name": "Orlando Horton, Jr.", "previous_school": "Midwestern State", "player_id": "2252_orlando_horton,jr." },
   { "transfer_name": "Renārs Sondors", "previous_school": "Louisiana-Monroe", "player_id": "211_renars_sondors" },
   { "transfer_name": "Mike Collins", "previous_school": "Louisiana", "player_id": "2336_michael_collins" },
-  { "transfer_name": "Nathan Johnson", "previous_school": "Detroit Mercy", "player_id": "1462_nate_johnson" }
+  { "transfer_name": "Nathan Johnson", "previous_school": "Detroit Mercy", "player_id": "1462_nate_johnson" },
+  { "transfer_name": "Kwame Evans, Jr.", "previous_school": "Oregon", "player_id": "926_kwame_evansjr." },
+  { "transfer_name": "Drew King", "previous_school": "Youngstown State", "player_id": "2557_andrew_king" },
+  { "transfer_name": "Josh Michigan", "previous_school": "St. Thomas Aquinas", "player_id": "1934_joshua_michigan" }
 ]
