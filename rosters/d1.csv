@@ -1,85 +1,55 @@
 player_id,division,team_name,first_name,last_name,height,year
-1133_rob_lee_jr.,mens-d1,Lamar University,Rob,"Lee, Jr.","6'2""",Jr
-1176_jalai_o'keith,mens-d2,Alas. Fairbanks,Jalai,O'Keith,"6'6""",Sr
-1387966_julian_mcgowan,mens-d2,Allen,Julian,McGowan,"6'6""",Jr
-2066_brandon_scott,mens-d2,Ark.-Fort Smith,Brandon,Scott,"6'3""",Sr
-2220_abu_keita,mens-d2,Bemidji St.,Abu,Keita,"6'5""",Fr
-58647_cameron_brown,mens-d2,Biola,Cameron,Brown,"6'3""",Sr
-58647_chris_harris,mens-d2,Biola,Chris,Harris,"6'4""",So
-58647_jalen_atkins,mens-d2,Biola,Jalen,Atkins,"6'3""",Fr
-480_shedrach_makanjuola,mens-d2,Bridgeport,Shedrach,Makanjuola,"6'7""",Jr
-1053_martin_gumwel,mens-d2,Cal Poly Pomona,Martin,Gumwel,"6'10""",Fr
-53225_ryan_conner,mens-d2,Cal St. San Marcos,Ryan,Conner,"6'8""",So
-712_kyran_tilley,mens-d2,Central Mo.,Kyran,Tilley,"6'1""",So
-1072_nate_sasseriii,mens-d2,Chaminade,Nate,Sasser III,"6'6""",Jr
-1585_matthew_shelton,mens-d2,Charleston (WV),Matthew,Shelton,"6'5""",So
-159_iman_kheirati,mens-d2,Christian Brothers,Iman,Kheirati,"6'5""",Sr
-2422_cam_crockett,mens-d2,Clarion,Cam,Crockett,"6'7""",Jr
-996_joe_thomas,mens-d2,Clayton St.,Joe,Thomas,"6'5""",Jr
-1216_anfernee_hanna,mens-d2,Concord,Anfernee,Hanna,"6'6""",Jr
-1216_micah_young,mens-d2,Concord,Micah,Young,"6'2""",Fr
-1588_lucus_brown,mens-d2,D'Youville,Lucus,Brown,"6'0""",So
-1460_matthew_gray,mens-d2,Davis & Elkins,Matthew,Gray,"6'7""",Jr
-1460_vegas_evans,mens-d2,Davis & Elkins,Vegas,Evans,"6'7""",Sr
-16469_sargent_jeffery,mens-d2,Dominican (CA),Sargent,Jeffery,"6'6""",Jr
-53222_dawson_barr,mens-d2,Embry-Riddle (FL),Dawson,Barr,"6'4""",Jr
-2244_dorien_johnson,mens-d2,Erskine,Dorien,Johnson,"6'4""",Jr
-2371_jeremiah_anderson,mens-d2,Felician,Jeremiah,Anderson,"6'1""",Jr
-1790_owen_hardy,mens-d2,Ferris St.,Owen,Hardy,"6'10""",Jr
-1484_danny_delgardoiii,mens-d2,Fort Valley St.,Danny,Delgardo III,"6'2""",Fr
-1484_derek_delgardojr,mens-d2,Fort Valley St.,Derek,Delgardo Jr,"6'2""",Fr
-2146_charles_turner,mens-d2,Grand Valley St.,Charles,Turner,"6'7""",Jr
-2570_daniel_henderson,mens-d2,Harding,Daniel,Henderson,"6'1""",So
-2570_martez_burse,mens-d2,Harding,Martez,Burse,"6'5""",Jr
-1023_deandre_nobles,mens-d2,Hawaii Hilo,DeAndre,Nobles,"6'6""",Jr
-1023_fabiodaniele_novaisdarocha,mens-d2,Hawaii Hilo,Fabio Daniele,Novais da Rocha,"6'11""",Jr
-318_evan_simon,mens-d2,Ill. Springfield,Evan,Simon,"5'11""",Fr
-2400_amari_williams,mens-d2,Lake Erie,Amari,Williams,"6'3""",Jr
-424_nino_carter-smith,mens-d2,Lake Superior St.,Nino,Carter-Smith,"6'1""",Jr
-427_d'necco_rucker,mens-d2,Lincoln (MO),D'Necco,Rucker,"6'6""",Jr
-427_matthieu_biembongo,mens-d2,Lincoln (MO),Matthieu,Biembongo,"6'11""",So
-18517_amondo_millerjr.,mens-d2,Lubbock Christian,Amondo,Miller Jr.,"6'7""",Sr
-18517_lucas_mercandino,mens-d2,Lubbock Christian,Lucas,Mercandino,"6'6""",Jr
-2187_kobe_clark,mens-d2,Maryville (MO),Kobe,Clark,"6'7""",Sr
-261808_grant_fridley,mens-d2,McKendree,Grant,Fridley,"6'2""",So
-2252_orlando_horton_jr.,mens-d2,Midwestern St.,Orlando,"Horton, Jr.","5'10""",Jr
-1166_amir_cunningham,mens-d2,Millersville,Amir,Cunningham,"6'5""",Jr
-1166_cesar_tchilombo,mens-d2,Millersville,Cesar,Tchilombo,"6'9""",Jr
-1166_jaylen_bernikow,mens-d2,Millersville,Jaylen,Bernikow,"6'1""",Fr
-179_brandon_fussell,mens-d2,Montevallo,Brandon,Fussell,"6'1""",Jr
-179_devon_mckinnon,mens-d2,Montevallo,Devon,McKinnon,"6'5""",Fr
-1618_jermontae_hill,mens-d2,Morehouse,JerMontae,Hill,"6'6""",Sr
-2285_bennett_basich,mens-d2,Northern Mich.,Bennett,Basich,"6'4""",Fr
-2285_cal_klesmit,mens-d2,Northern Mich.,Cal,Klesmit,"6'2""",So
-2285_jonny_ingalls,mens-d2,Northern Mich.,Jonny,Ingalls,"6'0""",Fr
-2285_keller_hanson,mens-d2,Northern Mich.,Keller,Hanson,"6'6""",Fr
-2285_trevor_polite,mens-d2,Northern Mich.,Trevor,Polite,"6'6""",Fr
-1926_christian_parks,mens-d2,Ouachita Baptist,Christian,Parks,"6'7""",Jr
-1732_bobby_hardison,mens-d2,Palm Beach Atl.,Bobby,Hardison,"6'5""",Fr
-1732_trent_mcnair,mens-d2,Palm Beach Atl.,Trent,McNair,"6'5""",Jr
-2584_connor_rogers,mens-d2,Pittsburg St.,Connor,Rogers,"5'11""",Jr
-2634_jovan_ristic,mens-d2,Saint Anselm,Jovan,Ristic,"6'5""",So
-2587_diego_trejo-delgado,mens-d2,Saint Martin's,Diego,Trejo-Delgado,"6'7""",So
-2587_kaden_hansen,mens-d2,Saint Martin's,Kaden,Hansen,"6'2""",So
-2587_ronyo_obou,mens-d2,Saint Martin's,Ronyo,Obou,"6'4""",Jr
-265_daniel_mbaeteka,mens-d2,Shaw,Daniel,Mbaeteka,"7'0""",So
-261813_hudson_yarbrough,mens-d2,Southern Wesleyan,Hudson,Yarbrough,"6'8""",Fr
-1314_luke_winkel,mens-d2,St. Cloud St.,Luke,Winkel,"5'11""",So
-1314_tre_blissett,mens-d2,St. Cloud St.,Tre,Blissett,"6'4""",Fr
-1934_starrell_hearns,mens-d2,St. Thomas Aquinas,Starrell,Hearns,"6'2""",Jr
-1939_antwonne_holmes,mens-d2,Sul Ross St.,Antwonne,Holmes,"6'3""",Jr
-1818_parker_lepla,mens-d2,UIndy,Parker,LePla,"6'7""",Fr
-1818_shaun_arnold,mens-d2,UIndy,Shaun,Arnold,"6'5""",Jr
-2619_jp_ricks,mens-d2,UNC Pembroke,JP,Ricks,"6'1""",Sr
-2619_will_brown,mens-d2,UNC Pembroke,Will,Brown,"6'2""",Fr
-2262_jj_ferrin,mens-d2,Wayne St. (NE),JJ,Ferrin,"6'3""",Jr
-85_christian_thompson,mens-d2,West Ala.,Christian,Thompson,"6'8""",Jr
-191_charlie_hill,mens-d2,West Liberty,Charlie,Hill,"6'3""",Fr
-191_daniel_burton,mens-d2,West Liberty,Daniel,Burton,"6'9""",Fr
-191_hayden_abdullah,mens-d2,West Liberty,Hayden,Abdullah,"6'9""",So
-191_xavier_harris,mens-d2,West Liberty,Xavier,Harris,"6'2""",Jr
-18001_kyle_scharbrough,mens-d2,William Jewell,Kyle,Scharbrough,"6'3""",Jr
-18501_dylan_wolle,mens-d2,Young Harris,Dylan,Wolle,"6'3""",Jr
-18501_ernesto_almonte,mens-d2,Young Harris,Ernesto,Almonte,"6'3""",Fr
-18501_justin_payne,mens-d2,Young Harris,Justin,Payne,"5'11""",So
-18501_willie_jones,mens-d2,Young Harris,Willie,Jones,"6'5""",Jr
+2522_parker_kroon,mens-d2,Alas. Anchorage,Parker,Kroon,"6'2""",So
+1434_rashawn_inglemon,mens-d2,Anderson (SC),Rashawn,Inglemon,"6'0""",Fr
+469_cole_white,mens-d2,Benedict,Cole,White,"6'8""",Jr
+469_jamian_jackson,mens-d2,Benedict,Jamian,Jackson,"6'4""",Fr
+469_kameron_foman,mens-d2,Benedict,Kameron,Foman,"6'4""",Jr
+2087_jalen_brown,mens-d2,Cal St. Dom. Hills,Jalen,Brown,"6'2""",Jr
+1441_antoine_arnett,mens-d2,California (PA),Antoine,Arnett,"6'7""",So
+1441_bryson_lucas,mens-d2,California (PA),Bryson,Lucas,"6'7""",Jr
+1441_dalman_alexander,mens-d2,California (PA),Dalman,Alexander,"6'7""",Jr
+1441_jayden_daisy,mens-d2,California (PA),Jayden,Daisy,"6'4""",Fr
+1441_jordyn_buchanan,mens-d2,California (PA),Jordyn,Buchanan,"6'5""",So
+1897_bralyn_smith,mens-d2,Central Wash.,Bralyn,Smith,"6'5""",So
+1897_chae_haynes,mens-d2,Central Wash.,Chae,Haynes,"6'9""",Jr
+159_antonio_foxwell,mens-d2,Christian Brothers,Antonio,Foxwell,"6'5""",Jr
+1011_grayson_kirk,mens-d2,Claflin,Grayson,Kirk,"6'2""",Jr
+693_harvey_white,mens-d2,Colorado Mesa,Harvey,White,"6'2""",So
+693_tevin_riehl,mens-d2,Colorado Mesa,Tevin,Riehl,"6'1""",So
+693_yanis_mahoundo,mens-d2,Colorado Mesa,Yanis,Mahoundo,"6'5""",Jr
+32_will_mccrory,mens-d2,Delta St.,Will,McCrory,"6'3""",So
+2447_devon_lassiter,mens-d2,Elizabeth City St.,Devon,Lassiter,"6'3""",Fr
+162_eli_stokes,mens-d2,Emporia St.,Eli,Stokes,"6'7""",Fr
+2371_moussa_camara,mens-d2,Felician,Moussa,Camara,"6'9""",So
+2245_c.j._jones,mens-d2,Georgia College,C.J.,Jones,"6'2""",So
+1417_adrian_vazquez,mens-d2,Goldey-Beacom,Adrian,Vazquez,"6'4""",So
+2146_cam_regnerus,mens-d2,Grand Valley St.,Cam,Regnerus,"6'9""",So
+1916_kobe_long,mens-d2,Holy Family,Kobe,Long,"6'1""",Jr
+424_don_douglass,mens-d2,Lake Superior St.,Don,Douglass,"6'10""",So
+2187_lincoln_palbicki,mens-d2,Maryville (MO),Lincoln,Palbicki,"6'9""",So
+2196_kole_hanson,mens-d2,Minn. Duluth,Kole,Hanson,"6'2""",So
+16436_braelyn_dale,mens-d2,Minot St.,Braelyn,Dale,"6'7""",Jr
+16436_carson_yale,mens-d2,Minot St.,Carson,Yale,"6'9""",Fr
+2727_wesley_isoje,mens-d2,N.M. Highlands,Wesley,Isoje,"6'7""",Jr
+1595_anthony_swift,mens-d2,Neb.-Kearney,Anthony,Swift,"6'7""",Jr
+1926_trey_smith,mens-d2,Ouachita Baptist,Trey,Smith,"6'6""",Jr
+1655_promise_opurum,mens-d2,Pace,Promise,Opurum,"6'7""",Jr
+2634_will_davies,mens-d2,Saint Anselm,Will,Davies,"6'4""",So
+2587_pablo_navarro,mens-d2,Saint Martin's,Pablo,Navarro,"6'4""",Jr
+52018_ajani_jamison,mens-d2,Simon Fraser,Ajani,Jamison,"6'5""",Jr
+673_jeremy_moore,mens-d2,Southwest Baptist,Jeremy,Moore,"6'5""",Jr
+1242_ryder_bradley,mens-d2,St. Edward's,Ryder,Bradley,"6'2""",Fr
+1605_freddie_cooper,mens-d2,St. Mary's (TX),Freddie,Cooper,"6'2""",Sr
+1605_jj_walton,mens-d2,St. Mary's (TX),JJ,Walton,"6'6""",Jr
+1934_brennan_chatman,mens-d2,St. Thomas Aquinas,Brennan,Chatman,"6'3""",So
+1934_joshua_michigan,mens-d2,St. Thomas Aquinas,Joshua,Michigan,"6'5""",So
+2670_caleb_carr,mens-d2,Tex. A&M-Kingsville,Caleb,Carr,"6'11""",Jr
+2670_david_oriaku,mens-d2,Tex. A&M-Kingsville,David,Oriaku,"6'7""",So
+1247_ryan_paris,mens-d2,Thomas More,Ryan,Paris,"6'5""",Jr
+1713_ashton_hermann,mens-d2,Upper Iowa,Ashton,Hermann,"6'3""",Jr
+2678_samarion_bond,mens-d2,Valdosta St.,Samarion,Bond,"6'5""",Jr
+261810_brayden_gross,mens-d2,Walsh,Brayden,Gross,"6'7""",Fr
+261810_quintero_barnett,mens-d2,Walsh,Quintero,Barnett,"6'4""",So
+675_jeremiah_jones,mens-d2,Washburn,Jeremiah,Jones,"6'3""",Jr
+1431_anthony_igiede,mens-d2,West Florida,Anthony,Igiede,"6'4""",Jr
+1879_connor_roffers,mens-d2,Winona St.,Connor,Roffers,"6'5""",So
