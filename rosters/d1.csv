@@ -1,54 +1,28 @@
 player_id,division,team_name,first_name,last_name,height,year
-426_bube_momah,mens-d1,Lehigh,Bube,Momah,"6'8""",Sr
-16383_devin_barksdale,mens-d2,AUM,Devin,Barksdale,"6'1""",Fr
-1581_thomas_adams,mens-d2,Adams St.,Thomas,Adams,"6'3""",Fr
-2528_noah_payne,mens-d2,Assumption,Noah,Payne,"6'1""",So
-469_anthony_magwood-spann,mens-d2,Benedict,Anthony,Magwood-Spann,"6'5""",So
-1563_ries_naugle,mens-d2,Bloomsburg,Ries,Naugle,"6'4""",Fr
-2539_jaiden_mcghee,mens-d2,Bowie St.,Jaiden,McGhee,"6'5""",Jr
-2539_joseph_allen,mens-d2,Bowie St.,Joseph,Allen,"6'5""",So
-1441_ibrahim_turay,mens-d2,California (PA),Ibrahim,Turay,"6'4""",So
-712_deshawne_crim,mens-d2,Central Mo.,Deshawne,Crim,"6'2""",Jr
-712_naz_brown,mens-d2,Central Mo.,Naz,Brown,"6'1""",Jr
-2564_ben_averitt,mens-d2,Central Okla.,Ben,Averitt,"6'6""",Sr
-693_clayton_jewell,mens-d2,Colorado Mesa,Clayton,Jewell,"6'9""",Jr
-693_kap_laila,mens-d2,Colorado Mesa,Kap,Laila,"6'8""",So
-341_caleb_evans,mens-d2,East Central,Caleb,Evans,"6'5""",So
-341_hudson_linsenmeyer,mens-d2,East Central,Hudson,Linsenmeyer,"6'2""",So
-379_john_mobley,mens-d2,Edinboro,John,Mobley,"6'2""",Fr
-2713_jordan_smith,mens-d2,Flagler,Jordan,Smith,"6'6""",Jr
-1909_chuol_deng,mens-d2,Fort Lewis,Chuol,Deng,"6'7""",Sr
-16498_liam_switzer,mens-d2,Fresno Pacific,Liam,Switzer,"6'10""",So
-1417_julian_williams,mens-d2,Goldey-Beacom,Julian,Williams,"6'8""",Jr
-2146_javion_otten,mens-d2,Grand Valley St.,Javion,Otten,"6'4""",So
-2067_quentin_meza,mens-d2,Hawaii Pacific,Quentin,Meza,"6'0""",Jr
-1228_jameel_wesleyii,mens-d2,Henderson St.,Jameel,Wesley II,"6'2""",So
-1508_dallis_dillard,mens-d2,Indiana (PA),Dallis,Dillard,"6'3""",Sr
-52014_lenier_pocknett,mens-d2,King (TN),Lenier,Pocknett,"6'6""",Fr
-2490_andre_walkerii,mens-d2,LeMoyne-Owen,Andre,Walker II,"5'9""",Jr
-2490_courage_agbekpornu,mens-d2,LeMoyne-Owen,Courage,Agbekpornu,"6'7""",Fr
-880_conrad_luczynski,mens-d2,Lenoir-Rhyne,Conrad,Luczynski,"7'2""",Jr
-785_jahmire_brewer,mens-d2,Lincoln (PA),Jahmire,Brewer,"6'7""",So
-785_ronald_bridgesjr,mens-d2,Lincoln (PA),Ronald,Bridges Jr,"6'4""",Jr
-2510_nathan_francis,mens-d2,MSU Denver,Nathan,Francis,"6'3""",Fr
-1530_darrien_berriosrivera,mens-d2,Mansfield,Darrien,Berrios Rivera,"6'5""",Jr
-1156_christopher_nana,mens-d2,Mercy,Christopher,Nana,"6'7""",Jr
-1166_kyle_benjamin,mens-d2,Millersville,Kyle,Benjamin,"6'4""",Fr
-2727_nikk_williams,mens-d2,N.M. Highlands,Nikk,Williams,"6'8""",Jr
-2584_darrell_washington,mens-d2,Pittsburg St.,Darrell,Washington,"6'10""",Jr
-2584_ethan_sage,mens-d2,Pittsburg St.,Ethan,Sage,"6'7""",Fr
-16451_caden_harris,mens-d2,Point Loma,Caden,Harris,"6'5""",Jr
-2634_isaiah_griffin,mens-d2,Saint Anselm,Isaiah,Griffin,"6'0""",So
-2634_jack_medalie,mens-d2,Saint Anselm,Jack,Medalie,"6'6""",Jr
-596_dominic_commisso,mens-d2,Saint Leo,Dominic,Commisso,"6'8""",So
-2646_henry_sandberg,mens-d2,Seattle Pacific,Henry,Sandberg,"6'4""",So
-2330_enire_bowens,mens-d2,Slippery Rock,Enire,Bowens,"6'9""",Jr
-2330_sheick_samoura,mens-d2,Slippery Rock,Sheick,Samoura,"6'5""",Jr
-1934_jamal_hicks_jr.,mens-d2,St. Thomas Aquinas,Jamal,"Hicks, Jr.","6'2""",Fr
-2670_james_livingston,mens-d2,Tex. A&M-Kingsville,James,Livingston,"6'0""",So
-261810_brandon_null,mens-d2,Walsh,Brandon,Null,"6'5""",So
-261810_rj_winegarner,mens-d2,Walsh,RJ,Winegarner,"6'7""",Fr
-85_bj_brownjr.,mens-d2,West Ala.,BJ,Brown Jr.,"5'10""",Jr
-1251_keylon_dorsey,mens-d2,Western N.M.,Keylon,Dorsey,"6'6""",Jr
-193_malachi_miller,mens-d2,Western Wash.,Malachi,Miller,"6'3""",Jr
-544_kendall_campbell,mens-d2,Wingate,Kendall,Campbell,"6'8""",Jr
+475_audrey_ericksen,womens-d1,Boston U.,Audrey,Ericksen,"6'0""",Jr
+134_desirae_ashton,womens-d1,Bucknell,Desirae,Ashton,"6'0""",So
+134_hope_masonius,womens-d1,Bucknell,Hope,Masonius,"5'9""",So
+134_tuana_coskun,womens-d1,Bucknell,Tuana,Coskun,"6'0""",Jr
+726_alayna_west,womens-d1,DePaul,Alayna,West,"5'10""",Fr
+726_natiah_nelson,womens-d1,DePaul,Natiah,Nelson,"5'9""",So
+34_allison_basye,womens-d1,Detroit Mercy,Allison,Basye,"5'11""",Sr
+1097_nyaluak_dak,womens-d1,East Texas A&M,Nyaluak,Dak,"6'2""",So
+1097_reza_po,womens-d1,East Texas A&M,Reza,Po,"5'2""",So
+1110_crystal_henderson,womens-d1,Georgia St.,Crystal,Henderson,"5'4""",Jr
+2155_kamryn_mclaurin,womens-d1,Houston Christian,Kamryn,McLaurin,"5'11""",Fr
+2155_madelyne_davis,womens-d1,Houston Christian,Madelyne,Davis,"5'11""",So
+69_kennedi_ard,womens-d1,Indiana St.,Kennedi,Ard,"5'10""",So
+416_angel_wilkinson,womens-d1,Jackson St.,Angel,Wilkinson,"5'8""",Jr
+1259_deniz_torgut,womens-d1,Mount St. Mary's,Deniz,Torgut,"5'10""",Jr
+1259_erin_edmonds,womens-d1,Mount St. Mary's,Erin,Edmonds,"5'8""",Fr
+2608_skyler_volmer,womens-d1,North Dakota,Skyler,Volmer,"5'9""",So
+1279_jbionna_robinson,womens-d1,Northern Ariz.,JBionna,Robinson,"5'7""",Fr
+923_nisaa_muhammad,womens-d1,Old Dominion,Nisaa,Muhammad,"5'10""",So
+1930_morgan_boyd,womens-d1,Presbyterian,Morgan,Boyd,"5'9""",So
+1930_shelby_fiddler,womens-d1,Presbyterian,Shelby,Fiddler,"5'9""",Sr
+1935_sydnie_rodriguez,womens-d1,Seattle U,Sydnie,Rodriguez,"6'0""",So
+2591_jailynn_brill,womens-d1,Tarleton St.,Jailynn,Brill,"6'3""",Jr
+352_despoina_baltzi,womens-d1,UC Irvine,Despoina,Baltzi,"5'8""",Fr
+1405_chardonnay_hartley,womens-d1,Utah Tech,Chardonnay,Hartley,"5'3""",Sr
+1416_queen_ikhiuwu,womens-d1,Wofford,Queen,Ikhiuwu,"6'1""",Jr
+1885_penda_dieng,womens-d1,Xavier,Penda,Dieng,"6'3""",Fr
