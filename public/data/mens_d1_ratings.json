@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-03-23T11:39:33.675Z",
+  "generated_at_utc": "2026-03-25T11:36:48.390Z",
   "season_start": "2025-11-04",
   "rows": [
     {
@@ -173,16 +173,6 @@
       "adjT": 67.14117647058823
     },
     {
-      "teamId": "1354",
-      "team": "Tulsa",
-      "conference": "american",
-      "games": 35,
-      "adjO": 122.45566613425073,
-      "adjD": 104.81368844653336,
-      "adjEM": 17.64197768771737,
-      "adjT": 69.76285714285714
-    },
-    {
       "teamId": "1363",
       "team": "Virginia",
       "conference": "acc",
@@ -191,6 +181,16 @@
       "adjD": 101.66153846153847,
       "adjEM": 17.521547088129722,
       "adjT": 67.49652777777777
+    },
+    {
+      "teamId": "1354",
+      "team": "Tulsa",
+      "conference": "american",
+      "games": 36,
+      "adjO": 122.13346051428799,
+      "adjD": 104.79898299698078,
+      "adjEM": 17.334477517307207,
+      "adjT": 69.89166666666667
     },
     {
       "teamId": "1361",
@@ -296,11 +296,11 @@
       "teamId": "1630",
       "team": "New Mexico",
       "conference": "mountain-west",
-      "games": 35,
-      "adjO": 115.40290834758497,
-      "adjD": 100.2484999090854,
-      "adjEM": 15.154408438499573,
-      "adjT": 70.585
+      "games": 36,
+      "adjO": 115.28905735974311,
+      "adjD": 100.1148376078443,
+      "adjEM": 15.174219751898818,
+      "adjT": 70.71597222222222
     },
     {
       "teamId": "1680",
@@ -503,16 +503,6 @@
       "adjT": 70.465
     },
     {
-      "teamId": "494",
-      "team": "Wichita St.",
-      "conference": "american",
-      "games": 35,
-      "adjO": 113.59076971051401,
-      "adjD": 101.92347466390899,
-      "adjEM": 11.66729504660502,
-      "adjT": 68.71785714285714
-    },
-    {
       "teamId": "855",
       "team": "Winthrop",
       "conference": "big-south",
@@ -561,6 +551,16 @@
       "adjD": 106.99088145896656,
       "adjEM": 11.158886706459285,
       "adjT": 70.70928571428571
+    },
+    {
+      "teamId": "494",
+      "team": "Wichita St.",
+      "conference": "american",
+      "games": 36,
+      "adjO": 113.30793881129453,
+      "adjD": 102.211164171917,
+      "adjEM": 11.096774639377529,
+      "adjT": 68.9125
     },
     {
       "teamId": "628",
@@ -1413,16 +1413,6 @@
       "adjT": 70.5515625
     },
     {
-      "teamId": "1990",
-      "team": "Saint Joseph's",
-      "conference": "atlantic-10",
-      "games": 35,
-      "adjO": 106.90126017573667,
-      "adjD": 101.93977423154297,
-      "adjEM": 4.961485944193697,
-      "adjT": 68.52785714285714
-    },
-    {
       "teamId": "288",
       "team": "UT Arlington",
       "conference": "wac",
@@ -1521,6 +1511,16 @@
       "adjD": 107.34875091113909,
       "adjEM": 4.580880754611314,
       "adjT": 68.90151515151516
+    },
+    {
+      "teamId": "1990",
+      "team": "Saint Joseph's",
+      "conference": "atlantic-10",
+      "games": 36,
+      "adjO": 106.56898854575627,
+      "adjD": 102.23241806550716,
+      "adjEM": 4.336570480249108,
+      "adjT": 68.63055555555555
     },
     {
       "teamId": "1629",
