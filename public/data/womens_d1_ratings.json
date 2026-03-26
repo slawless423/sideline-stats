@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-03-25T11:36:46.094Z",
+  "generated_at_utc": "2026-03-26T11:43:58.651Z",
   "season_start": "2025-11-03",
   "rows": [
     {
@@ -573,6 +573,16 @@
       "adjT": 77.63749999999999
     },
     {
+      "teamId": "1710",
+      "team": "Army West Point",
+      "conference": "patriot",
+      "games": 33,
+      "adjO": 99.32143521100578,
+      "adjD": 84.59383102161351,
+      "adjEM": 14.727604189392263,
+      "adjT": 65.2
+    },
+    {
       "teamId": "1888",
       "team": "Youngstown St.",
       "conference": "horizon",
@@ -591,16 +601,6 @@
       "adjD": 93.91759319816873,
       "adjEM": 14.684963298244613,
       "adjT": 72.42578125
-    },
-    {
-      "teamId": "1710",
-      "team": "Army West Point",
-      "conference": "patriot",
-      "games": 32,
-      "adjO": 99.16243075333165,
-      "adjD": 84.51551576844867,
-      "adjEM": 14.646914984882976,
-      "adjT": 65.01328125
     },
     {
       "teamId": "2333",
@@ -1993,16 +1993,6 @@
       "adjT": 71.60564516129033
     },
     {
-      "teamId": "1517",
-      "team": "La Salle",
-      "conference": "atlantic-10",
-      "games": 32,
-      "adjO": 89.92669019820798,
-      "adjD": 89.26575954775522,
-      "adjEM": 0.6609306504527623,
-      "adjT": 71.93359375
-    },
-    {
       "teamId": "166",
       "team": "Grand Canyon",
       "conference": "mountain-west",
@@ -2071,6 +2061,16 @@
       "adjD": 96.5170720566404,
       "adjEM": 0.18271097407787096,
       "adjT": 68.4140625
+    },
+    {
+      "teamId": "1517",
+      "team": "La Salle",
+      "conference": "atlantic-10",
+      "games": 33,
+      "adjO": 89.83227518241257,
+      "adjD": 89.71049136786189,
+      "adjEM": 0.1217838145506911,
+      "adjT": 71.95227272727273
     },
     {
       "teamId": "591",
