@@ -29,5 +29,5 @@ jobs:
 
       - name: Run EYBL scraper
         env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DATABASE_URL: ${{ secrets.POSTGRES_URL }}
         run: node scripts/scrape_eybl.mjs
