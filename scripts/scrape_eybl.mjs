@@ -145,14 +145,6 @@ async function scrapeBoxScore(page, url) {
   const html = await page.content();
   const $ = cheerio.load(html);
 
-  // Debug: show what sections and sub-headings cheerio finds
-  const sectionCount = $('section').length;
-  const subHeadingCount = $('h3.sub-heading').length;
-  console.log(`  Found ${sectionCount} sections, ${subHeadingCount} h3.sub-heading elements`);
-  $('h3.sub-heading').each((i, el) => {
-    console.log(`  h3[${i}]: "${$(el).text().trim()}"`);
-  });
-
   // Sidearm box score structure (confirmed from DevTools inspection):
   // <section>
   //   <h3 class="sub-heading">Utah Prep 74</h3>
@@ -162,13 +154,15 @@ async function scrapeBoxScore(page, url) {
   // Two such <section> blocks appear, one per team.
 
   const teams = [];
+  let teamsFound = 0;
 
   $('section').each((_, section) => {
+    if (teamsFound >= 2) return; // only want the first two teams (full game)
+
     const heading = $(section).find('h3.sub-heading').first();
     if (!heading.length) return;
 
     const rawName = heading.text().trim().replace(/\s+/g, ' ');
-    // Strip trailing score: "Utah Prep 74" → "Utah Prep"
     const teamName = rawName.replace(/\s+\d+$/, '');
     if (!teamName) return;
 
@@ -179,6 +173,7 @@ async function scrapeBoxScore(page, url) {
     const players = parseBoxscoreTable($, table);
     if (players.length > 0) {
       teams.push({ teamName, players });
+      teamsFound++;
     }
   });
 
