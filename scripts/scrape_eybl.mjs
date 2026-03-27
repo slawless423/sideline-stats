@@ -212,7 +212,11 @@ function addStats(target, src) {
 }
 
 function emptyStats() {
-  return { gp:0, fgm:0, fga:0, fg3m:0, fg3a:0, ftm:0, fta:0, oreb:0, dreb:0, reb:0, pts:0, ast:0, tov:0, blk:0, stl:0, mp:0 };
+  return {
+    gp:0, fgm:0, fga:0, fg3m:0, fg3a:0, ftm:0, fta:0, oreb:0, dreb:0, reb:0, pts:0, ast:0, tov:0, blk:0, stl:0, mp:0,
+    opp_fgm:0, opp_fga:0, opp_fg3m:0, opp_fg3a:0, opp_ftm:0, opp_fta:0,
+    opp_oreb:0, opp_dreb:0, opp_reb:0, opp_ast:0, opp_stl:0, opp_blk:0, opp_tov:0, opp_pts:0,
+  };
 }
 
 function normalizeName(name) {
@@ -267,16 +271,26 @@ async function upsertToDb(playerMap, teamMap) {
     for (const [teamName, stats] of Object.entries(teamMap)) {
       await client.query(`
         INSERT INTO eybl_team_stats
-          (team, league, season, gp, fgm, fga, fg3m, fg3a, ftm, fta, oreb, dreb, reb, ast, stl, blk, tov, pts)
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18)
+          (team, league, season, gp,
+           fgm, fga, fg3m, fg3a, ftm, fta, oreb, dreb, reb, ast, stl, blk, tov, pts,
+           opp_fgm, opp_fga, opp_fg3m, opp_fg3a, opp_ftm, opp_fta,
+           opp_oreb, opp_dreb, opp_reb, opp_ast, opp_stl, opp_blk, opp_tov, opp_pts)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,
+                $19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32)
         ON CONFLICT (team, league, season) DO UPDATE SET
           gp=$4, fgm=$5, fga=$6, fg3m=$7, fg3a=$8, ftm=$9, fta=$10,
-          oreb=$11, dreb=$12, reb=$13, ast=$14, stl=$15, blk=$16, tov=$17, pts=$18
+          oreb=$11, dreb=$12, reb=$13, ast=$14, stl=$15, blk=$16, tov=$17, pts=$18,
+          opp_fgm=$19, opp_fga=$20, opp_fg3m=$21, opp_fg3a=$22, opp_ftm=$23, opp_fta=$24,
+          opp_oreb=$25, opp_dreb=$26, opp_reb=$27, opp_ast=$28, opp_stl=$29, opp_blk=$30,
+          opp_tov=$31, opp_pts=$32
       `, [
         teamName, LEAGUE, SEASON,
         stats.gp, stats.fgm, stats.fga, stats.fg3m, stats.fg3a,
         stats.ftm, stats.fta, stats.oreb, stats.dreb, stats.reb,
-        stats.ast, stats.stl, stats.blk, stats.tov, stats.pts
+        stats.ast, stats.stl, stats.blk, stats.tov, stats.pts,
+        stats.opp_fgm, stats.opp_fga, stats.opp_fg3m, stats.opp_fg3a,
+        stats.opp_ftm, stats.opp_fta, stats.opp_oreb, stats.opp_dreb, stats.opp_reb,
+        stats.opp_ast, stats.opp_stl, stats.opp_blk, stats.opp_tov, stats.opp_pts,
       ]);
     }
 
@@ -368,13 +382,12 @@ async function main() {
 
     if (!teams) continue;
 
+    // Each box score has exactly 2 teams — accumulate each team's stats
+    // as the opponent stats for the other team
     for (const { teamName, players } of teams) {
       if (!teamName || players.length === 0) continue;
-
-      // Accumulate team totals
       if (!teamMap[teamName]) teamMap[teamName] = emptyStats();
       teamMap[teamName].gp += 1;
-      // Sum player stats for team totals
       for (const p of players) addStats(teamMap[teamName], p);
 
       // Accumulate player totals
@@ -383,6 +396,26 @@ async function main() {
         if (!playerMap[key]) playerMap[key] = emptyStats();
         playerMap[key].gp += 1;
         addStats(playerMap[key], p);
+      }
+    }
+
+    // Cross-accumulate opponent stats — Team A's stats → Team B's opp stats and vice versa
+    if (teams.length === 2) {
+      const [teamA, teamB] = teams;
+      if (teamA.teamName && teamB.teamName && teamA.players.length > 0 && teamB.players.length > 0) {
+        const oppFields = ['fgm','fga','fg3m','fg3a','ftm','fta','oreb','dreb','reb','pts','ast','tov','blk','stl'];
+        // Sum teamA players → add to teamB's opp totals
+        for (const p of teamA.players) {
+          for (const f of oppFields) {
+            teamMap[teamB.teamName][`opp_${f}`] = (teamMap[teamB.teamName][`opp_${f}`] || 0) + (p[f] || 0);
+          }
+        }
+        // Sum teamB players → add to teamA's opp totals
+        for (const p of teamB.players) {
+          for (const f of oppFields) {
+            teamMap[teamA.teamName][`opp_${f}`] = (teamMap[teamA.teamName][`opp_${f}`] || 0) + (p[f] || 0);
+          }
+        }
       }
     }
 
