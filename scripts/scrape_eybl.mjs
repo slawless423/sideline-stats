@@ -130,7 +130,7 @@ async function scrapeBoxScore(page, url) {
 
   // Wait for at least one box score table to appear
   try {
-    await page.waitForSelector('table.sidearm-table, table.statistics, .boxscore table', { timeout: 15000 });
+    await page.waitForSelector('table.sidearm-table', { timeout: 15000 });
   } catch {
     console.warn(`  Timeout waiting for tables on ${url}`);
     return null;
@@ -139,48 +139,34 @@ async function scrapeBoxScore(page, url) {
   const html = await page.content();
   const $ = cheerio.load(html);
 
-  // Find the two team sections — Sidearm wraps each team in a div with a heading
-  // The heading contains the team name, followed by a stats table
+  // Sidearm box score structure (confirmed from DevTools inspection):
+  // <section>
+  //   <h3 class="sub-heading">Utah Prep 74</h3>
+  //   <table class="sidearm-table overall-stats ...">  ← player stats
+  //   <table class="sidearm-table ...">               ← team summary (ignore)
+  // </section>
+  // Two such <section> blocks appear, one per team.
+
   const teams = [];
 
-  // Try to find team name + table pairs
-  // Sidearm typically uses: <div class="team"> <h2>Team Name</h2> <table>...</table> </div>
-  // or adjacent headings before tables
-  const teamDivs = $('[class*="team"]:has(table), .boxscore-team, .team-stats').toArray();
+  $('section').each((_, section) => {
+    const heading = $(section).find('h3.sub-heading').first();
+    if (!heading.length) return;
 
-  if (teamDivs.length >= 2) {
-    for (const div of teamDivs.slice(0, 2)) {
-      const teamName = $(div).find('h1, h2, h3, h4, .team-name, caption').first().text().trim()
-        .replace(/\s+/g, ' ')
-        .replace(/\s+\d+$/, '');  // strip trailing score e.g. "Utah Prep 74" → "Utah Prep"
-      const table = $(div).find('table').first();
-      if (table.length) {
-        teams.push({ teamName, players: parseBoxscoreTable($, table) });
-      }
+    const rawName = heading.text().trim().replace(/\s+/g, ' ');
+    // Strip trailing score: "Utah Prep 74" → "Utah Prep"
+    const teamName = rawName.replace(/\s+\d+$/, '');
+    if (!teamName) return;
+
+    // First sidearm-table in the section is the player stats table
+    const table = $(section).find('table.sidearm-table').first();
+    if (!table.length) return;
+
+    const players = parseBoxscoreTable($, table);
+    if (players.length > 0) {
+      teams.push({ teamName, players });
     }
-  } else {
-    // Fallback: find all tables and team headings in document order
-    const tables = $('table').toArray().filter(t => {
-      const headers = $(t).find('th').map((_, th) => $(th).text().toLowerCase()).toArray();
-      return headers.some(h => ['fg', 'fgm', 'pts', 'tp'].includes(h));
-    });
-
-    const headings = $('h1, h2, h3, h4, caption').toArray()
-      .map(el => ({ el, text: $(el).text().trim(), offset: $(el).index() }));
-
-    for (const table of tables.slice(0, 2)) {
-      // Find the closest preceding heading
-      const tableIndex = $(table).index();
-      const heading = headings
-        .filter(h => h.offset < tableIndex)
-        .sort((a, b) => b.offset - a.offset)[0];
-
-      const teamName = heading
-        ? heading.text.replace(/\s+/g, ' ').replace(/\s+\d+$/, '')
-        : 'Unknown';
-      teams.push({ teamName, players: parseBoxscoreTable($, table) });
-    }
-  }
+  });
 
   if (teams.length === 0) {
     console.warn(`  Could not parse teams from ${url}`);
