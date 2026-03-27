@@ -39,9 +39,6 @@ function parseBoxscoreTable($, table) {
     headers.push($(th).text().trim().toLowerCase());
   });
 
-  // Debug: log headers for first few tables
-  if (headers.length > 0) console.log('  Table headers:', headers);
-
   const colIndex = (names) => {
     for (const name of names) {
       const i = headers.findIndex(h => h === name);
@@ -134,10 +131,12 @@ async function fetchBoxScoreUrls() {
 
 async function scrapeBoxScore(page, url) {
   await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
+  await new Promise(r => setTimeout(r, 2000)); // let JS finish rendering
 
   // Wait for at least one box score table to appear
   try {
-    await page.waitForSelector('table.sidearm-table', { timeout: 15000 });
+    await page.waitForSelector('h3.sub-heading', { timeout: 20000 });
+    await page.waitForSelector('table.sidearm-table', { timeout: 20000 });
   } catch {
     console.warn(`  Timeout waiting for tables on ${url}`);
     return null;
