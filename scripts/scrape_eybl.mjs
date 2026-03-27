@@ -48,6 +48,7 @@ function parseBoxscoreTable($, table) {
   };
 
   const iName    = colIndex(['player', 'name']);
+  console.log(`    colIndex iName=${iName}, headers=${JSON.stringify(headers.slice(0,5))}`);
   const iFg      = colIndex(['fg', 'fgm-fga']);
   const i3pt     = colIndex(['3pt', '3fg', '3fgm-3fga', '3-pt']);
   const iFt      = colIndex(['ft', 'ftm-fta']);
@@ -171,6 +172,7 @@ async function scrapeBoxScore(page, url) {
     if (!table.length) return;
 
     const players = parseBoxscoreTable($, table);
+    console.log(`  Section "${teamName}": ${players.length} players, table class="${$(table).attr('class')}"`);
     if (players.length > 0) {
       teams.push({ teamName, players });
       teamsFound++;
