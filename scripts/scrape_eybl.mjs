@@ -50,19 +50,18 @@ function parseBoxscoreTable($, table) {
     return -1;
   };
 
-  const iNum    = colIndex(['##', '#', 'no', 'no.']);
-  const iName   = colIndex(['player', 'name']);
-  const iFg     = colIndex(['fg']);
-  const i3pt    = colIndex(['3pt', '3fg', '3-pt']);
-  const iFt     = colIndex(['ft']);
-  const iOrbDrb = colIndex(['orb-drb', 'off-def', 'oreb-dreb']);
-  const iReb    = colIndex(['reb', 'tot', 'total']);
-  const iPts    = colIndex(['pts', 'tp', 'points']);
-  const iAst    = colIndex(['a', 'ast']);
-  const iTo     = colIndex(['to', 'tov']);
-  const iBlk    = colIndex(['blk']);
-  const iStl    = colIndex(['stl']);
-  const iMin    = colIndex(['min', 'minutes']);
+  const iName    = colIndex(['player', 'name']);
+  const iFg      = colIndex(['fg', 'fgm-fga']);
+  const i3pt     = colIndex(['3pt', '3fg', '3fgm-3fga', '3-pt']);
+  const iFt      = colIndex(['ft', 'ftm-fta']);
+  const iOrbDrb  = colIndex(['orb-drb', 'off-def', 'oreb-dreb']);
+  const iReb     = colIndex(['reb', 'tot', 'total']);
+  const iPts     = colIndex(['pts', 'tp', 'points']);
+  const iAst     = colIndex(['a', 'ast']);
+  const iTo      = colIndex(['to', 'tov']);
+  const iBlk     = colIndex(['blk']);
+  const iStl     = colIndex(['stl']);
+  const iMin     = colIndex(['min', 'minutes']);
 
   const players = [];
 
@@ -199,8 +198,44 @@ function emptyStats() {
 }
 
 function normalizeName(name) {
-  // "Smith,John" → "john smith"
-  return name.replace(',', ' ').toLowerCase().replace(/\s+/g, ' ').trim();
+  // Handles "Smith,John" → "John Smith" and "Medlock, Jr.,Carlos" → "Carlos Medlock Jr."
+  // Format is typically "LastName,FirstName" or "LastName, Suffix.,FirstName"
+  const parts = name.split(',').map(s => s.trim()).filter(Boolean);
+  if (parts.length >= 2) {
+    const last = parts[0];
+    const first = parts[parts.length - 1];
+    const suffix = parts.length === 3 ? parts[1] : '';
+    const full = suffix ? `${first} ${last} ${suffix}` : `${first} ${last}`;
+    return full.toLowerCase().replace(/\s+/g, ' ').trim();
+  }
+  return name.toLowerCase().replace(/\s+/g, ' ').trim();
+}
+
+function buildNameParts(normalizedName) {
+  // "carlos medlock jr." → { fullName, firstName, lastName }
+  const words = normalizedName.split(' ').filter(Boolean);
+  const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+  const suffixes = ['jr.', 'sr.', 'jr', 'sr', 'ii', 'iii', 'iv'];
+  
+  // Check if last word is a suffix
+  const hasSuffix = words.length > 2 && suffixes.includes(words[words.length - 1]);
+  
+  let firstName, lastName, suffix;
+  if (hasSuffix) {
+    suffix = cap(words[words.length - 1]);
+    firstName = words.slice(0, -2).map(cap).join(' ') || cap(words[0]);
+    lastName = cap(words[words.length - 2]);
+  } else {
+    firstName = words.slice(0, -1).map(cap).join(' ') || cap(words[0]);
+    lastName = cap(words[words.length - 1]);
+    suffix = '';
+  }
+  
+  const fullName = suffix
+    ? `${firstName} ${lastName} ${suffix}`
+    : `${firstName} ${lastName}`;
+
+  return { fullName, firstName, lastName };
 }
 
 // ─── Step 4: Upsert into Neon ─────────────────────────────────────────────────
@@ -233,16 +268,8 @@ async function upsertToDb(playerMap, teamMap) {
     let playerCount = 0;
     for (const [key, stats] of Object.entries(playerMap)) {
       const [normalizedName, teamName] = key.split('|||');
-
-      // Reconstruct first/last from normalized "first last"
-      const parts = normalizedName.split(' ').filter(Boolean);
-      const firstName = parts.slice(0, -1).join(' ') || parts[0] || '';
-      const lastName  = parts[parts.length - 1] || '';
-      // Capitalize
-      const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
-      const fullName   = parts.map(cap).join(' ');
-      const firstNameC = firstName.split(' ').map(cap).join(' ');
-      const lastNameC  = cap(lastName);
+      const { fullName, firstName, lastName } = buildNameParts(normalizedName);
+      try {
 
       // Upsert player
       const playerRes = await client.query(`
@@ -252,7 +279,7 @@ async function upsertToDb(playerMap, teamMap) {
           first_name = EXCLUDED.first_name,
           last_name  = EXCLUDED.last_name
         RETURNING id
-      `, [fullName, firstNameC, lastNameC, teamName, LEAGUE, SEASON]);
+      `, [fullName, firstName, lastName, teamName, LEAGUE, SEASON]);
 
       const playerId = playerRes.rows[0].id;
 
@@ -272,6 +299,9 @@ async function upsertToDb(playerMap, teamMap) {
       ]);
 
       playerCount++;
+      } catch (playerErr) {
+        console.error(`  Failed to upsert player "${fullName}" (${teamName}):`, playerErr.message);
+      }
     }
 
     await client.query('COMMIT');
