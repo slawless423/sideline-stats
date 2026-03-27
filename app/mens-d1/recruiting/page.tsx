@@ -81,11 +81,17 @@ type HSTeamStats = {
   oreb: number; dreb: number; reb: number;
   ast: number; stl: number; blk: number;
   tov: number; pts: number;
+  opp_fgm: number; opp_fga: number;
+  opp_fg3m: number; opp_fg3a: number;
+  opp_ftm: number; opp_fta: number;
+  opp_oreb: number; opp_dreb: number; opp_reb: number;
+  opp_ast: number; opp_stl: number; opp_blk: number;
+  opp_tov: number; opp_pts: number;
 };
 
 type HSSortKey =
   | 'name' | 'team' | 'league' | 'season' | 'grad_year' | 'gp'
-  | 'ortg' | 'usagePct' | 'efg' | 'ts' | 'orbPct' | 'drbPct'
+  | 'ortg' | 'usagePct' | 'minPct' | 'shotsPct' | 'efg' | 'ts' | 'orbPct' | 'drbPct'
   | 'aRate' | 'toRate' | 'blkPct' | 'stlPct' | 'ftRate'
   | 'twopm' | 'twopa' | 'twopPct' | 'fg3m' | 'fg3a' | 'tpPct' | 'ftm' | 'fta' | 'ftPct' | 'fgPct'
   | 'ppg' | 'rpg' | 'orbpg' | 'drbpg' | 'apg' | 'spg' | 'bpg' | 'mpg'
@@ -184,39 +190,61 @@ function calcStats(t: Transfer, team: TeamRow | undefined) {
 }
 
 // ── High School stat calc ─────────────────────────────────────────────────────
+// Identical formulas to calcStats — only field name differences:
+//   p.minutes → p.mp | p.points → p.pts | p.tpm → p.fg3m | p.tpa → p.fg3a
+//   p.trb → p.reb | team.tpm → team.fg3m | team.opp_trb → team.opp_reb | team.opp_tpa → team.opp_fg3a
 
 function calcHSStats(p: HSPlayer, team: HSTeamStats | undefined) {
   if (!team || p.gp === 0 || p.mp === 0) return null;
   const teamMinutes = team.gp * 200;
+  const opp_drb = team.opp_reb - team.opp_oreb;
+  const drb = team.reb - team.oreb;
+  const Team_ORB_pct = team.oreb / (team.oreb + opp_drb);
+  const Team_Scoring_Poss = team.fgm + (1 - Math.pow(1 - team.ftm / team.fta, 2)) * team.fta * 0.4;
+  const Team_Play_pct = Team_Scoring_Poss / (team.fga + team.fta * 0.4 + team.tov);
+  const Team_ORB_Weight = ((1 - Team_ORB_pct) * Team_Play_pct) / ((1 - Team_ORB_pct) * Team_Play_pct + Team_ORB_pct * (1 - Team_Play_pct));
+  const teamPossTotal = team.fga + 0.44 * team.fta + team.tov;
+  const usagePct = 100 * (p.fga + 0.44 * p.fta + p.tov) / (teamPossTotal / teamMinutes * p.mp) / 5;
+  const minPct = 100 * p.mp / teamMinutes * 5;
+  const shotsPct = team.fga > 0 && p.mp > 0 ? (p.fga / team.fga) / (p.mp / teamMinutes) / 5 * 100 : 0;
   const efg = p.fga > 0 ? ((p.fgm + 0.5 * p.fg3m) / p.fga) * 100 : 0;
   const ts = (p.fga + 0.475 * p.fta) > 0 ? (p.pts / (2 * (p.fga + 0.475 * p.fta))) * 100 : 0;
+  const orbPct = p.mp > 0 && (team.oreb + opp_drb) > 0 ? (p.oreb / p.mp) * (teamMinutes / 5) / (team.oreb + opp_drb) * 100 : 0;
+  const drbPct = p.mp > 0 && (drb + team.opp_oreb) > 0 ? (p.dreb / p.mp) * (teamMinutes / 5) / (drb + team.opp_oreb) * 100 : 0;
+  const aRateDenom = ((p.mp / (teamMinutes / 5)) * team.fgm) - p.fgm;
+  const aRate = aRateDenom > 0 ? (p.ast / aRateDenom) * 100 : 0;
+  const playerPoss = p.fga + 0.44 * p.fta + p.tov;
+  const toRate = playerPoss > 0 ? (p.tov / playerPoss) * 100 : 0;
+  const oppPoss = team.opp_fga - team.opp_oreb + team.opp_tov + 0.475 * team.opp_fta;
+  const opp2PA = team.opp_fga - team.opp_fg3a;
+  const blkPct = (p.mp * opp2PA) > 0 ? 100 * (p.blk * (teamMinutes / 5)) / (p.mp * opp2PA) : 0;
+  const stlPct = (p.mp * oppPoss) > 0 ? 100 * (p.stl * (teamMinutes / 5)) / (p.mp * oppPoss) : 0;
+  const ftRate = p.fga > 0 ? (p.fta / p.fga) * 100 : 0;
   const twopm = p.fgm - p.fg3m; const twopa = p.fga - p.fg3a;
   const twopPct = twopa > 0 ? (twopm / twopa) * 100 : 0;
   const tpPct = p.fg3a > 0 ? (p.fg3m / p.fg3a) * 100 : 0;
   const ftPct = p.fta > 0 ? (p.ftm / p.fta) * 100 : 0;
   const fgPct = p.fga > 0 ? (p.fgm / p.fga) * 100 : 0;
-  const ftRate = p.fga > 0 ? (p.fta / p.fga) * 100 : 0;
-  const opp_drb = (team.dreb + team.oreb) - team.oreb; // simplified
-  const orbPct = p.mp > 0 && (team.oreb + opp_drb) > 0
-    ? (p.oreb / p.mp) * (teamMinutes / 5) / (team.oreb + opp_drb) * 100 : 0;
-  const drbPct = p.mp > 0 && (team.dreb + team.oreb) > 0
-    ? (p.dreb / p.mp) * (teamMinutes / 5) / (team.dreb + team.oreb) * 100 : 0;
-  const teamPoss = team.fga + 0.44 * team.fta + team.tov;
-  const usagePct = teamPoss > 0 && p.mp > 0
-    ? 100 * (p.fga + 0.44 * p.fta + p.tov) / (teamPoss / teamMinutes * p.mp) / 5 : 0;
-  const playerPoss = p.fga + 0.44 * p.fta + p.tov;
-  const toRate = playerPoss > 0 ? (p.tov / playerPoss) * 100 : 0;
-  const aRateDenom = ((p.mp / (teamMinutes / 5)) * team.fgm) - p.fgm;
-  const aRate = aRateDenom > 0 ? (p.ast / aRateDenom) * 100 : 0;
-  // Simplified ORtg for HS (no opponent data)
-  const ScPoss = p.fgm + (p.fta > 0 ? (1 - Math.pow(1 - p.ftm / p.fta, 2)) * p.fta * 0.4 : 0);
-  const TotPoss = p.fga + (p.fta > 0 ? 0.44 * p.fta : 0) + p.tov;
-  const PProd = 2 * (p.fgm + 0.5 * p.fg3m) + p.ftm;
+  const qAST = ((p.mp / (teamMinutes / 5)) * (1.14 * ((team.ast - p.ast) / team.fgm))) +
+    ((((team.ast / teamMinutes) * p.mp * 5 - p.ast) / ((team.fgm / teamMinutes) * p.mp * 5 - p.fgm)) * (1 - p.mp / (teamMinutes / 5)));
+  const FG_Part = p.fgm * (1 - 0.5 * ((p.pts - p.ftm) / (2 * p.fga)) * qAST);
+  const AST_Part = 0.5 * (((team.pts - team.ftm) - (p.pts - p.ftm)) / (2 * (team.fga - p.fga))) * p.ast;
+  const FT_Part = (1 - Math.pow(1 - p.ftm / p.fta, 2)) * 0.4 * p.fta;
+  const ORB_Part = p.oreb * Team_ORB_Weight * Team_Play_pct;
+  const ScPoss = (FG_Part + AST_Part + FT_Part) * (1 - (team.oreb / Team_Scoring_Poss) * Team_ORB_Weight * Team_Play_pct) + ORB_Part;
+  const FGxPoss = (p.fga - p.fgm) * (1 - 1.07 * Team_ORB_pct);
+  const FTxPoss = Math.pow(1 - p.ftm / p.fta, 2) * 0.4 * p.fta;
+  const TotPoss = ScPoss + FGxPoss + FTxPoss + p.tov;
+  const PProd_FG = 2 * (p.fgm + 0.5 * p.fg3m) * (1 - 0.5 * ((p.pts - p.ftm) / (2 * p.fga)) * qAST);
+  const PProd_AST = 2 * ((team.fgm - p.fgm + 0.5 * (team.fg3m - p.fg3m)) / (team.fgm - p.fgm)) *
+    0.5 * (((team.pts - team.ftm) - (p.pts - p.ftm)) / (2 * (team.fga - p.fga))) * p.ast;
+  const PProd_ORB = p.oreb * Team_ORB_Weight * Team_Play_pct *
+    (team.pts / (team.fgm + (1 - Math.pow(1 - team.ftm / team.fta, 2)) * 0.4 * team.fta));
+  const PProd = (PProd_FG + PProd_AST + p.ftm) * (1 - (team.oreb / Team_Scoring_Poss) * Team_ORB_Weight * Team_Play_pct) + PProd_ORB;
   const ortg = TotPoss > 0 ? 100 * PProd / TotPoss : 0;
-  const blkPct = 0; const stlPct = 0; // no opp data
   const g = p.gp || 1; const m = p.mp || 1;
   return {
-    ortg, usagePct, efg, ts, orbPct, drbPct, aRate, toRate, blkPct, stlPct, ftRate,
+    ortg, usagePct, minPct, shotsPct, efg, ts, orbPct, drbPct, aRate, toRate, blkPct, stlPct, ftRate,
     twopm, twopa, twopPct, fg3m: p.fg3m, fg3a: p.fg3a, tpPct, ftm: p.ftm, fta: p.fta, ftPct, fgPct,
     ppg: p.pts/g, rpg: p.reb/g, orbpg: p.oreb/g, drbpg: p.dreb/g,
     apg: p.ast/g, spg: p.stl/g, bpg: p.blk/g, mpg: p.mp/g,
@@ -236,7 +264,6 @@ const ADVANCED_COLS: { label: string; key: TransferSortKey }[] = [
   { label: 'eFG%', key: 'efg' }, { label: 'TS%', key: 'ts' },
   { label: 'OR%', key: 'orbPct' }, { label: 'DR%', key: 'drbPct' },
   { label: 'ARate', key: 'aRate' }, { label: 'TORate', key: 'toRate' },
-  { label: 'Blk%', key: 'blkPct' }, { label: 'Stl%', key: 'stlPct' },
   { label: 'FTRate', key: 'ftRate' }, { label: '2PM', key: 'twopm' },
   { label: '2PA', key: 'twopa' }, { label: '2P%', key: 'twopPct' },
   { label: '3PM', key: 'tpm' }, { label: '3PA', key: 'tpa' },
@@ -267,10 +294,12 @@ const PER_40_COLS: { label: string; key: TransferSortKey }[] = [
 ];
 
 const HS_ADVANCED_COLS: { label: string; key: HSSortKey }[] = [
-  { label: 'ORtg', key: 'ortg' }, { label: '%Usg', key: 'usagePct' },
+  { label: '%Min', key: 'minPct' }, { label: 'ORtg', key: 'ortg' },
+  { label: '%Usg', key: 'usagePct' }, { label: '%Shots', key: 'shotsPct' },
   { label: 'eFG%', key: 'efg' }, { label: 'TS%', key: 'ts' },
   { label: 'OR%', key: 'orbPct' }, { label: 'DR%', key: 'drbPct' },
   { label: 'ARate', key: 'aRate' }, { label: 'TORate', key: 'toRate' },
+  { label: 'Blk%', key: 'blkPct' }, { label: 'Stl%', key: 'stlPct' },
   { label: 'FTRate', key: 'ftRate' }, { label: '2PM', key: 'twopm' },
   { label: '2PA', key: 'twopa' }, { label: '2P%', key: 'twopPct' },
   { label: '3PM', key: 'fg3m' }, { label: '3PA', key: 'fg3a' },
@@ -747,7 +776,7 @@ export default function MensRecruitingPage() {
                         return (
                           <tr key={`${p.id}`} style={{ borderBottom: '1px solid #f0f0f0', background: bg }}>
                             <td style={{ padding: '5px 8px', fontWeight: 600, position: 'sticky', left: 0, background: bg, zIndex: 1, minWidth: 140, maxWidth: 160, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                              <Link href={`/recruiting/highschool/${p.id}`} style={{ color: NAVY, textDecoration: 'none' }}
+                              <Link href={`/mens-d1/recruiting/highschool/${p.id}`} style={{ color: NAVY, textDecoration: 'none' }}
                                 onMouseEnter={e => (e.currentTarget.style.color = ACCENT)}
                                 onMouseLeave={e => (e.currentTarget.style.color = NAVY)}>
                                 {p.full_name}
