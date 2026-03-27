@@ -145,6 +145,14 @@ async function scrapeBoxScore(page, url) {
   const html = await page.content();
   const $ = cheerio.load(html);
 
+  // Debug: show what sections and sub-headings cheerio finds
+  const sectionCount = $('section').length;
+  const subHeadingCount = $('h3.sub-heading').length;
+  console.log(`  Found ${sectionCount} sections, ${subHeadingCount} h3.sub-heading elements`);
+  $('h3.sub-heading').each((i, el) => {
+    console.log(`  h3[${i}]: "${$(el).text().trim()}"`);
+  });
+
   // Sidearm box score structure (confirmed from DevTools inspection):
   // <section>
   //   <h3 class="sub-heading">Utah Prep 74</h3>
