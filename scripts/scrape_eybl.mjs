@@ -29,9 +29,10 @@ function parseNum(str) {
   return isNaN(n) ? 0 : n;
 }
 
-// Box score player rows look like:
-//   ## | Name | Pos | FGM-FGA | 3FGM-3FGA | FTM-FTA | OFF-DEF | TOT | PF | TP | A | TO | BLK | STL | MIN
-// The exact columns can vary slightly; we locate them by header text.
+// Actual box score column layout (confirmed from screenshot):
+//   ## | Player | GS | MIN | FG | 3PT | FT | ORB-DRB | REB | PF | A | TO | BLK | STL | PTS
+// MIN values have a "+" suffix (e.g. "30+") — parseInt handles this fine.
+// ORB-DRB is a combined "4-3" fraction column, not two separate columns.
 function parseBoxscoreTable($, table) {
   const headers = [];
   $(table).find('thead th, thead td').each((_, th) => {
@@ -46,56 +47,55 @@ function parseBoxscoreTable($, table) {
     return -1;
   };
 
-  const iName  = colIndex(['name', 'player']);
-  const iFgFga = colIndex(['fg', 'fgm-fga', 'fg-fga']);
-  const i3p    = colIndex(['3fg', '3fgm-3fga', '3fg-3fga', '3-pt']);
-  const iFt    = colIndex(['ft', 'ftm-fta', 'ft-fta']);
-  const iOreb  = colIndex(['off', 'oreb']);
-  const iDreb  = colIndex(['def', 'dreb']);
-  const iTot   = colIndex(['tot', 'reb', 'total']);
-  const iPts   = colIndex(['tp', 'pts', 'points']);
-  const iAst   = colIndex(['a', 'ast', 'assists']);
-  const iTo    = colIndex(['to', 'tov', 'turnovers']);
-  const iBlk   = colIndex(['blk', 'blocks']);
-  const iStl   = colIndex(['stl', 'steals', 's']);
-  const iMin   = colIndex(['min', 'minutes']);
+  const iName    = colIndex(['player', 'name']);
+  const iFg      = colIndex(['fg']);
+  const i3pt     = colIndex(['3pt', '3fg', '3-pt']);
+  const iFt      = colIndex(['ft']);
+  const iOrbDrb  = colIndex(['orb-drb', 'orb-drb', 'off-def', 'oreb-dreb']);
+  const iReb     = colIndex(['reb', 'tot', 'total']);
+  const iPts     = colIndex(['pts', 'tp', 'points']);
+  const iAst     = colIndex(['a', 'ast']);
+  const iTo      = colIndex(['to', 'tov']);
+  const iBlk     = colIndex(['blk']);
+  const iStl     = colIndex(['stl']);
+  const iMin     = colIndex(['min', 'minutes']);
 
   const players = [];
 
   $(table).find('tbody tr').each((_, tr) => {
     const cells = $(tr).find('td');
-    if (cells.length < 5) return; // skip totals / empty rows
+    if (cells.length < 5) return;
 
     const name = iName !== -1 ? $(cells[iName]).text().trim() : '';
-    if (!name || name.toLowerCase() === 'totals' || name.toLowerCase() === 'team') return;
+    if (!name || /totals/i.test(name) || /^team$/i.test(name)) return;
 
     const splitFrac = (str, part) => {
-      // e.g. "5-9" → [5, 9]
       const [a, b] = (str || '0-0').split('-').map(s => parseNum(s));
-      return part === 0 ? a : (b || 0);
+      return part === 0 ? (a || 0) : (b || 0);
     };
 
-    const fgStr  = iFgFga !== -1 ? $(cells[iFgFga]).text().trim() : '0-0';
-    const fg3Str = i3p    !== -1 ? $(cells[i3p]).text().trim()    : '0-0';
-    const ftStr  = iFt    !== -1 ? $(cells[iFt]).text().trim()    : '0-0';
+    const fgStr     = iFg     !== -1 ? $(cells[iFg]).text().trim()     : '0-0';
+    const fg3Str    = i3pt    !== -1 ? $(cells[i3pt]).text().trim()    : '0-0';
+    const ftStr     = iFt     !== -1 ? $(cells[iFt]).text().trim()     : '0-0';
+    const orbDrbStr = iOrbDrb !== -1 ? $(cells[iOrbDrb]).text().trim() : '0-0';
 
     players.push({
       name,
-      fgm:  splitFrac(fgStr,  0),
-      fga:  splitFrac(fgStr,  1),
-      fg3m: splitFrac(fg3Str, 0),
-      fg3a: splitFrac(fg3Str, 1),
-      ftm:  splitFrac(ftStr,  0),
-      fta:  splitFrac(ftStr,  1),
-      oreb: iOreb !== -1 ? parseNum($(cells[iOreb]).text()) : 0,
-      dreb: iDreb !== -1 ? parseNum($(cells[iDreb]).text()) : 0,
-      reb:  iTot  !== -1 ? parseNum($(cells[iTot]).text())  : 0,
-      pts:  iPts  !== -1 ? parseNum($(cells[iPts]).text())  : 0,
-      ast:  iAst  !== -1 ? parseNum($(cells[iAst]).text())  : 0,
-      tov:  iTo   !== -1 ? parseNum($(cells[iTo]).text())   : 0,
-      blk:  iBlk  !== -1 ? parseNum($(cells[iBlk]).text())  : 0,
-      stl:  iStl  !== -1 ? parseNum($(cells[iStl]).text())  : 0,
-      mp:   iMin  !== -1 ? parseNum($(cells[iMin]).text())  : 0,
+      fgm:  splitFrac(fgStr,     0),
+      fga:  splitFrac(fgStr,     1),
+      fg3m: splitFrac(fg3Str,    0),
+      fg3a: splitFrac(fg3Str,    1),
+      ftm:  splitFrac(ftStr,     0),
+      fta:  splitFrac(ftStr,     1),
+      oreb: splitFrac(orbDrbStr, 0),   // left side of ORB-DRB
+      dreb: splitFrac(orbDrbStr, 1),   // right side of ORB-DRB
+      reb:  iReb !== -1 ? parseNum($(cells[iReb]).text()) : 0,
+      pts:  iPts !== -1 ? parseNum($(cells[iPts]).text()) : 0,
+      ast:  iAst !== -1 ? parseNum($(cells[iAst]).text()) : 0,
+      tov:  iTo  !== -1 ? parseNum($(cells[iTo]).text())  : 0,
+      blk:  iBlk !== -1 ? parseNum($(cells[iBlk]).text()) : 0,
+      stl:  iStl !== -1 ? parseNum($(cells[iStl]).text()) : 0,
+      mp:   iMin !== -1 ? parseNum($(cells[iMin]).text()) : 0,
     });
   });
 
@@ -151,7 +151,8 @@ async function scrapeBoxScore(page, url) {
   if (teamDivs.length >= 2) {
     for (const div of teamDivs.slice(0, 2)) {
       const teamName = $(div).find('h1, h2, h3, h4, .team-name, caption').first().text().trim()
-        .replace(/\s+/g, ' ');
+        .replace(/\s+/g, ' ')
+        .replace(/\s+\d+$/, '');  // strip trailing score e.g. "Utah Prep 74" → "Utah Prep"
       const table = $(div).find('table').first();
       if (table.length) {
         teams.push({ teamName, players: parseBoxscoreTable($, table) });
@@ -174,7 +175,9 @@ async function scrapeBoxScore(page, url) {
         .filter(h => h.offset < tableIndex)
         .sort((a, b) => b.offset - a.offset)[0];
 
-      const teamName = heading ? heading.text.replace(/\s+/g, ' ') : 'Unknown';
+      const teamName = heading
+        ? heading.text.replace(/\s+/g, ' ').replace(/\s+\d+$/, '')
+        : 'Unknown';
       teams.push({ teamName, players: parseBoxscoreTable($, table) });
     }
   }
