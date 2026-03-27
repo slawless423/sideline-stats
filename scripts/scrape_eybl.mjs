@@ -81,7 +81,10 @@ function parseBoxscoreTable($, table) {
     if (/^\d+$/.test(name)) return;
     // All player names are in "LastName,FirstName" format — skip anything without a comma
     // (catches team name totals rows like "Utah Prep", "CIA Bella Vista" etc.)
-    if (!name.includes(',')) return;
+    if (!name.includes(',')) {
+      if (name.length > 2) console.log(`  Skipping no-comma name: "${name}"`);
+      return;
+    }
 
     const cells = $(tr).find('td');
     if (cells.length < 5) return;
@@ -119,81 +122,25 @@ function parseBoxscoreTable($, table) {
   return players;
 }
 
-// ─── Step 1: Get all box score URLs from team schedule pages ─────────────────
-// The aggregate stats page only shows ~148 box scores but misses games.
-// Each team's individual schedule page has all their games with box score links.
-// We scrape all 20 team schedule pages to get complete coverage.
-
-const TEAM_SCHEDULE_IDS = [
-  82,   // Link Academy
-  83,   // AZ Compass Prep
-  84,   // Utah Prep
-  86,   // Brewster Academy
-  87,   // Spire Institute Academy
-  88,   // CIA Bella Vista
-  93,   // Veritas Academy
-  94,   // Wasatch Academy
-  95,   // Iowa United
-  97,   // Tennessee Collegiate Academy
-  98,   // Oak Hill Academy
-  99,   // Montverde Academy
-  100,  // The St. James
-];
-
-// For remaining teams without confirmed IDs, fetch from stats page team links
-// and also try schedule IDs 80-105 range to find missing ones
-const SCHEDULE_IDS_TO_TRY = Array.from({length: 26}, (_, i) => 80 + i);
+// ─── Step 1: Get all box score URLs from the stats page ───────────────────────
 
 async function fetchBoxScoreUrls() {
-  console.log('Fetching box score URLs from team schedule pages...');
-  const urls = new Set();
+  console.log('Fetching box score URL list...');
+  const res = await fetch(STATS_URL);
+  const html = await res.text();
+  const $ = cheerio.load(html);
 
-  // First get URLs from the main stats page as a baseline
-  const statsRes = await fetch(STATS_URL);
-  const statsHtml = await statsRes.text();
-  const $stats = cheerio.load(statsHtml);
-  $stats('a[href*="boxscore.aspx"]').each((_, a) => {
-    const href = $stats(a).attr('href');
+  const urls = [];
+  $('a[href*="boxscore.aspx"]').each((_, a) => {
+    const href = $(a).attr('href');
     if (href) {
       const full = href.startsWith('http') ? href : `${BASE_URL}/${href.replace(/^\//, '')}`;
-      urls.add(full);
+      if (!urls.includes(full)) urls.push(full);
     }
   });
-  console.log(`  Stats page: ${urls.size} box score URLs`);
 
-  // Now fetch from each team schedule page
-  const scheduleIds = [...new Set([...TEAM_SCHEDULE_IDS, ...SCHEDULE_IDS_TO_TRY])];
-  
-  for (const id of scheduleIds) {
-    try {
-      const res = await fetch(`${BASE_URL}/schedule.aspx?schedule=${id}`);
-      const html = await res.text();
-      
-      // Check if this is a 2025-26 mbball schedule (not a different sport/season)
-      if (!html.includes('2025-26') || !html.includes('mbball')) continue;
-      
-      const $ = cheerio.load(html);
-      let found = 0;
-      $('a[href*="boxscore.aspx"]').each((_, a) => {
-        const href = $(a).attr('href');
-        if (href) {
-          const full = href.startsWith('http') ? href : `${BASE_URL}/${href.replace(/^\//, '')}`;
-          if (!urls.has(full)) {
-            urls.add(full);
-            found++;
-          }
-        }
-      });
-      if (found > 0) console.log(`  Schedule ${id}: +${found} new box score URLs`);
-    } catch {
-      // Skip IDs that don't exist
-    }
-    await new Promise(r => setTimeout(r, 200));
-  }
-
-  const allUrls = [...urls];
-  console.log(`Total: ${allUrls.length} box score URLs`);
-  return allUrls;
+  console.log(`Found ${urls.length} box score URLs`);
+  return urls;
 }
 
 // ─── Step 2: Scrape a single box score with Puppeteer ────────────────────────
