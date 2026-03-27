@@ -48,7 +48,15 @@ function parseBoxscoreTable($, table) {
   };
 
   const iName    = colIndex(['player', 'name']);
-  console.log(`    colIndex iName=${iName}, headers=${JSON.stringify(headers.slice(0,5))}`);
+  
+  // Debug: show first tbody row
+  const firstRow = $(table).find('tbody tr').first();
+  if (firstRow.length) {
+    const cells = firstRow.find('td').map((_, td) => $(td).text().trim()).toArray();
+    console.log(`    First tbody row cells:`, JSON.stringify(cells.slice(0, 6)));
+  } else {
+    console.log(`    No tbody rows found`);
+  }
   const iFg      = colIndex(['fg', 'fgm-fga']);
   const i3pt     = colIndex(['3pt', '3fg', '3fgm-3fga', '3-pt']);
   const iFt      = colIndex(['ft', 'ftm-fta']);
@@ -172,7 +180,8 @@ async function scrapeBoxScore(page, url) {
     if (!table.length) return;
 
     const players = parseBoxscoreTable($, table);
-    console.log(`  Section "${teamName}": ${players.length} players, table class="${$(table).attr('class')}"`);
+    const tbodyRows = $(table).find('tbody tr').length;
+    console.log(`  Section "${teamName}": ${players.length} players, ${tbodyRows} tbody rows, table class="${$(table).attr('class')}"`);
     if (players.length > 0) {
       teams.push({ teamName, players });
       teamsFound++;
