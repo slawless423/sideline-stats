@@ -70,7 +70,9 @@ function parseBoxscoreTable($, table) {
   $(table).find('tbody tr').each((_, tr) => {
     // Name is in <th scope="row">
     const nameEl = $(tr).find('th[scope="row"]');
-    const name = nameEl.length ? nameEl.text().trim() : '';
+    const rawName = nameEl.length ? nameEl.text().trim() : '';
+    // Strip any leading jersey number e.g. "1 Felesi,Anthony" → "Felesi,Anthony"
+    const name = rawName.replace(/^\d+\s+/, '').trim();
 
     if (!name) return;
     if (/^totals?$/i.test(name)) return;
