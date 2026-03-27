@@ -34,7 +34,9 @@ export async function GET() {
           SELECT
             team, league, season, gp,
             fgm, fga, fg3m, fg3a, ftm, fta,
-            oreb, dreb, reb, ast, stl, blk, tov, pts
+            oreb, dreb, reb, ast, stl, blk, tov, pts,
+            opp_fgm, opp_fga, opp_fg3m, opp_fg3a, opp_ftm, opp_fta,
+            opp_oreb, opp_dreb, opp_reb, opp_ast, opp_stl, opp_blk, opp_tov, opp_pts
           FROM eybl_team_stats
         `),
       ]);
