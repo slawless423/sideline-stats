@@ -29,68 +29,67 @@ function parseNum(str) {
   return isNaN(n) ? 0 : n;
 }
 
-// Actual box score column layout (confirmed from screenshot):
-//   ## | Player | GS | MIN | FG | 3PT | FT | ORB-DRB | REB | PF | A | TO | BLK | STL | PTS
-// MIN values have a "+" suffix (e.g. "30+") — parseInt handles this fine.
-// ORB-DRB is a combined "4-3" fraction column, not two separate columns.
 function parseBoxscoreTable($, table) {
-  const headers = [];
+  // DataTables renders player name as <th scope="row"> in tbody.
+  // The thead has all columns including 'player', but tbody <td> cells
+  // skip the name column. So we build a td-only header list for indexing.
+
+  const allHeaders = [];
   $(table).find('thead th, thead td').each((_, th) => {
-    headers.push($(th).text().trim().toLowerCase());
+    allHeaders.push($(th).text().trim().toLowerCase());
   });
+
+  // Build td-only headers by removing 'player'/'name' entry
+  const tdHeaders = allHeaders.filter(h => h !== 'player' && h !== 'name');
 
   const colIndex = (names) => {
     for (const name of names) {
-      const i = headers.findIndex(h => h === name);
+      const i = tdHeaders.findIndex(h => h === name);
       if (i !== -1) return i;
     }
     return -1;
   };
 
-  const iName    = colIndex(['player', 'name']);
-  
-  // Debug: show first tbody row
-  const firstRow = $(table).find('tbody tr').first();
-  if (firstRow.length) {
-    const cells = firstRow.find('td').map((_, td) => $(td).text().trim()).toArray();
-    console.log(`    First tbody row cells:`, JSON.stringify(cells.slice(0, 6)));
-  } else {
-    console.log(`    No tbody rows found`);
-  }
-  const iFg      = colIndex(['fg', 'fgm-fga']);
-  const i3pt     = colIndex(['3pt', '3fg', '3fgm-3fga', '3-pt']);
-  const iFt      = colIndex(['ft', 'ftm-fta']);
-  const iOrbDrb  = colIndex(['orb-drb', 'off-def', 'oreb-dreb']);
-  const iReb     = colIndex(['reb', 'tot', 'total']);
-  const iPts     = colIndex(['pts', 'tp', 'points']);
-  const iAst     = colIndex(['a', 'ast']);
-  const iTo      = colIndex(['to', 'tov']);
-  const iBlk     = colIndex(['blk']);
-  const iStl     = colIndex(['stl']);
-  const iMin     = colIndex(['min', 'minutes']);
+  // td cell indexes (player name is in <th>, not counted here)
+  // Format 1 td cols: ## | GS | MIN | FG | 3PT | FT | ORB-DRB | REB | PF | A | TO | BLK | STL | PTS
+  // Format 2 td cols: ## | GS | FGM-FGA | 3FGM-3FGA | FTM-FTA | OFF-DEF | TOT | PF | A | TO | BLK | STL | MIN
+  const iFg     = colIndex(['fg', 'fgm-fga']);
+  const i3pt    = colIndex(['3pt', '3fg', '3fgm-3fga']);
+  const iFt     = colIndex(['ft', 'ftm-fta']);
+  const iOrbDrb = colIndex(['orb-drb', 'off-def']);
+  const iReb    = colIndex(['reb', 'tot']);
+  const iPts    = colIndex(['pts', 'tp']);
+  const iAst    = colIndex(['a', 'ast']);
+  const iTo     = colIndex(['to', 'tov']);
+  const iBlk    = colIndex(['blk']);
+  const iStl    = colIndex(['stl']);
+  const iMin    = colIndex(['min']);
 
   const players = [];
 
   $(table).find('tbody tr').each((_, tr) => {
-    const cells = $(tr).find('td');
-    if (cells.length < 5) return;
+    // Name is in <th scope="row">
+    const nameEl = $(tr).find('th[scope="row"]');
+    const name = nameEl.length ? nameEl.text().trim() : '';
 
-    const name = iName !== -1 ? $(cells[iName]).text().trim() : '';
     if (!name) return;
     if (/^totals?$/i.test(name)) return;
     if (/^team$/i.test(name)) return;
-    if (/^\*?$/.test(name)) return;  // skip asterisk-only (GS column bleedthrough)
-    if (/^\d+$/.test(name)) return;  // skip pure jersey numbers
+    if (/^\*?$/.test(name)) return;
+    if (/^\d+$/.test(name)) return;
+
+    const cells = $(tr).find('td');
+    if (cells.length < 5) return;
 
     const splitFrac = (str, part) => {
       const [a, b] = (str || '0-0').split('-').map(s => parseNum(s));
       return part === 0 ? (a || 0) : (b || 0);
     };
 
-    const fgStr     = iFg     !== -1 ? $(cells[iFg]).text().trim()     : '0-0';
-    const fg3Str    = i3pt    !== -1 ? $(cells[i3pt]).text().trim()    : '0-0';
-    const ftStr     = iFt     !== -1 ? $(cells[iFt]).text().trim()     : '0-0';
-    const orbDrbStr = iOrbDrb !== -1 ? $(cells[iOrbDrb]).text().trim() : '0-0';
+    const fgStr     = iFg     !== -1 ? $(cells[iFg]).text().trim()      : '0-0';
+    const fg3Str    = i3pt    !== -1 ? $(cells[i3pt]).text().trim()     : '0-0';
+    const ftStr     = iFt     !== -1 ? $(cells[iFt]).text().trim()      : '0-0';
+    const orbDrbStr = iOrbDrb !== -1 ? $(cells[iOrbDrb]).text().trim()  : '0-0';
 
     players.push({
       name,
@@ -100,8 +99,8 @@ function parseBoxscoreTable($, table) {
       fg3a: splitFrac(fg3Str,    1),
       ftm:  splitFrac(ftStr,     0),
       fta:  splitFrac(ftStr,     1),
-      oreb: splitFrac(orbDrbStr, 0),   // left side of ORB-DRB
-      dreb: splitFrac(orbDrbStr, 1),   // right side of ORB-DRB
+      oreb: splitFrac(orbDrbStr, 0),
+      dreb: splitFrac(orbDrbStr, 1),
       reb:  iReb !== -1 ? parseNum($(cells[iReb]).text()) : 0,
       pts:  iPts !== -1 ? parseNum($(cells[iPts]).text()) : 0,
       ast:  iAst !== -1 ? parseNum($(cells[iAst]).text()) : 0,
@@ -180,8 +179,6 @@ async function scrapeBoxScore(page, url) {
     if (!table.length) return;
 
     const players = parseBoxscoreTable($, table);
-    const tbodyRows = $(table).find('tbody tr').length;
-    console.log(`  Section "${teamName}": ${players.length} players, ${tbodyRows} tbody rows, table class="${$(table).attr('class')}"`);
     if (players.length > 0) {
       teams.push({ teamName, players });
       teamsFound++;
