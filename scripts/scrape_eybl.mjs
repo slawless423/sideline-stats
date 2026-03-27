@@ -39,6 +39,9 @@ function parseBoxscoreTable($, table) {
     headers.push($(th).text().trim().toLowerCase());
   });
 
+  // Debug: log headers for first few tables
+  if (headers.length > 0) console.log('  Table headers:', headers);
+
   const colIndex = (names) => {
     for (const name of names) {
       const i = headers.findIndex(h => h === name);
@@ -47,18 +50,19 @@ function parseBoxscoreTable($, table) {
     return -1;
   };
 
-  const iName    = colIndex(['player', 'name']);
-  const iFg      = colIndex(['fg']);
-  const i3pt     = colIndex(['3pt', '3fg', '3-pt']);
-  const iFt      = colIndex(['ft']);
-  const iOrbDrb  = colIndex(['orb-drb', 'orb-drb', 'off-def', 'oreb-dreb']);
-  const iReb     = colIndex(['reb', 'tot', 'total']);
-  const iPts     = colIndex(['pts', 'tp', 'points']);
-  const iAst     = colIndex(['a', 'ast']);
-  const iTo      = colIndex(['to', 'tov']);
-  const iBlk     = colIndex(['blk']);
-  const iStl     = colIndex(['stl']);
-  const iMin     = colIndex(['min', 'minutes']);
+  const iNum    = colIndex(['##', '#', 'no', 'no.']);
+  const iName   = colIndex(['player', 'name']);
+  const iFg     = colIndex(['fg']);
+  const i3pt    = colIndex(['3pt', '3fg', '3-pt']);
+  const iFt     = colIndex(['ft']);
+  const iOrbDrb = colIndex(['orb-drb', 'off-def', 'oreb-dreb']);
+  const iReb    = colIndex(['reb', 'tot', 'total']);
+  const iPts    = colIndex(['pts', 'tp', 'points']);
+  const iAst    = colIndex(['a', 'ast']);
+  const iTo     = colIndex(['to', 'tov']);
+  const iBlk    = colIndex(['blk']);
+  const iStl    = colIndex(['stl']);
+  const iMin    = colIndex(['min', 'minutes']);
 
   const players = [];
 
@@ -67,7 +71,11 @@ function parseBoxscoreTable($, table) {
     if (cells.length < 5) return;
 
     const name = iName !== -1 ? $(cells[iName]).text().trim() : '';
-    if (!name || /totals/i.test(name) || /^team$/i.test(name)) return;
+    if (!name) return;
+    if (/^totals?$/i.test(name)) return;
+    if (/^team$/i.test(name)) return;
+    if (/^\*?$/.test(name)) return;  // skip asterisk-only (GS column bleedthrough)
+    if (/^\d+$/.test(name)) return;  // skip pure jersey numbers
 
     const splitFrac = (str, part) => {
       const [a, b] = (str || '0-0').split('-').map(s => parseNum(s));
