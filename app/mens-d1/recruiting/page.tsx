@@ -898,7 +898,16 @@ export default function MensRecruitingPage() {
                             <td title={p.team} style={{ padding: '5px 8px', color: MUTED, minWidth: 100, maxWidth: 120, overflow: 'hidden', textOverflow: 'ellipsis' }}>{p.team}</td>
                             <td style={{ padding: '5px 8px', textAlign: 'center', color: ACCENT, fontWeight: 600 }}>{p.season}</td>
                             <td style={{ padding: '5px 8px', minWidth: 100 }}>
-                              <span style={{ display: 'inline-block', padding: '1px 6px', borderRadius: 4, fontSize: 10, fontWeight: 600, background: FROST, color: NAVY }}>{p.league}</span>
+                              <a
+                                href={`/api/recruiting/mens/highschool/pdf?league=${encodeURIComponent(p.league)}&season=${encodeURIComponent(p.season)}`}
+                                download
+                                style={{ textDecoration: 'none' }}
+                              >
+                                <span style={{ display: 'inline-block', padding: '1px 6px', borderRadius: 4, fontSize: 10, fontWeight: 600, background: FROST, color: NAVY, cursor: 'pointer' }}
+                                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = ICE; }}
+                                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = FROST; }}
+                                >{p.league}</span>
+                              </a>
                             </td>
                             <td style={{ padding: '5px 8px', textAlign: 'center' }}>{p.grad_year || '—'}</td>
                             <td style={{ padding: '5px 8px', textAlign: 'center' }}>{p.height || '—'}</td>
