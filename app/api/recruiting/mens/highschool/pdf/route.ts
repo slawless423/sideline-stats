@@ -164,10 +164,11 @@ export async function GET(req: NextRequest) {
       autoFirstPage: false,
     });
 
-    const NAVY  = '#0D1F3C';
+    const NAVY   = '#0D1F3C';
     const ACCENT = '#3B9EFF';
-    const FROST = '#E8F2FC';
-    const MUTED = '#6B7E9A';
+    const FROST  = '#E8F2FC';
+    const ICE    = '#A8C8F0';
+    const MUTED  = '#6B7E9A';
     const W = 792 - 72; // page width minus margins
     const PAGE_H = 612;
     const MARGIN = 36;
@@ -185,13 +186,29 @@ export async function GET(req: NextRequest) {
 
       let y = MARGIN;
 
-      // Header bar
-      doc.rect(MARGIN, y, W, 22).fill(NAVY);
+      // ── Header bar ──
+      doc.rect(MARGIN, y, W, 28).fill(NAVY);
+
+      // Wordmark: "Sideline" bold + divider + "STATS" light
+      doc.fillColor('#fff').fontSize(11).font('Helvetica-Bold')
+        .text('Sideline', MARGIN + 8, y + 4, { continued: false });
+      doc.moveTo(MARGIN + 8, y + 17).lineTo(MARGIN + 58, y + 17)
+        .strokeColor(ACCENT).lineWidth(1).stroke();
+      doc.fillColor(ICE).fontSize(8).font('Helvetica')
+        .text('S T A T S', MARGIN + 8, y + 19, { continued: false });
+
+      // Team name and league/season on right
       doc.fillColor('#fff').fontSize(12).font('Helvetica-Bold')
-        .text(teamName, MARGIN + 8, y + 5, { width: W / 2 });
-      doc.fontSize(9).font('Helvetica')
-        .text(`${league} · ${season}`, MARGIN + W / 2, y + 7, { width: W / 2, align: 'right' });
-      y += 26;
+        .text(teamName, MARGIN + 72, y + 5, { width: W - 72 - 120 });
+      doc.fillColor(ICE).fontSize(8).font('Helvetica')
+        .text(`${league}  ·  ${season}`, MARGIN + 72, y + 19, { width: W - 72 - 120 });
+
+      // Date top right
+      const today = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      doc.fillColor(ICE).fontSize(7).font('Helvetica')
+        .text(today, MARGIN, y + 10, { width: W - 8, align: 'right' });
+
+      y += 32;
 
       // Column headers
       doc.rect(MARGIN, y, W, 16).fill(FROST);
@@ -251,15 +268,16 @@ export async function GET(req: NextRequest) {
         x += STAT_W;
       }
 
-      // Footer with branding and page number
+      // ── Footer ──
       const footerY = PAGE_H - MARGIN - 8;
+      doc.moveTo(MARGIN, footerY - 4).lineTo(MARGIN + W, footerY - 4)
+        .strokeColor(FROST).lineWidth(0.5).stroke();
       doc.fillColor(ACCENT).fontSize(7).font('Helvetica-Bold')
-        .text('SIDELINE STATS', MARGIN, footerY, { width: 100 });
-      doc.fillColor(MUTED).fontSize(7).font('Helvetica')
-        .text('sideline-stats.com', MARGIN + 100, footerY, { width: 120 });
-      doc.fillColor(MUTED).fontSize(7).font('Helvetica')
-        .text(`${(teams as string[]).indexOf(teamName) + 1} / ${teams.length}`,
-          MARGIN, footerY, { width: W, align: 'right' });
+        .text('SIDELINE STATS', MARGIN, footerY, { continued: true });
+      doc.fillColor(MUTED).font('Helvetica')
+        .text('  ·  sideline-stats.com', { continued: true });
+      doc.fillColor(MUTED)
+        .text(`Page ${(teams as string[]).indexOf(teamName) + 1} of ${teams.length}`, { align: 'right' });
     }
 
     (teams as string[]).forEach((team, i) => drawTeamPage(team, false));
