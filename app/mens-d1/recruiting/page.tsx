@@ -888,14 +888,14 @@ export default function MensRecruitingPage() {
                         const bg = idx%2===0 ? '#fff' : '#fafafa';
                         return (
                           <tr key={`${p.id}`} style={{ borderBottom: '1px solid #f0f0f0', background: bg }}>
-                            <td style={{ padding: '5px 8px', fontWeight: 600, position: 'sticky', left: 0, background: bg, zIndex: 1, minWidth: 140, maxWidth: 140, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            <td title={p.full_name} style={{ padding: '5px 8px', fontWeight: 600, position: 'sticky', left: 0, background: bg, zIndex: 1, minWidth: 140, maxWidth: 140, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                               <Link href={`/mens-d1/recruiting/highschool/${p.id}`} style={{ color: NAVY, textDecoration: 'none' }}
                                 onMouseEnter={e => (e.currentTarget.style.color = ACCENT)}
                                 onMouseLeave={e => (e.currentTarget.style.color = NAVY)}>
                                 {p.full_name}
                               </Link>
                             </td>
-                            <td style={{ padding: '5px 8px', color: MUTED, minWidth: 100, maxWidth: 120, overflow: 'hidden', textOverflow: 'ellipsis' }}>{p.team}</td>
+                            <td title={p.team} style={{ padding: '5px 8px', color: MUTED, minWidth: 100, maxWidth: 120, overflow: 'hidden', textOverflow: 'ellipsis' }}>{p.team}</td>
                             <td style={{ padding: '5px 8px', textAlign: 'center', color: ACCENT, fontWeight: 600 }}>{p.season}</td>
                             <td style={{ padding: '5px 8px', minWidth: 100 }}>
                               <span style={{ display: 'inline-block', padding: '1px 6px', borderRadius: 4, fontSize: 10, fontWeight: 600, background: FROST, color: NAVY }}>{p.league}</span>
