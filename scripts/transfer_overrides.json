@@ -615,5 +615,9 @@
   { "transfer_name": "Calvin Sirmans", "previous_school": "Stetson", "player_id": "281_calvin_sirmansiii" },
   { "transfer_name": "Arthur Roaché", "previous_school": "District of Columbia", "player_id": "2123_arthur_roache" },
   { "transfer_name": "Wiggy Ball", "previous_school": "Louisiana-Monroe", "player_id": "211_william_ball" },
-  { "transfer_name": "Andrew Mills", "previous_school": "Valdosta State", "player_id": "2678_drew_mills" }
+  { "transfer_name": "Andrew Mills", "previous_school": "Valdosta State", "player_id": "2678_drew_mills" },
+  { "transfer_name": "Juan Cranford, Jr.", "previous_school": "Eastern Kentucky", "player_id": "42_juan_cranford,jr." },
+  { "transfer_name": "Tómas Þrastarson", "previous_school": "Washington State", "player_id": "2359_tomas_thrastarson" },
+  { "transfer_name": "Trey Horton III", "previous_school": "UTEP", "player_id": "2017_trey_horton" },
+  { "transfer_name": "Victor Valdés", "previous_school": "Troy", "player_id": "2350_victor_valdes" }
 ]
