@@ -195,7 +195,7 @@ export async function GET(req: NextRequest) {
 
     // League averages (players with stats only, mp >= 50)
     const qualifiedRaw = playerStats.filter(p => p.adv && p.mp >= 50);
-    const leagueAvg = avgStats(qualifiedRaw, teamMap);
+    const leagueAvg = avgStats(qualifiedRaw, teamMap as Map<string, any>);
 
     // Build PDF - autoFirstPage:false prevents the initial blank page
     const doc = new PDFDocument({
