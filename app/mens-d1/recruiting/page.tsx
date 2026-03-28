@@ -109,6 +109,18 @@ type TransferSortKey =
 
 const MIN_MINUTES_OPTIONS = [0, 50, 100, 150, 200, 300];
 
+const HEIGHT_OPTIONS = [
+  "5'6\"","5'7\"","5'8\"","5'9\"","5'10\"","5'11\"",
+  "6'0\"","6'1\"","6'2\"","6'3\"","6'4\"","6'5\"","6'6\"","6'7\"","6'8\"","6'9\"","6'10\"","6'11\"",
+  "7'0\"","7'1\"","7'2\"",
+];
+
+function heightToInches(h: string): number {
+  const m = h.match(/(\d+)'(\d+)"/);
+  if (!m) return 0;
+  return parseInt(m[1]) * 12 + parseInt(m[2]);
+}
+
 // ── Transfer helpers (unchanged) ──────────────────────────────────────────────
 
 function hasStats(t: Transfer): boolean {
@@ -351,6 +363,9 @@ export default function MensRecruitingPage() {
   const [leagueFilter, setLeagueFilter] = useState('all');
   const [seasonFilter, setSeasonFilter] = useState('all');
   const [gradYearFilter, setGradYearFilter] = useState('all');
+  const [minHeightFilter, setMinHeightFilter] = useState('');
+  const [maxHeightFilter, setMaxHeightFilter] = useState('');
+  const [hsFilterOpen, setHsFilterOpen] = useState(false);
   const [hsSortKey, setHsSortKey]   = useState<HSSortKey>('ppg');
   const [hsSortOrder, setHsSortOrder] = useState<'asc' | 'desc'>('desc');
 
@@ -436,18 +451,29 @@ export default function MensRecruitingPage() {
   const seasons = useMemo(() => ['all', ...Array.from(new Set(hsPlayers.map(p => p.season))).sort().reverse()], [hsPlayers]);
   const gradYears = useMemo(() => ['all', ...Array.from(new Set(hsPlayers.filter(p => p.grad_year).map(p => String(p.grad_year)))).sort()], [hsPlayers]);
 
+  const hsActiveFilterCount = [
+    leagueFilter !== 'all', seasonFilter !== 'all',
+    gradYearFilter !== 'all', minHeightFilter !== '', maxHeightFilter !== '',
+  ].filter(Boolean).length;
+
   const filteredHs = useMemo(() => hsPlayers.filter(p => {
     if (p.gp === 0 || p.mp === 0) return false;
     if (minMinutes > 0 && p.mp < minMinutes) return false;
     if (leagueFilter !== 'all' && p.league !== leagueFilter) return false;
     if (seasonFilter !== 'all' && p.season !== seasonFilter) return false;
     if (gradYearFilter !== 'all' && String(p.grad_year) !== gradYearFilter) return false;
+    if (minHeightFilter && p.height) {
+      if (heightToInches(p.height) < heightToInches(minHeightFilter)) return false;
+    }
+    if (maxHeightFilter && p.height) {
+      if (heightToInches(p.height) > heightToInches(maxHeightFilter)) return false;
+    }
     if (searchTerm) {
       const q = searchTerm.toLowerCase();
       if (!p.full_name.toLowerCase().includes(q) && !p.team.toLowerCase().includes(q)) return false;
     }
     return true;
-  }), [hsPlayers, leagueFilter, seasonFilter, gradYearFilter, searchTerm, minMinutes]);
+  }), [hsPlayers, leagueFilter, seasonFilter, gradYearFilter, minHeightFilter, maxHeightFilter, searchTerm, minMinutes]);
 
   const sortedHs = useMemo(() => [...filteredHs].sort((a, b) => {
     if (hsSortKey === 'name') return hsSortOrder==='asc'?a.full_name.localeCompare(b.full_name):b.full_name.localeCompare(a.full_name);
@@ -661,68 +687,150 @@ export default function MensRecruitingPage() {
         {/* ── HIGH SCHOOL TAB ── */}
         {activeTab === 'highschool' && (
           <>
-            {/* Row 1: Search + filters + Stat mode */}
-            <div style={{ display: 'flex', gap: 12, marginBottom: 8, flexWrap: 'wrap', alignItems: 'flex-end' }}>
+            {/* Filter popup overlay */}
+            {hsFilterOpen && (
+              <div style={{
+                position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.3)', zIndex: 1000,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }} onClick={() => setHsFilterOpen(false)}>
+                <div style={{
+                  background: '#fff', borderRadius: 12, padding: 28, width: 480, maxWidth: '95vw',
+                  boxShadow: '0 8px 40px rgba(0,0,0,0.18)', fontFamily: "'Outfit', sans-serif",
+                }} onClick={e => e.stopPropagation()}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+                    <span style={{ fontSize: 16, fontWeight: 700, color: NAVY }}>Filters</span>
+                    <button onClick={() => setHsFilterOpen(false)} style={{
+                      background: 'none', border: 'none', cursor: 'pointer', fontSize: 18, color: MUTED, lineHeight: 1,
+                    }}>✕</button>
+                  </div>
+
+                  {/* League */}
+                  <div style={{ marginBottom: 20 }}>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: MUTED, marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.05em' }}>League</div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                      {leagues.map(val => (
+                        <button key={val} onClick={() => setLeagueFilter(val)} style={{
+                          padding: '6px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer', borderRadius: 6,
+                          fontFamily: "'Outfit', sans-serif", border: `1px solid ${leagueFilter===val ? NAVY : ICE}`,
+                          background: leagueFilter===val ? NAVY : '#fff', color: leagueFilter===val ? '#fff' : MUTED,
+                          transition: 'all 0.15s',
+                        }}>{val === 'all' ? 'All' : val}</button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Season */}
+                  <div style={{ marginBottom: 20 }}>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: MUTED, marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Season</div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                      {seasons.map(val => (
+                        <button key={val} onClick={() => setSeasonFilter(val)} style={{
+                          padding: '6px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer', borderRadius: 6,
+                          fontFamily: "'Outfit', sans-serif", border: `1px solid ${seasonFilter===val ? NAVY : ICE}`,
+                          background: seasonFilter===val ? NAVY : '#fff', color: seasonFilter===val ? '#fff' : MUTED,
+                          transition: 'all 0.15s',
+                        }}>{val === 'all' ? 'All' : val}</button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Grad Year */}
+                  <div style={{ marginBottom: 20 }}>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: MUTED, marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Grad Year</div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                      {gradYears.map(val => (
+                        <button key={val} onClick={() => setGradYearFilter(val)} style={{
+                          padding: '6px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer', borderRadius: 6,
+                          fontFamily: "'Outfit', sans-serif", border: `1px solid ${gradYearFilter===val ? NAVY : ICE}`,
+                          background: gradYearFilter===val ? NAVY : '#fff', color: gradYearFilter===val ? '#fff' : MUTED,
+                          transition: 'all 0.15s',
+                        }}>{val === 'all' ? 'All' : val}</button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Height Range */}
+                  <div style={{ marginBottom: 24 }}>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: MUTED, marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Height Range</div>
+                    <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontSize: 11, color: MUTED, marginBottom: 4 }}>Min</div>
+                        <select value={minHeightFilter} onChange={e => setMinHeightFilter(e.target.value)} style={{
+                          width: '100%', padding: '8px 10px', border: `1px solid ${ICE}`, borderRadius: 6,
+                          fontSize: 13, fontFamily: "'Outfit', sans-serif", outline: 'none', background: '#fff', color: NAVY,
+                        }}>
+                          <option value="">No minimum</option>
+                          {HEIGHT_OPTIONS.map(h => <option key={h} value={h}>{h}</option>)}
+                        </select>
+                      </div>
+                      <div style={{ paddingTop: 20, color: MUTED, fontSize: 13 }}>—</div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontSize: 11, color: MUTED, marginBottom: 4 }}>Max</div>
+                        <select value={maxHeightFilter} onChange={e => setMaxHeightFilter(e.target.value)} style={{
+                          width: '100%', padding: '8px 10px', border: `1px solid ${ICE}`, borderRadius: 6,
+                          fontSize: 13, fontFamily: "'Outfit', sans-serif", outline: 'none', background: '#fff', color: NAVY,
+                        }}>
+                          <option value="">No maximum</option>
+                          {HEIGHT_OPTIONS.map(h => <option key={h} value={h}>{h}</option>)}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Footer buttons */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <button onClick={() => {
+                      setLeagueFilter('all'); setSeasonFilter('all');
+                      setGradYearFilter('all'); setMinHeightFilter(''); setMaxHeightFilter('');
+                    }} style={{
+                      padding: '7px 16px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
+                      fontFamily: "'Outfit', sans-serif", border: `1px solid ${ICE}`, borderRadius: 6,
+                      background: '#fff', color: MUTED,
+                    }}>Clear All</button>
+                    <button onClick={() => setHsFilterOpen(false)} style={{
+                      padding: '7px 20px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
+                      fontFamily: "'Outfit', sans-serif", border: 'none', borderRadius: 6,
+                      background: ACCENT, color: '#fff',
+                    }}>Apply</button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Row 1: Search + Filter button + Stat mode */}
+            <div style={{ display: 'flex', gap: 12, marginBottom: 8, flexWrap: 'wrap', alignItems: 'center' }}>
               <input type="text" placeholder="Search player or team..." value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
                 style={{ padding: '8px 12px', border: `1px solid ${ICE}`, borderRadius: 6, fontSize: 13, flex: 1, minWidth: 200, outline: 'none', fontFamily: "'Outfit', sans-serif" }} />
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                <span style={{ fontSize: 10, color: MUTED, fontFamily: "'Outfit', sans-serif", fontWeight: 600 }}>League</span>
-                <div style={{ display: 'flex', borderRadius: 6, overflow: 'hidden', border: `1px solid ${ICE}` }}>
-                  {leagues.map(val => (
-                    <button key={val} onClick={() => setLeagueFilter(val)} style={{
-                      padding: '7px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
-                      fontFamily: "'Outfit', sans-serif", border: 'none', outline: 'none',
-                      background: leagueFilter===val ? NAVY : '#fff', color: leagueFilter===val ? '#fff' : MUTED,
-                      transition: 'background 0.15s, color 0.15s',
-                    }}>{val === 'all' ? 'All' : val}</button>
-                  ))}
-                </div>
-              </div>
+              {/* Filter button with active count badge */}
+              <button onClick={() => setHsFilterOpen(true)} style={{
+                padding: '8px 16px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
+                fontFamily: "'Outfit', sans-serif", borderRadius: 6,
+                border: `1px solid ${hsActiveFilterCount > 0 ? ACCENT : ICE}`,
+                background: hsActiveFilterCount > 0 ? FROST : '#fff',
+                color: hsActiveFilterCount > 0 ? ACCENT : MUTED,
+                display: 'flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap',
+              }}>
+                ⚙ Filters
+                {hsActiveFilterCount > 0 && (
+                  <span style={{
+                    background: ACCENT, color: '#fff', borderRadius: '50%',
+                    width: 18, height: 18, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: 10, fontWeight: 700,
+                  }}>{hsActiveFilterCount}</span>
+                )}
+              </button>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                <span style={{ fontSize: 10, color: MUTED, fontFamily: "'Outfit', sans-serif", fontWeight: 600 }}>Season</span>
-                <div style={{ display: 'flex', borderRadius: 6, overflow: 'hidden', border: `1px solid ${ICE}` }}>
-                  {seasons.map(val => (
-                    <button key={val} onClick={() => setSeasonFilter(val)} style={{
-                      padding: '7px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
-                      fontFamily: "'Outfit', sans-serif", border: 'none', outline: 'none',
-                      background: seasonFilter===val ? NAVY : '#fff', color: seasonFilter===val ? '#fff' : MUTED,
-                      transition: 'background 0.15s, color 0.15s',
-                    }}>{val === 'all' ? 'All' : val}</button>
-                  ))}
-                </div>
-              </div>
-
-              {gradYears.length > 1 && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                  <span style={{ fontSize: 10, color: MUTED, fontFamily: "'Outfit', sans-serif", fontWeight: 600 }}>Grad Year</span>
-                  <div style={{ display: 'flex', borderRadius: 6, overflow: 'hidden', border: `1px solid ${ICE}` }}>
-                    {gradYears.map(val => (
-                      <button key={val} onClick={() => setGradYearFilter(val)} style={{
-                        padding: '7px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
-                        fontFamily: "'Outfit', sans-serif", border: 'none', outline: 'none',
-                        background: gradYearFilter===val ? NAVY : '#fff', color: gradYearFilter===val ? '#fff' : MUTED,
-                        transition: 'background 0.15s, color 0.15s',
-                      }}>{val === 'all' ? 'All' : val}</button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                <span style={{ fontSize: 10, color: MUTED, fontFamily: "'Outfit', sans-serif", fontWeight: 600 }}>Stat Mode</span>
-                <div style={{ display: 'flex', borderRadius: 6, overflow: 'hidden', border: `1px solid ${ICE}` }}>
-                  {([{key:'advanced',label:'Advanced'},{key:'perGame',label:'Per Game'},{key:'per40',label:'Per 40'}] as {key:StatMode;label:string}[]).map(({key,label}) => (
-                    <button key={key} onClick={() => setStatMode(key)} style={{
-                      padding: '7px 16px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
-                      fontFamily: "'Outfit', sans-serif", border: 'none', outline: 'none',
-                      background: statMode===key ? ACCENT : '#fff', color: statMode===key ? '#fff' : MUTED,
-                      transition: 'background 0.15s, color 0.15s',
-                    }}>{label}</button>
-                  ))}
-                </div>
+              <div style={{ display: 'flex', borderRadius: 6, overflow: 'hidden', border: `1px solid ${ICE}` }}>
+                {([{key:'advanced',label:'Advanced'},{key:'perGame',label:'Per Game'},{key:'per40',label:'Per 40'}] as {key:StatMode;label:string}[]).map(({key,label}) => (
+                  <button key={key} onClick={() => setStatMode(key)} style={{
+                    padding: '7px 16px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
+                    fontFamily: "'Outfit', sans-serif", border: 'none', outline: 'none',
+                    background: statMode===key ? ACCENT : '#fff', color: statMode===key ? '#fff' : MUTED,
+                    transition: 'background 0.15s, color 0.15s',
+                  }}>{label}</button>
+                ))}
               </div>
             </div>
 
