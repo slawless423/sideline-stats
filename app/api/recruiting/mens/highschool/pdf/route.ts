@@ -113,7 +113,12 @@ export async function GET(req: NextRequest) {
   const league = searchParams.get('league') || 'EYBL Scholastic';
   const season = searchParams.get('season') || '2026';
 
-  const client = await pool.connect();
+  let client;
+  try {
+    client = await pool.connect();
+  } catch (err) {
+    return new NextResponse(JSON.stringify({ error: 'DB connection failed', detail: String(err) }), { status: 500 });
+  }
   try {
     const [playersRes, teamsRes] = await Promise.all([
       client.query(`
@@ -269,7 +274,10 @@ export async function GET(req: NextRequest) {
         'Content-Disposition': `attachment; filename="${filename}"`,
       },
     });
+  } catch (err) {
+    console.error('PDF generation error:', err);
+    return new NextResponse(JSON.stringify({ error: String(err) }), { status: 500 });
   } finally {
-    client.release();
+    client?.release();
   }
 }
