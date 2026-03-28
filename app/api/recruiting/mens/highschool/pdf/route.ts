@@ -251,7 +251,7 @@ export async function GET(req: NextRequest) {
           MARGIN, PAGE_H - MARGIN - 8, { width: W, align: 'right' });
     }
 
-    teams.forEach((team, i) => drawTeamPage(team, i === 0));
+    (teams as string[]).forEach((team, i) => drawTeamPage(team, i === 0));
 
     doc.end();
 
