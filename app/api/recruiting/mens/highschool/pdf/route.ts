@@ -201,8 +201,9 @@ export async function GET(req: NextRequest) {
     const doc = new PDFDocument({
       size: 'LETTER',
       layout: 'landscape',
-      margins: { top: 36, bottom: 36, left: 36, right: 36 },
+      margins: { top: 36, bottom: 50, left: 36, right: 36 },
       autoFirstPage: false,
+      bufferPages: true,
     });
 
     const NAVY   = '#0D1F3C';
@@ -210,13 +211,30 @@ export async function GET(req: NextRequest) {
     const FROST  = '#E8F2FC';
     const ICE    = '#A8C8F0';
     const MUTED  = '#6B7E9A';
-    const W = 792 - 72; // page width minus margins
+    const W = 792 - 72;
     const PAGE_H = 612;
     const MARGIN = 36;
 
     const NAME_W = 110;
-    const META_W = 38; // ht, class, g
+    const META_W = 38;
     const STAT_W = (W - NAME_W - META_W * 3) / COLS.length;
+
+    // Draw footer on every page after all pages are built
+    function drawFooters(pageCount: number) {
+      const range = doc.bufferedPageRange();
+      for (let i = 0; i < range.count; i++) {
+        doc.switchToPage(range.start + i);
+        const footerY = PAGE_H - MARGIN - 8;
+        doc.moveTo(MARGIN, footerY - 4).lineTo(MARGIN + W, footerY - 4)
+          .strokeColor(FROST).lineWidth(0.5).stroke();
+        doc.fillColor(ACCENT).fontSize(7).font('Helvetica-Bold')
+          .text('SIDELINE STATS', MARGIN, footerY, { width: 80, lineBreak: false });
+        doc.fillColor(MUTED).fontSize(7).font('Helvetica')
+          .text('sideline-stats.com', MARGIN + 82, footerY, { width: 120, lineBreak: false });
+        doc.fillColor(MUTED).fontSize(7).font('Helvetica')
+          .text(`Page ${i + 1} of ${pageCount}`, MARGIN + W - 60, footerY, { width: 60, align: 'right', lineBreak: false });
+      }
+    }
 
     function drawTeamPage(teamName: string, isFirst: boolean) {
       doc.addPage();
@@ -308,21 +326,12 @@ export async function GET(req: NextRequest) {
         doc.text(fmt(leagueAvg[col.key], col.dec), x, y + 5, { width: STAT_W, align: 'right', lineBreak: false });
         x += STAT_W;
       }
-
-      // ── Footer ── at fixed absolute position
-      const footerY = PAGE_H - MARGIN - 8;
-      doc.moveTo(MARGIN, footerY - 4).lineTo(MARGIN + W, footerY - 4)
-        .strokeColor(FROST).lineWidth(0.5).stroke();
-      doc.fillColor(ACCENT).fontSize(7).font('Helvetica-Bold')
-        .text('SIDELINE STATS', MARGIN, footerY, { width: 80, lineBreak: false });
-      doc.fillColor(MUTED).fontSize(7).font('Helvetica')
-        .text('sideline-stats.com', MARGIN + 82, footerY, { width: 120, lineBreak: false });
-      const pageNum = `Page ${(teams as string[]).indexOf(teamName) + 1} of ${teams.length}`;
-      doc.fillColor(MUTED).fontSize(7).font('Helvetica')
-        .text(pageNum, MARGIN + W - 60, footerY, { width: 60, align: 'right', lineBreak: false });
     }
 
     (teams as string[]).forEach((team) => drawTeamPage(team, false));
+
+    // Draw footers on all pages now that they're all built
+    drawFooters(teams.length);
 
     const pdfBuffer = await new Promise<Buffer>((resolve, reject) => {
       const chunks: Buffer[] = [];
