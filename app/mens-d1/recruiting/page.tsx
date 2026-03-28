@@ -93,7 +93,7 @@ type HSSortKey =
   | 'name' | 'team' | 'league' | 'season' | 'grad_year' | 'gp'
   | 'ortg' | 'usagePct' | 'minPct' | 'shotsPct' | 'efg' | 'ts' | 'orbPct' | 'drbPct'
   | 'aRate' | 'toRate' | 'blkPct' | 'stlPct' | 'ftRate'
-  | 'twopm' | 'twopa' | 'twopPct' | 'fg3m' | 'fg3a' | 'tpPct' | 'ftm' | 'fta' | 'ftPct' | 'fgPct'
+  | 'twopm' | 'twopa' | 'twopPct' | 'fg3m' | 'fg3a' | 'tpPct' | 'ftm' | 'fta' | 'ftPct' | 'fgPct' | 'height'
   | 'ppg' | 'rpg' | 'orbpg' | 'drbpg' | 'apg' | 'spg' | 'bpg' | 'mpg'
   | 'p40' | 'r40' | 'orb40' | 'drb40' | 'a40' | 's40' | 'b40'
   | 'twopm40' | 'twopa40' | 'twopPct40' | 'fg3m40' | 'fg3a40' | 'tpPct40' | 'ftm40' | 'fta40' | 'ftPct40';
@@ -322,8 +322,7 @@ const HS_PER_GAME_COLS: { label: string; key: HSSortKey }[] = [
   { label: 'PPG', key: 'ppg' }, { label: 'RPG', key: 'rpg' },
   { label: 'ORB', key: 'orbpg' }, { label: 'DRB', key: 'drbpg' },
   { label: 'APG', key: 'apg' }, { label: 'SPG', key: 'spg' },
-  { label: 'BPG', key: 'bpg' }, { label: 'MPG', key: 'mpg' },
-  { label: 'FG%', key: 'fgPct' }, { label: '2PM', key: 'twopm' },
+  { label: 'BPG', key: 'bpg' }, { label: '2PM', key: 'twopm' },
   { label: '2PA', key: 'twopa' }, { label: '2P%', key: 'twopPct' },
   { label: '3PM', key: 'fg3m' }, { label: '3PA', key: 'fg3a' },
   { label: '3P%', key: 'tpPct' }, { label: 'FTM', key: 'ftm' },
@@ -333,12 +332,11 @@ const HS_PER_40_COLS: { label: string; key: HSSortKey }[] = [
   { label: 'PTS/40', key: 'p40' }, { label: 'REB/40', key: 'r40' },
   { label: 'ORB/40', key: 'orb40' }, { label: 'DRB/40', key: 'drb40' },
   { label: 'AST/40', key: 'a40' }, { label: 'STL/40', key: 's40' },
-  { label: 'BLK/40', key: 'b40' }, { label: 'FG%', key: 'fgPct' },
-  { label: '2PM', key: 'twopm40' }, { label: '2PA', key: 'twopa40' },
-  { label: '2P%', key: 'twopPct40' }, { label: '3PM', key: 'fg3m40' },
-  { label: '3PA', key: 'fg3a40' }, { label: '3P%', key: 'tpPct40' },
-  { label: 'FTM', key: 'ftm40' }, { label: 'FTA', key: 'fta40' },
-  { label: 'FT%', key: 'ftPct40' },
+  { label: 'BLK/40', key: 'b40' }, { label: '2PM', key: 'twopm40' },
+  { label: '2PA', key: 'twopa40' }, { label: '2P%', key: 'twopPct40' },
+  { label: '3PM', key: 'fg3m40' }, { label: '3PA', key: 'fg3a40' },
+  { label: '3P%', key: 'tpPct40' }, { label: 'FTM', key: 'ftm40' },
+  { label: 'FTA', key: 'fta40' }, { label: 'FT%', key: 'ftPct40' },
 ];
 
 const INTEGER_KEYS = new Set(['twopm','twopa','tpm','tpa','fg3m','fg3a','ftm','fta',
@@ -480,6 +478,10 @@ export default function MensRecruitingPage() {
     if (hsSortKey === 'team') return hsSortOrder==='asc'?a.team.localeCompare(b.team):b.team.localeCompare(a.team);
     if (hsSortKey === 'gp') return hsSortOrder==='asc'?a.gp-b.gp:b.gp-a.gp;
     if (hsSortKey === 'grad_year') { const ay=a.grad_year??0,by=b.grad_year??0; return hsSortOrder==='asc'?ay-by:by-ay; }
+    if (hsSortKey === 'height') {
+      const ah = heightToInches(a.height??''), bh = heightToInches(b.height??'');
+      return hsSortOrder==='asc'?ah-bh:bh-ah;
+    }
     const as_ = calcHSStats(a, hsTeamMap.get(`${a.team}|||${a.season}`));
     const bs_ = calcHSStats(b, hsTeamMap.get(`${b.team}|||${b.season}`));
     if (!as_ && !bs_) return 0; if (!as_) return 1; if (!bs_) return -1;
@@ -869,11 +871,12 @@ export default function MensRecruitingPage() {
                       <tr style={{ borderBottom: `2px solid ${ACCENT}`, background: FROST }}>
                         <HSSortableHeader label="Player" sk="name" align="left" />
                         <HSSortableHeader label="Team" sk="team" align="left" />
-                        <th style={{ padding: '6px 8px', textAlign: 'left', fontWeight: 700, fontSize: 10 }}>League</th>
                         <th style={{ padding: '6px 8px', textAlign: 'center', fontWeight: 700, fontSize: 10 }}>Season</th>
-                        <HSSortableHeader label="Grad" sk="grad_year" align="center" />
-                        <th style={{ padding: '6px 8px', textAlign: 'center', fontWeight: 700, fontSize: 10 }}>Ht</th>
+                        <th style={{ padding: '6px 8px', textAlign: 'left', fontWeight: 700, fontSize: 10 }}>League</th>
+                        <HSSortableHeader label="Class" sk="grad_year" align="center" />
+                        <HSSortableHeader label="Ht" sk="height" align="center" />
                         <HSSortableHeader label="G" sk="gp" />
+                        <HSSortableHeader label="MPG" sk="mpg" />
                         {hsActiveCols.map(col => <HSSortableHeader key={col.key} label={col.label} sk={col.key} />)}
                       </tr>
                     </thead>
@@ -883,21 +886,22 @@ export default function MensRecruitingPage() {
                         const bg = idx%2===0 ? '#fff' : '#fafafa';
                         return (
                           <tr key={`${p.id}`} style={{ borderBottom: '1px solid #f0f0f0', background: bg }}>
-                            <td style={{ padding: '5px 8px', fontWeight: 600, position: 'sticky', left: 0, background: bg, zIndex: 1, minWidth: 140, maxWidth: 160, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            <td style={{ padding: '5px 8px', fontWeight: 600, position: 'sticky', left: 0, background: bg, zIndex: 1, minWidth: 140, maxWidth: 140, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                               <Link href={`/mens-d1/recruiting/highschool/${p.id}`} style={{ color: NAVY, textDecoration: 'none' }}
                                 onMouseEnter={e => (e.currentTarget.style.color = ACCENT)}
                                 onMouseLeave={e => (e.currentTarget.style.color = NAVY)}>
                                 {p.full_name}
                               </Link>
                             </td>
-                            <td style={{ padding: '5px 8px', color: MUTED, minWidth: 130, maxWidth: 150, overflow: 'hidden', textOverflow: 'ellipsis' }}>{p.team}</td>
-                            <td style={{ padding: '5px 8px', minWidth: 120 }}>
+                            <td style={{ padding: '5px 8px', color: MUTED, minWidth: 100, maxWidth: 120, overflow: 'hidden', textOverflow: 'ellipsis' }}>{p.team}</td>
+                            <td style={{ padding: '5px 8px', textAlign: 'center', color: ACCENT, fontWeight: 600 }}>{p.season}</td>
+                            <td style={{ padding: '5px 8px', minWidth: 100 }}>
                               <span style={{ display: 'inline-block', padding: '1px 6px', borderRadius: 4, fontSize: 10, fontWeight: 600, background: FROST, color: NAVY }}>{p.league}</span>
                             </td>
-                            <td style={{ padding: '5px 8px', textAlign: 'center' }}>{p.season}</td>
                             <td style={{ padding: '5px 8px', textAlign: 'center' }}>{p.grad_year || '—'}</td>
                             <td style={{ padding: '5px 8px', textAlign: 'center' }}>{p.height || '—'}</td>
                             <td style={{ padding: '5px 8px', textAlign: 'right' }}>{p.gp}</td>
+                            <td style={{ padding: '5px 8px', textAlign: 'right' }}>{p.mp > 0 ? (p.mp / p.gp).toFixed(1) : '—'}</td>
                             {hsActiveCols.map(col => {
                               const val = stats ? (stats as Record<string,number>)[col.key] : undefined;
                               return (
