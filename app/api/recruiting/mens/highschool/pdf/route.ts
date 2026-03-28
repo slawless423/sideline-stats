@@ -302,14 +302,14 @@ export async function GET(req: NextRequest) {
       doc.rect(MARGIN, y, W, 16).fill(NAVY);
       doc.fillColor('#fff').fontSize(7).font('Helvetica-Bold');
       x = MARGIN;
-      doc.text('League Average', x + 2, y + 5, { width: NAME_W - 4 });
+      doc.text('League Average', x + 2, y + 5, { width: NAME_W - 4, lineBreak: false });
       x += NAME_W + META_W * 3;
       for (const col of COLS) {
-        doc.text(fmt(leagueAvg[col.key], col.dec), x, y + 5, { width: STAT_W, align: 'right' });
+        doc.text(fmt(leagueAvg[col.key], col.dec), x, y + 5, { width: STAT_W, align: 'right', lineBreak: false });
         x += STAT_W;
       }
 
-      // ── Footer ──
+      // ── Footer ── at fixed absolute position
       const footerY = PAGE_H - MARGIN - 8;
       doc.moveTo(MARGIN, footerY - 4).lineTo(MARGIN + W, footerY - 4)
         .strokeColor(FROST).lineWidth(0.5).stroke();
@@ -317,11 +317,12 @@ export async function GET(req: NextRequest) {
         .text('SIDELINE STATS', MARGIN, footerY, { width: 80, lineBreak: false });
       doc.fillColor(MUTED).fontSize(7).font('Helvetica')
         .text('sideline-stats.com', MARGIN + 82, footerY, { width: 120, lineBreak: false });
+      const pageNum = `Page ${(teams as string[]).indexOf(teamName) + 1} of ${teams.length}`;
       doc.fillColor(MUTED).fontSize(7).font('Helvetica')
-        .text(`Page ${(teams as string[]).indexOf(teamName) + 1} of ${teams.length}`, MARGIN, footerY, { width: W, align: 'right', lineBreak: false });
+        .text(pageNum, MARGIN + W - 60, footerY, { width: 60, align: 'right', lineBreak: false });
     }
 
-    (teams as string[]).forEach((team, i) => drawTeamPage(team, false));
+    (teams as string[]).forEach((team) => drawTeamPage(team, false));
 
     const pdfBuffer = await new Promise<Buffer>((resolve, reject) => {
       const chunks: Buffer[] = [];
