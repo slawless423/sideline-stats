@@ -201,9 +201,8 @@ export async function GET(req: NextRequest) {
     const doc = new PDFDocument({
       size: 'LETTER',
       layout: 'landscape',
-      margins: { top: 36, bottom: 50, left: 36, right: 36 },
+      margins: { top: 36, bottom: 36, left: 36, right: 36 },
       autoFirstPage: false,
-      bufferPages: true,
     });
 
     const NAVY   = '#0D1F3C';
@@ -219,26 +218,10 @@ export async function GET(req: NextRequest) {
     const META_W = 38;
     const STAT_W = (W - NAME_W - META_W * 3) / COLS.length;
 
-    // Draw footer on every page after all pages are built
-    function drawFooters() {
-      const range = doc.bufferedPageRange();
-      for (let i = 0; i < range.count; i++) {
-        doc.switchToPage(range.start + i);
-        const footerY = PAGE_H - MARGIN - 8;
-        doc.moveTo(MARGIN, footerY - 4).lineTo(MARGIN + W, footerY - 4)
-          .strokeColor(FROST).lineWidth(0.5).stroke();
-        doc.fillColor(ACCENT).fontSize(7).font('Helvetica-Bold')
-          .text('SIDELINE STATS', MARGIN, footerY, { width: 80, lineBreak: false });
-        doc.fillColor(MUTED).fontSize(7).font('Helvetica')
-          .text('sideline-stats.com', MARGIN + 82, footerY, { width: 120, lineBreak: false });
-        doc.fillColor(MUTED).fontSize(7).font('Helvetica')
-          .text(`Page ${i + 1} of ${range.count}`, MARGIN + W - 60, footerY, { width: 60, align: 'right', lineBreak: false });
-      }
-    }
-
     function drawTeamPage(teamName: string, isFirst: boolean) {
       doc.addPage();
 
+      const teamIdx = (teams as string[]).indexOf(teamName);
       const teamPlayers = playerStats
         .filter(p => p.team === teamName)
         .sort((a, b) => (b.mp || 0) - (a.mp || 0));
@@ -247,76 +230,80 @@ export async function GET(req: NextRequest) {
 
       // ── Header bar ──
       doc.rect(MARGIN, y, W, 28).fill(NAVY);
-
-      // Wordmark: "Sideline" bold + divider + "STATS" light
       doc.fillColor('#fff').fontSize(11).font('Helvetica-Bold')
-        .text('Sideline', MARGIN + 8, y + 4, { continued: false });
+        .text('Sideline', MARGIN + 8, y + 4, { lineBreak: false });
       doc.moveTo(MARGIN + 8, y + 17).lineTo(MARGIN + 58, y + 17)
         .strokeColor(ACCENT).lineWidth(1).stroke();
       doc.fillColor(ICE).fontSize(8).font('Helvetica')
-        .text('S T A T S', MARGIN + 8, y + 19, { continued: false });
-
-      // Team name and league/season on right
+        .text('S T A T S', MARGIN + 8, y + 19, { lineBreak: false });
       doc.fillColor('#fff').fontSize(12).font('Helvetica-Bold')
-        .text(teamName, MARGIN + 72, y + 5, { width: W - 72 - 120 });
+        .text(teamName, MARGIN + 72, y + 5, { width: W - 72 - 120, lineBreak: false });
       doc.fillColor(ICE).fontSize(8).font('Helvetica')
-        .text(`${league}  ·  ${season}`, MARGIN + 72, y + 19, { width: W - 72 - 120 });
-
-      // Date top right
+        .text(`${league}  ·  ${season}`, MARGIN + 72, y + 19, { width: W - 72 - 120, lineBreak: false });
       const today = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
       doc.fillColor(ICE).fontSize(7).font('Helvetica')
-        .text(today, MARGIN, y + 10, { width: W - 8, align: 'right' });
-
+        .text(today, MARGIN, y + 10, { width: W - 8, align: 'right', lineBreak: false });
       y += 32;
 
-      // Column headers
+      // ── Footer drawn NOW at fixed position (before content so cursor stays above it) ──
+      const footerY = PAGE_H - MARGIN - 8;
+      doc.moveTo(MARGIN, footerY - 4).lineTo(MARGIN + W, footerY - 4)
+        .strokeColor(FROST).lineWidth(0.5).stroke();
+      doc.fillColor(ACCENT).fontSize(7).font('Helvetica-Bold')
+        .text('SIDELINE STATS', MARGIN, footerY, { width: 80, lineBreak: false });
+      doc.fillColor(MUTED).fontSize(7).font('Helvetica')
+        .text('sideline-stats.com', MARGIN + 82, footerY, { width: 120, lineBreak: false });
+      doc.fillColor(MUTED).fontSize(7).font('Helvetica')
+        .text(`Page ${teamIdx + 1} of ${teams.length}`, MARGIN + W - 60, footerY, { width: 60, align: 'right', lineBreak: false });
+
+      // Reset cursor back up for content
+      doc.moveTo(MARGIN, y);
+
+      // ── Column headers ──
       doc.rect(MARGIN, y, W, 16).fill(FROST);
       doc.fillColor(NAVY).fontSize(7).font('Helvetica-Bold');
-
       let x = MARGIN;
-      doc.text('Player', x + 2, y + 5, { width: NAME_W - 4 });
+      doc.text('Player', x + 2, y + 5, { width: NAME_W - 4, lineBreak: false });
       x += NAME_W;
-      doc.text('Ht', x, y + 5, { width: META_W, align: 'center' });
+      doc.text('Ht', x, y + 5, { width: META_W, align: 'center', lineBreak: false });
       x += META_W;
-      doc.text('Cls', x, y + 5, { width: META_W, align: 'center' });
+      doc.text('Cls', x, y + 5, { width: META_W, align: 'center', lineBreak: false });
       x += META_W;
-      doc.text('G', x, y + 5, { width: META_W, align: 'center' });
+      doc.text('G', x, y + 5, { width: META_W, align: 'center', lineBreak: false });
       x += META_W;
       for (const col of COLS) {
-        doc.text(col.label, x, y + 5, { width: STAT_W, align: 'right' });
+        doc.text(col.label, x, y + 5, { width: STAT_W, align: 'right', lineBreak: false });
         x += STAT_W;
       }
       y += 18;
 
-      // Player rows
+      // ── Player rows ──
+      const maxY = footerY - 24; // stop before footer
       let rowIdx = 0;
       for (const p of teamPlayers) {
-        if (y > PAGE_H - MARGIN - 30) break; // safety cutoff
+        if (y > maxY) break;
         const bg = rowIdx % 2 === 0 ? '#ffffff' : FROST;
         doc.rect(MARGIN, y, W, 14).fill(bg);
         doc.fillColor('#000').fontSize(7).font('Helvetica');
-
         x = MARGIN;
-        doc.text(p.full_name, x + 2, y + 3, { width: NAME_W - 4, ellipsis: true });
+        doc.text(p.full_name, x + 2, y + 3, { width: NAME_W - 4, lineBreak: false });
         x += NAME_W;
-        doc.text(p.height || '—', x, y + 3, { width: META_W, align: 'center' });
+        doc.text(p.height || '—', x, y + 3, { width: META_W, align: 'center', lineBreak: false });
         x += META_W;
-        doc.text(p.grad_year ? String(p.grad_year) : '—', x, y + 3, { width: META_W, align: 'center' });
+        doc.text(p.grad_year ? String(p.grad_year) : '—', x, y + 3, { width: META_W, align: 'center', lineBreak: false });
         x += META_W;
-        doc.text(String(p.gp), x, y + 3, { width: META_W, align: 'center' });
+        doc.text(String(p.gp), x, y + 3, { width: META_W, align: 'center', lineBreak: false });
         x += META_W;
-
         for (const col of COLS) {
           const val = p.adv ? (p.adv as any)[col.key] : null;
-          doc.text(fmt(val, col.dec), x, y + 3, { width: STAT_W, align: 'right' });
+          doc.text(fmt(val, col.dec), x, y + 3, { width: STAT_W, align: 'right', lineBreak: false });
           x += STAT_W;
         }
-
         y += 14;
         rowIdx++;
       }
 
-      // League average row
+      // ── League average row ──
       doc.rect(MARGIN, y, W, 16).fill(NAVY);
       doc.fillColor('#fff').fontSize(7).font('Helvetica-Bold');
       x = MARGIN;
@@ -329,12 +316,6 @@ export async function GET(req: NextRequest) {
     }
 
     (teams as string[]).forEach((team) => drawTeamPage(team, false));
-
-    // Draw footers on all buffered pages
-    drawFooters();
-
-    // Flush all buffered pages
-    doc.flushPages();
 
     const pdfBuffer = await new Promise<Buffer>((resolve, reject) => {
       const chunks: Buffer[] = [];
