@@ -323,23 +323,21 @@ const HS_PER_GAME_COLS: { label: string; key: HSSortKey }[] = [
   { label: 'PPG', key: 'ppg' }, { label: 'RPG', key: 'rpg' },
   { label: 'ORB', key: 'orbpg' }, { label: 'DRB', key: 'drbpg' },
   { label: 'APG', key: 'apg' }, { label: 'SPG', key: 'spg' },
-  { label: 'BPG', key: 'bpg' }, { label: 'MPG', key: 'mpg' },
-  { label: '2PM', key: 'twopm' }, { label: '2PA', key: 'twopa' },
-  { label: '2P%', key: 'twopPct' }, { label: '3PM', key: 'fg3m' },
-  { label: '3PA', key: 'fg3a' }, { label: '3P%', key: 'tpPct' },
-  { label: 'FTM', key: 'ftm' }, { label: 'FTA', key: 'fta' },
-  { label: 'FT%', key: 'ftPct' },
+  { label: 'BPG', key: 'bpg' }, { label: '2PM', key: 'twopm' },
+  { label: '2PA', key: 'twopa' }, { label: '2P%', key: 'twopPct' },
+  { label: '3PM', key: 'fg3m' }, { label: '3PA', key: 'fg3a' },
+  { label: '3P%', key: 'tpPct' }, { label: 'FTM', key: 'ftm' },
+  { label: 'FTA', key: 'fta' }, { label: 'FT%', key: 'ftPct' },
 ];
 const HS_PER_40_COLS: { label: string; key: HSSortKey }[] = [
   { label: 'PTS/40', key: 'p40' }, { label: 'REB/40', key: 'r40' },
   { label: 'ORB/40', key: 'orb40' }, { label: 'DRB/40', key: 'drb40' },
   { label: 'AST/40', key: 'a40' }, { label: 'STL/40', key: 's40' },
-  { label: 'BLK/40', key: 'b40' }, { label: 'MIN', key: 'totalMin' },
-  { label: '2PM', key: 'twopm40' }, { label: '2PA', key: 'twopa40' },
-  { label: '2P%', key: 'twopPct40' }, { label: '3PM', key: 'fg3m40' },
-  { label: '3PA', key: 'fg3a40' }, { label: '3P%', key: 'tpPct40' },
-  { label: 'FTM', key: 'ftm40' }, { label: 'FTA', key: 'fta40' },
-  { label: 'FT%', key: 'ftPct40' },
+  { label: 'BLK/40', key: 'b40' }, { label: '2PM', key: 'twopm40' },
+  { label: '2PA', key: 'twopa40' }, { label: '2P%', key: 'twopPct40' },
+  { label: '3PM', key: 'fg3m40' }, { label: '3PA', key: 'fg3a40' },
+  { label: '3P%', key: 'tpPct40' }, { label: 'FTM', key: 'ftm40' },
+  { label: 'FTA', key: 'fta40' }, { label: 'FT%', key: 'ftPct40' },
 ];
 
 const INTEGER_KEYS = new Set(['twopm','twopa','tpm','tpa','fg3m','fg3a','ftm','fta',
@@ -879,6 +877,8 @@ export default function MensRecruitingPage() {
                         <HSSortableHeader label="Class" sk="grad_year" align="center" />
                         <HSSortableHeader label="Ht" sk="height" align="center" />
                         <HSSortableHeader label="G" sk="gp" />
+                        {statMode === 'perGame' && <HSSortableHeader label="MPG" sk="mpg" />}
+                        {statMode === 'per40' && <th style={{ padding: '6px 8px', textAlign: 'right', fontWeight: 700, fontSize: 10 }}>MIN</th>}
                         {hsActiveCols.map(col => <HSSortableHeader key={col.key} label={col.label} sk={col.key} />)}
                       </tr>
                     </thead>
@@ -903,6 +903,12 @@ export default function MensRecruitingPage() {
                             <td style={{ padding: '5px 8px', textAlign: 'center' }}>{p.grad_year || '—'}</td>
                             <td style={{ padding: '5px 8px', textAlign: 'center' }}>{p.height || '—'}</td>
                             <td style={{ padding: '5px 8px', textAlign: 'right' }}>{p.gp}</td>
+                            {statMode === 'perGame' && (
+                              <td style={{ padding: '5px 8px', textAlign: 'right' }}>{p.mp > 0 ? (p.mp / p.gp).toFixed(1) : '—'}</td>
+                            )}
+                            {statMode === 'per40' && (
+                              <td style={{ padding: '5px 8px', textAlign: 'right' }}>{p.mp}</td>
+                            )}
                             {hsActiveCols.map(col => {
                               const val = stats ? (stats as Record<string,number>)[col.key] : undefined;
                               return (
