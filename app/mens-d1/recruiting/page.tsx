@@ -195,9 +195,9 @@ function calcStats(t: Transfer, team: TeamRow | undefined) {
     apg: p.ast/g, spg: p.stl/g, bpg: p.blk/g, mpg: p.minutes/g,
     p40: p.points/m*40, r40: p.trb/m*40, orb40: p.orb/m*40, drb40: p.drb/m*40,
     a40: p.ast/m*40, s40: p.stl/m*40, b40: p.blk/m*40, fc40: p.pf/m*40,
-    twopm40: twopm/m*40, twopa40: twopa/m*40, twopPct40: twopPct,
-    tpm40: p.tpm/m*40, tpa40: p.tpa/m*40, tpPct40: tpPct,
-    ftm40: p.ftm/m*40, fta40: p.fta/m*40, ftPct40: ftPct,
+    twopm40: twopm, twopa40: twopa, twopPct40: twopPct,
+    tpm40: p.tpm, tpa40: p.tpa, tpPct40: tpPct,
+    ftm40: p.ftm, fta40: p.fta, ftPct40: ftPct,
   };
 }
 
@@ -263,9 +263,9 @@ function calcHSStats(p: HSPlayer, team: HSTeamStats | undefined) {
     totalMin: p.mp,
     p40: p.pts/m*40, r40: p.reb/m*40, orb40: p.oreb/m*40, drb40: p.dreb/m*40,
     a40: p.ast/m*40, s40: p.stl/m*40, b40: p.blk/m*40,
-    twopm40: twopm/m*40, twopa40: twopa/m*40, twopPct40: twopPct,
-    fg3m40: p.fg3m/m*40, fg3a40: p.fg3a/m*40, tpPct40: tpPct,
-    ftm40: p.ftm/m*40, fta40: p.fta/m*40, ftPct40: ftPct,
+    twopm40: twopm, twopa40: twopa, twopPct40: twopPct,
+    fg3m40: p.fg3m, fg3a40: p.fg3a, tpPct40: tpPct,
+    ftm40: p.ftm, fta40: p.fta, ftPct40: ftPct,
   };
 }
 
