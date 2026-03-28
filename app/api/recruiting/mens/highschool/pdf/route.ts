@@ -73,16 +73,59 @@ function fmt(val: number | null | undefined, dec = 1): string {
   return val.toFixed(dec);
 }
 
-function avgStats(rows: any[]): Record<string, number> {
-  const keys = ['ortg','minPct','usagePct','shotsPct','efg','ts','orbPct','drbPct',
-    'aRate','toRate','blkPct','stlPct','ftRate','twopm','twopa','twopPct',
-    'fg3m','fg3a','tpPct','ftm','fta','ftPct','ppg','rpg','apg','spg','bpg','mpg'];
-  const result: Record<string, number> = {};
-  for (const k of keys) {
-    const vals = rows.map(r => r[k]).filter(v => v != null && !isNaN(v));
-    result[k] = vals.length > 0 ? vals.reduce((a, b) => a + b, 0) / vals.length : 0;
+function avgStats(rawPlayers: any[], teamMap: Map<string, any>): Record<string, number> {
+  // Aggregate all raw counting stats across qualified players
+  const tot = {
+    gp: 0, mp: 0, pts: 0, fgm: 0, fga: 0, fg3m: 0, fg3a: 0,
+    ftm: 0, fta: 0, oreb: 0, dreb: 0, reb: 0, ast: 0, stl: 0, blk: 0, tov: 0,
+  };
+  for (const p of rawPlayers) {
+    for (const k of Object.keys(tot) as (keyof typeof tot)[]) {
+      tot[k] += Number(p[k]) || 0;
+    }
   }
-  return result;
+
+  // Build a fake "team" row by summing all team stats for teams that have qualified players
+  const teamsInAvg = new Set(rawPlayers.map(p => p.team));
+  const aggTeam: any = {
+    gp: 0, fgm: 0, fga: 0, fg3m: 0, fg3a: 0, ftm: 0, fta: 0,
+    oreb: 0, dreb: 0, reb: 0, ast: 0, stl: 0, blk: 0, tov: 0, pts: 0,
+    opp_fga: 0, opp_fg3a: 0, opp_ftm: 0, opp_fta: 0,
+    opp_oreb: 0, opp_dreb: 0, opp_reb: 0, opp_tov: 0,
+  };
+  for (const teamName of teamsInAvg) {
+    const t = teamMap.get(teamName);
+    if (!t) continue;
+    for (const k of Object.keys(aggTeam)) aggTeam[k] += Number(t[k]) || 0;
+  }
+
+  // Use the same calcAdv formula on the aggregated "average player"
+  const avgPlayer = {
+    gp: rawPlayers.length,
+    mp: tot.mp / rawPlayers.length,
+    pts: tot.pts / rawPlayers.length,
+    fgm: tot.fgm / rawPlayers.length,
+    fga: tot.fga / rawPlayers.length,
+    fg3m: tot.fg3m / rawPlayers.length,
+    fg3a: tot.fg3a / rawPlayers.length,
+    ftm: tot.ftm / rawPlayers.length,
+    fta: tot.fta / rawPlayers.length,
+    oreb: tot.oreb / rawPlayers.length,
+    dreb: tot.dreb / rawPlayers.length,
+    reb: tot.reb / rawPlayers.length,
+    ast: tot.ast / rawPlayers.length,
+    stl: tot.stl / rawPlayers.length,
+    blk: tot.blk / rawPlayers.length,
+    tov: tot.tov / rawPlayers.length,
+  };
+
+  // Scale team to per-player basis too
+  const n = teamsInAvg.size;
+  const scaledTeam = { ...aggTeam };
+  for (const k of Object.keys(scaledTeam)) scaledTeam[k] = scaledTeam[k] / n;
+
+  const adv = calcAdv(avgPlayer, scaledTeam);
+  return adv || {};
 }
 
 // ── Column definitions ────────────────────────────────────────────────────────
@@ -151,10 +194,8 @@ export async function GET(req: NextRequest) {
     }));
 
     // League averages (players with stats only, mp >= 50)
-    const qualifiedStats = playerStats
-      .filter(p => p.adv && p.mp >= 50)
-      .map(p => p.adv!);
-    const leagueAvg = avgStats(qualifiedStats);
+    const qualifiedRaw = playerStats.filter(p => p.adv && p.mp >= 50);
+    const leagueAvg = avgStats(qualifiedRaw, teamMap);
 
     // Build PDF - autoFirstPage:false prevents the initial blank page
     const doc = new PDFDocument({
@@ -273,11 +314,11 @@ export async function GET(req: NextRequest) {
       doc.moveTo(MARGIN, footerY - 4).lineTo(MARGIN + W, footerY - 4)
         .strokeColor(FROST).lineWidth(0.5).stroke();
       doc.fillColor(ACCENT).fontSize(7).font('Helvetica-Bold')
-        .text('SIDELINE STATS', MARGIN, footerY, { continued: true });
-      doc.fillColor(MUTED).font('Helvetica')
-        .text('  ·  sideline-stats.com', { continued: true });
-      doc.fillColor(MUTED)
-        .text(`Page ${(teams as string[]).indexOf(teamName) + 1} of ${teams.length}`, { align: 'right' });
+        .text('SIDELINE STATS', MARGIN, footerY, { width: 80, lineBreak: false });
+      doc.fillColor(MUTED).fontSize(7).font('Helvetica')
+        .text('sideline-stats.com', MARGIN + 82, footerY, { width: 120, lineBreak: false });
+      doc.fillColor(MUTED).fontSize(7).font('Helvetica')
+        .text(`Page ${(teams as string[]).indexOf(teamName) + 1} of ${teams.length}`, MARGIN, footerY, { width: W, align: 'right', lineBreak: false });
     }
 
     (teams as string[]).forEach((team, i) => drawTeamPage(team, false));
