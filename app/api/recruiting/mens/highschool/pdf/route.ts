@@ -220,7 +220,7 @@ export async function GET(req: NextRequest) {
     const STAT_W = (W - NAME_W - META_W * 3) / COLS.length;
 
     // Draw footer on every page after all pages are built
-    function drawFooters(pageCount: number) {
+    function drawFooters() {
       const range = doc.bufferedPageRange();
       for (let i = 0; i < range.count; i++) {
         doc.switchToPage(range.start + i);
@@ -232,7 +232,7 @@ export async function GET(req: NextRequest) {
         doc.fillColor(MUTED).fontSize(7).font('Helvetica')
           .text('sideline-stats.com', MARGIN + 82, footerY, { width: 120, lineBreak: false });
         doc.fillColor(MUTED).fontSize(7).font('Helvetica')
-          .text(`Page ${i + 1} of ${pageCount}`, MARGIN + W - 60, footerY, { width: 60, align: 'right', lineBreak: false });
+          .text(`Page ${i + 1} of ${range.count}`, MARGIN + W - 60, footerY, { width: 60, align: 'right', lineBreak: false });
       }
     }
 
@@ -330,8 +330,11 @@ export async function GET(req: NextRequest) {
 
     (teams as string[]).forEach((team) => drawTeamPage(team, false));
 
-    // Draw footers on all pages now that they're all built
-    drawFooters(teams.length);
+    // Draw footers on all buffered pages
+    drawFooters();
+
+    // Flush all buffered pages
+    doc.flushPages();
 
     const pdfBuffer = await new Promise<Buffer>((resolve, reject) => {
       const chunks: Buffer[] = [];
