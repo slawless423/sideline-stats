@@ -8,8 +8,6 @@ export const dynamic = 'force-dynamic';
 
 const pool = new Pool({ connectionString: process.env.POSTGRES_URL });
 
-// ── Advanced stat calc (mirrors frontend calcHSStats) ─────────────────────────
-
 function calcAdv(p: any, team: any) {
   if (!team || p.gp === 0 || p.mp === 0) return null;
   const teamMinutes = team.gp * 200;
@@ -60,96 +58,43 @@ function calcAdv(p: any, team: any) {
   const g = p.gp || 1;
   return {
     ortg, minPct, usagePct, shotsPct, efg, ts, orbPct, drbPct,
-    aRate, toRate, blkPct, stlPct, ftRate,
-    twopm, twopa, twopPct, fg3m: p.fg3m, fg3a: p.fg3a, tpPct,
-    ftm: p.ftm, fta: p.fta, ftPct,
+    aRate, toRate, blkPct, stlPct, ftRate, twopPct, tpPct, ftPct,
     ppg: p.pts / g, rpg: p.reb / g, apg: p.ast / g,
     spg: p.stl / g, bpg: p.blk / g, mpg: p.mp / g,
   };
 }
 
 function fmt(val: number | null | undefined, dec = 1): string {
-  if (val == null || isNaN(val)) return '—';
+  if (val == null || isNaN(val) || !isFinite(val)) return '—';
   return val.toFixed(dec);
 }
 
 function avgStats(rawPlayers: any[], teamMap: Map<string, any>): Record<string, number> {
-  // Aggregate all raw counting stats across qualified players
-  const tot = {
-    gp: 0, mp: 0, pts: 0, fgm: 0, fga: 0, fg3m: 0, fg3a: 0,
-    ftm: 0, fta: 0, oreb: 0, dreb: 0, reb: 0, ast: 0, stl: 0, blk: 0, tov: 0,
-  };
-  for (const p of rawPlayers) {
-    for (const k of Object.keys(tot) as (keyof typeof tot)[]) {
-      tot[k] += Number(p[k]) || 0;
-    }
-  }
-
-  // Build a fake "team" row by summing all team stats for teams that have qualified players
-  const teamsInAvg = new Set(rawPlayers.map(p => p.team));
-  const aggTeam: any = {
-    gp: 0, fgm: 0, fga: 0, fg3m: 0, fg3a: 0, ftm: 0, fta: 0,
-    oreb: 0, dreb: 0, reb: 0, ast: 0, stl: 0, blk: 0, tov: 0, pts: 0,
-    opp_fga: 0, opp_fg3a: 0, opp_ftm: 0, opp_fta: 0,
-    opp_oreb: 0, opp_dreb: 0, opp_reb: 0, opp_tov: 0,
-  };
+  const tot: any = { gp:0,mp:0,pts:0,fgm:0,fga:0,fg3m:0,fg3a:0,ftm:0,fta:0,oreb:0,dreb:0,reb:0,ast:0,stl:0,blk:0,tov:0 };
+  for (const p of rawPlayers) for (const k of Object.keys(tot)) tot[k] += Number(p[k]) || 0;
+  const teamsInAvg = new Set(rawPlayers.map((p: any) => p.team));
+  const aggTeam: any = { gp:0,fgm:0,fga:0,fg3m:0,fg3a:0,ftm:0,fta:0,oreb:0,dreb:0,reb:0,ast:0,stl:0,blk:0,tov:0,pts:0,opp_fga:0,opp_fg3a:0,opp_ftm:0,opp_fta:0,opp_oreb:0,opp_dreb:0,opp_reb:0,opp_tov:0 };
   for (const teamName of teamsInAvg) {
-    const t = teamMap.get(teamName);
-    if (!t) continue;
-    for (const k of Object.keys(aggTeam)) aggTeam[k] += Number(t[k]) || 0;
+    const t = teamMap.get(teamName as string);
+    if (t) for (const k of Object.keys(aggTeam)) aggTeam[k] += Number(t[k]) || 0;
   }
-
-  // Use the same calcAdv formula on the aggregated "average player"
-  const avgPlayer = {
-    gp: rawPlayers.length,
-    mp: tot.mp / rawPlayers.length,
-    pts: tot.pts / rawPlayers.length,
-    fgm: tot.fgm / rawPlayers.length,
-    fga: tot.fga / rawPlayers.length,
-    fg3m: tot.fg3m / rawPlayers.length,
-    fg3a: tot.fg3a / rawPlayers.length,
-    ftm: tot.ftm / rawPlayers.length,
-    fta: tot.fta / rawPlayers.length,
-    oreb: tot.oreb / rawPlayers.length,
-    dreb: tot.dreb / rawPlayers.length,
-    reb: tot.reb / rawPlayers.length,
-    ast: tot.ast / rawPlayers.length,
-    stl: tot.stl / rawPlayers.length,
-    blk: tot.blk / rawPlayers.length,
-    tov: tot.tov / rawPlayers.length,
-  };
-
-  // Scale team to per-player basis too
-  const n = teamsInAvg.size;
-  const scaledTeam = { ...aggTeam };
-  for (const k of Object.keys(scaledTeam)) scaledTeam[k] = scaledTeam[k] / n;
-
-  const adv = calcAdv(avgPlayer, scaledTeam);
-  return adv || {};
+  const n = rawPlayers.length;
+  const nt = teamsInAvg.size;
+  const avgPlayer = Object.fromEntries(Object.keys(tot).map(k => [k, k === 'gp' ? n : tot[k] / n]));
+  const scaledTeam = Object.fromEntries(Object.keys(aggTeam).map(k => [k, aggTeam[k] / nt]));
+  return calcAdv(avgPlayer, scaledTeam) || {};
 }
 
-// ── Column definitions ────────────────────────────────────────────────────────
-
 const COLS = [
-  { label: '%Min',    key: 'minPct',    dec: 1 },
-  { label: 'ORtg',   key: 'ortg',      dec: 1 },
-  { label: '%Usg',   key: 'usagePct',  dec: 1 },
-  { label: '%Shots', key: 'shotsPct',  dec: 1 },
-  { label: 'eFG%',   key: 'efg',       dec: 1 },
-  { label: 'TS%',    key: 'ts',        dec: 1 },
-  { label: 'OR%',    key: 'orbPct',    dec: 1 },
-  { label: 'DR%',    key: 'drbPct',    dec: 1 },
-  { label: 'ARate',  key: 'aRate',     dec: 1 },
-  { label: 'TORate', key: 'toRate',    dec: 1 },
-  { label: 'Blk%',   key: 'blkPct',   dec: 1 },
-  { label: 'Stl%',   key: 'stlPct',   dec: 1 },
-  { label: 'FTRate', key: 'ftRate',    dec: 1 },
-  { label: '2P%',    key: 'twopPct',  dec: 1 },
-  { label: '3P%',    key: 'tpPct',    dec: 1 },
-  { label: 'FT%',    key: 'ftPct',    dec: 1 },
+  { label: '%Min', key: 'minPct' }, { label: 'ORtg', key: 'ortg' },
+  { label: '%Usg', key: 'usagePct' }, { label: '%Shots', key: 'shotsPct' },
+  { label: 'eFG%', key: 'efg' }, { label: 'TS%', key: 'ts' },
+  { label: 'OR%', key: 'orbPct' }, { label: 'DR%', key: 'drbPct' },
+  { label: 'ARate', key: 'aRate' }, { label: 'TORate', key: 'toRate' },
+  { label: 'Blk%', key: 'blkPct' }, { label: 'Stl%', key: 'stlPct' },
+  { label: 'FTRate', key: 'ftRate' }, { label: '2P%', key: 'twopPct' },
+  { label: '3P%', key: 'tpPct' }, { label: 'FT%', key: 'ftPct' },
 ];
-
-// ── PDF generation ────────────────────────────────────────────────────────────
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -157,11 +102,9 @@ export async function GET(req: NextRequest) {
   const season = searchParams.get('season') || '2026';
 
   let client;
-  try {
-    client = await pool.connect();
-  } catch (err) {
-    return new NextResponse(JSON.stringify({ error: 'DB connection failed', detail: String(err) }), { status: 500 });
-  }
+  try { client = await pool.connect(); }
+  catch (err) { return new NextResponse(JSON.stringify({ error: String(err) }), { status: 500 }); }
+
   try {
     const [playersRes, teamsRes] = await Promise.all([
       client.query(`
@@ -178,148 +121,116 @@ export async function GET(req: NextRequest) {
                oreb, dreb, reb, ast, stl, blk, tov, pts,
                opp_fgm, opp_fga, opp_fg3m, opp_fg3a, opp_ftm, opp_fta,
                opp_oreb, opp_dreb, opp_reb, opp_ast, opp_stl, opp_blk, opp_tov, opp_pts
-        FROM eybl_team_stats
-        WHERE league = $1 AND season = $2
+        FROM eybl_team_stats WHERE league = $1 AND season = $2
       `, [league, season]),
     ]);
 
     const players = playersRes.rows;
-    const teamMap = new Map(teamsRes.rows.map(t => [t.team, t]));
-    const teams = [...new Set(players.map(p => p.team))].sort();
-
-    // Calculate all advanced stats
-    const playerStats = players.map(p => ({
-      ...p,
-      adv: calcAdv(p, teamMap.get(p.team)),
-    }));
-
-    // League averages (players with stats only, mp >= 50)
-    const qualifiedRaw = playerStats.filter(p => p.adv && p.mp >= 50);
+    const teamMap = new Map(teamsRes.rows.map((t: any) => [t.team, t]));
+    const teams = [...new Set(players.map((p: any) => p.team))].sort() as string[];
+    const playerStats = players.map((p: any) => ({ ...p, adv: calcAdv(p, teamMap.get(p.team)) }));
+    const qualifiedRaw = playerStats.filter((p: any) => p.adv && p.mp >= 50);
     const leagueAvg = avgStats(qualifiedRaw, teamMap as Map<string, any>);
 
-    // Build PDF - autoFirstPage:false prevents the initial blank page
-    const doc = new PDFDocument({
-      size: 'LETTER',
-      layout: 'landscape',
-      margins: { top: 36, bottom: 36, left: 36, right: 36 },
-      autoFirstPage: false,
-    });
-
-    const NAVY   = '#0D1F3C';
+    const NAVY  = '#0D1F3C';
+    const FROST = '#E8F2FC';
+    const MUTED = '#6B7E9A';
     const ACCENT = '#3B9EFF';
-    const FROST  = '#E8F2FC';
-    const ICE    = '#A8C8F0';
-    const MUTED  = '#6B7E9A';
-    const W = 792 - 72;
-    const PAGE_H = 612;
-    const MARGIN = 36;
-
+    const M = 36;
+    const W = 792 - M * 2;
     const NAME_W = 110;
     const META_W = 38;
     const STAT_W = (W - NAME_W - META_W * 3) / COLS.length;
+    const ROW_H = 14;
+    const COL_H = 16;
+    const HDR_H = 22;
 
-    function drawTeamPage(teamName: string, isFirst: boolean) {
+    const doc = new PDFDocument({
+      size: 'LETTER', layout: 'landscape',
+      margins: { top: M, bottom: M, left: M, right: M },
+      autoFirstPage: false,
+    });
+
+    const chunks: Buffer[] = [];
+    doc.on('data', (c: Buffer) => chunks.push(c));
+
+    for (const teamName of teams) {
       doc.addPage();
+      let y = M;
 
-      const teamIdx = (teams as string[]).indexOf(teamName);
-      const teamPlayers = playerStats
-        .filter(p => p.team === teamName)
-        .sort((a, b) => (b.mp || 0) - (a.mp || 0));
-
-      let y = MARGIN;
-
-      // ── Header bar ──
-      doc.rect(MARGIN, y, W, 28).fill(NAVY);
+      // Team header
+      doc.rect(M, y, W, HDR_H).fill(NAVY);
       doc.fillColor('#fff').fontSize(11).font('Helvetica-Bold')
-        .text('Sideline', MARGIN + 8, y + 4, { lineBreak: false });
-      doc.moveTo(MARGIN + 8, y + 17).lineTo(MARGIN + 58, y + 17)
-        .strokeColor(ACCENT).lineWidth(1).stroke();
-      doc.fillColor(ICE).fontSize(8).font('Helvetica')
-        .text('S T A T S', MARGIN + 8, y + 19, { lineBreak: false });
-      doc.fillColor('#fff').fontSize(12).font('Helvetica-Bold')
-        .text(teamName, MARGIN + 72, y + 5, { width: W - 72 - 120, lineBreak: false });
-      doc.fillColor(ICE).fontSize(8).font('Helvetica')
-        .text(`${league}  ·  ${season}`, MARGIN + 72, y + 19, { width: W - 72 - 120, lineBreak: false });
-      const today = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-      doc.fillColor(ICE).fontSize(7).font('Helvetica')
-        .text(today, MARGIN, y + 10, { width: W - 8, align: 'right', lineBreak: false });
-      y += 32;
+        .text(`${teamName}`, M + 8, y + 6, { width: W / 2 });
+      doc.fontSize(8).font('Helvetica').fillColor('#aac8f0')
+        .text(`${league} · ${season}`, M + W / 2, y + 8, { width: W / 2 - 8, align: 'right' });
+      y += HDR_H + 2;
 
-      // ── Footer drawn NOW at fixed position (before content so cursor stays above it) ──
-      const footerY = PAGE_H - MARGIN - 8;
-      doc.moveTo(MARGIN, footerY - 4).lineTo(MARGIN + W, footerY - 4)
-        .strokeColor(FROST).lineWidth(0.5).stroke();
-      doc.fillColor(ACCENT).fontSize(7).font('Helvetica-Bold')
-        .text('SIDELINE STATS', MARGIN, footerY, { width: 80, lineBreak: false });
-      doc.fillColor(MUTED).fontSize(7).font('Helvetica')
-        .text('sideline-stats.com', MARGIN + 82, footerY, { width: 120, lineBreak: false });
-      doc.fillColor(MUTED).fontSize(7).font('Helvetica')
-        .text(`Page ${teamIdx + 1} of ${teams.length}`, MARGIN + W - 60, footerY, { width: 60, align: 'right', lineBreak: false });
-
-      // Reset cursor back up for content
-      doc.moveTo(MARGIN, y);
-
-      // ── Column headers ──
-      doc.rect(MARGIN, y, W, 16).fill(FROST);
+      // Column headers
+      doc.rect(M, y, W, COL_H).fill(FROST);
       doc.fillColor(NAVY).fontSize(7).font('Helvetica-Bold');
-      let x = MARGIN;
-      doc.text('Player', x + 2, y + 5, { width: NAME_W - 4, lineBreak: false });
+      let x = M;
+      doc.text('Player', x + 2, y + 5, { width: NAME_W - 4 });
       x += NAME_W;
-      doc.text('Ht', x, y + 5, { width: META_W, align: 'center', lineBreak: false });
-      x += META_W;
-      doc.text('Cls', x, y + 5, { width: META_W, align: 'center', lineBreak: false });
-      x += META_W;
-      doc.text('G', x, y + 5, { width: META_W, align: 'center', lineBreak: false });
-      x += META_W;
+      for (const lbl of ['Ht', 'Cls', 'G']) {
+        doc.text(lbl, x, y + 5, { width: META_W, align: 'center' });
+        x += META_W;
+      }
       for (const col of COLS) {
-        doc.text(col.label, x, y + 5, { width: STAT_W, align: 'right', lineBreak: false });
+        doc.text(col.label, x, y + 5, { width: STAT_W, align: 'right' });
         x += STAT_W;
       }
-      y += 18;
+      y += COL_H + 2;
 
-      // ── Player rows ──
-      const maxY = footerY - 24; // stop before footer
+      // Player rows
+      const teamPlayers = playerStats
+        .filter((p: any) => p.team === teamName)
+        .sort((a: any, b: any) => (b.mp || 0) - (a.mp || 0));
+
       let rowIdx = 0;
       for (const p of teamPlayers) {
-        if (y > maxY) break;
         const bg = rowIdx % 2 === 0 ? '#ffffff' : FROST;
-        doc.rect(MARGIN, y, W, 14).fill(bg);
+        doc.rect(M, y, W, ROW_H).fill(bg);
         doc.fillColor('#000').fontSize(7).font('Helvetica');
-        x = MARGIN;
-        doc.text(p.full_name, x + 2, y + 3, { width: NAME_W - 4, lineBreak: false });
+        x = M;
+        doc.text(p.full_name, x + 2, y + 3, { width: NAME_W - 4 });
         x += NAME_W;
-        doc.text(p.height || '—', x, y + 3, { width: META_W, align: 'center', lineBreak: false });
+        doc.text(p.height || '—', x, y + 3, { width: META_W, align: 'center' });
         x += META_W;
-        doc.text(p.grad_year ? String(p.grad_year) : '—', x, y + 3, { width: META_W, align: 'center', lineBreak: false });
+        doc.text(p.grad_year ? String(p.grad_year) : '—', x, y + 3, { width: META_W, align: 'center' });
         x += META_W;
-        doc.text(String(p.gp), x, y + 3, { width: META_W, align: 'center', lineBreak: false });
+        doc.text(String(p.gp), x, y + 3, { width: META_W, align: 'center' });
         x += META_W;
         for (const col of COLS) {
           const val = p.adv ? (p.adv as any)[col.key] : null;
-          doc.text(fmt(val, col.dec), x, y + 3, { width: STAT_W, align: 'right', lineBreak: false });
+          doc.text(fmt(val), x, y + 3, { width: STAT_W, align: 'right' });
           x += STAT_W;
         }
-        y += 14;
+        y += ROW_H;
         rowIdx++;
       }
 
-      // ── League average row ──
-      doc.rect(MARGIN, y, W, 16).fill(NAVY);
+      // League average row
+      y += 2;
+      doc.rect(M, y, W, COL_H).fill(NAVY);
       doc.fillColor('#fff').fontSize(7).font('Helvetica-Bold');
-      x = MARGIN;
-      doc.text('League Average', x + 2, y + 5, { width: NAME_W - 4, lineBreak: false });
+      x = M;
+      doc.text('League Average', x + 2, y + 5, { width: NAME_W - 4 });
       x += NAME_W + META_W * 3;
       for (const col of COLS) {
-        doc.text(fmt(leagueAvg[col.key], col.dec), x, y + 5, { width: STAT_W, align: 'right', lineBreak: false });
+        doc.text(fmt(leagueAvg[col.key]), x, y + 5, { width: STAT_W, align: 'right' });
         x += STAT_W;
       }
+      y += COL_H + 8;
+
+      // Branding line below stats
+      doc.fillColor(ACCENT).fontSize(7).font('Helvetica-Bold')
+        .text('SIDELINE STATS', M, y, { continued: true });
+      doc.fillColor(MUTED).font('Helvetica')
+        .text(`  ·  sideline-stats.com  ·  ${league} ${season}  ·  ${teams.indexOf(teamName) + 1} of ${teams.length}`, { });
     }
 
-    (teams as string[]).forEach((team) => drawTeamPage(team, false));
-
     const pdfBuffer = await new Promise<Buffer>((resolve, reject) => {
-      const chunks: Buffer[] = [];
-      doc.on('data', (chunk: Buffer) => chunks.push(chunk));
       doc.on('end', () => resolve(Buffer.concat(chunks)));
       doc.on('error', reject);
       doc.end();
