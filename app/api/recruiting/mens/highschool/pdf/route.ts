@@ -160,8 +160,12 @@ export async function GET(req: NextRequest) {
 
       // Team header
       doc.rect(M, y, W, HDR_H).fill(NAVY);
+      doc.fillColor('#fff').fontSize(8).font('Helvetica-Bold')
+        .text('SIDELINE', M + 8, y + 4, { width: 60 });
+      doc.fillColor('#aac8f0').fontSize(6).font('Helvetica')
+        .text('S T A T S', M + 8, y + 13, { width: 60 });
       doc.fillColor('#fff').fontSize(11).font('Helvetica-Bold')
-        .text(`${teamName}`, M + 8, y + 6, { width: W / 2 });
+        .text(`${teamName}`, M + 72, y + 6, { width: W / 2 });
       doc.fontSize(8).font('Helvetica').fillColor('#aac8f0')
         .text(`${league} · ${season}`, M + W / 2, y + 8, { width: W / 2 - 8, align: 'right' });
       y += HDR_H + 2;
@@ -227,7 +231,7 @@ export async function GET(req: NextRequest) {
       doc.fillColor(ACCENT).fontSize(7).font('Helvetica-Bold')
         .text('SIDELINE STATS', M, y, { continued: true });
       doc.fillColor(MUTED).font('Helvetica')
-        .text(`  ·  sideline-stats.com  ·  ${league} ${season}  ·  ${teams.indexOf(teamName) + 1} of ${teams.length}`, { });
+        .text(`  ·  sideline-stats.com  ·  info@sideline-stats.com  ·  ${league} ${season}  ·  ${teams.indexOf(teamName) + 1} of ${teams.length}`, { });
     }
 
     const pdfBuffer = await new Promise<Buffer>((resolve, reject) => {
