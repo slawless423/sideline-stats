@@ -3,6 +3,9 @@ import { Pool } from 'pg';
 // @ts-ignore
 import PDFDocument from 'pdfkit';
 
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
 const pool = new Pool({ connectionString: process.env.POSTGRES_URL });
 
 // ── Advanced stat calc (mirrors frontend calcHSStats) ─────────────────────────
@@ -149,14 +152,11 @@ export async function GET(req: NextRequest) {
     const leagueAvg = avgStats(qualifiedStats);
 
     // Build PDF
-    const chunks: Buffer[] = [];
     const doc = new PDFDocument({
       size: 'LETTER',
       layout: 'landscape',
       margins: { top: 36, bottom: 36, left: 36, right: 36 },
     });
-
-    doc.on('data', (chunk: Buffer) => chunks.push(chunk));
 
     const NAVY  = '#0D1F3C';
     const ACCENT = '#3B9EFF';
@@ -253,10 +253,13 @@ export async function GET(req: NextRequest) {
 
     (teams as string[]).forEach((team, i) => drawTeamPage(team, i === 0));
 
-    doc.end();
-
-    await new Promise<void>(resolve => doc.on('end', resolve));
-    const pdfBuffer = Buffer.concat(chunks);
+    const pdfBuffer = await new Promise<Buffer>((resolve, reject) => {
+      const chunks: Buffer[] = [];
+      doc.on('data', (chunk: Buffer) => chunks.push(chunk));
+      doc.on('end', () => resolve(Buffer.concat(chunks)));
+      doc.on('error', reject);
+      doc.end();
+    });
 
     const filename = `${league.replace(/\s+/g, '_')}_${season}.pdf`;
     return new NextResponse(pdfBuffer, {
