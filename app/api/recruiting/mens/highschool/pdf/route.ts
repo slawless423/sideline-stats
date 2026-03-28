@@ -262,7 +262,7 @@ export async function GET(req: NextRequest) {
     });
 
     const filename = `${league.replace(/\s+/g, '_')}_${season}.pdf`;
-    return new NextResponse(pdfBuffer, {
+    return new NextResponse(pdfBuffer.buffer as ArrayBuffer, {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',
