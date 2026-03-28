@@ -9,7 +9,7 @@ const NAVY    = "#0D1F3C";
 const SKY     = "#2E7DD1";
 const ICE     = "#A8C8F0";
 const FROST   = "#E8F2FC";
-const MUTED   = "#6B7E9A";
+const MUTED   = "#6B7E9A"; 
 
 type StatMode = 'advanced' | 'perGame' | 'per40';
 type ActiveTab = 'transfers' | 'highschool';
