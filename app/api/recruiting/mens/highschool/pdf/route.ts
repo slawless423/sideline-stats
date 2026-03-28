@@ -156,11 +156,12 @@ export async function GET(req: NextRequest) {
       .map(p => p.adv!);
     const leagueAvg = avgStats(qualifiedStats);
 
-    // Build PDF
+    // Build PDF - autoFirstPage:false prevents the initial blank page
     const doc = new PDFDocument({
       size: 'LETTER',
       layout: 'landscape',
       margins: { top: 36, bottom: 36, left: 36, right: 36 },
+      autoFirstPage: false,
     });
 
     const NAVY  = '#0D1F3C';
@@ -176,7 +177,7 @@ export async function GET(req: NextRequest) {
     const STAT_W = (W - NAME_W - META_W * 3) / COLS.length;
 
     function drawTeamPage(teamName: string, isFirst: boolean) {
-      if (!isFirst) doc.addPage();
+      doc.addPage();
 
       const teamPlayers = playerStats
         .filter(p => p.team === teamName)
@@ -250,13 +251,18 @@ export async function GET(req: NextRequest) {
         x += STAT_W;
       }
 
-      // Page number
+      // Footer with branding and page number
+      const footerY = PAGE_H - MARGIN - 8;
+      doc.fillColor(ACCENT).fontSize(7).font('Helvetica-Bold')
+        .text('SIDELINE STATS', MARGIN, footerY, { width: 100 });
       doc.fillColor(MUTED).fontSize(7).font('Helvetica')
-        .text(`${teams.indexOf(teamName) + 1} / ${teams.length}`,
-          MARGIN, PAGE_H - MARGIN - 8, { width: W, align: 'right' });
+        .text('sideline-stats.com', MARGIN + 100, footerY, { width: 120 });
+      doc.fillColor(MUTED).fontSize(7).font('Helvetica')
+        .text(`${(teams as string[]).indexOf(teamName) + 1} / ${teams.length}`,
+          MARGIN, footerY, { width: W, align: 'right' });
     }
 
-    (teams as string[]).forEach((team, i) => drawTeamPage(team, i === 0));
+    (teams as string[]).forEach((team, i) => drawTeamPage(team, false));
 
     const pdfBuffer = await new Promise<Buffer>((resolve, reject) => {
       const chunks: Buffer[] = [];
