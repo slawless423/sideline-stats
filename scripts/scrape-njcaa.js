@@ -497,16 +497,15 @@ async function getTeams() {
 }
 
 // ── SHARED STAT PARSER ────────────────────────────────────────────────────────
-// Parses a stats string into the full set of counting stat fields.
-// Column order (from header):
+// Fields are TAB-separated. Column order:
 //   GP GS MIN AVG | FG-FGA PCT | 3FG-3FGA PCT | FT-FTA PCT |
 //   OFF DEF TOT AVG | PF DQ | A A/G | TO TO/G | A/TO | BLK BLK/G | STL STL/G | PTS AVG
 function parseStatFields(parts) {
-  const num = s => (s === undefined || s === '-') ? null : parseFloat(s);
-  const int = s => (s === undefined || s === '-') ? null : parseInt(s);
+  const num = s => (s === undefined || s === null || s.trim() === '-' || s.trim() === '') ? null : parseFloat(s.trim());
+  const int = s => (s === undefined || s === null || s.trim() === '-' || s.trim() === '') ? null : parseInt(s.trim());
   const madeAtt = s => {
-    if (!s || s === '-') return [null, null];
-    const m = s.match(/^(\d+)-(\d+)$/);
+    if (!s || s.trim() === '-' || s.trim() === '') return [null, null];
+    const m = s.trim().match(/^(\d+)-(\d+)$/);
     return m ? [parseInt(m[1]), parseInt(m[2])] : [null, null];
   };
 
@@ -521,9 +520,9 @@ function parseStatFields(parts) {
   const [fg3, fg3a] = madeAtt(parts[i++]);
   const fg3_pct     = num(parts[i++]);
 
-  // FT-FTA can be bare '-' for players/rows with no free throw attempts
+  // FT-FTA can be bare '-' for players with no free throw attempts
   let ft = null, fta = null;
-  if (parts[i] === '-') {
+  if (!parts[i] || parts[i].trim() === '-') {
     i++;
   } else {
     [ft, fta] = madeAtt(parts[i++]);
@@ -564,77 +563,64 @@ function parseStatFields(parts) {
 // ── PARSE FULL STAT PAGE ──────────────────────────────────────────────────────
 function parseStatPage(rawText, teamSlug, teamName) {
   const players = [];
-  let teamTotal   = null;
-  let oppTotal    = null;
+  let teamTotal = null;
+  let oppTotal  = null;
 
-  const lines = rawText.split('\n').map(l => l.trim()).filter(Boolean);
+  const lines = rawText.split('\n').filter(l => l.trim().length > 0);
 
   for (const line of lines) {
+    const trimmed = line.trim();
+
     // Skip header / metadata lines
     if (
-      line.startsWith('Click')     ||
-      line.startsWith('2025-26')   ||
-      line.startsWith('Record')    ||
-      line.startsWith('#')         ||
-      line.includes('3-Point')     ||
-      line.length < 20
+      trimmed.startsWith('Click')           ||
+      trimmed.startsWith('2025-26')         ||
+      trimmed.startsWith('Record')          ||
+      trimmed.includes('3-Point')           ||
+      trimmed.startsWith('Conference Only') ||
+      trimmed.length < 10
     ) continue;
 
-    // ── Team Total row ──────────────────────────────────────────────────────
-    // e.g. "Total...............31 31 4503 145 725-1664 43.6 ..."
-    if (line.startsWith('Total') && !line.startsWith('Total3')) {
-      const statStr = line.replace(/^Total\.*/i, '').trim();
-      const parts   = statStr.split(/\s+/);
-      try {
-        teamTotal = parseStatFields(parts);
-      } catch (e) {
-        console.warn(`  ⚠ Could not parse Total row`);
-      }
+    // Split on tabs - the format is fully tab-delimited
+    const cols = line.split('\t');
+
+    // Team Total row: cols[0]="Total...", cols[1..]=stats
+    if (trimmed.startsWith('Total') && !trimmed.startsWith('Total3')) {
+      try { teamTotal = parseStatFields(cols.slice(1)); } catch(e) {}
       continue;
     }
 
-    // ── Opponents row ───────────────────────────────────────────────────────
-    // e.g. "Opponents...........31 31 4503 145 878-1989 44.1 ..."
-    if (line.startsWith('Opponents')) {
-      const statStr = line.replace(/^Opponents\.*/i, '').trim();
-      const parts   = statStr.split(/\s+/);
-      try {
-        oppTotal = parseStatFields(parts);
-      } catch (e) {
-        console.warn(`  ⚠ Could not parse Opponents row`);
-      }
+    // Opponents row: cols[0]="Opponents...", cols[1..]=stats
+    if (trimmed.startsWith('Opponents')) {
+      try { oppTotal = parseStatFields(cols.slice(1)); } catch(e) {}
       continue;
     }
 
-    // ── Skip Conference Only rows ───────────────────────────────────────────
-    if (line.startsWith('Conference Only')) continue;
+    // Player rows: cols[0]=jersey, cols[1]=name(dot-padded), cols[2..]=stats
+    if (cols.length < 10) continue;
 
-    // ── Player rows ─────────────────────────────────────────────────────────
-    // e.g. "2Brennan Wansley.....16 15 376 23.5 89-179 49.7 ..."
-    const playerMatch = line.match(/^(\d{0,2})\s*([A-Za-z][A-Za-z'\s.-]+?)\.*\s{2,}(.+)$/);
-    if (!playerMatch) continue;
+    const jerseyRaw = cols[0].trim();
+    const nameRaw   = cols[1] ? cols[1].replace(/[.]+$/, '').trim() : '';
 
-    const jersey  = playerMatch[1].trim();
-    const name    = playerMatch[2].replace(/\.+$/, '').trim();
-    const statStr = playerMatch[3].trim();
-    const parts   = statStr.split(/\s+/);
+    // jersey must be empty or digits only; name must start with a letter
+    if (!/^[0-9]{0,2}$/.test(jerseyRaw)) continue;
+    if (!nameRaw || !/^[A-Za-z]/.test(nameRaw)) continue;
 
     try {
-      const stats = parseStatFields(parts);
-      if (!name || stats.gp === null) continue;
+      const stats = parseStatFields(cols.slice(2));
+      if (!nameRaw || stats.gp === null) continue;
 
-      const nameParts = name.toLowerCase().replace(/[^a-z0-9 ]/g, '').trim().split(/\s+/);
-      const player_id = `${teamSlug}_${jersey}_${nameParts.join('_')}`;
+      const nameParts = nameRaw.toLowerCase().replace(/[^a-z0-9 ]/g, '').trim().split(/\s+/);
+      const player_id = `${teamSlug}_${jerseyRaw}_${nameParts.join('_')}`;
 
-      players.push({ player_id, jersey, name, ...stats });
+      players.push({ player_id, jersey: jerseyRaw, name: nameRaw, ...stats });
     } catch (e) {
-      console.warn(`  ⚠ Skipped player line: ${line.substring(0, 70)}`);
+      console.warn(`  skipped: ${trimmed.substring(0, 60)}`);
     }
   }
 
   return { players, teamTotal, oppTotal };
 }
-
 // ── DB UPSERTS ────────────────────────────────────────────────────────────────
 async function upsertPlayers(players, teamSlug, teamName) {
   for (const p of players) {
