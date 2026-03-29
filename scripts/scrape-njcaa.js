@@ -13,7 +13,9 @@
  * Env var:  DATABASE_URL
  */
 
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-extra');
+const StealthPlugin = require('puppeteer-extra-plugin-stealth');
+puppeteer.use(StealthPlugin());
 const { Pool } = require('pg');
 require('dotenv').config();
 
@@ -742,16 +744,31 @@ async function main() {
       process.stdout.write(`[${idx + 1}/${teams.length}] ${team.name}... `);
 
       try {
-        await page.goto(url, { waitUntil: 'networkidle2', timeout: 20000 });
-        const rawHtml = await page.content();
-        // Extract text from <pre> or <body> - PrestoSports monospace template wraps in <pre>
+        await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
+
+        // Wait for Cloudflare challenge to pass - keep checking until real content loads
         let rawText = '';
-        const preMatch = rawHtml.match(/<pre[^>]*>([\s\S]*?)<\/pre>/i);
-        if (preMatch) {
-          rawText = preMatch[1].replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&nbsp;/g, ' ').replace(/&#9;/g, '\t');
-        } else {
-          // fallback: strip all HTML tags
-          rawText = rawHtml.replace(/<[^>]+>/g, '\t').replace(/\t+/g, '\t');
+        for (let attempt = 0; attempt < 10; attempt++) {
+          const rawHtml = await page.content();
+          // Cloudflare challenge pages contain "Just a moment"
+          if (rawHtml.includes('Just a moment') || rawHtml.includes('cf-browser-verification')) {
+            await sleep(3000);
+            continue;
+          }
+          // Real content - extract from <pre> tag (PrestoSports monospace template)
+          const preMatch = rawHtml.match(/<pre[^>]*>([\s\S]*?)<\/pre>/i);
+          if (preMatch) {
+            rawText = preMatch[1]
+              .replace(/&amp;/g, '&')
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+              .replace(/&nbsp;/g, ' ')
+              .replace(/&#9;/g, '\t')
+              .replace(/<[^>]+>/g, '');
+          } else {
+            rawText = await page.evaluate(() => document.body.innerText);
+          }
+          break;
         }
 
         if (!rawText || rawText.length < 100) {
