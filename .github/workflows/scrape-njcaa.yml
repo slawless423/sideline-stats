@@ -29,17 +29,14 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Install Puppeteer browser
-        run: npx puppeteer browsers install chrome
-
       - name: Scrape womens
         if: ${{ github.event.inputs.gender == 'womens' || github.event.inputs.gender == 'both' }}
-        run: node scripts/scrape-njcaa.js --gender womens
+        run: node scripts/scrape-njcaa-boxscores.js --gender womens
         env:
           DATABASE_URL: ${{ secrets.POSTGRES_URL_NON_POOLING }}
 
       - name: Scrape mens
         if: ${{ github.event.inputs.gender == 'mens' || github.event.inputs.gender == 'both' }}
-        run: node scripts/scrape-njcaa.js --gender mens
+        run: node scripts/scrape-njcaa-boxscores.js --gender mens
         env:
           DATABASE_URL: ${{ secrets.POSTGRES_URL_NON_POOLING }}
