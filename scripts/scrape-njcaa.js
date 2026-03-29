@@ -136,8 +136,25 @@ async function ensureTables() {
 // ── GET TEAM SLUGS ────────────────────────────────────────────────────────────
 async function getTeams(page) {
   console.log(`\nLoading teams page: ${TEAMS_URL}`);
-  await page.goto(TEAMS_URL, { waitUntil: 'networkidle2', timeout: 30000 });
-  await page.waitForSelector('[data-team-name]', { timeout: 15000 });
+
+  await page.goto(TEAMS_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+
+  // Wait up to 45s for JS-rendered team rows
+  try {
+    await page.waitForSelector('[data-team-name]', { timeout: 45000 });
+  } catch (e) {
+    // Fallback: extract slugs from raw HTML
+    console.log('  ⚠ Selector timeout — attempting raw HTML fallback');
+    const html = await page.content();
+    const slugMatches = [...html.matchAll(/\/sports\/[^/]+\/[^/]+\/div1\/teams\/([^?"]+)\?view=profile[^"]*"[^>]*title="([^"]+)"/g)];
+    if (slugMatches.length === 0) throw new Error('Could not find any team slugs in page source');
+    const seen = new Set();
+    const teams = slugMatches
+      .map(m => ({ slug: m[1], name: m[2] }))
+      .filter(t => { if (seen.has(t.slug)) return false; seen.add(t.slug); return true; });
+    console.log(`✓ Found ${teams.length} teams (fallback)`);
+    return teams;
+  }
 
   const teams = await page.evaluate((division) => {
     return Array.from(document.querySelectorAll('[data-team-name]')).map(row => {
