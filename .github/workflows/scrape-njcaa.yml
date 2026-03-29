@@ -36,10 +36,10 @@ jobs:
         if: ${{ github.event.inputs.gender == 'womens' || github.event.inputs.gender == 'both' }}
         run: node scripts/scrape-njcaa.js --gender womens
         env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DATABASE_URL: ${{ secrets.POSTGRES_URL_NON_POOLING }}
 
       - name: Scrape mens
         if: ${{ github.event.inputs.gender == 'mens' || github.event.inputs.gender == 'both' }}
         run: node scripts/scrape-njcaa.js --gender mens
         env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DATABASE_URL: ${{ secrets.POSTGRES_URL_NON_POOLING }}
