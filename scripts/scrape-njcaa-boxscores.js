@@ -101,62 +101,61 @@ async function fetchHtml(url, retries = 3) {
 }
 
 // ── GET ALL BOX SCORE URLS ────────────────────────────────────────────────────
+// Generate all dates in the NJCAA season range
+function getSeasonDates() {
+  const dates = [];
+  const start = new Date('2025-11-01');
+  const end   = new Date('2026-03-30');
+  for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+    dates.push(d.toISOString().slice(0, 10));
+  }
+  return dates;
+}
+
 async function getBoxScoreUrls() {
-  console.log(`\nFetching composite schedule...`);
+  const dates = getSeasonDates();
+  console.log(`\nScanning ${dates.length} dates (${dates[0]} → ${dates[dates.length-1]})...`);
 
-  // Get all game dates from the season schedule
-  // PrestoSports composite shows all dates - we fetch without a date param to get the full list
-  const scheduleUrl = `${BASE}/sports/${SPORT_SLUG}/${SEASON}/${DIVISION}/composite`;
-  const html = await fetchHtml(scheduleUrl);
-  const root = parse(html);
-
-  // Extract all box score links
-  const links = root.querySelectorAll('a[href*="/boxscores/"]');
   const urls = new Set();
-  for (const link of links) {
-    const href = link.getAttribute('href');
-    if (href && href.includes('.xml')) {
-      const fullUrl = href.startsWith('http') ? href : `${BASE}${href}`;
-      urls.add(fullUrl);
-    }
-  }
+  let datesWithGames = 0;
 
-  console.log(`✓ Found ${urls.size} box scores on current page`);
-
-  // The composite page may only show recent dates - we need to paginate through all dates
-  // Find all date links in the date navigation
-  const dateLinks = root.querySelectorAll('a[href*="composite?d="]');
-  const allDates = new Set();
-  for (const link of dateLinks) {
-    const href = link.getAttribute('href');
-    const dateMatch = href && href.match(/\?d=(\d{4}-\d{2}-\d{2})/);
-    if (dateMatch) allDates.add(dateMatch[1]);
-  }
-
-  console.log(`  Found ${allDates.size} additional dates to check`);
-
-  // Fetch each date page
-  for (const date of allDates) {
+  for (let i = 0; i < dates.length; i++) {
+    const date = dates[i];
     try {
       const dateUrl = `${BASE}/sports/${SPORT_SLUG}/${SEASON}/${DIVISION}/composite?d=${date}`;
-      const dateHtml = await fetchHtml(dateUrl);
-      const dateRoot = parse(dateHtml);
-      const dateLinks = dateRoot.querySelectorAll('a[href*="/boxscores/"]');
-      for (const link of dateLinks) {
+      const html    = await fetchHtml(dateUrl);
+      const root    = parse(html);
+
+      const links = root.querySelectorAll('a[href*="/boxscores/"]');
+      let found = 0;
+      for (const link of links) {
         const href = link.getAttribute('href');
         if (href && href.includes('.xml')) {
           const fullUrl = href.startsWith('http') ? href : `${BASE}${href}`;
-          urls.add(fullUrl);
+          if (!urls.has(fullUrl)) {
+            urls.add(fullUrl);
+            found++;
+          }
         }
       }
-      process.stdout.write('.');
-      await sleep(DELAY_MS);
+
+      if (found > 0) {
+        datesWithGames++;
+        process.stdout.write(`[${date}: ${found}] `);
+      } else {
+        process.stdout.write('.');
+      }
     } catch (e) {
       process.stdout.write('x');
     }
+
+    await sleep(DELAY_MS);
+
+    // Print newline every 20 dates for readability
+    if ((i + 1) % 20 === 0) process.stdout.write('\n');
   }
 
-  console.log(`\n✓ Total box scores found: ${urls.size}`);
+  console.log(`\n\n✓ Found ${urls.size} box scores across ${datesWithGames} game days`);
   return [...urls];
 }
 
