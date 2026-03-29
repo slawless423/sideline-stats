@@ -17,13 +17,14 @@
     "resend": "^4.0.0",
     "pdfkit": "^0.15.0",
     "iconv-lite": "^0.6.3",
-    "@vercel/analytics": "^1.5.0"
+    "@vercel/analytics": "^1.5.0",
+    "pg": "^8.11.3",
+    "puppeteer": "^22.0.0"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "pg": "^8.11.3",
     "@types/pdfkit": "^0.13.0",
     "typescript": "^5"
   }
