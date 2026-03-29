@@ -743,12 +743,28 @@ async function main() {
 
       try {
         await page.goto(url, { waitUntil: 'networkidle2', timeout: 20000 });
-        const rawText = await page.evaluate(() => document.body.innerText);
+        const rawHtml = await page.content();
+        // Extract text from <pre> or <body> - PrestoSports monospace template wraps in <pre>
+        let rawText = '';
+        const preMatch = rawHtml.match(/<pre[^>]*>([\s\S]*?)<\/pre>/i);
+        if (preMatch) {
+          rawText = preMatch[1].replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&nbsp;/g, ' ').replace(/&#9;/g, '\t');
+        } else {
+          // fallback: strip all HTML tags
+          rawText = rawHtml.replace(/<[^>]+>/g, '\t').replace(/\t+/g, '\t');
+        }
 
         if (!rawText || rawText.length < 100) {
           console.log('⚠ Empty response, skipping');
           skipped++;
           continue;
+        }
+
+        // DEBUG: dump first team's raw text sample then exit
+        if (idx === 0) {
+          console.log('\n--- RAW SAMPLE (first 1000 chars) ---');
+          console.log(JSON.stringify(rawText.substring(0, 1000)));
+          console.log('--- END SAMPLE ---\n');
         }
 
         const { players, teamTotal, oppTotal } = parseStatPage(rawText, team.slug, team.name);
