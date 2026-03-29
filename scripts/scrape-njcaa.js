@@ -772,7 +772,10 @@ async function main() {
         }
 
         if (!rawText || rawText.length < 100) {
-          console.log('⚠ Empty response, skipping');
+          // DEBUG: show what we actually got
+          const debugHtml = await page.content();
+          console.log('⚠ Empty rawText. Page length:', debugHtml.length);
+          console.log('Page sample:', JSON.stringify(debugHtml.substring(0, 300)));
           skipped++;
           continue;
         }
