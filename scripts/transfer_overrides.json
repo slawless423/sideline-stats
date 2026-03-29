@@ -619,5 +619,7 @@
   { "transfer_name": "Juan Cranford, Jr.", "previous_school": "Eastern Kentucky", "player_id": "42_juan_cranford,jr." },
   { "transfer_name": "Tómas Þrastarson", "previous_school": "Washington State", "player_id": "2359_tomas_thrastarson" },
   { "transfer_name": "Trey Horton III", "previous_school": "UTEP", "player_id": "2017_trey_horton" },
-  { "transfer_name": "Victor Valdés", "previous_school": "Troy", "player_id": "2350_victor_valdes" }
+  { "transfer_name": "Victor Valdés", "previous_school": "Troy", "player_id": "2350_victor_valdes" },
+  { "transfer_name": "Josh Dalton", "previous_school": "Loyola Marymount", "player_id": "790_joshua_dalton" },
+  { "transfer_name": "Leroy Blyden, Jr.", "previous_school": "Toledo", "player_id": "291_leroy_blydenjr." }
 ]
