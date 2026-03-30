@@ -6,38 +6,31 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false },
 });
 
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, x-import-secret',
+};
+
 export async function OPTIONS() {
-  return new NextResponse(null, {
-    status: 204,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, x-import-secret',
-    },
-  });
+  return new NextResponse(null, { status: 204, headers: CORS_HEADERS });
 }
 
 export async function POST(request: NextRequest) {
-  const corsHeaders = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, x-import-secret',
-  };
-
   try {
     const secret = request.headers.get('x-import-secret');
     if (secret !== process.env.NJCAA_IMPORT_SECRET) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: corsHeaders });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: CORS_HEADERS });
     }
 
     const { players, gender, season } = await request.json();
 
     if (!players || !Array.isArray(players) || !gender || !season) {
-      return NextResponse.json({ error: 'Invalid payload' }, { status: 400, headers: corsHeaders });
+      return NextResponse.json({ error: 'Invalid payload' }, { status: 400, headers: CORS_HEADERS });
     }
 
     if (!['mens', 'womens'].includes(gender)) {
-      return NextResponse.json({ error: 'Invalid gender' }, { status: 400, headers: corsHeaders });
+      return NextResponse.json({ error: 'Invalid gender' }, { status: 400, headers: CORS_HEADERS });
     }
 
     const table = `njcaa_${gender}_d1_players`;
@@ -51,8 +44,7 @@ export async function POST(request: NextRequest) {
         jersey      TEXT,
         name        TEXT NOT NULL,
         gp          INTEGER DEFAULT 0,
-        gs          INTEGER DEFAULT 0,
-        min         INTEGER DEFAULT 0,
+        min         INTEGER,
         fg          INTEGER DEFAULT 0,
         fga         INTEGER DEFAULT 0,
         fg3         INTEGER DEFAULT 0,
@@ -78,17 +70,17 @@ export async function POST(request: NextRequest) {
       await pool.query(`
         INSERT INTO ${table} (
           player_id, team_name, season, jersey, name,
-          gp, gs, min,
+          gp, min,
           fg, fga, fg3, fg3a, ft, fta,
           reb_off, reb_def, reb_tot,
           ast, stl, blk, to_stat, pf, pts,
           updated_at
         ) VALUES (
           $1,$2,$3,$4,$5,
-          $6,$7,$8,
-          $9,$10,$11,$12,$13,$14,
-          $15,$16,$17,
-          $18,$19,$20,$21,$22,$23,
+          $6,$7,
+          $8,$9,$10,$11,$12,$13,
+          $14,$15,$16,
+          $17,$18,$19,$20,$21,$22,
           NOW()
         )
         ON CONFLICT (player_id) DO UPDATE SET
@@ -96,7 +88,6 @@ export async function POST(request: NextRequest) {
           jersey     = EXCLUDED.jersey,
           name       = EXCLUDED.name,
           gp         = EXCLUDED.gp,
-          gs         = EXCLUDED.gs,
           min        = EXCLUDED.min,
           fg         = EXCLUDED.fg,
           fga        = EXCLUDED.fga,
@@ -115,8 +106,8 @@ export async function POST(request: NextRequest) {
           pts        = EXCLUDED.pts,
           updated_at = NOW()
       `, [
-        p.player_id, p.team_name, season, p.jersey, p.name,
-        p.gp, p.gs, p.min,
+        p.player_id, p.team_name, season, p.jersey || '', p.name,
+        p.gp, p.min ?? null,
         p.fg, p.fga, p.fg3, p.fg3a, p.ft, p.fta,
         p.reb_off, p.reb_def, p.reb_tot,
         p.ast, p.stl, p.blk, p.to_stat, p.pf, p.pts,
@@ -124,10 +115,10 @@ export async function POST(request: NextRequest) {
       upserted++;
     }
 
-    return NextResponse.json({ success: true, upserted }, { headers: corsHeaders });
+    return NextResponse.json({ success: true, upserted }, { headers: CORS_HEADERS });
 
   } catch (err: any) {
     console.error('NJCAA import error:', err);
-    return NextResponse.json({ error: err.message }, { status: 500, headers: corsHeaders });
+    return NextResponse.json({ error: err.message }, { status: 500, headers: CORS_HEADERS });
   }
 }
