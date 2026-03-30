@@ -1,42 +1,47 @@
 import { Pool } from 'pg';
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 const pool = new Pool({
   connectionString: process.env.POSTGRES_URL_NON_POOLING,
   ssl: { rejectUnauthorized: false },
 });
 
-const CORS_HEADERS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, x-import-secret',
-};
-
 export async function OPTIONS() {
-  return new Response(null, { status: 204, headers: CORS_HEADERS });
+  return new NextResponse(null, {
+    status: 204,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, x-import-secret',
+    },
+  });
 }
 
 export async function POST(request: NextRequest) {
+  const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, x-import-secret',
+  };
+
   try {
-    // Verify secret
     const secret = request.headers.get('x-import-secret');
     if (secret !== process.env.NJCAA_IMPORT_SECRET) {
-      return Response.json({ error: 'Unauthorized' }, { status: 401, headers: CORS_HEADERS });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: corsHeaders });
     }
 
     const { players, gender, season } = await request.json();
 
     if (!players || !Array.isArray(players) || !gender || !season) {
-      return Response.json({ error: 'Invalid payload' }, { status: 400, headers: CORS_HEADERS });
+      return NextResponse.json({ error: 'Invalid payload' }, { status: 400, headers: corsHeaders });
     }
 
     if (!['mens', 'womens'].includes(gender)) {
-      return Response.json({ error: 'Invalid gender' }, { status: 400, headers: CORS_HEADERS });
+      return NextResponse.json({ error: 'Invalid gender' }, { status: 400, headers: corsHeaders });
     }
 
     const table = `njcaa_${gender}_d1_players`;
 
-    // Ensure table exists
     await pool.query(`
       CREATE TABLE IF NOT EXISTS ${table} (
         id          SERIAL PRIMARY KEY,
@@ -119,10 +124,10 @@ export async function POST(request: NextRequest) {
       upserted++;
     }
 
-    return Response.json({ success: true, upserted }, { headers: CORS_HEADERS });
+    return NextResponse.json({ success: true, upserted }, { headers: corsHeaders });
 
   } catch (err: any) {
     console.error('NJCAA import error:', err);
-    return Response.json({ error: err.message }, { status: 500, headers: CORS_HEADERS });
+    return NextResponse.json({ error: err.message }, { status: 500, headers: corsHeaders });
   }
 }
