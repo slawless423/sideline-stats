@@ -6,22 +6,32 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false },
 });
 
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, x-import-secret',
+};
+
+export async function OPTIONS() {
+  return new Response(null, { status: 204, headers: CORS_HEADERS });
+}
+
 export async function POST(request: NextRequest) {
   try {
     // Verify secret
     const secret = request.headers.get('x-import-secret');
     if (secret !== process.env.NJCAA_IMPORT_SECRET) {
-      return Response.json({ error: 'Unauthorized' }, { status: 401 });
+      return Response.json({ error: 'Unauthorized' }, { status: 401, headers: CORS_HEADERS });
     }
 
     const { players, gender, season } = await request.json();
 
     if (!players || !Array.isArray(players) || !gender || !season) {
-      return Response.json({ error: 'Invalid payload' }, { status: 400 });
+      return Response.json({ error: 'Invalid payload' }, { status: 400, headers: CORS_HEADERS });
     }
 
     if (!['mens', 'womens'].includes(gender)) {
-      return Response.json({ error: 'Invalid gender' }, { status: 400 });
+      return Response.json({ error: 'Invalid gender' }, { status: 400, headers: CORS_HEADERS });
     }
 
     const table = `njcaa_${gender}_d1_players`;
@@ -109,10 +119,10 @@ export async function POST(request: NextRequest) {
       upserted++;
     }
 
-    return Response.json({ success: true, upserted });
+    return Response.json({ success: true, upserted }, { headers: CORS_HEADERS });
 
   } catch (err: any) {
     console.error('NJCAA import error:', err);
-    return Response.json({ error: err.message }, { status: 500 });
+    return Response.json({ error: err.message }, { status: 500, headers: CORS_HEADERS });
   }
 }
