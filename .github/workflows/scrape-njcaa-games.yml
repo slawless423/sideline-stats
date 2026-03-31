@@ -1,0 +1,35 @@
+name: Scrape NJCAA D1 Games
+
+on:
+  workflow_dispatch:
+    inputs:
+      gender:
+        description: 'Gender to scrape'
+        required: true
+        default: 'womens'
+        type: choice
+        options:
+          - womens
+          - mens
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Scrape games
+        run: node scripts/scrape-njcaa-games.js --gender ${{ github.event.inputs.gender }}
+        env:
+          DATABASE_URL: ${{ secrets.POSTGRES_URL_NON_POOLING }}
