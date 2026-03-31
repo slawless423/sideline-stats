@@ -1,15 +1,24 @@
 player_id,division,team_name,first_name,last_name,height,year
-1434_dallas_jones,mens-d2,Anderson (SC),Dallas,Jones,"6'4""",Jr
-1434_osmar_garcia,mens-d2,Anderson (SC),Osmar,Garcia,"6'7""",Jr
-159_jabari_phillipjr.,mens-d2,Christian Brothers,Jabari,Phillip Jr.,"6'4""",Jr
-366_ahmed-sory_soumahoro,mens-d2,Columbus St.,Ahmed-Sory,Soumahoro,"6'3""",Jr
-1484_khirius_doucet,mens-d2,Fort Valley St.,Khirius,Doucet,"6'4""",So
-2491_drew_fisher,mens-d2,Lewis,Drew,Fisher,"6'4""",Fr
-1842_luke_wieskamp,mens-d2,Menlo,Luke,Wieskamp,"6'6""",Fr
-2584_domonic_turnerjr.,mens-d2,Pittsburg St.,Domonic,Turner Jr.,"6'4""",Jr
-1993_harry_geng,mens-d2,Saint Michael's,Harry,Geng,"6'1""",Fr
-1993_rico_byrd,mens-d2,Saint Michael's,Rico,Byrd,"6'2""",So
-2610_troy_anderson,mens-d2,Truman St.,Troy,Anderson,"6'3""",So
-817_thomas_allard,mens-d2,UAH,Thomas,Allard,"6'7""",Jr
-2029_jordan_lambert,mens-d2,Virginia St.,Jordan,Lambert,"5'11""",Jr
-1431_aric_demings,mens-d2,West Florida,Aric,Demings,"6'0""",Jr
+1787_marlon_barnes_jr.,mens-d1,Evansville,Marlon,"Barnes, Jr.","6'6""",So
+946_kalu_anya,mens-d1,Saint Louis,Kalu,Anya,"6'8""",Sr
+16400_joel_speckman,mens-d2,Black Hills St.,Joel,Speckman,"6'9""",Jr
+2564_marcus_zeigler_jr.,mens-d2,Central Okla.,Marcus,"Zeigler, Jr.","6'1""",Jr
+362_darnell_evans,mens-d2,Clark Atlanta,Darnell,Evans,"6'0""",Sr
+366_jordan_mitchell,mens-d2,Columbus St.,Jordan,Mitchell,"6'6""",Jr
+1216_josiah_rickards,mens-d2,Concord,Josiah,Rickards,"6'3""",So
+261790_benjamin_bill,mens-d2,Daemen,Benjamin,Bill,"6'8""",Jr
+261790_josh_haskell,mens-d2,Daemen,Josh,Haskell,"6'6""",Jr
+261790_ronnie_williams,mens-d2,Daemen,Ronnie,Williams,"6'5""",Sr
+261790_ryan_heath,mens-d2,Daemen,Ryan,Heath,"5'11""",Jr
+261790_santana_sinvilcin,mens-d2,Daemen,Santana,Sinvilcin,"6'5""",Fr
+261790_zach_philipkoski,mens-d2,Daemen,Zach,Philipkoski,"6'4""",Jr
+734_zaylan_chaney,mens-d2,Eastern N.M.,Zaylan,Chaney,"6'7""",Jr
+2146_matthew_elderkin,mens-d2,Grand Valley St.,Matthew,Elderkin,"6'6""",Fr
+2194_matt_schmainda,mens-d2,Michigan Tech,Matt,Schmainda,"6'2""",Jr
+2727_caileb_parham,mens-d2,N.M. Highlands,Caileb,Parham,"6'4""",Fr
+1595_ja'bryant_hill,mens-d2,Neb.-Kearney,Ja'Bryant,Hill,"5'10""",Sr
+1595_kendrick_gilbert,mens-d2,Neb.-Kearney,Kendrick,Gilbert,"6'5""",Sr
+1655_saif_saleh,mens-d2,Pace,Saif,Saleh,"6'8""",Fr
+1606_bela_clobes,mens-d2,Southeastern Okla.,Bela,Clobes,"6'6""",Fr
+1607_jayce_tillman,mens-d2,Southern Ark.,Jayce,Tillman,"6'5""",Fr
+1431_shahar_lazar,mens-d2,West Florida,Shahar,Lazar,"6'3""",Jr
