@@ -57,7 +57,7 @@ type SortKey =
   | 'orbPct' | 'drbPct' | 'aRate' | 'toRate' | 'blkPct' | 'stlPct' | 'ftRate'
   | 'twopm' | 'twopa' | 'twopPct' | 'tpm' | 'tpa' | 'tpPct' | 'ftm' | 'fta' | 'ftPct'
   | 'ppg' | 'rpg' | 'orbpg' | 'drbpg' | 'apg' | 'spg' | 'bpg' | 'mpg' | 'fgPct'
-  | 'twopmPg' | 'twopaPg' | 'tpmPg' | 'tpaPg' | 'ftmPg' | 'ftaPg'
+  | 'twopmPg' | 'twopaPg' | 'twopPctPg' | 'tpmPg' | 'tpaPg' | 'tpPctPg' | 'ftmPg' | 'ftaPg' | 'ftPctPg'
   | 'p40' | 'r40' | 'orb40' | 'drb40' | 'a40' | 's40' | 'b40' | 'fc40'
   | 'twopm40' | 'twopa40' | 'twopPct40' | 'tpm40' | 'tpa40' | 'tpPct40' | 'ftm40' | 'fta40' | 'ftPct40';
 
@@ -214,9 +214,9 @@ function calcStats(p: Player, team: TeamRow | undefined) {
     apg: ast/g, spg: stl/g, bpg: blk/g, mpg: (p.minutes ?? 0)/g,
     fgPct,
     // Per Game shooting (all games)
-    twopmPg: twopm/g, twopaPg: twopa/g, twopPct,
-    tpmPg: tpm/g, tpaPg: tpa/g, tpPct,
-    ftmPg: ftm/g, ftaPg: fta/g, ftPct,
+    twopmPg: twopm/g, twopaPg: twopa/g, twopPctPg: twopPct,
+    tpmPg: tpm/g, tpaPg: tpa/g, tpPctPg: tpPct,
+    ftmPg: ftm/g, ftaPg: fta/g, ftPctPg: ftPct,
     // Per 40 (clean games)
     p40: cpts/cm40*40, r40: ctrb/cm40*40, orb40: corb/cm40*40, drb40: cdrb/cm40*40,
     a40: cast/cm40*40, s40: cstl/cm40*40, b40: cblk/cm40*40, fc40: cpf/cm40*40,
@@ -247,10 +247,10 @@ const PER_GAME_COLS: { label: string; key: SortKey }[] = [
   { label: 'APG',  key: 'apg'      }, { label: 'SPG',  key: 'spg'      },
   { label: 'BPG',  key: 'bpg'      }, { label: 'MPG',  key: 'mpg'      },
   { label: 'FG%',  key: 'fgPct'    }, { label: '2PM',  key: 'twopmPg'  },
-  { label: '2PA',  key: 'twopaPg'  }, { label: '2P%',  key: 'twopPct'  },
+  { label: '2PA',  key: 'twopaPg'  }, { label: '2P%',  key: 'twopPctPg'  },
   { label: '3PM',  key: 'tpmPg'    }, { label: '3PA',  key: 'tpaPg'    },
-  { label: '3P%',  key: 'tpPct'    }, { label: 'FTM',  key: 'ftmPg'    },
-  { label: 'FTA',  key: 'ftaPg'    }, { label: 'FT%',  key: 'ftPct'    },
+  { label: '3P%',  key: 'tpPctPg'    }, { label: 'FTM',  key: 'ftmPg'    },
+  { label: 'FTA',  key: 'ftaPg'    }, { label: 'FT%',  key: 'ftPctPg'    },
 ];
 
 const PER_40_COLS: { label: string; key: SortKey }[] = [
