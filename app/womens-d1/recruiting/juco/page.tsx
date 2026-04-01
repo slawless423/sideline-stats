@@ -338,7 +338,7 @@ export default function NjcaaWomensDivisionPage() {
   const sorted = useMemo(() => [...filtered].sort((a, b) => {
     if (sortKey === 'name') return sortOrder === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
     if (sortKey === 'teamName') return sortOrder === 'asc' ? a.teamName.localeCompare(b.teamName) : b.teamName.localeCompare(a.teamName);
-    if (sortKey === 'games') { const ag = a.games ?? 0, bg = b.games ?? 0; return sortOrder === 'asc' ? ag - bg : bg - ag; }
+    if (sortKey === 'games') { const ag = statMode === 'perGame' ? (a.games ?? 0) : (a.cleanGames ?? 0); const bg = statMode === 'perGame' ? (b.games ?? 0) : (b.cleanGames ?? 0); return sortOrder === 'asc' ? ag - bg : bg - ag; }
     const as_ = calcStats(a, teamMap.get(a.teamName));
     const bs_ = calcStats(b, teamMap.get(b.teamName));
     if (!as_ && !bs_) return 0;
