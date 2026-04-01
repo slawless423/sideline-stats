@@ -21,12 +21,21 @@ type Player = {
   games: number | null;
   minutes: number | null;
   cleanGames: number | null;
+  cleanMin: number | null;
+  // All-game stats (for per game)
   fgm: number | null; fga: number | null;
   tpm: number | null; tpa: number | null;
   ftm: number | null; fta: number | null;
   orb: number | null; drb: number | null; trb: number | null;
   ast: number | null; stl: number | null; blk: number | null;
   tov: number | null; pf: number | null; points: number | null;
+  // Clean game stats (for advanced + per 40)
+  cleanFgm: number | null; cleanFga: number | null;
+  cleanTpm: number | null; cleanTpa: number | null;
+  cleanFtm: number | null; cleanFta: number | null;
+  cleanOrb: number | null; cleanDrb: number | null; cleanTrb: number | null;
+  cleanAst: number | null; cleanStl: number | null; cleanBlk: number | null;
+  cleanTov: number | null; cleanPf: number | null; cleanPts: number | null;
 };
 
 type TeamRow = {
@@ -37,6 +46,9 @@ type TeamRow = {
   orb: number; trb: number; ast: number; tov: number; points: number;
   cleanFga: number; cleanFta: number; cleanOrb: number; cleanTrb: number; cleanTov: number;
   cleanOppFga: number; cleanOppFta: number; cleanOppOrb: number; cleanOppTrb: number; cleanOppTov: number;
+  // Optional clean team totals for ORtg
+  cleanFgm?: number; cleanTpm?: number; cleanFtm?: number; cleanAst?: number; cleanPts?: number;
+  cleanOppTpa?: number;
 };
 
 type SortKey =
@@ -45,6 +57,7 @@ type SortKey =
   | 'orbPct' | 'drbPct' | 'aRate' | 'toRate' | 'blkPct' | 'stlPct' | 'ftRate'
   | 'twopm' | 'twopa' | 'twopPct' | 'tpm' | 'tpa' | 'tpPct' | 'ftm' | 'fta' | 'ftPct'
   | 'ppg' | 'rpg' | 'orbpg' | 'drbpg' | 'apg' | 'spg' | 'bpg' | 'mpg' | 'fgPct'
+  | 'twopmPg' | 'twopaPg' | 'tpmPg' | 'tpaPg' | 'ftmPg' | 'ftaPg'
   | 'p40' | 'r40' | 'orb40' | 'drb40' | 'a40' | 's40' | 'b40' | 'fc40'
   | 'twopm40' | 'twopa40' | 'twopPct40' | 'tpm40' | 'tpa40' | 'tpPct40' | 'ftm40' | 'fta40' | 'ftPct40';
 
@@ -65,8 +78,8 @@ function csvField(val: string | number | null | undefined): string {
 function calcStats(p: Player, team: TeamRow | undefined) {
   if (!team || !hasStats(p)) return null;
 
-  // Use all-game stats for per game / per 40
-  const g = p.games ?? 1;
+  // ── ALL-GAME stats (used for Per Game) ──────────────────────────────────
+  const g   = p.games ?? 1;
   const fgm = p.fgm ?? 0;
   const fga = p.fga ?? 0;
   const tpm = p.tpm ?? 0;
@@ -83,119 +96,136 @@ function calcStats(p: Player, team: TeamRow | undefined) {
   const pf  = p.pf  ?? 0;
   const pts = p.points ?? 0;
 
-  // Per game / per 40 use all-game minutes
-  const totalMin = p.minutes ?? 0;
-  const m = totalMin || 1;
+  // ── CLEAN stats (used for Advanced + Per 40) ────────────────────────────
+  const cg   = p.cleanGames ?? 0;
+  const cm   = p.cleanMin ?? 0;
+  const cfgm = p.cleanFgm ?? 0;
+  const cfga = p.cleanFga ?? 0;
+  const ctpm = p.cleanTpm ?? 0;
+  const ctpa = p.cleanTpa ?? 0;
+  const cftm = p.cleanFtm ?? 0;
+  const cfta = p.cleanFta ?? 0;
+  const corb = p.cleanOrb ?? 0;
+  const cdrb = p.cleanDrb ?? 0;
+  const ctrb = p.cleanTrb ?? 0;
+  const cast = p.cleanAst ?? 0;
+  const cstl = p.cleanStl ?? 0;
+  const cblk = p.cleanBlk ?? 0;
+  const ctov = p.cleanTov ?? 0;
+  const cpf  = p.cleanPf  ?? 0;
+  const cpts = p.cleanPts ?? 0;
 
-  // Advanced stats use clean games only (min_tracked + opponent_has_stats)
-  // We use team clean totals and player clean minutes
-  const cleanMin = p.cleanGames != null && p.cleanGames > 0 ? p.cleanGames * (totalMin / g) : 0;
-  const hasClean = team.cleanGames > 0 && cleanMin > 0;
+  const hasClean = cg > 0 && cm > 0;
 
-  // Team totals for advanced stats (clean games only)
-  const teamCleanMin = team.cleanGames * 200;
-  const opp_drb_clean = team.cleanOppTrb - team.cleanOppOrb;
-  const drb_clean     = team.cleanTrb - team.cleanOrb;
-
-  let ortg = 0, usagePct = 0, minPct = 0, shotsPct = 0;
-  let orbPct = 0, drbPct = 0, aRate = 0, toRate = 0, blkPct = 0, stlPct = 0;
-
-  if (hasClean) {
-    const teamMinutes = teamCleanMin;
-
-    // Scale player clean stats proportionally
-    const cleanRatio = cleanMin / totalMin;
-    const p_fgm = fgm * cleanRatio;
-    const p_fga = fga * cleanRatio;
-    const p_tpm = tpm * cleanRatio;
-    const p_tpa = tpa * cleanRatio;
-    const p_ftm = ftm * cleanRatio;
-    const p_fta = fta * cleanRatio;
-    const p_orb = orb * cleanRatio;
-    const p_drb = drb * cleanRatio;
-    const p_ast = ast * cleanRatio;
-    const p_stl = stl * cleanRatio;
-    const p_blk = blk * cleanRatio;
-    const p_tov = tov * cleanRatio;
-    const p_pts = pts * cleanRatio;
-    const p_pf  = pf  * cleanRatio;
-
-    const Team_ORB_pct = team.cleanOrb / (team.cleanOrb + opp_drb_clean) || 0;
-    const Team_Scoring_Poss = team.cleanFga > 0 && team.cleanFta > 0
-      ? team.cleanFga + (1 - Math.pow(1 - (team.ftm / team.fta || 0.7), 2)) * team.cleanFta * 0.4
-      : 1;
-    const Team_Play_pct = Team_Scoring_Poss / ((team.cleanFga + team.cleanFta * 0.4 + team.cleanTov) || 1);
-    const Team_ORB_Weight = ((1 - Team_ORB_pct) * Team_Play_pct) /
-      (((1 - Team_ORB_pct) * Team_Play_pct) + (Team_ORB_pct * (1 - Team_Play_pct)) || 1);
-
-    const teamPossTotal = team.cleanFga + 0.44 * team.cleanFta + team.cleanTov;
-    usagePct = teamPossTotal > 0 && cleanMin > 0
-      ? 100 * (p_fga + 0.44 * p_fta + p_tov) / (teamPossTotal / teamMinutes * cleanMin) / 5 : 0;
-    minPct   = 100 * cleanMin / teamMinutes * 5;
-    shotsPct = team.cleanFga > 0 && cleanMin > 0
-      ? (p_fga / team.cleanFga) / (cleanMin / teamMinutes) / 5 * 100 : 0;
-
-    orbPct = cleanMin > 0 && (team.cleanOrb + opp_drb_clean) > 0
-      ? (p_orb / cleanMin) * (teamMinutes / 5) / (team.cleanOrb + opp_drb_clean) * 100 : 0;
-    drbPct = cleanMin > 0 && (drb_clean + team.cleanOppOrb) > 0
-      ? (p_drb / cleanMin) * (teamMinutes / 5) / (drb_clean + team.cleanOppOrb) * 100 : 0;
-
-    const aRateDenom = ((cleanMin / (teamMinutes / 5)) * (team.fgm / team.games * team.cleanGames)) - p_fgm;
-    aRate = aRateDenom > 0 ? (p_ast / aRateDenom) * 100 : 0;
-
-    const playerPoss = p_fga + 0.44 * p_fta + p_tov;
-    toRate = playerPoss > 0 ? (p_tov / playerPoss) * 100 : 0;
-
-    const oppPoss = team.cleanOppFga - team.cleanOppOrb + team.cleanOppTov + 0.475 * team.cleanOppFta;
-    const opp2PA  = team.cleanOppFga - (team.tpm / team.games * team.cleanGames);
-    blkPct = (cleanMin * opp2PA) > 0 ? 100 * (p_blk * (teamMinutes / 5)) / (cleanMin * opp2PA) : 0;
-    stlPct = (cleanMin * oppPoss) > 0 ? 100 * (p_stl * (teamMinutes / 5)) / (cleanMin * oppPoss) : 0;
-
-    // ORtg (Dean Oliver)
-    const qAST = ((cleanMin / (teamMinutes / 5)) * (1.14 * (((team.fgm / team.games * team.cleanGames) - p_fgm) / (team.fgm / team.games * team.cleanGames || 1)))) +
-      ((((team.ast / teamMinutes) * cleanMin * 5 - p_ast) / (((team.fgm / teamMinutes) * cleanMin * 5 - p_fgm) || 1)) * (1 - cleanMin / (teamMinutes / 5)));
-    const FG_Part  = p_fgm * (1 - 0.5 * ((p_pts - p_ftm) / (2 * p_fga || 1)) * qAST);
-    const AST_Part = 0.5 * (((team.points / team.games * team.cleanGames - team.ftm / team.games * team.cleanGames) - (p_pts - p_ftm)) /
-      (2 * ((team.cleanFga - p_fga) || 1))) * p_ast;
-    const FT_Part  = (1 - Math.pow(1 - (p_ftm / (p_fta || 1)), 2)) * 0.4 * p_fta;
-    const ORB_Part = p_orb * Team_ORB_Weight * Team_Play_pct;
-    const ScPoss   = (FG_Part + AST_Part + FT_Part) * (1 - (team.cleanOrb / Team_Scoring_Poss) * Team_ORB_Weight * Team_Play_pct) + ORB_Part;
-    const FGxPoss  = (p_fga - p_fgm) * (1 - 1.07 * Team_ORB_pct);
-    const FTxPoss  = Math.pow(1 - (p_ftm / (p_fta || 1)), 2) * 0.4 * p_fta;
-    const TotPoss  = ScPoss + FGxPoss + FTxPoss + p_tov;
-    const PProd_FG  = 2 * (p_fgm + 0.5 * p_tpm) * (1 - 0.5 * ((p_pts - p_ftm) / (2 * p_fga || 1)) * qAST);
-    const PProd_AST = 2 * ((team.cleanFga > 0 ? (team.fgm / team.games * team.cleanGames - p_fgm + 0.5 * (team.tpm / team.games * team.cleanGames - p_tpm)) /
-      ((team.fgm / team.games * team.cleanGames - p_fgm) || 1) : 0)) *
-      0.5 * (((team.points / team.games * team.cleanGames - team.ftm / team.games * team.cleanGames) - (p_pts - p_ftm)) /
-        (2 * ((team.cleanFga - p_fga) || 1))) * p_ast;
-    const PProd_ORB = p_orb * Team_ORB_Weight * Team_Play_pct *
-      ((team.points / team.games * team.cleanGames) / (team.cleanFga + (1 - Math.pow(1 - (team.ftm / team.fta || 0.7), 2)) * 0.4 * team.cleanFta || 1));
-    const PProd = (PProd_FG + PProd_AST + p_ftm) * (1 - (team.cleanOrb / Team_Scoring_Poss) * Team_ORB_Weight * Team_Play_pct) + PProd_ORB;
-    ortg = TotPoss > 0 ? 100 * PProd / TotPoss : 0;
-  }
-
-  const efg     = fga > 0 ? ((fgm + 0.5 * tpm) / fga) * 100 : 0;
-  const ts      = (fga + 0.475 * fta) > 0 ? (pts / (2 * (fga + 0.475 * fta))) * 100 : 0;
-  const ftRate  = fga > 0 ? (fta / fga) * 100 : 0;
+  // ── Per Game (all games) ─────────────────────────────────────────────────
+  const fgPct   = fga > 0 ? (fgm / fga) * 100 : 0;
   const twopm   = fgm - tpm;
   const twopa   = fga - tpa;
   const twopPct = twopa > 0 ? (twopm / twopa) * 100 : 0;
   const tpPct   = tpa > 0 ? (tpm / tpa) * 100 : 0;
   const ftPct   = fta > 0 ? (ftm / fta) * 100 : 0;
-  const fgPct   = fga > 0 ? (fgm / fga) * 100 : 0;
+
+  // ── Clean game derived ───────────────────────────────────────────────────
+  const c_twopm   = cfgm - ctpm;
+  const c_twopa   = cfga - ctpa;
+  const c_twopPct = c_twopa > 0 ? (c_twopm / c_twopa) * 100 : 0;
+  const c_tpPct   = ctpa > 0 ? (ctpm / ctpa) * 100 : 0;
+  const c_ftPct   = cfta > 0 ? (cftm / cfta) * 100 : 0;
+  const c_fgPct   = cfga > 0 ? (cfgm / cfga) * 100 : 0;
+  const efg       = cfga > 0 ? ((cfgm + 0.5 * ctpm) / cfga) * 100 : 0;
+  const ts        = (cfga + 0.475 * cfta) > 0 ? (cpts / (2 * (cfga + 0.475 * cfta))) * 100 : 0;
+  const ftRate    = cfga > 0 ? (cfta / cfga) * 100 : 0;
+
+  // ── Advanced (clean games only) ──────────────────────────────────────────
+  let ortg = 0, usagePct = 0, minPct = 0, shotsPct = 0;
+  let orbPct = 0, drbPct = 0, aRate = 0, toRate = 0, blkPct = 0, stlPct = 0;
+
+  if (hasClean && team.cleanGames > 0) {
+    const teamCleanMin  = team.cleanGames * 200;
+    const opp_drb       = team.cleanOppTrb - team.cleanOppOrb;
+    const team_drb      = team.cleanTrb - team.cleanOrb;
+    const Team_ORB_pct  = team.cleanOrb / ((team.cleanOrb + opp_drb) || 1);
+    const ftm_rate      = team.cleanFta > 0 ? team.cleanFtm / team.cleanFta : 0.7;
+    const Team_Scoring_Poss = team.cleanFga + (1 - Math.pow(1 - ftm_rate, 2)) * team.cleanFta * 0.4;
+    const Team_Play_pct = Team_Scoring_Poss / ((team.cleanFga + team.cleanFta * 0.4 + team.cleanTov) || 1);
+    const Team_ORB_Weight = ((1 - Team_ORB_pct) * Team_Play_pct) /
+      (((1 - Team_ORB_pct) * Team_Play_pct + Team_ORB_pct * (1 - Team_Play_pct)) || 1);
+
+    const teamPossTotal = team.cleanFga + 0.44 * team.cleanFta + team.cleanTov;
+    usagePct = teamPossTotal > 0 && cm > 0
+      ? 100 * (cfga + 0.44 * cfta + ctov) / (teamPossTotal / teamCleanMin * cm) / 5 : 0;
+    minPct   = 100 * cm / teamCleanMin * 5;
+    shotsPct = team.cleanFga > 0 && cm > 0
+      ? (cfga / team.cleanFga) / (cm / teamCleanMin) / 5 * 100 : 0;
+
+    orbPct = cm > 0 && (team.cleanOrb + opp_drb) > 0
+      ? (corb / cm) * (teamCleanMin / 5) / (team.cleanOrb + opp_drb) * 100 : 0;
+    drbPct = cm > 0 && (team_drb + team.cleanOppOrb) > 0
+      ? (cdrb / cm) * (teamCleanMin / 5) / (team_drb + team.cleanOppOrb) * 100 : 0;
+
+    const aRateDenom = ((cm / (teamCleanMin / 5)) * (team.cleanFgm ?? team.fgm / team.games * team.cleanGames)) - cfgm;
+    aRate = aRateDenom > 0 ? (cast / aRateDenom) * 100 : 0;
+
+    const playerPoss = cfga + 0.44 * cfta + ctov;
+    toRate = playerPoss > 0 ? (ctov / playerPoss) * 100 : 0;
+
+    const oppPoss = team.cleanOppFga - team.cleanOppOrb + team.cleanOppTov + 0.475 * team.cleanOppFta;
+    const opp2PA  = team.cleanOppFga - (team.cleanOppTpa ?? 0);
+    blkPct = (cm * opp2PA) > 0 ? 100 * (cblk * (teamCleanMin / 5)) / (cm * opp2PA) : 0;
+    stlPct = (cm * oppPoss) > 0 ? 100 * (cstl * (teamCleanMin / 5)) / (cm * oppPoss) : 0;
+
+    // ORtg (Dean Oliver) - using clean stats
+    const teamFgm_clean = team.cleanFgm ?? (team.fgm / team.games * team.cleanGames);
+    const teamPts_clean = team.cleanPts ?? (team.points / team.games * team.cleanGames);
+    const teamFtm_clean = team.cleanFtm ?? (team.ftm / team.games * team.cleanGames);
+    const qAST = ((cm / (teamCleanMin / 5)) * (1.14 * ((teamFgm_clean - cfgm) / (teamFgm_clean || 1)))) +
+      ((((team.cleanAst ?? 0) / teamCleanMin * cm * 5 - cast) / (((teamFgm_clean / teamCleanMin) * cm * 5 - cfgm) || 1)) * (1 - cm / (teamCleanMin / 5)));
+    const FG_Part  = cfgm * (1 - 0.5 * ((cpts - cftm) / (2 * cfga || 1)) * qAST);
+    const AST_Part = 0.5 * ((teamPts_clean - teamFtm_clean - (cpts - cftm)) / (2 * ((team.cleanFga - cfga) || 1))) * cast;
+    const FT_Part  = (1 - Math.pow(1 - (cftm / (cfta || 1)), 2)) * 0.4 * cfta;
+    const ORB_Part = corb * Team_ORB_Weight * Team_Play_pct;
+    const ScPoss   = (FG_Part + AST_Part + FT_Part) * (1 - (team.cleanOrb / Team_Scoring_Poss) * Team_ORB_Weight * Team_Play_pct) + ORB_Part;
+    const FGxPoss  = (cfga - cfgm) * (1 - 1.07 * Team_ORB_pct);
+    const FTxPoss  = Math.pow(1 - (cftm / (cfta || 1)), 2) * 0.4 * cfta;
+    const TotPoss  = ScPoss + FGxPoss + FTxPoss + ctov;
+    const PProd_FG  = 2 * (cfgm + 0.5 * ctpm) * (1 - 0.5 * ((cpts - cftm) / (2 * cfga || 1)) * qAST);
+    const PProd_AST = 2 * ((teamFgm_clean - cfgm + 0.5 * ((team.cleanTpm ?? 0) - ctpm)) / ((teamFgm_clean - cfgm) || 1)) *
+      0.5 * ((teamPts_clean - teamFtm_clean - (cpts - cftm)) / (2 * ((team.cleanFga - cfga) || 1))) * cast;
+    const PProd_ORB = corb * Team_ORB_Weight * Team_Play_pct *
+      (teamPts_clean / ((team.cleanFga + (1 - Math.pow(1 - ftm_rate, 2)) * 0.4 * team.cleanFta) || 1));
+    const PProd = (PProd_FG + PProd_AST + cftm) *
+      (1 - (team.cleanOrb / Team_Scoring_Poss) * Team_ORB_Weight * Team_Play_pct) + PProd_ORB;
+    ortg = TotPoss > 0 ? 100 * PProd / TotPoss : 0;
+  }
+
+  // ── Per 40 (clean games only) ────────────────────────────────────────────
+  const cMpg = cg > 0 ? cm / cg : 0;
+  const cm40 = cm || 1;
 
   return {
+    // Advanced (clean games)
     ortg, usagePct, minPct, shotsPct, efg, ts,
     orbPct, drbPct, aRate, toRate, blkPct, stlPct, ftRate,
-    twopm, twopa, twopPct, tpm, tpa, tpPct, ftm, fta, ftPct, fgPct,
+    twopm: c_twopm, twopa: c_twopa, twopPct: c_twopPct,
+    tpm: ctpm, tpa: ctpa, tpPct: c_tpPct,
+    ftm: cftm, fta: cfta, ftPct: c_ftPct,
+    // Per Game (all games)
     ppg: pts/g, rpg: trb/g, orbpg: orb/g, drbpg: drb/g,
-    apg: ast/g, spg: stl/g, bpg: blk/g, mpg: totalMin/g,
-    p40: pts/m*40, r40: trb/m*40, orb40: orb/m*40, drb40: drb/m*40,
-    a40: ast/m*40, s40: stl/m*40, b40: blk/m*40, fc40: pf/m*40,
-    twopm40: twopm/m*40, twopa40: twopa/m*40, twopPct40: twopPct,
-    tpm40: tpm/m*40, tpa40: tpa/m*40, tpPct40: tpPct,
-    ftm40: ftm/m*40, fta40: fta/m*40, ftPct40: ftPct,
+    apg: ast/g, spg: stl/g, bpg: blk/g, mpg: (p.minutes ?? 0)/g,
+    fgPct,
+    // Per Game shooting (all games)
+    twopmPg: twopm/g, twopaPg: twopa/g, twopPct,
+    tpmPg: tpm/g, tpaPg: tpa/g, tpPct,
+    ftmPg: ftm/g, ftaPg: fta/g, ftPct,
+    // Per 40 (clean games)
+    p40: cpts/cm40*40, r40: ctrb/cm40*40, orb40: corb/cm40*40, drb40: cdrb/cm40*40,
+    a40: cast/cm40*40, s40: cstl/cm40*40, b40: cblk/cm40*40, fc40: cpf/cm40*40,
+    twopm40: c_twopm/cm40*40, twopa40: c_twopa/cm40*40, twopPct40: c_twopPct,
+    tpm40: ctpm/cm40*40, tpa40: ctpa/cm40*40, tpPct40: c_tpPct,
+    ftm40: cftm/cm40*40, fta40: cfta/cm40*40, ftPct40: c_ftPct,
   };
+}
+
 }
 
 const ADVANCED_COLS: { label: string; key: SortKey }[] = [
@@ -213,15 +243,15 @@ const ADVANCED_COLS: { label: string; key: SortKey }[] = [
 ];
 
 const PER_GAME_COLS: { label: string; key: SortKey }[] = [
-  { label: 'PPG',  key: 'ppg'     }, { label: 'RPG',  key: 'rpg'     },
-  { label: 'ORB',  key: 'orbpg'   }, { label: 'DRB',  key: 'drbpg'   },
-  { label: 'APG',  key: 'apg'     }, { label: 'SPG',  key: 'spg'     },
-  { label: 'BPG',  key: 'bpg'     }, { label: 'MPG',  key: 'mpg'     },
-  { label: 'FG%',  key: 'fgPct'   }, { label: '2PM',  key: 'twopm'   },
-  { label: '2PA',  key: 'twopa'   }, { label: '2P%',  key: 'twopPct' },
-  { label: '3PM',  key: 'tpm'     }, { label: '3PA',  key: 'tpa'     },
-  { label: '3P%',  key: 'tpPct'  }, { label: 'FTM',  key: 'ftm'     },
-  { label: 'FTA',  key: 'fta'     }, { label: 'FT%',  key: 'ftPct'   },
+  { label: 'PPG',  key: 'ppg'      }, { label: 'RPG',  key: 'rpg'      },
+  { label: 'ORB',  key: 'orbpg'    }, { label: 'DRB',  key: 'drbpg'    },
+  { label: 'APG',  key: 'apg'      }, { label: 'SPG',  key: 'spg'      },
+  { label: 'BPG',  key: 'bpg'      }, { label: 'MPG',  key: 'mpg'      },
+  { label: 'FG%',  key: 'fgPct'    }, { label: '2PM',  key: 'twopmPg'  },
+  { label: '2PA',  key: 'twopaPg'  }, { label: '2P%',  key: 'twopPct'  },
+  { label: '3PM',  key: 'tpmPg'    }, { label: '3PA',  key: 'tpaPg'    },
+  { label: '3P%',  key: 'tpPct'    }, { label: 'FTM',  key: 'ftmPg'    },
+  { label: 'FTA',  key: 'ftaPg'    }, { label: 'FT%',  key: 'ftPct'    },
 ];
 
 const PER_40_COLS: { label: string; key: SortKey }[] = [
