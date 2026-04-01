@@ -289,9 +289,17 @@ export default function WomensTransfersPage() {
       <SiteNavigation currentDivision="womens-d1" currentPage="recruiting" divisionPath="/womens-d1" />
       <main style={{ maxWidth: '100%', margin: '0 auto', padding: 20 }}>
         <div style={{ display: 'flex', gap: 0, borderBottom: `2px solid ${FROST}`, marginBottom: 24 }}>
-          <div style={{ padding: '10px 20px', fontFamily: "'Outfit', sans-serif", fontSize: 14, fontWeight: 700, color: SKY, borderBottom: `3px solid ${ACCENT}`, marginBottom: -2, letterSpacing: '0.01em' }}>
-            Transfers
-          </div>
+          {['Transfers', 'JUCO', 'High School'].map(tab => (
+            <a key={tab} href={tab === 'Transfers' ? '/womens-d1/recruiting' : tab === 'JUCO' ? '/womens-d1/recruiting/juco' : '/womens-d1/recruiting/highschool'}
+              style={{
+                padding: '10px 20px', fontFamily: "'Outfit', sans-serif", fontSize: 14, fontWeight: 700,
+                color: tab === 'Transfers' ? SKY : MUTED,
+                borderBottom: tab === 'Transfers' ? `3px solid ${ACCENT}` : '3px solid transparent',
+                marginBottom: -2, letterSpacing: '0.01em', textDecoration: 'none',
+              }}>
+              {tab}
+            </a>
+          ))}
         </div>
 
         {/* Row 1: Search + Division filter + Stat mode toggle */}
