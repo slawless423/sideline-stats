@@ -226,7 +226,6 @@ function calcStats(p: Player, team: TeamRow | undefined) {
   };
 }
 
-}
 
 const ADVANCED_COLS: { label: string; key: SortKey }[] = [
   { label: '%Min',   key: 'minPct'   }, { label: 'ORtg',   key: 'ortg'     },
