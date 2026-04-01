@@ -269,15 +269,15 @@ const ADVANCED_COLS: { label: string; key: SortKey }[] = [
 ];
 
 const PER_GAME_COLS: { label: string; key: SortKey }[] = [
-  { label: 'PPG',  key: 'ppg'      }, { label: 'RPG',  key: 'rpg'      },
-  { label: 'ORB',  key: 'orbpg'    }, { label: 'DRB',  key: 'drbpg'    },
-  { label: 'APG',  key: 'apg'      }, { label: 'SPG',  key: 'spg'      },
-  { label: 'BPG',  key: 'bpg'      }, { label: 'MPG',  key: 'mpg'      },
-  { label: 'FG%',  key: 'fgPct'    }, { label: '2PM',  key: 'twopmPg'  },
-  { label: '2PA',  key: 'twopaPg'  }, { label: '2P%',  key: 'twopPctPg'  },
-  { label: '3PM',  key: 'tpmPg'    }, { label: '3PA',  key: 'tpaPg'    },
-  { label: '3P%',  key: 'tpPctPg'    }, { label: 'FTM',  key: 'ftmPg'    },
-  { label: 'FTA',  key: 'ftaPg'    }, { label: 'FT%',  key: 'ftPctPg'    },
+  { label: 'MPG',  key: 'mpg'      }, { label: 'PPG',  key: 'ppg'      },
+  { label: 'RPG',  key: 'rpg'      }, { label: 'ORB',  key: 'orbpg'    },
+  { label: 'DRB',  key: 'drbpg'    }, { label: 'APG',  key: 'apg'      },
+  { label: 'SPG',  key: 'spg'      }, { label: 'BPG',  key: 'bpg'      },
+  { label: '2PM',  key: 'twopm'    }, { label: '2PA',  key: 'twopa'    },
+  { label: '2P%',  key: 'twopPctPg'  }, { label: '3PM',  key: 'tpm'      },
+  { label: '3PA',  key: 'tpa'      }, { label: '3P%',  key: 'tpPctPg'  },
+  { label: 'FTM',  key: 'ftm'      }, { label: 'FTA',  key: 'fta'      },
+  { label: 'FT%',  key: 'ftPctPg'  },
 ];
 
 const PER_40_COLS: { label: string; key: SortKey }[] = [
@@ -285,11 +285,11 @@ const PER_40_COLS: { label: string; key: SortKey }[] = [
   { label: 'ORB/40', key: 'orb40'     }, { label: 'DRB/40', key: 'drb40'     },
   { label: 'AST/40', key: 'a40'       }, { label: 'STL/40', key: 's40'       },
   { label: 'BLK/40', key: 'b40'       }, { label: 'FC/40',  key: 'fc40'      },
-  { label: 'FG%',    key: 'fgPct'     }, { label: '2PM',    key: 'twopm40'   },
-  { label: '2PA',    key: 'twopa40'   }, { label: '2P%',    key: 'twopPct40' },
-  { label: '3PM',    key: 'tpm40'     }, { label: '3PA',    key: 'tpa40'     },
-  { label: '3P%',    key: 'tpPct40'  }, { label: 'FTM',    key: 'ftm40'     },
-  { label: 'FTA',    key: 'fta40'     }, { label: 'FT%',    key: 'ftPct40'   },
+  { label: '2PM',    key: 'twopm'     }, { label: '2PA',    key: 'twopa'     },
+  { label: '2P%',    key: 'twopPct40' }, { label: '3PM',    key: 'tpm'       },
+  { label: '3PA',    key: 'tpa'       }, { label: '3P%',    key: 'tpPct40'  },
+  { label: 'FTM',    key: 'ftm'       }, { label: 'FTA',    key: 'fta'       },
+  { label: 'FT%',    key: 'ftPct40'   },
 ];
 
 const INTEGER_KEYS = new Set(['twopm','twopa','tpm','tpa','ftm','fta']);
@@ -467,7 +467,6 @@ export default function NjcaaWomensDivisionPage() {
                   <tr style={{ borderBottom: `2px solid ${ACCENT}`, background: FROST }}>
                     <SortableHeader label="Player" sk="name" align="left" />
                     <SortableHeader label="Team" sk="teamName" align="left" />
-                    <th style={{ padding: '6px 8px', textAlign: 'center', fontWeight: 700, fontSize: 10 }}>#</th>
                     <SortableHeader label="G" sk="games" />
                     {activeCols.map(col => <SortableHeader key={col.key} label={col.label} sk={col.key} />)}
                   </tr>
@@ -484,7 +483,6 @@ export default function NjcaaWomensDivisionPage() {
                         <td style={{ padding: '5px 8px', color: MUTED, minWidth: 160, maxWidth: 160, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                           {p.teamName}
                         </td>
-                        <td style={{ padding: '5px 8px', textAlign: 'center' }}>{p.jersey || '—'}</td>
                         <td style={{ padding: '5px 8px', textAlign: 'right' }}>
                           {statMode === 'perGame' ? (p.games ?? '—') : (p.cleanGames ?? '—')}
                         </td>
