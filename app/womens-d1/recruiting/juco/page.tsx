@@ -44,11 +44,11 @@ type TeamRow = {
   cleanGames: number;
   fgm: number; fga: number; tpm: number; tpa: number; ftm: number; fta: number;
   orb: number; trb: number; ast: number; tov: number; points: number;
-  cleanFga: number; cleanFta: number; cleanOrb: number; cleanTrb: number; cleanTov: number;
-  cleanOppFga: number; cleanOppFta: number; cleanOppOrb: number; cleanOppTrb: number; cleanOppTov: number;
-  // Optional clean team totals for ORtg
-  cleanFgm?: number; cleanTpm?: number; cleanFtm?: number; cleanAst?: number; cleanPts?: number;
-  cleanOppTpa?: number;
+  cleanFgm: number; cleanFga: number; cleanTpm: number; cleanFtm: number; cleanFta: number;
+  cleanAst: number; cleanPts: number;
+  cleanOrb: number; cleanTrb: number; cleanTov: number;
+  cleanOppFga: number; cleanOppTpa: number; cleanOppFta: number;
+  cleanOppOrb: number; cleanOppTrb: number; cleanOppTov: number;
 };
 
 type SortKey =
@@ -115,7 +115,7 @@ function calcStats(p: Player, team: TeamRow | undefined) {
   const cpf  = p.cleanPf  ?? 0;
   const cpts = p.cleanPts ?? 0;
 
-  const hasClean = cg > 0 && cm > 0;
+  const hasClean = cg >= 3 && cm >= 30;
 
   // ── Per Game (all games) ─────────────────────────────────────────────────
   const fgPct   = fga > 0 ? (fgm / fga) * 100 : 0;
@@ -163,21 +163,21 @@ function calcStats(p: Player, team: TeamRow | undefined) {
     drbPct = cm > 0 && (team_drb + team.cleanOppOrb) > 0
       ? (cdrb / cm) * (teamCleanMin / 5) / (team_drb + team.cleanOppOrb) * 100 : 0;
 
-    const aRateDenom = ((cm / (teamCleanMin / 5)) * (team.cleanFgm ?? team.fgm / team.games * team.cleanGames)) - cfgm;
+    const aRateDenom = ((cm / (teamCleanMin / 5)) * team.cleanFgm) - cfgm;
     aRate = aRateDenom > 0 ? (cast / aRateDenom) * 100 : 0;
 
     const playerPoss = cfga + 0.44 * cfta + ctov;
     toRate = playerPoss > 0 ? (ctov / playerPoss) * 100 : 0;
 
     const oppPoss = team.cleanOppFga - team.cleanOppOrb + team.cleanOppTov + 0.475 * team.cleanOppFta;
-    const opp2PA  = team.cleanOppFga - (team.cleanOppTpa ?? 0);
+    const opp2PA  = team.cleanOppFga - team.cleanOppTpa;
     blkPct = (cm * opp2PA) > 0 ? 100 * (cblk * (teamCleanMin / 5)) / (cm * opp2PA) : 0;
     stlPct = (cm * oppPoss) > 0 ? 100 * (cstl * (teamCleanMin / 5)) / (cm * oppPoss) : 0;
 
     // ORtg (Dean Oliver) - using clean stats
-    const teamFgm_clean = team.cleanFgm ?? (team.fgm / team.games * team.cleanGames);
-    const teamPts_clean = team.cleanPts ?? (team.points / team.games * team.cleanGames);
-    const teamFtm_clean = team.cleanFtm ?? (team.ftm / team.games * team.cleanGames);
+    const teamFgm_clean = team.cleanFgm;
+    const teamPts_clean = team.cleanPts;
+    const teamFtm_clean = team.cleanFtm;
     const qAST = ((cm / (teamCleanMin / 5)) * (1.14 * ((teamFgm_clean - cfgm) / (teamFgm_clean || 1)))) +
       ((((team.cleanAst ?? 0) / teamCleanMin * cm * 5 - cast) / (((teamFgm_clean / teamCleanMin) * cm * 5 - cfgm) || 1)) * (1 - cm / (teamCleanMin / 5)));
     const FG_Part  = cfgm * (1 - 0.5 * ((cpts - cftm) / (2 * cfga || 1)) * qAST);
