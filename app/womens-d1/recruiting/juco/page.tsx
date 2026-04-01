@@ -326,6 +326,13 @@ export default function NjcaaWomensDivisionPage() {
 
   const filtered = useMemo(() => players.filter(p => {
     if (!hasStats(p)) return false;
+    // Minimum game threshold by mode
+    if (statMode === 'perGame') {
+      if ((p.games ?? 0) < 5) return false;
+    } else {
+      // Advanced and Per 40 require clean games
+      if ((p.cleanGames ?? 0) < 5) return false;
+    }
     if (minMinutes > 0 && (p.minutes ?? 0) < minMinutes) return false;
     if (searchTerm) {
       const q = searchTerm.toLowerCase();
@@ -333,7 +340,7 @@ export default function NjcaaWomensDivisionPage() {
           !p.teamName.toLowerCase().includes(q)) return false;
     }
     return true;
-  }), [players, searchTerm, minMinutes]);
+  }), [players, statMode, searchTerm, minMinutes]);
 
   const sorted = useMemo(() => [...filtered].sort((a, b) => {
     if (sortKey === 'name') return sortOrder === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
