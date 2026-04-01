@@ -203,12 +203,27 @@ function calcStats(p: Player, team: TeamRow | undefined) {
   const cm40 = cm || 1;
 
   return {
-    // Advanced (clean games)
-    ortg, usagePct, minPct, shotsPct, efg, ts,
-    orbPct, drbPct, aRate, toRate, blkPct, stlPct, ftRate,
-    twopm: c_twopm, twopa: c_twopa, twopPct: c_twopPct,
-    tpm: ctpm, tpa: ctpa, tpPct: c_tpPct,
-    ftm: cftm, fta: cfta, ftPct: c_ftPct,
+    // Advanced (clean games) — null if no clean data
+    ortg:     hasClean ? ortg     : null,
+    usagePct: hasClean ? usagePct : null,
+    minPct:   hasClean ? minPct   : null,
+    shotsPct: hasClean ? shotsPct : null,
+    orbPct:   hasClean ? orbPct   : null,
+    drbPct:   hasClean ? drbPct   : null,
+    aRate:    hasClean ? aRate    : null,
+    toRate:   hasClean ? toRate   : null,
+    blkPct:   hasClean ? blkPct   : null,
+    stlPct:   hasClean ? stlPct   : null,
+    efg, ts, ftRate,
+    twopm:   hasClean ? c_twopm   : null,
+    twopa:   hasClean ? c_twopa   : null,
+    twopPct: hasClean ? c_twopPct : null,
+    tpm:     hasClean ? ctpm      : null,
+    tpa:     hasClean ? ctpa      : null,
+    tpPct:   hasClean ? c_tpPct   : null,
+    ftm:     hasClean ? cftm      : null,
+    fta:     hasClean ? cfta      : null,
+    ftPct:   hasClean ? c_ftPct   : null,
     // Per Game (all games)
     ppg: pts/g, rpg: trb/g, orbpg: orb/g, drbpg: drb/g,
     apg: ast/g, spg: stl/g, bpg: blk/g, mpg: (p.minutes ?? 0)/g,
@@ -217,12 +232,24 @@ function calcStats(p: Player, team: TeamRow | undefined) {
     twopmPg: twopm/g, twopaPg: twopa/g, twopPctPg: twopPct,
     tpmPg: tpm/g, tpaPg: tpa/g, tpPctPg: tpPct,
     ftmPg: ftm/g, ftaPg: fta/g, ftPctPg: ftPct,
-    // Per 40 (clean games)
-    p40: cpts/cm40*40, r40: ctrb/cm40*40, orb40: corb/cm40*40, drb40: cdrb/cm40*40,
-    a40: cast/cm40*40, s40: cstl/cm40*40, b40: cblk/cm40*40, fc40: cpf/cm40*40,
-    twopm40: c_twopm/cm40*40, twopa40: c_twopa/cm40*40, twopPct40: c_twopPct,
-    tpm40: ctpm/cm40*40, tpa40: ctpa/cm40*40, tpPct40: c_tpPct,
-    ftm40: cftm/cm40*40, fta40: cfta/cm40*40, ftPct40: c_ftPct,
+    // Per 40 (clean games) — null if no clean data
+    p40:      hasClean ? cpts/cm40*40    : null,
+    r40:      hasClean ? ctrb/cm40*40    : null,
+    orb40:    hasClean ? corb/cm40*40    : null,
+    drb40:    hasClean ? cdrb/cm40*40    : null,
+    a40:      hasClean ? cast/cm40*40    : null,
+    s40:      hasClean ? cstl/cm40*40    : null,
+    b40:      hasClean ? cblk/cm40*40    : null,
+    fc40:     hasClean ? cpf/cm40*40     : null,
+    twopm40:  hasClean ? c_twopm/cm40*40 : null,
+    twopa40:  hasClean ? c_twopa/cm40*40 : null,
+    twopPct40: hasClean ? c_twopPct      : null,
+    tpm40:    hasClean ? ctpm/cm40*40    : null,
+    tpa40:    hasClean ? ctpa/cm40*40    : null,
+    tpPct40:  hasClean ? c_tpPct         : null,
+    ftm40:    hasClean ? cftm/cm40*40    : null,
+    fta40:    hasClean ? cfta/cm40*40    : null,
+    ftPct40:  hasClean ? c_ftPct         : null,
   };
 }
 
@@ -451,7 +478,9 @@ export default function NjcaaWomensDivisionPage() {
                           {p.teamName}
                         </td>
                         <td style={{ padding: '5px 8px', textAlign: 'center' }}>{p.jersey || '—'}</td>
-                        <td style={{ padding: '5px 8px', textAlign: 'right' }}>{p.games ?? '—'}</td>
+                        <td style={{ padding: '5px 8px', textAlign: 'right' }}>
+                          {statMode === 'perGame' ? (p.games ?? '—') : (p.cleanGames ?? '—')}
+                        </td>
                         {activeCols.map(col => {
                           const val = stats ? (stats as Record<string, number>)[col.key] : undefined;
                           return (
