@@ -115,7 +115,7 @@ function calcStats(p: Player, team: TeamRow | undefined) {
   const cpf  = p.cleanPf  ?? 0;
   const cpts = p.cleanPts ?? 0;
 
-  const hasClean = cg >= 3 && cm >= 30;
+  const hasClean = cg > 0 && cm > 0;
 
   // ── Per Game (all games) ─────────────────────────────────────────────────
   const fgPct   = fga > 0 ? (fgm / fga) * 100 : 0;
