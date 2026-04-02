@@ -164,6 +164,19 @@ const TEAM_STATES: Record<string, string> = {
   'Westmoreland County Community College': 'PA', 'Wilbur Wright College': 'IL',
   'Williston State College': 'ND', 'WVU Potomac State College': 'WV',
   'Yavapai College': 'AZ',
+  'Butler Community College - KS': 'KS',
+  'Chipola College': 'FL',
+  'Cleveland State Community College': 'TN',
+  'Cloud County Community College': 'KS',
+  'Coahoma Community College': 'MS',
+  'Collin County Community College': 'TX',
+  'Cowley County Community College': 'KS',
+  'Highland Community College - Illinois': 'IL',
+  'Kalamazoo Valley Community College': 'MI',
+  'Lake Region State College - ND': 'ND',
+  'Seward County': 'KS',
+  'Shorter College': 'AR',
+  'Ulster County Community College': 'NY',
 };
 const SKY     = "#2E7DD1";
 const ICE     = "#A8C8F0";
@@ -672,11 +685,12 @@ export default function NjcaaWomensDivisionPage() {
                           {p.teamName}{TEAM_STATES[p.teamName] ? ` (${TEAM_STATES[p.teamName]})` : ''}
                         </td>
                         <td style={{ padding: '4px 5px', textAlign: 'center' }}>
-                          <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center',
+                          <div style={{ display: 'inline-flex', alignItems: 'center',
                             background: p.division === 'njcaa-womens-d1' ? D1_COLOR : D2_COLOR,
-                            borderRadius: 4, padding: '2px 5px', lineHeight: 1.2 }}>
-                            <span style={{ fontSize: 8, fontWeight: 700, color: '#fff', letterSpacing: '0.03em' }}>NJCAA</span>
-                            <span style={{ fontSize: 9, fontWeight: 800, color: '#fff' }}>{p.division === 'njcaa-womens-d1' ? 'D1' : 'D2'}</span>
+                            borderRadius: 4, padding: '2px 6px' }}>
+                            <span style={{ fontSize: 9, fontWeight: 800, color: '#fff', letterSpacing: '0.03em', whiteSpace: 'nowrap' }}>
+                              {p.division === 'njcaa-womens-d1' ? 'JUCO-D1' : 'JUCO-D2'}
+                            </span>
                           </div>
                         </td>
                         <td style={{ padding: '5px 8px', textAlign: 'right' }}>
