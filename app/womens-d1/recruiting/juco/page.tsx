@@ -461,7 +461,7 @@ export default function NjcaaWomensDivisionPage() {
             <p style={{ fontSize: 12, color: MUTED, marginBottom: 12 }}>
               Showing {sorted.length} players
             </p>
-            <div style={{ overflowX: 'auto' }}>
+            <div style={{ overflowX: 'auto', overflowY: 'visible' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11, whiteSpace: 'nowrap' }}>
                 <thead>
                   <tr style={{ borderBottom: `2px solid ${ACCENT}`, background: FROST, position: 'sticky', top: 0, zIndex: 2 }}>
