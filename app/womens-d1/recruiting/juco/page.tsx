@@ -165,18 +165,14 @@ const TEAM_STATES: Record<string, string> = {
   'Williston State College': 'ND', 'WVU Potomac State College': 'WV',
   'Yavapai College': 'AZ',
   'Butler Community College - KS': 'KS',
-  'Chipola College': 'FL',
   'Cleveland State Community College': 'TN',
   'Cloud County Community College': 'KS',
   'Coahoma Community College': 'MS',
   'Collin County Community College': 'TX',
   'Cowley County Community College': 'KS',
   'Highland Community College - Illinois': 'IL',
-  'Kalamazoo Valley Community College': 'MI',
   'Lake Region State College - ND': 'ND',
   'Seward County': 'KS',
-  'Shorter College': 'AR',
-  'Ulster County Community College': 'NY',
 };
 const SKY     = "#2E7DD1";
 const ICE     = "#A8C8F0";
