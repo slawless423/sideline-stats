@@ -230,7 +230,7 @@ type SortKey =
   | 'twopmPg' | 'twopaPg' | 'twopPctPg' | 'tpmPg' | 'tpaPg' | 'tpPctPg' | 'ftmPg' | 'ftaPg' | 'ftPctPg'
   | 'allTwopm' | 'allTwopa' | 'allTwopPct' | 'allTpm' | 'allTpa' | 'allTpPct' | 'allFtm' | 'allFta' | 'allFtPct'
   | 'totalMin'
-  | 'p40' | 'r40' | 'orb40' | 'drb40' | 'a40' | 's40' | 'b40' | 'fc40'
+  | 'p40' | 'r40' | 'orb40' | 'drb40' | 'a40' | 'tov40' | 's40' | 'b40' | 'fc40' | 'tovpg'
   | 'twopm40' | 'twopa40' | 'twopPct40' | 'tpm40' | 'tpa40' | 'tpPct40' | 'ftm40' | 'fta40' | 'ftPct40';
 
 const MIN_MINUTES_OPTIONS = [0, 50, 100, 150, 200, 300];
@@ -423,6 +423,7 @@ function calcStats(p: Player, team: TeamRow | undefined) {
     orb40:    hasClean ? corb/cm40*40    : null,
     drb40:    hasClean ? cdrb/cm40*40    : null,
     a40:      hasClean ? cast/cm40*40    : null,
+    tov40:    hasClean ? (p.cleanTov??0)/cm40*40 : null,
     s40:      hasClean ? cstl/cm40*40    : null,
     b40:      hasClean ? cblk/cm40*40    : null,
     fc40:     hasClean ? cpf/cm40*40     : null,
