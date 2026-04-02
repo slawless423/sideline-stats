@@ -58,6 +58,7 @@ type SortKey =
   | 'twopm' | 'twopa' | 'twopPct' | 'tpm' | 'tpa' | 'tpPct' | 'ftm' | 'fta' | 'ftPct'
   | 'ppg' | 'rpg' | 'orbpg' | 'drbpg' | 'apg' | 'spg' | 'bpg' | 'mpg' | 'fgPct'
   | 'twopmPg' | 'twopaPg' | 'twopPctPg' | 'tpmPg' | 'tpaPg' | 'tpPctPg' | 'ftmPg' | 'ftaPg' | 'ftPctPg'
+  | 'totalMin'
   | 'p40' | 'r40' | 'orb40' | 'drb40' | 'a40' | 's40' | 'b40' | 'fc40'
   | 'twopm40' | 'twopa40' | 'twopPct40' | 'tpm40' | 'tpa40' | 'tpPct40' | 'ftm40' | 'fta40' | 'ftPct40';
 
@@ -224,6 +225,9 @@ function calcStats(p: Player, team: TeamRow | undefined) {
     ftm:     hasClean ? cftm      : null,
     fta:     hasClean ? cfta      : null,
     ftPct:   hasClean ? c_ftPct   : null,
+    // Minutes (mode-dependent - handled in column display)
+    cleanMinTotal: cm,
+    allMinTotal: p.minutes ?? 0,
     // Per Game (all games)
     ppg: pts/g, rpg: trb/g, orbpg: orb/g, drbpg: drb/g,
     apg: ast/g, spg: stl/g, bpg: blk/g, mpg: (p.minutes ?? 0)/g,
@@ -266,6 +270,7 @@ const ADVANCED_COLS: { label: string; key: SortKey }[] = [
   { label: '3PM',    key: 'tpm'      }, { label: '3PA',    key: 'tpa'      },
   { label: '3P%',    key: 'tpPct'   }, { label: 'FTM',    key: 'ftm'      },
   { label: 'FTA',    key: 'fta'      }, { label: 'FT%',    key: 'ftPct'    },
+  { label: 'MIN',    key: 'totalMin' },
 ];
 
 const PER_GAME_COLS: { label: string; key: SortKey }[] = [
@@ -277,7 +282,7 @@ const PER_GAME_COLS: { label: string; key: SortKey }[] = [
   { label: '2P%',  key: 'twopPctPg'  }, { label: '3PM',  key: 'tpm'      },
   { label: '3PA',  key: 'tpa'      }, { label: '3P%',  key: 'tpPctPg'  },
   { label: 'FTM',  key: 'ftm'      }, { label: 'FTA',  key: 'fta'      },
-  { label: 'FT%',  key: 'ftPctPg'  },
+  { label: 'FT%',  key: 'ftPctPg'  }, { label: 'MIN',  key: 'totalMin' },
 ];
 
 const PER_40_COLS: { label: string; key: SortKey }[] = [
@@ -289,7 +294,7 @@ const PER_40_COLS: { label: string; key: SortKey }[] = [
   { label: '2P%',    key: 'twopPct40' }, { label: '3PM',    key: 'tpm'       },
   { label: '3PA',    key: 'tpa'       }, { label: '3P%',    key: 'tpPct40'  },
   { label: 'FTM',    key: 'ftm'       }, { label: 'FTA',    key: 'fta'       },
-  { label: 'FT%',    key: 'ftPct40'   },
+  { label: 'FT%',    key: 'ftPct40'   }, { label: 'MIN',    key: 'totalMin'  },
 ];
 
 const INTEGER_KEYS = new Set(['twopm','twopa','tpm','tpa','ftm','fta']);
@@ -346,6 +351,11 @@ export default function NjcaaWomensDivisionPage() {
     if (sortKey === 'name') return sortOrder === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
     if (sortKey === 'teamName') return sortOrder === 'asc' ? a.teamName.localeCompare(b.teamName) : b.teamName.localeCompare(a.teamName);
     if (sortKey === 'games') { const ag = statMode === 'perGame' ? (a.games ?? 0) : (a.cleanGames ?? 0); const bg = statMode === 'perGame' ? (b.games ?? 0) : (b.cleanGames ?? 0); return sortOrder === 'asc' ? ag - bg : bg - ag; }
+    if (sortKey === 'totalMin') {
+      const am = statMode === 'perGame' ? (a.minutes ?? 0) : (a.cleanMin ?? 0);
+      const bm = statMode === 'perGame' ? (b.minutes ?? 0) : (b.cleanMin ?? 0);
+      return sortOrder === 'asc' ? am - bm : bm - am;
+    }
     const as_ = calcStats(a, teamMap.get(a.teamName));
     const bs_ = calcStats(b, teamMap.get(b.teamName));
     if (!as_ && !bs_) return 0;
@@ -487,14 +497,19 @@ export default function NjcaaWomensDivisionPage() {
                           {statMode === 'perGame' ? (p.games ?? '—') : (p.cleanGames ?? '—')}
                         </td>
                         {activeCols.map(col => {
-                          const val = stats ? (stats as Record<string, number>)[col.key] : undefined;
+                          let val: number | undefined;
+                          if (col.key === 'totalMin') {
+                            val = statMode === 'perGame' ? (p.minutes ?? 0) : (p.cleanMin ?? 0);
+                          } else {
+                            val = stats ? (stats as Record<string, number>)[col.key] : undefined;
+                          }
                           return (
                             <td key={col.key} style={{
                               padding: '5px 8px', textAlign: 'right',
                               fontWeight: col.key === sortKey ? 600 : 400,
                               color: !stats ? MUTED : 'inherit',
                             }}>
-                              {val != null ? (INTEGER_KEYS.has(col.key) ? Math.round(val) : val.toFixed(1)) : '—'}
+                              {val != null ? (INTEGER_KEYS.has(col.key) || col.key === 'totalMin' ? Math.round(val) : val.toFixed(1)) : '—'}
                             </td>
                           );
                         })}
