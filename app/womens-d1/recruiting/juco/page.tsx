@@ -232,6 +232,7 @@ type SortKey =
   | 'twopm' | 'twopa' | 'twopPct' | 'tpm' | 'tpa' | 'tpPct' | 'ftm' | 'fta' | 'ftPct'
   | 'ppg' | 'rpg' | 'orbpg' | 'drbpg' | 'apg' | 'spg' | 'bpg' | 'mpg' | 'fgPct'
   | 'twopmPg' | 'twopaPg' | 'twopPctPg' | 'tpmPg' | 'tpaPg' | 'tpPctPg' | 'ftmPg' | 'ftaPg' | 'ftPctPg'
+  | 'allTwopm' | 'allTwopa' | 'allTwopPct' | 'allTpm' | 'allTpa' | 'allTpPct' | 'allFtm' | 'allFta' | 'allFtPct'
   | 'totalMin'
   | 'p40' | 'r40' | 'orb40' | 'drb40' | 'a40' | 's40' | 'b40' | 'fc40'
   | 'twopm40' | 'twopa40' | 'twopPct40' | 'tpm40' | 'tpa40' | 'tpPct40' | 'ftm40' | 'fta40' | 'ftPct40';
@@ -393,6 +394,16 @@ function calcStats(p: Player, team: TeamRow | undefined) {
     twopm:   hasClean ? c_twopm   : null,
     twopa:   hasClean ? c_twopa   : null,
     twopPct: hasClean ? c_twopPct : null,
+    // All-game shooting for perGame mode
+    allTwopm:   twopm,
+    allTwopa:   twopa,
+    allTwopPct: twopPct,
+    allTpm:     tpm,
+    allTpa:     tpa,
+    allTpPct:   tpPct,
+    allFtm:     ftm,
+    allFta:     fta,
+    allFtPct:   ftPct,
     tpm:     hasClean ? ctpm      : null,
     tpa:     hasClean ? ctpa      : null,
     tpPct:   hasClean ? c_tpPct   : null,
@@ -451,11 +462,11 @@ const PER_GAME_COLS: { label: string; key: SortKey }[] = [
   { label: 'RPG',  key: 'rpg'      }, { label: 'ORB',  key: 'orbpg'    },
   { label: 'DRB',  key: 'drbpg'    }, { label: 'APG',  key: 'apg'      },
   { label: 'SPG',  key: 'spg'      }, { label: 'BPG',  key: 'bpg'      },
-  { label: '2PM',  key: 'twopm'    }, { label: '2PA',  key: 'twopa'    },
-  { label: '2P%',  key: 'twopPctPg'  }, { label: '3PM',  key: 'tpm'      },
-  { label: '3PA',  key: 'tpa'      }, { label: '3P%',  key: 'tpPctPg'  },
-  { label: 'FTM',  key: 'ftm'      }, { label: 'FTA',  key: 'fta'      },
-  { label: 'FT%',  key: 'ftPctPg'  },
+  { label: '2PM',  key: 'allTwopm'    }, { label: '2PA',  key: 'allTwopa'    },
+  { label: '2P%',  key: 'allTwopPct'  }, { label: '3PM',  key: 'allTpm'      },
+  { label: '3PA',  key: 'allTpa'      }, { label: '3P%',  key: 'allTpPct'    },
+  { label: 'FTM',  key: 'allFtm'      }, { label: 'FTA',  key: 'allFta'      },
+  { label: 'FT%',  key: 'allFtPct'    },
 ];
 
 const PER_40_COLS: { label: string; key: SortKey }[] = [
@@ -470,7 +481,7 @@ const PER_40_COLS: { label: string; key: SortKey }[] = [
   { label: 'FT%',    key: 'ftPct40'   },
 ];
 
-const INTEGER_KEYS = new Set(['twopm','twopa','tpm','tpa','ftm','fta']);
+const INTEGER_KEYS = new Set(['twopm','twopa','tpm','tpa','ftm','fta','allTwopm','allTwopa','allTpm','allTpa','allFtm','allFta']);
 
 export default function NjcaaWomensDivisionPage() {
   const [players, setPlayers]     = useState<Player[]>([]);
