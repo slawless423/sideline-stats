@@ -362,6 +362,7 @@ export default function NjcaaWomensDivisionPage() {
       fontWeight: 700, fontSize: 10, whiteSpace: 'nowrap',
       background: sortKey === sk ? ACCENT : FROST,
       color: sortKey === sk ? '#fff' : 'inherit', transition: 'background 0.15s',
+      position: 'sticky', top: 0, zIndex: 2,
     }}>
       {label} {sortKey === sk && (sortOrder === 'desc' ? '↓' : '↑')}
     </th>
