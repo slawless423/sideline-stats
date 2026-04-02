@@ -270,7 +270,6 @@ const ADVANCED_COLS: { label: string; key: SortKey }[] = [
   { label: '3PM',    key: 'tpm'      }, { label: '3PA',    key: 'tpa'      },
   { label: '3P%',    key: 'tpPct'   }, { label: 'FTM',    key: 'ftm'      },
   { label: 'FTA',    key: 'fta'      }, { label: 'FT%',    key: 'ftPct'    },
-  { label: 'MIN',    key: 'totalMin' },
 ];
 
 const PER_GAME_COLS: { label: string; key: SortKey }[] = [
@@ -282,7 +281,7 @@ const PER_GAME_COLS: { label: string; key: SortKey }[] = [
   { label: '2P%',  key: 'twopPctPg'  }, { label: '3PM',  key: 'tpm'      },
   { label: '3PA',  key: 'tpa'      }, { label: '3P%',  key: 'tpPctPg'  },
   { label: 'FTM',  key: 'ftm'      }, { label: 'FTA',  key: 'fta'      },
-  { label: 'FT%',  key: 'ftPctPg'  }, { label: 'MIN',  key: 'totalMin' },
+  { label: 'FT%',  key: 'ftPctPg'  },
 ];
 
 const PER_40_COLS: { label: string; key: SortKey }[] = [
@@ -294,7 +293,7 @@ const PER_40_COLS: { label: string; key: SortKey }[] = [
   { label: '2P%',    key: 'twopPct40' }, { label: '3PM',    key: 'tpm'       },
   { label: '3PA',    key: 'tpa'       }, { label: '3P%',    key: 'tpPct40'  },
   { label: 'FTM',    key: 'ftm'       }, { label: 'FTA',    key: 'fta'       },
-  { label: 'FT%',    key: 'ftPct40'   }, { label: 'MIN',    key: 'totalMin'  },
+  { label: 'FT%',    key: 'ftPct40'   },
 ];
 
 const INTEGER_KEYS = new Set(['twopm','twopa','tpm','tpa','ftm','fta']);
@@ -306,7 +305,7 @@ export default function NjcaaWomensDivisionPage() {
   const [statMode, setStatMode]   = useState<StatMode>('advanced');
   const [searchTerm, setSearchTerm] = useState('');
   const [minMinutes, setMinMinutes] = useState(0);
-  const [sortKey, setSortKey]     = useState<SortKey>('minPct');
+  const [sortKey, setSortKey]     = useState<SortKey>('totalMin');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   useEffect(() => {
@@ -368,7 +367,7 @@ export default function NjcaaWomensDivisionPage() {
 
   const SortableHeader = ({ label, sk, align = 'right' }: { label: string; sk: SortKey; align?: 'left' | 'right' | 'center' }) => (
     <th onClick={() => handleSort(sk)} style={{
-      padding: '6px 8px', textAlign: align, cursor: 'pointer', userSelect: 'none',
+      padding: '4px 5px', textAlign: align, cursor: 'pointer', userSelect: 'none',
       fontWeight: 700, fontSize: 10, whiteSpace: 'nowrap',
       background: sortKey === sk ? ACCENT : 'transparent',
       color: sortKey === sk ? '#fff' : 'inherit', transition: 'background 0.15s',
@@ -478,6 +477,7 @@ export default function NjcaaWomensDivisionPage() {
                     <SortableHeader label="Player" sk="name" align="left" />
                     <SortableHeader label="Team" sk="teamName" align="left" />
                     <SortableHeader label="G" sk="games" />
+                    <SortableHeader label="MIN" sk="totalMin" />
                     {activeCols.map(col => <SortableHeader key={col.key} label={col.label} sk={col.key} />)}
                   </tr>
                 </thead>
@@ -490,11 +490,14 @@ export default function NjcaaWomensDivisionPage() {
                         <td style={{ padding: '5px 8px', fontWeight: 600, position: 'sticky', left: 0, background: bg, zIndex: 1, minWidth: 140, maxWidth: 140, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                           {p.name}
                         </td>
-                        <td style={{ padding: '5px 8px', color: MUTED, minWidth: 160, maxWidth: 160, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        <td style={{ padding: '5px 8px', color: MUTED, minWidth: 200, maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                           {p.teamName}
                         </td>
                         <td style={{ padding: '5px 8px', textAlign: 'right' }}>
                           {statMode === 'perGame' ? (p.games ?? '—') : (p.cleanGames ?? '—')}
+                        </td>
+                        <td style={{ padding: '5px 8px', textAlign: 'right', fontWeight: sortKey === 'totalMin' ? 600 : 400 }}>
+                          {statMode === 'perGame' ? (p.minutes ?? 0) : (p.cleanMin ?? 0)}
                         </td>
                         {activeCols.map(col => {
                           let val: number | undefined;
@@ -505,7 +508,7 @@ export default function NjcaaWomensDivisionPage() {
                           }
                           return (
                             <td key={col.key} style={{
-                              padding: '5px 8px', textAlign: 'right',
+                              padding: '4px 5px', textAlign: 'right',
                               fontWeight: col.key === sortKey ? 600 : 400,
                               color: !stats ? MUTED : 'inherit',
                             }}>
