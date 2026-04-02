@@ -3,8 +3,168 @@
 import { useEffect, useState, useMemo } from 'react';
 import SiteNavigation from '@/components/SiteNavigation';
 
-const ACCENT  = "#3B9EFF";
-const NAVY    = "#0D1F3C";
+const ACCENT   = "#3B9EFF";
+const NAVY     = "#0D1F3C";
+const D1_COLOR = "#1a6b3c";
+const D2_COLOR = "#7b3f00";
+
+const TEAM_STATES: Record<string, string> = {
+  'Albany Technical College': 'GA', 'Allegany College of Maryland': 'MD',
+  'Allen County Community College': 'KS', 'Alpena Community College': 'MI',
+  'Andrew College': 'GA', 'Angelina College': 'TX',
+  'Anne Arundel Community College': 'MD', 'Arizona Western College': 'AZ',
+  'Arkansas State Mid-South': 'AR', 'Barton Community College': 'KS',
+  'Baton Rouge Community College': 'LA', 'Bay College': 'MI',
+  'Bishop State Community College': 'AL', 'Black Hawk College': 'IL',
+  'Blackhawk Technical College': 'WI', 'Blinn College': 'TX',
+  'Brunswick Community College': 'NC', 'Bryant & Stratton College (VA)': 'VA',
+  'Bryant and Stratton College (WI)': 'WI', 'Butler Community College': 'KS',
+  'Calhoun Community College': 'AL', 'Cape Fear Community College': 'NC',
+  'Carl Sandburg College': 'IL', 'Casper College': 'WY',
+  'Catawba Valley Community College': 'NC', 'CCBC Catonsville': 'MD',
+  'CCBC Essex': 'MD', 'Cecil College': 'MD', 'Central Arizona College': 'AZ',
+  'Central Community College': 'NE', 'Central Georgia Technical College': 'GA',
+  'Central Wyoming College': 'WY', 'Chandler-Gilbert Community College': 'AZ',
+  'Chattahoochee Valley Community College': 'AL', 'Chattanooga State Community College': 'TN',
+  'Chesapeake College': 'MD', 'Chipola College': 'FL', 'Cisco College': 'TX',
+  'Clarendon College': 'TX', 'Clark State College': 'OH',
+  'Cleveland Community College': 'TN', 'Coastal Alabama - North': 'AL',
+  'Coastal Alabama - South': 'AL', 'Coastal Bend College': 'TX',
+  'Cochise College': 'AZ', 'Coffeyville Community College': 'KS',
+  'Colby Community College': 'KS', 'College of DuPage': 'IL',
+  'College of Lake County': 'IL', 'College of Southern Idaho': 'ID',
+  'College of Southern Maryland': 'MD', 'College of Southern Nevada': 'NV',
+  'Collin College': 'TX', 'Colorado Northwestern Community College': 'CO',
+  'Columbia State Community College': 'TN', 'Community Christian (Mich.)': 'MI',
+  'Community Christian College': 'CA', 'Community College of Beaver County': 'PA',
+  'Connors State College': 'OK', 'Copiah-Lincoln Community College': 'MS',
+  'County College of Morris': 'NJ', 'Cowley College': 'KS', 'Crowder College': 'MO',
+  'Cuyahoga Community College': 'OH', 'Dakota College at Bottineau': 'ND',
+  'Danville Area Community College': 'IL', 'Dawson Community College': 'MT',
+  'Daytona State College': 'FL', 'Delaware Technical Community College': 'DE',
+  'Delgado Community College': 'LA', 'Delta College': 'MI',
+  'Denmark Technical College': 'SC', 'Des Moines Area Community College': 'IA',
+  'Dodge City Community College': 'KS', 'Dyersburg State Community College': 'TN',
+  'East Central Community College': 'MS', 'East Georgia State College': 'GA',
+  'East Mississippi Community College': 'MS', 'Eastern Arizona College': 'AZ',
+  'Eastern Florida State College': 'FL', 'Eastern Oklahoma State College': 'OK',
+  'Eastern Wyoming College': 'WY', 'Edison State': 'OH',
+  'Elgin Community College': 'IL', 'Ellsworth Community College': 'IA',
+  'Enterprise State Community College': 'AL', 'Essex County College': 'NJ',
+  'Fayetteville Technical CC': 'NC', 'Florida SouthWestern State College': 'FL',
+  'Florida State College at Jacksonville': 'FL', 'Fort Hays Tech Northwest': 'KS',
+  'Fort Scott Community College': 'KS', 'Frank Phillips College': 'TX',
+  'Frederick Community College': 'MD', 'Gadsden State Community College': 'AL',
+  'Garden City Community College': 'KS', 'Garrett College': 'MD',
+  'Gillette College': 'WY', 'Glen Oaks Community College': 'MI',
+  'Glendale Community College': 'AZ', 'Gogebic Community College': 'MI',
+  'Grand Rapids Community College': 'MI', 'Grayson College': 'TX',
+  'Guilford Technical Community College': 'NC', 'Gulf Coast State College': 'FL',
+  'Hagerstown Community College': 'MD', 'Harcum College': 'PA',
+  'Harford Community College': 'MD', 'Harper College': 'IL',
+  'Harry S. Truman College': 'IL', 'Henry Ford College': 'MI',
+  'Highland Community College': 'IL', 'Highland Community College - Kansas': 'KS',
+  'Hill College': 'TX', 'Hillsborough Community College': 'FL',
+  'Hinds Community College': 'MS', 'Hocking College': 'OH',
+  'Holmes Community College': 'MS', 'Howard College': 'TX',
+  'Howard Community College': 'MD', 'Hutchinson Community College': 'KS',
+  'Illinois Central College': 'IL', 'Illinois Valley Community College': 'IL',
+  'Independence Community College': 'KS', 'Iowa Central Community College': 'IA',
+  'Iowa Lakes Community College': 'IA', 'Iowa Western Community College': 'IA',
+  'Itawamba Community College': 'MS', 'Jackson College': 'MI',
+  'Jackson State Community College': 'TN', 'Jamestown Community College': 'NY',
+  'Jefferson College': 'MO', 'John A. Logan College': 'IL',
+  'John Wood Community College': 'IL', 'Johnson County Community College': 'KS',
+  'Jones College': 'MS', 'Kalamazoo Valley Community College': 'MI',
+  'Kankakee Community College': 'IL', 'Kansas City Kansas Community College': 'KS',
+  'Kaskaskia College': 'IL', 'Kellogg Community College': 'MI',
+  'Kennedy-King College': 'IL', 'Kilgore College': 'TX',
+  'Kirkwood Community College': 'IA', 'Kirtland Community College': 'MI',
+  'Kishwaukee College': 'IL', 'Labette Community College': 'KS',
+  'Lackawanna College': 'PA', 'Lake Land College': 'IL',
+  'Lake Michigan College': 'MI', 'Lake Region State College': 'ND',
+  'Lakeland Community College': 'OH', 'Lamar Community College': 'CO',
+  'Laramie County Community College': 'WY', 'Lansing Community College': 'MI',
+  'Lawson State Community College': 'AL', 'Lewis & Clark Community College': 'IL',
+  'Lincoln Land Community College': 'IL', 'Lincoln Trail College': 'IL',
+  'Louisiana State University Eunice': 'LA', 'Louisburg College': 'NC',
+  'Lurleen B. Wallace Community College': 'AL', 'Macomb Community College': 'MI',
+  'Madison College': 'WI', 'Malcolm X College': 'IL',
+  'Marian University Ancilla': 'IN', 'Marshalltown CC': 'IA',
+  'McCook Community College': 'NE', 'McHenry County College': 'IL',
+  'McLennan Community College': 'TX', 'Mercer County Community College': 'NJ',
+  'Meridian Community College': 'MS', 'Mesa Community College': 'AZ',
+  'Metropolitan Community College': 'MO', 'Miami Dade College': 'FL',
+  'Mid Michigan College': 'MI', 'Middlesex College': 'NJ',
+  'Midland College': 'TX', 'Miles Community College': 'MT',
+  'Milwaukee Area Technical College': 'WI', 'Mineral Area College': 'MO',
+  'Mississippi Delta Community College': 'MS', 'Mississippi Gulf Coast Community College': 'MS',
+  'Moberly Area Community College': 'MO', 'Monroe Community College': 'NY',
+  'Monroe University': 'NY', 'Montcalm Community College': 'MI',
+  'Montgomery College (MD)': 'MD', 'Moraine Valley Community College': 'IL',
+  'Morton College': 'IL', 'Motlow State Community College': 'TN',
+  'Mott Community College': 'MI', 'Murray State College': 'OK',
+  'Muskegon Community College': 'MI', 'National Park College': 'AR',
+  'Neosho County Community College': 'KS', 'New Mexico Junior College': 'NM',
+  'North Arkansas College': 'AR', 'North Central Michigan': 'MI',
+  'North Central Missouri College': 'MO', 'North Dakota State College of Science': 'ND',
+  'North Idaho College': 'ID', 'North Iowa Area Community College': 'IA',
+  'North Platte Community College': 'NE', 'Northeast Community College': 'NE',
+  'Northeast Mississippi Community College': 'MS', 'Northeastern Junior College': 'CO',
+  'Northeastern Oklahoma AM College': 'OK', 'Northern Oklahoma College-Enid': 'OK',
+  'Northern Oklahoma College-Tonkawa': 'OK', 'Northwest College': 'WY',
+  'Northwest Florida State College': 'FL', 'Northwest Mississippi Community College': 'MS',
+  'Oakland Community College': 'MI', 'Oakton Community College': 'IL',
+  'Odessa College': 'TX', 'Olive-Harvey College': 'IL', 'Olney Central College': 'IL',
+  'Orange County Community College': 'NY', 'Otero College': 'CO',
+  'Palm Beach State College': 'FL', 'Panola College': 'TX',
+  'Paris Junior College': 'TX', 'Parkland College': 'IL',
+  'Pearl River Community College': 'MS', 'Pellissippi State Community College': 'TN',
+  'Pensacola State College': 'FL', 'Phillips Community College - UA': 'AR',
+  'Phoenix College': 'AZ', 'Pima Community College': 'AZ',
+  'Prairie State College': 'IL', 'Pratt Community College': 'KS',
+  "Prince George's Community College": 'MD', 'Ranger College': 'TX',
+  'Raritan Valley Community College': 'NJ', 'Redlands Community College': 'OK',
+  'Reid State Community College': 'AL', 'Rend Lake College': 'IL',
+  'Richard Bland College': 'VA', 'Richard J. Daley College': 'IL',
+  'Roane State Community College': 'TN', 'Rock Valley College': 'IL',
+  'Rockland Community College': 'NY', 'Salem Community College': 'NJ',
+  'Salt Lake Community College': 'UT', 'Santa Fe College': 'FL',
+  'Sauk Valley Community College': 'IL', 'Schoolcraft College': 'MI',
+  'Scottsdale Community College': 'AZ', 'Seminole State College': 'OK',
+  'Seward County Community College': 'KS', 'Shawnee Community College': 'IL',
+  'Shelton State Community College': 'AL', 'Shorter College': 'AR',
+  'Snead State Community College': 'AL', 'Snow College': 'UT',
+  'South Arkansas College': 'AR', 'South Georgia Technical College': 'GA',
+  'South Mountain Community College': 'AZ', 'South Plains College': 'TX',
+  'South Suburban College': 'IL', 'Southeast Arkansas College': 'AR',
+  'Southeast Community College': 'NE', 'Southeastern Community College': 'IA',
+  'Southern Arkansas University Tech': 'AR', 'Southern Crescent Technical College': 'GA',
+  'Southern Union State Community College': 'AL', 'Southern University-Shreveport': 'LA',
+  'Southwest Mississippi Community College': 'MS', 'Southwest Tennessee Community College': 'TN',
+  'Southwest Virginia': 'VA', 'Southwestern Christian College': 'TX',
+  'Southwestern Community College': 'IA', 'Southwestern Illinois College': 'IL',
+  'Southwestern Michigan': 'MI', 'Spoon River College': 'IL',
+  'St. Clair County Community College': 'MI', 'St. Louis Community College': 'MO',
+  'St. Petersburg College': 'FL', 'State Fair Community College': 'MO',
+  'SUNY Niagara': 'NY', 'Tallahassee State College': 'FL', 'Temple College': 'TX',
+  'Terra State': 'OH', 'Three Rivers College - MO': 'MO',
+  'Trinidad State College': 'CO', 'Trinity Valley Community College': 'TX',
+  'Triton College': 'IL', 'Tyler Junior College': 'TX', 'UCNJ': 'NJ',
+  'Ulster County Community College': 'NY', 'United Tribes Technical College': 'ND',
+  'University of Arkansas Cossatot': 'AR', 'USC Salkehatchie': 'SC',
+  'Utah State Eastern': 'UT', 'Vincennes University': 'IN',
+  'Volunteer State Community College': 'TN', 'Wabash Valley College': 'IL',
+  'Wake Technical Community College': 'NC', 'Wallace Community College-Selma': 'AL',
+  'Wallace State Community College-Hanceville': 'AL', 'Walters State Community College': 'TN',
+  'Waubonsee Community College': 'IL', 'Wayne County Community College': 'MI',
+  'Weatherford College': 'TX', 'Western Nebraska Community College': 'NE',
+  'Western Oklahoma State College': 'OK', 'Western Texas College': 'TX',
+  'Western Wyoming Community College': 'WY', 'Westchester Community College': 'NY',
+  'Westmoreland County Community College': 'PA', 'Wilbur Wright College': 'IL',
+  'Williston State College': 'ND', 'WVU Potomac State College': 'WV',
+  'Yavapai College': 'AZ',
+};
 const SKY     = "#2E7DD1";
 const ICE     = "#A8C8F0";
 const FROST   = "#E8F2FC";
@@ -493,6 +653,7 @@ export default function NjcaaWomensDivisionPage() {
                   <tr style={{ borderBottom: `2px solid ${ACCENT}`, background: FROST }}>
                     <SortableHeader label="Player" sk="name" align="left" />
                     <SortableHeader label="Team" sk="teamName" align="left" />
+                    <th style={{ padding: '4px 5px', textAlign: 'center', fontWeight: 700, fontSize: 10, whiteSpace: 'nowrap', color: MUTED }}>DIV</th>
                     <SortableHeader label="G" sk="games" />
                     <SortableHeader label="MIN" sk="totalMin" />
                     {activeCols.map(col => <SortableHeader key={col.key} label={col.label} sk={col.key} />)}
@@ -507,8 +668,16 @@ export default function NjcaaWomensDivisionPage() {
                         <td style={{ padding: '5px 8px', fontWeight: 600, position: 'sticky', left: 0, background: bg, zIndex: 1, minWidth: 140, maxWidth: 140, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                           {p.name}
                         </td>
-                        <td style={{ padding: '5px 8px', color: MUTED, minWidth: 200, maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                          {p.teamName}
+                        <td style={{ padding: '5px 8px', color: MUTED, minWidth: 210, maxWidth: 210, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          {p.teamName}{TEAM_STATES[p.teamName] ? ` (${TEAM_STATES[p.teamName]})` : ''}
+                        </td>
+                        <td style={{ padding: '4px 5px', textAlign: 'center' }}>
+                          <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center',
+                            background: p.division === 'njcaa-womens-d1' ? D1_COLOR : D2_COLOR,
+                            borderRadius: 4, padding: '2px 5px', lineHeight: 1.2 }}>
+                            <span style={{ fontSize: 8, fontWeight: 700, color: '#fff', letterSpacing: '0.03em' }}>NJCAA</span>
+                            <span style={{ fontSize: 9, fontWeight: 800, color: '#fff' }}>{p.division === 'njcaa-womens-d1' ? 'D1' : 'D2'}</span>
+                          </div>
                         </td>
                         <td style={{ padding: '5px 8px', textAlign: 'right' }}>
                           {statMode === 'perGame' ? (p.games ?? '—') : (p.cleanGames ?? '—')}
