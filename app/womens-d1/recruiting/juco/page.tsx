@@ -226,7 +226,7 @@ type SortKey =
   | 'ortg' | 'usagePct' | 'minPct' | 'shotsPct' | 'efg' | 'ts'
   | 'orbPct' | 'drbPct' | 'aRate' | 'toRate' | 'blkPct' | 'stlPct' | 'ftRate'
   | 'twopm' | 'twopa' | 'twopPct' | 'tpm' | 'tpa' | 'tpPct' | 'ftm' | 'fta' | 'ftPct'
-  | 'ppg' | 'rpg' | 'orbpg' | 'drbpg' | 'apg' | 'spg' | 'bpg' | 'mpg' | 'fgPct'
+  | 'ppg' | 'rpg' | 'orbpg' | 'drbpg' | 'apg' | 'tovpg' | 'spg' | 'bpg' | 'mpg' | 'fgPct'
   | 'twopmPg' | 'twopaPg' | 'twopPctPg' | 'tpmPg' | 'tpaPg' | 'tpPctPg' | 'ftmPg' | 'ftaPg' | 'ftPctPg'
   | 'allTwopm' | 'allTwopa' | 'allTwopPct' | 'allTpm' | 'allTpa' | 'allTpPct' | 'allFtm' | 'allFta' | 'allFtPct'
   | 'totalMin'
@@ -411,7 +411,7 @@ function calcStats(p: Player, team: TeamRow | undefined) {
     allMinTotal: p.minutes ?? 0,
     // Per Game (all games)
     ppg: pts/g, rpg: trb/g, orbpg: orb/g, drbpg: drb/g,
-    apg: ast/g, spg: stl/g, bpg: blk/g, mpg: (p.minutes ?? 0)/g,
+    apg: ast/g, tovpg: tov/g, spg: stl/g, bpg: blk/g, mpg: (p.minutes ?? 0)/g,
     fgPct,
     // Per Game shooting (all games)
     twopmPg: twopm/g, twopaPg: twopa/g, twopPctPg: twopPct,
@@ -457,7 +457,7 @@ const PER_GAME_COLS: { label: string; key: SortKey }[] = [
   { label: 'MPG',  key: 'mpg'      }, { label: 'PPG',  key: 'ppg'      },
   { label: 'RPG',  key: 'rpg'      }, { label: 'ORB',  key: 'orbpg'    },
   { label: 'DRB',  key: 'drbpg'    }, { label: 'APG',  key: 'apg'      },
-  { label: 'SPG',  key: 'spg'      }, { label: 'BPG',  key: 'bpg'      },
+  { label: 'TOV',  key: 'tovpg'   }, { label: 'SPG',  key: 'spg'      }, { label: 'BPG',  key: 'bpg'      },
   { label: '2PM',  key: 'allTwopm'    }, { label: '2PA',  key: 'allTwopa'    },
   { label: '2P%',  key: 'allTwopPct'  }, { label: '3PM',  key: 'allTpm'      },
   { label: '3PA',  key: 'allTpa'      }, { label: '3P%',  key: 'allTpPct'    },
@@ -468,7 +468,7 @@ const PER_GAME_COLS: { label: string; key: SortKey }[] = [
 const PER_40_COLS: { label: string; key: SortKey }[] = [
   { label: 'PTS/40', key: 'p40'       }, { label: 'REB/40', key: 'r40'       },
   { label: 'ORB/40', key: 'orb40'     }, { label: 'DRB/40', key: 'drb40'     },
-  { label: 'AST/40', key: 'a40'       }, { label: 'STL/40', key: 's40'       },
+  { label: 'AST/40', key: 'a40'       }, { label: 'TOV/40', key: 'tov40'     }, { label: 'STL/40', key: 's40'       },
   { label: 'BLK/40', key: 'b40'       }, { label: 'FC/40',  key: 'fc40'      },
   { label: '2PM',    key: 'twopm'     }, { label: '2PA',    key: 'twopa'     },
   { label: '2P%',    key: 'twopPct40' }, { label: '3PM',    key: 'tpm'       },
