@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-03-30T11:51:02.998Z",
+  "generated_at_utc": "2026-04-02T11:40:43.635Z",
   "season_start": "2025-11-04",
   "rows": [
     {
@@ -953,6 +953,16 @@
       "adjT": 70.03
     },
     {
+      "teamId": "2218",
+      "team": "Baylor",
+      "conference": "big-12",
+      "games": 33,
+      "adjO": 117.59343664539654,
+      "adjD": 109.5502867153412,
+      "adjEM": 8.043149930055336,
+      "adjT": 69.8090909090909
+    },
+    {
       "teamId": "1647",
       "team": "Northern Ky.",
       "conference": "horizon",
@@ -1023,16 +1033,6 @@
       "adjT": 68.3796875
     },
     {
-      "teamId": "2290",
-      "team": "Oklahoma",
-      "conference": "sec",
-      "games": 34,
-      "adjO": 119.72505373369368,
-      "adjD": 112.22196056603369,
-      "adjEM": 7.503093167659998,
-      "adjT": 69.10441176470589
-    },
-    {
       "teamId": "1442",
       "team": "UC San Diego",
       "conference": "big-west",
@@ -1053,14 +1053,14 @@
       "adjT": 64.57941176470588
     },
     {
-      "teamId": "2218",
-      "team": "Baylor",
-      "conference": "big-12",
-      "games": 32,
-      "adjO": 117.74143232764382,
-      "adjD": 110.29953762648262,
-      "adjEM": 7.441894701161203,
-      "adjT": 70.121875
+      "teamId": "2290",
+      "team": "Oklahoma",
+      "conference": "sec",
+      "games": 35,
+      "adjO": 119.32997636419688,
+      "adjD": 111.94855411846201,
+      "adjEM": 7.381422245734868,
+      "adjT": 69.50714285714285
     },
     {
       "teamId": "1386",
@@ -1753,16 +1753,6 @@
       "adjT": 71.31617647058823
     },
     {
-      "teamId": "2197",
-      "team": "Minnesota",
-      "conference": "big-ten",
-      "games": 32,
-      "adjO": 110.37098144477142,
-      "adjD": 107.08530689975095,
-      "adjEM": 3.28567454502047,
-      "adjT": 63.45078125
-    },
-    {
       "teamId": "625",
       "team": "Chattanooga",
       "conference": "socon",
@@ -1913,6 +1903,16 @@
       "adjT": 69.6703125
     },
     {
+      "teamId": "2197",
+      "team": "Minnesota",
+      "conference": "big-ten",
+      "games": 33,
+      "adjO": 109.54511736976859,
+      "adjD": 107.22588603691227,
+      "adjEM": 2.3192313328563188,
+      "adjT": 63.31969696969698
+    },
+    {
       "teamId": "335",
       "team": "Wofford",
       "conference": "socon",
@@ -2023,16 +2023,6 @@
       "adjT": 70.296875
     },
     {
-      "teamId": "2428",
-      "team": "Colorado",
-      "conference": "big-12",
-      "games": 32,
-      "adjO": 113.63989608544087,
-      "adjD": 112.10089962956431,
-      "adjEM": 1.538996455876557,
-      "adjT": 70.3703125
-    },
-    {
       "teamId": "731",
       "team": "Drexel",
       "conference": "caa",
@@ -2041,6 +2031,16 @@
       "adjD": 102.32783146546262,
       "adjEM": 1.3555351292978344,
       "adjT": 65.6719696969697
+    },
+    {
+      "teamId": "2428",
+      "team": "Colorado",
+      "conference": "big-12",
+      "games": 33,
+      "adjO": 113.30655957161981,
+      "adjD": 111.96188531563722,
+      "adjEM": 1.3446742559825964,
+      "adjT": 70.73863636363636
     },
     {
       "teamId": "1058",
