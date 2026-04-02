@@ -360,9 +360,8 @@ export default function NjcaaWomensDivisionPage() {
     <th onClick={() => handleSort(sk)} style={{
       padding: '6px 8px', textAlign: align, cursor: 'pointer', userSelect: 'none',
       fontWeight: 700, fontSize: 10, whiteSpace: 'nowrap',
-      background: sortKey === sk ? ACCENT : FROST,
+      background: sortKey === sk ? ACCENT : 'transparent',
       color: sortKey === sk ? '#fff' : 'inherit', transition: 'background 0.15s',
-      position: 'sticky', top: 0, zIndex: 2,
     }}>
       {label} {sortKey === sk && (sortOrder === 'desc' ? '↓' : '↑')}
     </th>
@@ -462,10 +461,10 @@ export default function NjcaaWomensDivisionPage() {
             <p style={{ fontSize: 12, color: MUTED, marginBottom: 12 }}>
               Showing {sorted.length} players
             </p>
-            <div style={{ width: '100%' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11, whiteSpace: 'nowrap', display: 'block', overflowX: 'auto' }}>
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11, whiteSpace: 'nowrap' }}>
                 <thead>
-                  <tr style={{ borderBottom: `2px solid ${ACCENT}`, background: FROST, position: 'sticky', top: 0, zIndex: 2 }}>
+                  <tr style={{ borderBottom: `2px solid ${ACCENT}`, background: FROST }}>
                     <SortableHeader label="Player" sk="name" align="left" />
                     <SortableHeader label="Team" sk="teamName" align="left" />
                     <SortableHeader label="G" sk="games" />
