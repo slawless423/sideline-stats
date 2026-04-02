@@ -643,5 +643,9 @@
   { "transfer_name": "Gašper Kočevar", "previous_school": "Fresno State", "player_id": "1764_gasper_kocevar" },
   { "transfer_name": "Redd Thompson, Jr.", "previous_school": "Longwood", "player_id": "787_redd_thompsonjr." },
   { "transfer_name": "Somtochukwu Cyril", "previous_school": "Georgia", "player_id": "53_somto_cyril" },
-  { "transfer_name": "Tré Norman", "previous_school": "Marquette", "player_id": "796_tre_norman" }
+  { "transfer_name": "Tré Norman", "previous_school": "Marquette", "player_id": "796_tre_norman" },
+  { "transfer_name": "Brandon Stores, Jr.", "previous_school": "Georgia Tech", "player_id": "52_brandon_storesjr." },
+  { "transfer_name": "Elijah Ryans", "previous_school": "Western Michigan", "player_id": "1876_ej_ryans" },
+  { "transfer_name": "Leon Horner III", "previous_school": "Texas Tech", "player_id": "628_leon_horner" },
+  { "transfer_name": "T.J. Cope", "previous_school": "New Orleans", "player_id": "2604_tavaj_cope" }
 ]
