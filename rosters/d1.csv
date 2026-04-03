@@ -1,17 +1,1889 @@
-player_id,division,team_name,first_name,last_name,height,year
-53_jackson_mcvey,mens-d1,Georgia,Jackson,McVey,"7'1""",Fr
-1437_gavin_davis,mens-d2,CSUSB,Gavin,Davis,"6'6""",Sr
-2087_john_solomon,mens-d2,Cal St. Dom. Hills,John,Solomon,"6'8""",Jr
-867_jaryn_bull,mens-d2,Caldwell,Jaryn,Bull,"6'4""",So
-159_max_cain,mens-d2,Christian Brothers,Max,Cain,"6'5""",So
-1790_justin_asi,mens-d2,Ferris St.,Justin,Asi,"6'6""",Jr
-2194_drew_barrie,mens-d2,Michigan Tech,Drew,Barrie,"6'4""",Jr
-2727_marcus_pierce,mens-d2,N.M. Highlands,Marcus,Pierce,"6'3""",Sr
-1048_xavier_glenn,mens-d2,Northeastern St.,Xavier,Glenn,"6'4""",Sr
-2048_alex_sessoms,mens-d2,Nova Southeastern,Alex,Sessoms,"6'0""",So
-1993_raph_dumont,mens-d2,Saint Michael's,Raph,Dumont,"6'4""",So
-1993_tay_dzingou,mens-d2,Saint Michael's,Tay,Dzingou,"6'4""",So
-673_barron_silsby,mens-d2,Southwest Baptist,Barron,Silsby,"6'0""",So
-1242_travon_williams,mens-d2,St. Edward's,Travon,Williams,"6'8""",So
-2619_demar_anderson,mens-d2,UNC Pembroke,Demar,Anderson,"6'3""",Sr
-896_hiram_alexander,mens-d2,Wilmington (DE),Hiram,Alexander,"6'4""",Sr
+Division	Name	Previous School	New School
+Men's D2	A.B. Gilchrist	Western Oregon	
+Men's D2	A.J. Reed, Jr.	Northeastern State	
+Men's D2	Aaron Goldstein	Staten Island	South Alabama
+Men's D2	Aaron Hall II	Coker	
+Men's D2	Abel Hutchinson	South Dakota School of Mines	
+Men's D1	Adam Fox	Central Connecticut State	
+Men's D2	Adonis Thomas	Coker	
+Men's D2	Adrijus Jančiauskas	West Virginia Wesleyan	
+Men's D2	Aeris Lawson	Saint Leo	
+Men's D2	Aguibou Balde	American International	Bentley
+Men's D2	Aidan McDowell	Western Colorado	
+Men's D2	Aidan Rice	Western Washington	UC Riverside
+Men's D2	Aidan Williams	Texas A&M International	
+Men's D1	Aiden Miller	IU Indy	
+Men's D2	Alden Ritt	Davenport	
+Men's D2	Alec Wendt	South Dakota School of Mines	
+Men's D2	Alejandro Redondo Cybak	Chestnut Hill	
+Men's D2	Alex Atkinson	Claflin	
+Men's D2	Alex Daniels	Parkside	
+Men's D2	Alex Dvorak	Mary	
+Men's D1	Alexander Lesburt, Jr.	Brown	
+Men's D2	Alvin Cole	Spring Hill	
+Men's D2	Amaan Sanni	Spring Hill	
+Men's D2	Amar Hot	Fresno Pacific	
+Men's D2	Amar Kadić	Lincoln (MO)	
+Men's D2	Amare Jackson	Mary	
+Men's D2	Amir Reaves	Georgia Southwestern	
+Men's D2	Andre Young	Clayton State	
+Men's D1	Andrew Ball	Monmouth	
+Men's D2	Andrew Pengel	Emporia State	
+Men's D2	Andrew Soenksen	Parkside	
+Men's D2	Anthony Chinn	Post	
+Men's D2	Anthony Parker	Franklin Pierce	
+Men's D2	Anthony Purnell	West Chester	
+Men's D2	Anthony Ruffolo	Cedarville	Charleston Southern
+Men's D2	Antwan Robinson	Arkansas–Fort Smith	
+Men's D2	Antwan Taylor	Midwestern State	
+Men's D2	Arius Alijosius	Lewis	
+Men's D1	Armoni Zeigler	Ball State	
+Men's D2	Arnaldo Rodriguez	Wilmington	
+Men's D2	Arzhonte Dallas	Cameron	
+Men's D2	Ashton Price	Arkansas–Monticello	
+Men's D2	Ashton Williams	Southern Wesleyan	
+Men's D2	Avaughn Johnson	Mississippi College	
+Men's D1	Avery Brown	Columbia	
+Men's D2	Ayden Goll	Wheeling	
+Men's D2	Ben Csernak	Florida Tech	
+Men's D2	Ben Kopetzki	Concordia St. Paul	Appalachian State
+Men's D2	Ben Ritger	Lee	
+Men's D2	Bernie Varnesdeel	Davenport	
+Men's D2	Blake Daugherty	Purdue Northwest	
+Men's D2	Blake Goodman	West Virginia State	
+Men's D2	Blake Wilson	Miles	
+Men's D2	Bobby McWard	Colorado Christian	
+Men's D2	Bonard Jackson, Jr.	Lincoln (PA)	
+Men's D2	Boston Painter	Westminster	
+Men's D2	Braden McGlothlin	Parkside	
+Men's D2	Bradley Swillie	Central Washington	
+Men's D1	Brady Hardewig	West Georgia	
+Men's D2	Brandon Coury	Seton Hill	
+Men's D2	Brandon Hooks	Holy Family	
+Men's D2	Brandon Hrncir	Sioux Falls	
+Men's D2	Brandon Lucas	San Francisco State	
+Men's D1	Brandon McCreesh	Bucknell	
+Men's D2	Brandon Moore	Southwest Baptist	
+Men's D2	Braydon Olson	Western Oregon	
+Men's D2	Braylon Jackson	Claflin	
+Men's D2	Brent Randleman	Lees–McRae	
+Men's D2	Brian Harris	Spring Hill	
+Men's D2	Brian Kitenge	Arkansas Tech	
+Men's D2	Brock Mishak	West Texas A&M	
+Men's D2	Broden Steiner	Roosevelt	
+Men's D2	Brogan Madson	Sioux Falls	
+Men's D2	Bryce Jackson	Tusculum	
+Men's D2	Brysen Bond	Sioux Falls	
+Men's D2	Bryson Goldsmith	Texas A&M–Kingsville	
+Men's D1	Bubz Alvarez	South Dakota State	
+Men's D2	C.J. McCord	Elizabeth City State	
+Men's D2	C.J. Mundell	Holy Family	
+Men's D2	C.J. Yao	Cameron	
+Men's D2	Caden Hinker	Augustana	Lamar
+Men's D2	Caden Kreger	Lees–McRae	
+Men's D1	Caden Wilkins	Green Bay	
+Men's D2	Caelan Zeilenga	Franklin Pierce	
+Men's D2	Caiden Botts	Carson–Newman	
+Men's D2	Caleb Jewell	Tiffin	
+Men's D2	Caleb Sampson	Post	
+Men's D1	Caleb Williams	Lafayette	
+Men's D2	Cam Malray	Montana State Billings	
+Men's D2	Cam Perkins	USC Aiken	
+Men's D2	Camden Cerese	Saint Leo	Southern Miss
+Men's D2	Cameron Mercadel	Northern State	
+Men's D2	Cameron Stovall	Missouri S&T	
+Men's D1	Cameron Wallace	Little Rock	
+Men's D2	Camren Roper	Sul Ross State	
+Men's D2	Camryn Pacheco	Augusta	
+Men's D2	Carter Metz	Southern Arkansas	
+Men's D2	Cedric Patterson	Lees–McRae	
+Men's D2	Chandler Meeks	Minnesota–Crookston	
+Men's D2	Chandler Olokor	Barton	
+Men's D2	Chanel Mballa	Cal State San Marcos	
+Men's D2	Chang Hoth	Ferris State	
+Men's D2	Charles Temple	Arkansas–Monticello	
+Men's D2	Chase Allen	USC Aiken	
+Men's D2	Chase Carlton	Erskine	
+Men's D2	Chase Kuiper	Wayne State (MI)	
+Men's D2	Chase McDuffie	Lees–McRae	
+Men's D2	Chase Nelson	American International	
+Men's D2	Chianti Clay, Jr.	Sul Ross State	Rivier University
+Men's D2	Chris Carpenter	UT Tyler	
+Men's D2	Chris Tippins	Northwestern Oklahoma State	
+Men's D1	Chris Walker	UIC	
+Men's D2	Christian Ananaba	Mount Olive	
+Men's D2	Christian Foy	Mars Hill	
+Men's D1	Christian Hughes	Little Rock	
+Men's D1	Christian Moore	The Citadel	
+Men's D2	Christopher Meakin	Frostburg State	
+Men's D2	Coleman Hopson	American International	
+Men's D2	Colin Hayes	Westminster	
+Men's D2	Connor Morris	Texas–Permian Basin	
+Men's D2	Connor Newton	Central Oklahoma	
+Men's D2	Corey Hunter	Barry	
+Men's D1	Corleone Dandridge	Denver	
+Men's D2	Courtney Davis II	Bloomsburg	
+Men's D2	Craig Jarvis	Pitt-Johnstown	
+Men's D2	Curtis Blair III	Cedarville	
+Men's D2	Curtis Jackson	Davenport	
+Men's D2	Cyncier Harrison	Coker	
+Men's D2	Cyrus Shaw	Newman	
+Men's D2	D.J. Daniel	Frostburg State	Gardner–Webb
+Men's D2	Dacory Porter	Delta State	
+Men's D2	DaJaun Young	Edinboro	
+Men's D2	Dalen Fuller	Northeastern State	
+Men's D2	Damjan Vukčević	Tusculum	
+Men's D2	Damon Folds	Malone	
+Men's D2	Dan Mukuna	Fort Hays State	
+Men's D2	Daniel Agu	Lees–McRae	
+Men's D2	Danny Lans	Christian Brothers	
+Men's D2	DaRon Dunbar	Augusta	
+Men's D2	DaVaughn McCrumb	Cal State San Marcos	
+Men's D2	David Gorianskii	Carson–Newman	
+Men's D2	David Oyona Ibandzo	Oklahoma Christian	
+Men's D2	David Shelia	Western Colorado	
+Men's D2	David Teele	Queens (NY)	
+Men's D1	Davion Hill	Ball State	
+Men's D2	Davyon Butler	Midwestern State	
+Men's D2	Deacon Courtney	Newman	
+Men's D1	DeAndre Craig, Jr.	Purdue Fort Wayne	
+Men's D2	Deavion Scales	Kentucky State	
+Men's D1	Demari Williams	Houston Christian	
+Men's D2	Demetris Phillips	Missouri–St. Louis	
+Men's D2	Demetrius Gibson	Columbus State	
+Men's D2	Denaj Kimber	Tusculum	
+Men's D2	Deng Diew	Westminster	
+Men's D2	Deonte Williams	Georgia Southwestern	
+Men's D2	Derek Goodman	Ohio Dominican	Mercer
+Men's D2	Derik Pranger	Colorado Colorado Springs	
+Men's D2	Devin Belle	Wayne State (MI)	
+Men's D2	Devin Conley	Emporia State	
+Men's D2	Devin Walker	Newman	
+Men's D2	Devon Hancock	Ouachita Baptist	
+Men's D2	Dez'Mond Perkins	Clayton State	
+Men's D2	Diego Martinez	San Francisco State	
+Men's D2	Dimitrios Sklavenitis	Seton Hill	
+Men's D2	Dominic Gooden	Minnesota State—Moorhead	
+Men's D2	Don Don Ferguson	Augustana	
+Men's D2	Donald Coats	Pittsburg State	
+Men's D2	Donovan Hill	Saint Leo	
+Men's D2	Dontae Prescott	Queens (NY)	
+Men's D1	Dontrez Williams	Lindenwood	
+Men's D2	Dorian Janvier	Coker	
+Men's D2	Drew Kingery	Truman State	
+Men's D2	Dylan Sanders	Colorado State–Pueblo	
+Men's D2	Dylan Smith	Davenport	
+Men's D1	Dylan Warlick	Saint Louis	
+Men's D2	Eddie Page	Clayton State	
+Men's D2	Edir Ortiz	Seton Hill	
+Men's D2	Elhadji Thiam	Auburn–Montgomery	
+Men's D2	Eli Kennedy	Southwest Baptist	
+Men's D2	Elías Pálsson	Augusta	
+Men's D2	Elijah Bailey	Oklahoma Christian	
+Men's D2	Elijah Hernandez	Holy Family	
+Men's D2	Elijah Lewis	Lane	
+Men's D1	Elijah Moore	Utah	
+Men's D2	Elson Berhanu	Wilmington	
+Men's D2	Eman Lawal	Salem	
+Men's D2	Enmanuel Ferreras	Franklin Pierce	
+Men's D2	Ernest Johnson II	Bluefield State	
+Men's D2	Ethan Blackmon	Northeastern State	Louisiana Tech
+Men's D2	Ethan Koltz	Southwest Minnesota State	
+Men's D2	Ethan Robertson	Pace	
+Men's D2	Ethan Russell	Chadron State	
+Men's D2	Evan Jackson	Pittsburg State	
+Men's D2	Evan Kilminster	USCB	
+Men's D1	Evan Otten	Idaho State	
+Men's D2	Evan Ramsey	Virginia–Wise	Wofford
+Men's D2	Fabrice Salvant	Franklin Pierce	
+Men's D2	Fontaine Williams	West Texas A&M	
+Men's D2	Gabe Clemmons	Maryville	
+Men's D2	Gabe Hatler	Montana State Billings	
+Men's D2	Garrett Falls	Metro State	
+Men's D2	Gavin Bullock	Lees–McRae	
+Men's D2	Gavin Carter	Colorado Colorado Springs	
+Men's D2	Gavin Cote	Clarion	Barry
+Men's D2	George Sabatini	Bloomsburg	
+Men's D2	Ginuwine Tropnas	Lincoln (PA)	
+Men's D2	Guido Wanschelbaum	South Dakota School of Mines	
+Men's D2	Gyterson Louissaint	Newberry	
+Men's D2	Hadi Alshami	Roberts Wesleyan	
+Men's D2	Hank Roesch	Pitt-Johnstown	
+Men's D1	Hansel Enmanuel	Austin Peay	
+Men's D2	Harry Adam	Molloy	
+Men's D2	Hasani Rivera	Georgia Southwestern	
+Men's D2	Hassan Belkhaddar	West Virginia State	
+Men's D2	Heath Tenner	UT Tyler	
+Men's D2	Henri Mennander	Queens (NY)	
+Men's D2	Horaces Jacques, Jr.	Claflin	
+Men's D2	Isaac Cherry	Malone	
+Men's D1	Isaac Garrett	Oakland	
+Men's D2	Isaak Eenhuis	Bemidji State	
+Men's D2	Isaiah Alexander	Minot State	
+Men's D2	Isaiah Baker	West Virginia Wesleyan	
+Men's D2	Isaiah Buckley	Shaw	
+Men's D2	Isaiah Schafer	Southwest Minnesota State	Bethany Lutheran College
+Men's D2	Isaiah Sonntag	Seattle Pacific	
+Men's D2	Isaiah Sullivan	Bridgeport	
+Men's D2	Isaiah Vick	Wingate	
+Men's D2	Isajah Deburgo	Lees–McRae	
+Men's D2	Isayah Owens	Coker	
+Men's D2	Ivan Yhomby	Daemen	
+Men's D2	J.J. Faulkner	Kentucky Wesleyan	
+Men's D2	J.R. Jacobs	Georgia Southwestern	
+Men's D2	J3 Swindell	Tusculum	
+Men's D2	Jace Canaba	Sul Ross State	
+Men's D2	Jace Williams	Mars Hill	
+Men's D2	Jack Carter	Lees–McRae	
+Men's D2	Jackson Beauchamp	Jamestown	
+Men's D2	Jackson Hayes	Winona State	
+Men's D2	Jackson McAdams	Metro State	
+Men's D2	Jackson Roberts	USC Aiken	
+Men's D2	Jackson Thoele	Sul Ross State	
+Men's D2	Jackson Twombly	Delta State	
+Men's D2	Jacob Bell	UT Tyler	
+Men's D1	Jacob Theodosiou	Loyola (MD)	
+Men's D1	Jaden Baker	Wagner	
+Men's D2	Jaden Colzie	Jefferson	
+Men's D2	Jaden Holt	West Texas A&M	
+Men's D2	Jaden Juarez	Cameron	
+Men's D1	Jaden Kempson	Albany	
+Men's D2	Jaden Miller	East Central	
+Men's D2	Jaden Pena	Queens (NY)	
+Men's D2	Jaden Tengan	Cal State Monterey Bay	
+Men's D1	Jadis Jones	Lindenwood	
+Men's D2	Jadon Cool	Chadron State	
+Men's D2	Jadyn Humber	Wilmington	
+Men's D2	Jaevian Alston	Mount Olive	
+Men's D2	Jagger Francom	Trevecca Nazarene	
+Men's D2	Jahlil Bethea	Southern Connecticut State	
+Men's D2	Jailin Johnson	Malone	
+Men's D2	Jake Dunham	Parkside	
+Men's D2	Jalen Bradberry	District of Columbia	
+Men's D2	Jalen Duff	Franklin Pierce	
+Men's D2	Jamari Gamble	Salem	
+Men's D2	James Spencer III	Sioux Falls	
+Men's D2	Jamieke Spruill	Tusculum	
+Men's D2	Jamil Aleem	Clayton State	
+Men's D2	JaMonte Williams	Central State	
+Men's D2	Jamyier Patton	Texas A&M International	
+Men's D2	Jaquay Randolph	Southern Wesleyan	
+Men's D2	Ja'Quez Thornton	New Mexico Highlands	
+Men's D2	Jared Berry	Embry–Riddle	
+Men's D2	Jaren Morton	Franklin Pierce	Southern Wesleyan
+Men's D2	Jason Lee	South Dakota School of Mines	
+Men's D2	Jason Shields	Holy Family	
+Men's D2	Javonte Landy	Savannah State	
+Men's D2	Javonte Long	Frostburg State	
+Men's D2	Jax Abernathy	Trevecca Nazarene	
+Men's D1	Jaxon Prunty	College of Charleston	
+Men's D2	Jaxon Smith	Fort Lewis	
+Men's D2	Jayden Schoen	Newman	
+Men's D2	Jaylen Subject	West Virginia State	
+Men's D2	Jaylin Horsey	Wilmington	Pace
+Men's D2	Jayson Harris	Virginia State	
+Men's D1	Jayson Petty	Kansas City	
+Men's D2	Jean Paul El Shamee	Cameron	
+Men's D2	Jed Moor	Erskine	
+Men's D2	Jefferson McLamb	Mount Olive	
+Men's D2	Jerell Jean-Baptiste	West Virginia Wesleyan	
+Men's D2	Jeremee Bryant	Johnson C. Smith	
+Men's D2	Jeremiah Barze	Clayton State	
+Men's D2	Jeremiah Dorsey	Jefferson	
+Men's D2	Jeremiah Gorham	Chestnut Hill	
+Men's D2	Jeremias Berchal	King	
+Men's D2	Jeremy Thomas II	Clarion	
+Men's D2	Jesse Edwards	Georgia Southwestern	
+Men's D2	Jessiah Pierre-Johnson	Johnson C. Smith	
+Men's D2	Jevin Sullivan	Southwest Baptist	
+Men's D2	Joel Amaro	Alaska	
+Men's D2	John Barbee	UT Tyler	
+Men's D2	John Bardelli	Tiffin	
+Men's D2	John Roland	Lynn	
+Men's D2	Johny Mathiang	Tusculum	
+Men's D2	Jonah Vaysbakh	Coker	
+Men's D2	Jordan Blair	Colorado State–Pueblo	Missouri State
+Men's D2	Jordan Briggs	Wayne State (MI)	Detroit Mercy
+Men's D2	Jordan Patterson	Lees–McRae	
+Men's D2	Jorge Sánchez-Ramos	Kentucky Wesleyan	
+Men's D1	Josh Fulton	Bucknell	
+Men's D2	Josh Holman	Mississippi College	West Virginia Wesleyan
+Men's D2	Josh Reid	Colorado Christian	
+Men's D1	Josh Smith	West Georgia	
+Men's D2	Joshua Ofori	Biola	
+Men's D2	Josiah Harding	USC Aiken	
+Men's D1	Josiah LeGree	Morehead State	
+Men's D2	Jothan Nweke	Wayne State (MI)	
+Men's D2	Juan Pedro Rodriguez	Mars Hill	
+Men's D2	Julian Mora	Seattle Pacific	
+Men's D2	Julien Barclay	Sul Ross State	
+Men's D2	Justin Duff	Truman State	
+Men's D2	Justin Mack	Emporia State	
+Men's D2	Justin Norris	Northwestern Oklahoma State	
+Men's D1	Justin Redmond	Northwestern State	
+Men's D2	K.J. Manuel	Texas A&M–Kingsville	
+Men's D2	Kadden Price	Newman	
+Men's D2	Kaden Minter	Concordia Irvine	
+Men's D2	Kahlif Barnes	Mount Olive	
+Men's D2	Kai Simpson	Thomas More	
+Men's D2	Kailon Nicholls	Angelo State	
+Men's D2	Kalvin Catchings	Saint Michael's	
+Men's D2	Kasai Fontanez	Savannah State	
+Men's D2	Kawar Singh	Molloy	
+Men's D2	Kaylon Mason	Cal State San Bernardino	Coker
+Men's D2	Kazell Stewart	Southern Connecticut State	
+Men's D2	Kedrick Curtis	Seton Hill	
+Men's D2	Keegan Burroughs	Middle Georgia	
+Men's D2	Keiren Brown	Westminster	
+Men's D2	Kelen Smith	Cameron	
+Men's D2	Kellen Leake	Malone	
+Men's D2	Kellen Little	Winona State	
+Men's D2	Kelton Coleman	Mary	
+Men's D2	Kelvin Amoako	Indianapolis	Youngstown State
+Men's D2	Ken Walker	Davenport	
+Men's D2	Kendale Johnson	Albany State	
+Men's D2	Kendall Davis	Coker	
+Men's D2	Kenny Burns III	Northwestern Oklahoma State	
+Men's D2	Kenny Gonzalez	Mary	
+Men's D2	Kenny Vera	Lees–McRae	
+Men's D2	Kesean Shillingford	Lincoln (PA)	
+Men's D2	KeShawn Brown, Jr.	Georgia Southwestern	
+Men's D2	Kevon Corley	District of Columbia	
+Men's D2	Kevon Zilaee	Sul Ross State	
+Men's D2	Kevonne Taylor	Saginaw Valley State	
+Men's D1	Khalil Badru	Iona	
+Men's D2	Khalil Green	Georgia College	
+Men's D2	Kiran Oliver	Arkansas Tech	
+Men's D2	Kodi Johnson	Bloomsburg	
+Men's D2	Kohlman Dutton	Colorado State–Pueblo	
+Men's D2	Konstantinos Lagos	Florida Tech	
+Men's D2	Kory Davis	Coker	
+Men's D2	Krishen Atwal	Middle Georgia	
+Men's D1	Krystian Lewis	Louisiana–Monroe	
+Men's D2	Kwynsie Pittsnogle	Lees–McRae	
+Men's D2	Kyle Houston	LeMoyne–Owen	
+Men's D2	Kyle Morgan	UT Tyler	
+Men's D2	Ladislav Novák	Davis & Elkins	
+Men's D2	LaDricus Pittman	LeMoyne–Owen	
+Men's D2	Landon Braun	Metro State	
+Men's D2	LaVonte Harris	Kentucky Wesleyan	
+Men's D2	Leo Gayman	Southwest Baptist	
+Men's D2	Leo Vlogianitis	Pace	
+Men's D2	Leslie Minter	Elizabeth City State	
+Men's D2	Lethaniel Foster, Jr.	West Virginia Wesleyan	
+Men's D2	Levi Lawal	Southern New Hampshire	
+Men's D2	Liam Canty	Northwestern Oklahoma State	
+Men's D2	Lincoln Cantrall	Colorado Christian	
+Men's D2	Lionel Nelson	Franklin Pierce	
+Men's D2	Logan Rainey	Seattle Pacific	
+Men's D2	Logan Threatt	Metro State	
+Men's D2	Lorenzo McMillion	Quincy	
+Men's D2	Luciano Casini	Newman	
+Men's D2	Luka Đurović	Chadron State	
+Men's D2	Luka Mateski	Parkside	
+Men's D2	Luke Denbow	Findlay	
+Men's D2	Luke Diem	Bemidji State	
+Men's D2	Luke Howard	Simon Fraser	
+Men's D2	Luke Soden	Regis	Bucknell
+Men's D2	Luke Wherley	Jamestown	
+Men's D2	MaCarhy Morris	Concordia Irvine	
+Men's D2	Mack Keighran	Chadron State	
+Men's D1	Makhai Valentine	Northern Illinois	
+Men's D2	Malachi Johnson	Stanislaus State	
+Men's D2	Malcolm Bell	Cal Poly Pomona	
+Men's D2	Malik Johnson	Stanislaus State	
+Men's D2	Malikai Delgado	Bridgeport	
+Men's D2	Marc Eyman	Texas A&M–Kingsville	
+Men's D2	Marc Raye, Jr.	Johnson C. Smith	
+Men's D2	Marcus Banks	Shepherd	
+Men's D2	Mario Williams, Jr.	Colorado Colorado Springs	
+Men's D2	Marko Šarenac	Barry	
+Men's D2	Markus Pastorcic-Straun	Colorado School of Mines	
+Men's D2	Marquel Newsome	Tiffin	
+Men's D2	Marquese Josephs	Saginaw Valley State	
+Men's D2	Marquis Carver-Smith	Truman State	
+Men's D2	Marshawn Smith	Northern State	
+Men's D2	Martin Zarzuela	Cal State Los Angeles	
+Men's D2	Marzouq Abdur-Razaaq	Colorado Colorado Springs	
+Men's D2	Mason Grant	USC Aiken	
+Men's D2	Matas Castillo	Parkside	
+Men's D1	Matas Deniušas	UT Martin	
+Men's D2	Matthew Webster	Georgia Southwestern	
+Men's D2	Matthew Willenborg	Central Oklahoma	
+Men's D2	Max Alexander	Northwestern Oklahoma State	
+Men's D2	Max Booher	Quincy	Eastern Michigan
+Men's D2	Max McFarland	Frostburg State	
+Men's D2	Max Sheridan	Menlo	
+Men's D2	Micah Bays	Central State	Cleveland State
+Men's D1	Micah Davis	IU Indy	
+Men's D2	Michael Johnson	Shorter	
+Men's D2	Michael Jones	Cameron	
+Men's D2	Michael Mora	Cal State Monterey Bay	Wyoming
+Men's D2	Michael Singleton	Post	
+Men's D2	Michael Wilson	Dominican (CA)	
+Men's D2	Mike Montano	Frostburg State	
+Men's D2	Mikey Hawkins	Northwestern Oklahoma State	
+Men's D2	Miles Gibson	Oklahoma Christian	
+Men's D2	Miles Gurske	Montana State Billings	
+Men's D2	Miles Hannah	Spring Hill	
+Men's D1	Miles White	Lipscomb	
+Men's D2	Miquel Llompart	Eckerd	
+Men's D2	Mitch Jeppesen	Westminster	
+Men's D1	Moustapha Loum	Northwestern State	
+Men's D2	Myles Shields	Regis	
+Men's D2	Nathan Robertson	Pace	
+Men's D2	Nathanael Lewis	Southern Wesleyan	
+Men's D2	Nehemiah Pollard	Western Washington	
+Men's D2	Nehemiah Weber	Northeastern State	
+Men's D2	Nic Smith	Minnesota State—Moorhead	
+Men's D2	Nick Corbett	Concordia Irvine	
+Men's D2	Noah Adamczyk	Davis & Elkins	
+Men's D2	Noah Courtney	Maryville	
+Men's D2	Noah Jaid	Barry	
+Men's D2	Noah Suarjaya	UT Tyler	
+Men's D2	Noah Thomas	Mary	
+Men's D2	Noah Wright	Seton Hill	
+Men's D2	Nolan Paladugu	USCB	
+Men's D2	Norris Bourne, Jr.	West Virginia State	
+Men's D1	Okechukwu Okeke	Albany	
+Men's D2	Oliver Spence	District of Columbia	
+Men's D2	Omar Suleiman	Lake Superior State	
+Men's D2	Omari Banks	Kutztown	
+Men's D2	Owen Pawlikowski	Saint Leo	Tampa
+Men's D2	Parker Baumann	Western Oregon	
+Men's D2	Parker Christensen	Azusa Pacific	
+Men's D2	Parker Hannah	Central Oklahoma	
+Men's D2	Paul Lanzi	Saint Leo	
+Men's D2	Paxton Davidson	Pace	
+Men's D2	Paxton Warden	Parkside	
+Men's D2	Peter Amakasu	Westminster	
+Men's D2	Pierce Ross	Northeastern State	
+Men's D2	Pierce Thomas	Indianapolis	
+Men's D2	Pop Wadang Wel	Lees–McRae	
+Men's D2	Porter Bazil	Colorado Christian	
+Men's D2	Predrag Panišić	Coker	
+Men's D2	Preston Clark	Maryville	
+Men's D1	Preston Copeland	Ball State	
+Men's D2	Prince Mosengo	Glenville State	
+Men's D2	Quadir Pettaway	Angelo State	
+Men's D1	Quin Berger	Bucknell	
+Men's D2	Qurahn Anderson	USCB	
+Men's D2	R.J. Delahaye	Holy Family	
+Men's D2	Raj Bencomo Shah	Chestnut Hill	
+Men's D2	Ramere Draper	Claflin	
+Men's D2	Raphaël Nagau-Trouart	Parkside	
+Men's D2	Rashaad Williams	Seton Hill	Georgia Southern
+Men's D2	Rashad Kee	Texas–Permian Basin	
+Men's D2	Raúl Pérez	Mount Olive	
+Men's D2	Reece Kircher	Southwest Minnesota State	Northwestern College
+Men's D2	Reed Pfaltzgraff	Sioux Falls	
+Men's D2	Reid Loewen	Lewis	
+Men's D2	ReJuan Gray	District of Columbia	
+Men's D2	Relja Nagulić	Mary	
+Men's D2	Rex Krout	Arkansas–Fort Smith	
+Men's D1	Richard Goods	Stony Brook	
+Men's D1	Ring Malith	SIUE	
+Men's D2	Rob Matos	Colorado Christian	
+Men's D2	Robin Discamps	Lincoln (MO)	
+Men's D2	Rocco Lamuno	Spring Hill	
+Men's D2	Rocco Morabito	Gannon	
+Men's D2	Rocco Spadafora	Edinboro	
+Men's D2	Roman Rose	Concordia Irvine	
+Men's D2	Ron Haas	Davis & Elkins	
+Men's D1	Ronnie Harrison	East Texas A&M	
+Men's D2	Ruben Bos	Spring Hill	
+Men's D2	Rubén Salazar	Erskine	
+Men's D1	Ruot Bijiek	Bucknell	
+Men's D2	Ryan Blount	Tampa	
+Men's D2	Ryan Lewis	Union	
+Men's D1	Ryan Nutter	Marshall	
+Men's D1	Ryan Pettis	Fordham	
+Men's D2	Rylan Houck	Carson–Newman	
+Men's D2	Sam Baskin	Sioux Falls	
+Men's D2	Sam Johnson	Cedarville	
+Men's D2	Sean Emfinger	UT Tyler	
+Men's D2	Shamir Caruthers	Carson–Newman	
+Men's D2	Shawnn Smith	D'Youville	
+Men's D1	Shey Eberwein	South Dakota	
+Men's D2	Shyheim Parm	Cal Poly Pomona	
+Men's D2	Silas Wright	Dominican (CA)	
+Men's D2	Spencer Gaze	UT Tyler	
+Men's D2	Steele Meister	Findlay	Mount Vernon Nazarene University
+Men's D2	Steph Yosia	Sul Ross State	
+Men's D2	Stephon MacDonald	Spring Hill	
+Men's D2	Sterling Scott	Mansfield	
+Men's D2	Stewart Erhart	Fort Lewis	
+Men's D2	Syris Williams	Newman	
+Men's D2	T.J. Pangonas	Tiffin	
+Men's D2	T.J. Printup	Tusculum	
+Men's D2	Taj Kimber	Tusculum	
+Men's D1	Taj Walters	Northern Illinois	
+Men's D2	Tameron Ferguson	Augustana	Arkansas State
+Men's D2	Tane Prictor	Pittsburg State	
+Men's D2	Ta'Quan Williams	Post	
+Men's D2	Tavion Spencer	Edinboro	
+Men's D2	Tee Harris, Jr.	Wheeling	
+Men's D2	Terrance Ramirez	Midwestern State	
+Men's D2	Terrell Wright	Newman	Central Oklahoma
+Men's D2	Thomas Diew	Jamestown	Minnesota State
+Men's D2	Thomas Tangle	Cameron	
+Men's D2	Tiernan Stynes	Quincy	Cal State Fullerton
+Men's D2	Tim Mikhailov	Sul Ross State	
+Men's D2	Titus Miller	Truman State	
+Men's D2	Tobias Prall	Augusta	
+Men's D2	Tory Homan	Fort Hays State	
+Men's D2	Tre Hawkins	Wilmington	Delaware State
+Men's D2	Trent Bowers	UT Tyler	
+Men's D2	Trevon Chambers	Western Oregon	
+Men's D1	Trevor Hennig	Weber State	
+Men's D2	Trevor White	Western Washington	
+Men's D1	Trey Cady	North Florida	
+Men's D2	Trey Harris	West Virginia State	
+Men's D2	Trey Kleitz	Roberts Wesleyan	Houghton College
+Men's D2	Trey Pettigrew	Johnson C. Smith	
+Men's D2	Trey Simmons	Frostburg State	Bowling Green
+Men's D2	Turo Moni	Jamestown	
+Men's D2	Ty Holdman	Texas A&M International	
+Men's D2	Ty Williams	District of Columbia	
+Men's D1	Ty-Laur Johnson	San Diego	
+Men's D2	Tyler Greene	Eckerd	
+Men's D2	Tyler Halligan	Western Colorado	
+Men's D2	Tylon Chatman	Lee	UNC Asheville
+Men's D2	Tyrone Wright, Jr.	Missouri Southern	
+Men's D2	Tyus Parrish-Tillman	Biola	UC Riverside
+Men's D2	Vlad Karasev	Jamestown	
+Men's D1	Will Aljancic	Holy Cross	
+Men's D2	Will Fowler	Converse	Canisius
+Men's D2	Will Koehl	Frostburg State	
+Men's D2	William Vasser, Jr.	USC Aiken	
+Men's D2	Willie Walton	Lee	
+Men's D2	Wyatt Triestman	Eckerd	
+Men's D2	Xavier Martinez	Colorado Colorado Springs	
+Men's D2	Xavier Moultrie	Coker	
+Men's D2	Xavier Price	Salem	
+Men's D2	Xavier Thomas	Saginaw Valley State	
+Men's D2	Xavier Tubbs-Matthews	Claflin	
+Men's D2	Xavier Williams	UT Tyler	
+Men's D2	Yannis Kiki	Frostburg State	
+Men's D2	Yoro Diallo	Virginia–Wise	
+Men's D2	Zac Reedus	Southwest Baptist	
+Men's D2	Zach Hayslett	Purdue Northwest	
+Men's D2	Zach Howell	Drury	
+Men's D2	Zahki Fallen	Salem	
+Men's D2	Zane McCarty	Frostburg State	
+Men's D2	Zavion Bianchini	Wilmington	
+Men's D1	Zine Eddine Bedri	Columbia	
+Men's D2	Zundrá Jackson	Coker	
+Men's D2	Zyon Little	Angelo State	
+Men's D1	Isaiah Manning	Sam Houston State	
+Men's D1	T.J. Caldwell	Arkansas State	
+Men's D1	Karmello Branch	Kansas City	
+Men's D1	K.J. Swain, Jr.	St. Francis (PA)	
+Men's D1	Dani Pounds	Tennessee Tech	
+Men's D1	Corey Hadnot II	Purdue Fort Wayne	
+Men's D2	Cristian Sanon	Claflin	
+Men's D2	Nate Simon	Cal State San Marcos	
+Men's D2	Marcellus Edwards	Concordia Irvine	
+Men's D2	Andrija Brzović	Southeastern Oklahoma State	
+Men's D2	Dylan Lewis	USCB	
+Men's D2	Payton Weemer	Grand Valley State	
+Men's D2	Ace Watkins	Eckerd	
+Men's D1	Jack Turner	Oral Roberts	
+Men's D1	Keelan Steele	Maine	
+Men's D1	Xavier Abreu	Northeastern	
+Men's D1	Logan Carey	Maine	
+Men's D1	Nazar Mahmoud	Grambling State	
+Men's D1	Jayme Mitchell, Jr.	Jackson State	
+Men's D1	Peter Bandelj	Cal Poly	
+Men's D1	Doyel Cockrill III	Chicago State	
+Men's D1	Kahlil Singleton	Canisius	
+Men's D1	Rob Dockery	La Salle	
+Men's D1	Bryce Baker	College of Charleston	
+Men's D1	Matar Diop	Stetson	
+Men's D1	Tanner Hayhurst	Southern Utah	
+Men's D1	Aaron Davis III	Bryant	
+Men's D1	Nick Jones	Wagner	
+Men's D1	Mikah Ballew	Portland	
+Men's D1	Michael James	Mississippi Valley State	
+Men's D1	Eric Dibami	Florida International	
+Men's D1	Cayden Ward	Cal Poly	
+Men's D1	Donny Yeager	Oakland	
+Men's D1	Jace Whiting	Weber State	
+Men's D1	Imanuel Zorgvol	Youngstown State	
+Men's D1	Mister Dean	College of Charleston	
+Men's D1	Connor Horan	Iona	
+Men's D1	Jac Mani	Fresno State	
+Men's D1	A.J. LaBeau	Cornell	
+Men's D1	Jake Fiegen	Cornell	
+Men's D1	M.J. Yeager	Oakland	
+Men's D1	Jaxon Olvera	Louisiana	
+Men's D1	Ridvan Tutić	Stonehill	
+Men's D1	Nils Machowski	Wofford	
+Men's D1	Braeden Speed	Loyola (MD)	
+Men's D1	Khoi Thurmon	Oakland	
+Men's D1	Darin Smith, Jr.	Central Connecticut State	
+Men's D1	Tyler Lundblade	Belmont	Tennessee
+Men's D1	Landon Williams	Niagara	
+Men's D1	Matt Reed	Iona	
+Men's D2	Cairo Rivera	St. Thomas Aquinas	
+Men's D2	Trevor Barrett	Charleston	
+Men's D2	Chase Sucharda	Central Oklahoma	
+Men's D2	Jordan Clark	Central Washington	
+Men's D2	Javonne Nesbit	Oklahoma Christian	
+Men's D2	Khalil Genwright	Tuskegee	
+Men's D2	Max Żylicz	Cal State San Bernardino	
+Men's D2	Davon Smith-Johnson	Roosevelt	
+Men's D2	Rico Carr-Cole	Charleston	
+Men's D2	Ca'Darrius Sowell	Florida Tech	
+Men's D2	Taye Moore	Missouri–St. Louis	
+Men's D2	Donyae May	Arkansas Tech	
+Men's D2	Seck Zongo	Arkansas–Fort Smith	
+Men's D2	Carson Browne	Thomas More	
+Men's D2	Kanaan Holder	Arkansas–Fort Smith	
+Men's D2	Meka Nnaji	Fort Valley State	
+Men's D2	Korbin Dixon	Emory & Henry	
+Men's D2	Easton Reagan	Northwest Nazarene	UC Riverside
+Men's D2	Ethan Maynard	East Stroudsburg	
+Men's D2	Nigel Okwakol	Lees–McRae	
+Men's D2	Dontrell Jenkins	Davis & Elkins	
+Men's D2	Ty Glasper	Lincoln Memorial	
+Men's D2	Austin White	Florida Tech	
+Men's D2	Nowah Hargrow	Staten Island	
+Men's D2	Tarrance Warren	Barry	
+Men's D2	Elisha Warren	D'Youville	
+Men's D2	JoJo Wallace	Southern New Hampshire	
+Men's D2	Tyler Hamilton	Ferris State	
+Men's D2	Jeven Beltran	Western New Mexico	
+Men's D2	Hussein Elmaraghy	Ferris State	
+Men's D2	Camren Wilkes	West Virginia State	
+Men's D2	John Rose III	Concord	
+Men's D2	Petar Mijatović	King	
+Men's D2	Aidan Lambert	Fort Valley State	
+Men's D2	Elija Langston	Ferris State	
+Men's D2	Tyler Parrish	Indianapolis	Winthrop
+Men's D2	Matthew Puodziukaitis	Lynn	
+Men's D2	Nate Orr	Indianapolis	
+Men's D2	Sam Bradford	Arkansas Tech	
+Men's D2	Hamahrie Bowers	Roosevelt	
+Men's D2	Eric Gordon, Jr.	Chowan	
+Men's D2	Colin Hardrick	Drury	Northern Illinois
+Men's D2	Aurek Fenn	Frostburg State	
+Men's D2	Elijah Redfern	Glenville State	
+Men's D2	Jackson Crawford	Emory & Henry	
+Men's D1	Malachi Brown	Georgia State	
+Men's D1	Tre McKinnon	Appalachian State	
+Men's D1	Melian Martínez	Louisiana Tech	
+Men's D1	Ty Price	UT Martin	
+Men's D1	Chase Cormier	Iona	
+Men's D1	Chol Machot	College of Charleston	
+Men's D2	Adren Roberts	Barry	
+Men's D2	Aiden Johnson	Jamestown	
+Men's D2	Andrew Sineway	West Florida	
+Men's D2	Anthony Januzzi	Ashland	
+Men's D2	Antonio Pusateri	Lubbock Christian	
+Men's D2	Aries Hull	Roosevelt	
+Men's D2	Austin Abrams	Eastern New Mexico	
+Men's D2	Austin Johnson	Dominican (CA)	
+Men's D2	Austin Vick	Lynn	
+Men's D2	Blair Thomas	American International	
+Men's D2	Boubacar Djigo	Concord	
+Men's D2	Brian Blanchet	Goldey–Beacom	
+Men's D2	Broderick Ellis	Palm Beach Atlantic	
+Men's D2	Bryson Kittrell	Goldey–Beacom	
+Men's D2	Caleb Johnson	Winona State	
+Men's D2	Charlie Gehler	Biola	
+Men's D2	Chris Bibbs	Shorter	
+Men's D2	Chris Holley	Chico State	
+Men's D2	Christopher Brown	Mount Olive	
+Men's D2	Connor O'Leary	Assumption	
+Men's D2	Cooper Davis	Ashland	Flagler
+Men's D2	Cooper Kent	West Liberty	
+Men's D2	Corbin Pack	Wingate	
+Men's D2	Crew Flowers	Ouachita Baptist	
+Men's D2	David Williams	Miles	
+Men's D2	Deuce Benjamin	Minot State	
+Men's D2	Dillon Claussen	Washburn	Liberty
+Men's D2	Donte Hickman	Claflin	
+Men's D2	Draven Pilson	Lincoln (PA)	
+Men's D2	Drey Carter	Fairmont State	North Alabama
+Men's D2	E.J. Breland	Pittsburg State	
+Men's D2	E.J. Bryson	Azusa Pacific	
+Men's D2	E.J. Smith	Lincoln Memorial	
+Men's D2	Elisha Brown	Goldey–Beacom	
+Men's D2	Emarquis Jones	Goldey–Beacom	
+Men's D2	Eric Hackett	Maryville	
+Men's D2	Fatih Hüyük	Kentucky Wesleyan	
+Men's D2	Frederiks Meinarts	Lynn	
+Men's D2	Henry Sanchez	Maryville	Nelson University
+Men's D2	Hunter Lorenson	Minnesota–Crookston	
+Men's D2	Isaiah Davis	Barton	
+Men's D2	Isaiah Otyaluk	Drury	
+Men's D2	J.P. Baron	Lynn	
+Men's D2	Jack Perry	Pittsburg State	
+Men's D2	Jacquez Shuler	Allen	
+Men's D2	Jaden Battle	Roberts Wesleyan	
+Men's D2	Jahki Parrinello	Truman State	
+Men's D2	Jaiden Lee	Lane	
+Men's D2	Jaidyn West	Fairmont State	
+Men's D2	Jevon Hill	Central Missouri	
+Men's D2	Jordan Edwards	Ashland	
+Men's D2	Jovan Jovanović	Chadron State	
+Men's D2	Justin Grimes	UNC Pembroke	
+Men's D2	K.J. Anderson	West Alabama	
+Men's D2	Kam Roberts	Virginia–Wise	
+Men's D2	Keonjay Carter	Roberts Wesleyan	
+Men's D2	Knowledge Carter	Texas A&M International	
+Men's D2	Kolier Pruett	Virginia–Wise	
+Men's D2	Landon Dimler	Minnesota–Crookston	
+Men's D2	Lazerek Houston	Central Missouri	
+Men's D2	Malachi Murrell	Cal State San Bernardino	
+Men's D2	Marcus Burnett	Texas–Permian Basin	
+Men's D2	Marlon Williams	UIS	Davis & Elkins
+Men's D2	Mason Honeyman	Colorado Mesa	
+Men's D2	Max Hurray	West Liberty	Roanoke College
+Men's D2	Max Lidman	Virginia–Wise	
+Men's D2	Montraivis White	USC Aiken	
+Men's D2	Moustapha Sanoh	Jefferson	
+Men's D2	Noah Prosser	Pitt-Johnstown	
+Men's D2	Nohah Nichols	Ashland	
+Men's D2	Reece Walker	Angelo State	
+Men's D2	Reggie Reinhardt	Arkansas Tech	
+Men's D2	Sam Maynard	Young Harris	
+Men's D2	Seth Brown	Fresno Pacific	
+Men's D2	Spivey Word	Texas A&M International	
+Men's D2	Tahj Johnson	UNC Pembroke	
+Men's D2	Tony Chau	Charleston	
+Men's D2	Tre Powell	Goldey–Beacom	Chattanooga
+Men's D2	Trevor Maruska	Lee	
+Men's D2	Varick Lewis	Jessup	
+Men's D2	Will Lovings-Watts	Union	
+Men's D2	William Landram II	St. Thomas Aquinas	
+Men's D1	Abdulai Fanta Kabba	Western Carolina	
+Men's D1	A'lahn Sumler	Charleston Southern	
+Men's D1	All Wright	Xavier	
+Men's D1	Antonio Munoz	Grambling State	
+Men's D1	Ashton Smith	South Dakota	
+Men's D1	Ashton Walker	La Salle	
+Men's D1	Ben Defty	Boston University	
+Men's D1	Ben Wesson	Vermont	
+Men's D1	Brycen Blaine	Charleston Southern	
+Men's D1	Chance Gladden	Boston University	
+Men's D1	Christopher Cox	UC San Diego	
+Men's D1	Daquan Davis	Providence	
+Men's D1	Deshawn Gory	Fresno State	
+Men's D1	Deuce Jones II	Saint Joseph's	
+Men's D1	Didier Maleng	Denver	
+Men's D1	Dorian McMillian	Jackson State	
+Men's D1	Drew Scharnowski	Belmont	
+Men's D1	Eric Acker	La Salle	
+Men's D1	Ethan Copeland	Stetson	
+Men's D1	Ethan Duncan	Lipscomb	
+Men's D1	Evan Chatman	UAB	
+Men's D1	Fraser Roxburgh	Manhattan	
+Men's D1	Harrison Reede	Incarnate Word	
+Men's D1	Isaac Taveras	Southern Miss	
+Men's D1	Jacob Hudson	Gardner–Webb	
+Men's D1	Jahki Howard	Utah	
+Men's D1	Jamie Kaiser, Jr.	Butler	
+Men's D1	Javion Guy-King	Central Arkansas	
+Men's D1	Jon Carroll	Morehead State	
+Men's D1	Jordan Frison	Chattanooga	
+Men's D1	Kayden Fish	Ball State	
+Men's D1	Keyon Kensie, Jr.	Portland State	
+Men's D1	Luke Carter	Lipscomb	
+Men's D1	Nas Hart	La Salle	
+Men's D1	Preist Ryan	Cleveland State	
+Men's D1	Roddie Anderson III	Xavier	
+Men's D1	Stefan Vaaks	Providence	
+Men's D1	Sultan Adewale	Albany	
+Men's D1	Terry McMorris	Eastern Illinois	
+Men's D1	Tolu Samuels	Southern Indiana	
+Men's D1	Trajan Thompson	Denver	
+Men's D1	Uzziah Buntyn	South Dakota	
+Men's D1	Will Shortt	Niagara	
+Men's D1	Xavier Spencer	UMass Lowell	
+Men's D1	Jordan Fisher	Ohio	
+Men's D1	Andrew Fuquay	Marshall	
+Men's D1	Josué Grullon	La Salle	
+Men's D1	Samuel Hincapie	Le Moyne	
+Men's D1	Nate Deer	Oakland	
+Men's D1	E.J. Spillman	UC Riverside	
+Men's D1	Canin Jefferson	North Alabama	
+Men's D1	Joey Chammaa	Arkansas State	
+Men's D1	Davanté Hackett	Stonehill	
+Men's D1	Tyler Wagner	Austin Peay	
+Men's D1	Pedro Santos	UT Martin	
+Men's D1	Omar Adegbola	Northwestern State	
+Men's D1	Alfred Worrell, Jr.	Morgan State	
+Men's D1	J.C. Riley	Northwestern State	
+Men's D1	Michael Evbagharu	Canisius	
+Men's D1	Camp Wagner	Indiana State	
+Men's D1	Emmett Adair	Loyola (MD)	
+Men's D1	Braden Appelhans	Drake	
+Men's D1	KiJan Robinson	New Hampshire	
+Men's D1	Edwin Suarez	Weber State	
+Men's D1	Connor Swider	Youngstown State	
+Men's D1	Christian Humphrey-Rembert	Lafayette	
+Men's D1	Gus Etchison	Idaho State	
+Men's D1	Justyn Fernandez	Delaware	
+Men's D1	C.J. Hyland	Western Carolina	
+Men's D1	Jacob Meyer	UAB	
+Men's D1	Elijah Elliott	Ohio	
+Men's D2	Nate Sasser III	Chaminade	
+Men's D2	Fabio Da Rocha	Hawaii–Hilo	
+Men's D2	Dre Nobles	Hawaii–Hilo	
+Men's D2	Ernesto Almonte	Young Harris	
+Men's D2	Justin Payne	Young Harris	Morehead State
+Men's D2	Dorien Johnson	Erskine	
+Men's D2	Cal Klesmit	Northern Michigan	Northern Illinois
+Men's D2	Evan Simon	UIS	
+Men's D2	Sargent Jeffery	Dominican (CA)	
+Men's D2	Tre Blissett	St. Cloud State	
+Men's D2	Brandon Scott	Arkansas–Fort Smith	
+Men's D2	Jalen Atkins	Biola	
+Men's D2	Kobe Clark	Maryville	
+Men's D2	Bennett Basich	Northern Michigan	
+Men's D2	Daniel Burton	West Liberty	
+Men's D2	Christian Thompson	West Alabama	
+Men's D2	Martin Gumwel	Cal Poly Pomona	
+Men's D2	Kaden Hansen	Saint Martin's	
+Men's D2	Willie Jones	Young Harris	
+Men's D2	Iman Kheirati	Christian Brothers	
+Men's D2	Charlie Hill	West Liberty	
+Men's D2	Luke Winkel	St. Cloud State	
+Men's D2	Matthew Shelton	Charleston	
+Men's D2	Dylan Wolle	Young Harris	
+Men's D2	Matthieu Biembongo	Lincoln (MO)	
+Men's D2	Starrell Hearns	St. Thomas Aquinas	
+Men's D2	Ronyo Obou	Saint Martin's	
+Men's D2	Trent McNair	Palm Beach Atlantic	
+Men's D2	Brandon Fussell	Montevallo	Samford
+Men's D2	Hayden Abdullah	West Liberty	
+Men's D2	Anfernee Hanna	Concord	
+Men's D2	Daniel Henderson	Harding	
+Men's D2	Lucus Brown	D'Youville	Cornell College
+Men's D2	Micah Young	Concord	
+Men's D1	Jafeth Martinez	USC Upstate	
+Men's D1	Bernie Blunt III	Mercyhurst	
+Men's D1	Kevo St. Hilaire	Cleveland State	
+Men's D1	Nikolaos Chitikoudis	Robert Morris	
+Men's D1	James Evans, Jr.	Cal State Northridge	
+Men's D1	Always Wright	Texas–Rio Grande Valley	
+Men's D1	Damien King	UT Martin	
+Men's D1	Melo Sanchez	Central Connecticut State	
+Men's D1	London Praytor	Toledo	
+Men's D1	M.J. Russell	Louisiana–Monroe	
+Men's D1	Carmelo Adkins	USC Upstate	
+Men's D1	Obadiah Curtis	Houston Christian	
+Men's D1	Isaac Bruns	South Dakota	
+Men's D1	Shawn Simmons II	UMass Lowell	
+Men's D1	Anthony Robinson	Xavier	
+Men's D1	Ayden Evans	Ohio	
+Men's D1	Khamani Cooper	Omaha	
+Men's D1	Colby Garland	San José State	
+Men's D1	Jay Rodgers	Central Connecticut State	
+Men's D1	Max Frazier	Central Connecticut State	
+Men's D1	De'Undrae Perteete, Jr.	UC Riverside	
+Men's D1	Marcus Adams, Jr.	Arizona State	
+Men's D1	Brady Swartz	Western Michigan	
+Men's D1	Jaxon Edwards	IU Indy	
+Men's D1	Qadir Martin	Mercyhurst	
+Men's D1	Samson Aletan	Yale	
+Men's D1	Julius Clark	Gardner–Webb	
+Men's D1	Mykolaus Ivanauskas	Mercyhurst	
+Men's D2	Amari Williams	Lake Erie	
+Men's D2	JerMontae Hill	Morehouse	
+Men's D2	Diego Trejo-Delgado	Saint Martin's	
+Men's D2	Devon McKinnon	Montevallo	
+Men's D2	Jeremiah Anderson	Felician	
+Men's D2	Derek Delgardo, Jr.	Fort Valley State	
+Men's D2	Martez Burse	Harding	
+Men's D2	Danny Delgardo III	Fort Valley State	
+Men's D2	Ryan Conner	Cal State San Marcos	
+Men's D2	Ron Brown III	Millersville	
+Men's D2	Cesar Tchilombo	Millersville	
+Men's D2	Owen Hardy	Ferris State	
+Men's D2	Chris Harris	Biola	
+Men's D2	Xavier Harris	West Liberty	
+Men's D2	Hudson Yarbrough	Southern Wesleyan	
+Men's D2	Julian McGowan	Allen	
+Men's D2	Kyran Tilley	Central Missouri	
+Men's D2	Kyle Scharbrough	William Jewell	
+Men's D2	J.J. Ferrin	Wayne State (NE)	
+Men's D2	Daniel Mbaeteka	Shaw	
+Men's D2	Trevor Polite	Northern Michigan	Northern Illinois
+Men's D2	Keller Hanson	Northern Michigan	Northern Illinois
+Men's D2	D'Necco Rucker	Lincoln (MO)	
+Men's D2	Jordayn Buhrle	Northwestern Oklahoma State	
+Men's D2	Matt Gray	Davis & Elkins	
+Men's D2	Charles Turner	Grand Valley State	
+Men's D2	Joey Thomas	Clayton State	
+Men's D1	Adrian Myers	San José State	
+Men's D1	Andre Pasha	New Haven	
+Men's D1	Anthony Gause	Charleston Southern	
+Men's D1	Anthony Smith III	North Dakota	
+Men's D1	Binael Basil	Wagner	
+Men's D1	C.J. O'Hara	Green Bay	
+Men's D1	Cade Bennerman	Northwestern	
+Men's D1	Cash Chavis	UT Arlington	
+Men's D1	Charlie King	UT Martin	
+Men's D1	Christian Alston	Abilene Christian	
+Men's D1	Cord Stansberry	Western Carolina	
+Men's D1	Corneilous Williams	North Alabama	
+Men's D1	Cory Lovell	Stonehill	
+Men's D1	Dionjahe’ Thomas	Jackson State	
+Men's D1	Eian Lowe	Lamar	
+Men's D1	Elijah Strong	South Carolina	
+Men's D1	Fredy-Salam Sylla	Arkansas State	
+Men's D1	Gianni Cobb	Northern Illinois	
+Men's D1	Hunter Adam	Davidson	
+Men's D1	Isaiah Mbeng	East Carolina	
+Men's D1	Jamie Phillips, Jr.	Stetson	
+Men's D1	Jamil Muttilib	Grambling State	
+Men's D1	Jayden Tyler	Wofford	
+Men's D1	Jaylen Washington	Texas–Rio Grande Valley	
+Men's D1	Jeremiah Johnson	Campbell	
+Men's D1	Jeremy Lorenz	DePaul	
+Men's D1	Joe Hurlburt	Davidson	
+Men's D1	Jordan Stiemke	Loyola (MD)	
+Men's D1	Joshua Hughes	Evansville	
+Men's D1	Josiah Sabino	Niagara	
+Men's D1	Kajus Kublickas	Pacific	
+Men's D1	Kam Burton	Stephen F. Austin	
+Men's D1	Keshawn Fisher	Detroit Mercy	
+Men's D1	Koree Cotton	Texas–Rio Grande Valley	
+Men's D1	Lamont Jackson	Jacksonville	
+Men's D1	Manasseh Stackhouse, Jr.	Alabama A&M	
+Men's D1	Marcus Kell	Western Carolina	
+Men's D1	Marley Curtis	North Dakota	
+Men's D1	Matthew Bothun	North Dakota	
+Men's D1	Micah Tucker	Georgia State	
+Men's D1	Michael Mouton	Louisiana	
+Men's D1	Mike Collins	Louisiana	
+Men's D1	Nathan Johnson	Detroit Mercy	
+Men's D1	Nehemiah Turner	Minnesota	
+Men's D1	Phoenix Glassnor	Toledo	
+Men's D1	Renārs Sondors	Louisiana–Monroe	
+Men's D1	Rob Lee, Jr.	Lamar	
+Men's D1	Sean Logan	Davidson	
+Men's D1	William Kermoury	Northeastern	
+Men's D1	Yassine Gharram	Pepperdine	
+Men's D2	Connor Rogers	Pittsburg State	
+Men's D2	Jovan Ristić	Saint Anselm	
+Men's D2	Jaylen Bernikow	Millersville	
+Men's D2	Amir Cunningham	Millersville	
+Men's D2	Amondo Miller, Jr.	Lubbock Christian	
+Men's D2	Dominic Eason	USCB	
+Men's D2	Will Brown	UNC Pembroke	
+Men's D2	Jalai O’Keith	Alaska	
+Men's D2	Shedrach Makanjuola	Bridgeport	
+Men's D2	Jonny Ingalls	Northern Michigan	
+Men's D2	J.P. Ricks	UNC Pembroke	
+Men's D2	Lucas Mercandino	Lubbock Christian	Washburn
+Men's D2	Nino Carter-Smith	Lake Superior State	
+Men's D2	Bobby Hardison	Palm Beach Atlantic	
+Men's D2	Dawson Barr	Embry–Riddle	
+Men's D2	Cameron Brown	Biola	
+Men's D2	Grant Fridley	McKendree	
+Men's D2	Shaun Arnold	Indianapolis	Tennessee Tech
+Men's D2	D.J. Joseph	Sul Ross State	
+Men's D2	Abu Keita	Bemidji State	
+Men's D2	Antwonne Holmes	Sul Ross State	
+Men's D2	Orlando Horton, Jr.	Midwestern State	
+Men's D2	Moussa Ngom	Caldwell	
+Men's D2	Parker LePla	Indianapolis	Grand Valley State
+Men's D2	Vegas Evans	Davis & Elkins	
+Men's D2	Cam Crockett	Clarion	
+Men's D2	Christian Parks	Ouachita Baptist	
+Men's D1	Alessandro Perotti	Wofford	
+Men's D1	Amaree Brown	Southern Indiana	
+Men's D1	Andrew Okafor	Stony Brook	
+Men's D1	Anthony Benard	Canisius	
+Men's D1	Anton Bonke	Charlotte	
+Men's D1	Augustine Youssef	UT Arlington	
+Men's D1	B.J. Omot	Minnesota	
+Men's D1	Brayden Young	Loyola Chicago	
+Men's D1	Brigham Rogers	Belmont	
+Men's D1	Bryan Ndjonga	Canisius	
+Men's D1	Cavan Reilly	Delaware	
+Men's D1	Damari Wheeler-Thomas	North Dakota State	
+Men's D1	D'Andre Harrison	Kansas City	
+Men's D1	DeAndre Williams	Holy Cross	
+Men's D1	DeSean Goode	Robert Morris	
+Men's D1	Devon Arlington	Yale	
+Men's D1	Drew King	Youngstown State	
+Men's D1	E.J. Walker	South Carolina	
+Men's D1	Eemeli Yalaho	Washington State	
+Men's D1	Eli Ellis	South Carolina	
+Men's D1	Ethan Roberts	Penn	
+Men's D1	George Natsvlishvili	North Dakota	
+Men's D1	Greyson Uelmen	North Dakota	
+Men's D1	Isaac Nyakundi	Le Moyne	
+Men's D1	Jack Karasinski	Bellarmine	
+Men's D1	Jack Payne	Idaho	
+Men's D1	Jacob Hogarth	Gardner–Webb	
+Men's D1	Jayden Johnson	South Carolina State	
+Men's D1	Jeremy Elyzee	Southeastern Louisiana	
+Men's D1	Jordan Butler	South Carolina	
+Men's D1	Jordan Ellerbee	Florida Gulf Coast	
+Men's D1	Jordan Pyke	Incarnate Word	
+Men's D1	Josh Pickett	Presbyterian	
+Men's D1	K.C. Ugwuakazi	Merrimack	
+Men's D1	Kai Yu	Bradley	
+Men's D1	Kase Wynott	Washington State	
+Men's D1	Kwame Evans, Jr.	Oregon	
+Men's D1	Kyler Daugustino	IU Indy	
+Men's D1	Luke McEldon	Mount St. Mary's	
+Men's D1	Lureon Walker	North Carolina A&T	
+Men's D1	Malachi Arrington	NJIT	
+Men's D1	Malek Gomma	Weber State	
+Men's D1	Ned Hull	Elon	
+Men's D1	Noah Feddersen	North Dakota State	
+Men's D1	Okku Federiko	Drake	
+Men's D1	T.J. Lewis	USC Upstate	
+Men's D1	Torey Alston	Middle Tennessee	
+Men's D1	Trevon Blassingame	Idaho	
+Men's D1	Treyson Anderson	North Dakota State	
+Men's D1	Tylan Lewis	Abilene Christian	
+Men's D1	Xavier Brown	South Florida	
+Men's D2	Adrian Vazquez	Goldey–Beacom	
+Men's D2	Ajani Jamison	Simon Fraser	
+Men's D2	Anthony Igiede	West Florida	
+Men's D2	Anthony Swift	Nebraska–Kearney	
+Men's D2	Antoine Arnett	California (PA)	
+Men's D2	Antonio Foxwell	Christian Brothers	
+Men's D2	Ashton Hermann	Upper Iowa	
+Men's D2	Braelyn Dale	Minot State	
+Men's D2	Bralyn Smith	Central Washington	
+Men's D2	Brayden Gross	Walsh	
+Men's D2	Brennan Chatman	St. Thomas Aquinas	
+Men's D2	Bryson Lucas	California (PA)	Florida Gulf Coast
+Men's D2	C.J. Jones	Georgia College	
+Men's D2	Caleb Carr	Texas A&M–Kingsville	
+Men's D2	Cam Regnerus	Grand Valley State	
+Men's D2	Carson Yale	Minot State	
+Men's D2	Chae Haynes	Central Washington	
+Men's D2	Cole White	Benedict	
+Men's D2	Connor Roffers	Winona State	
+Men's D2	Connor Spratt	Point Park	
+Men's D2	Dalman Alexander	California (PA)	
+Men's D2	David Oriaku	Texas A&M–Kingsville	
+Men's D2	Devon Lassiter, Jr.	Elizabeth City State	
+Men's D2	Don Douglass	Lake Superior State	
+Men's D2	Eli Stokes	Emporia State	
+Men's D2	Freddie Cooper	St. Mary's (TX)	
+Men's D2	Grayson Kirk	Claflin	
+Men's D2	Harvey White	Colorado Mesa	
+Men's D2	J.J. Walton	St. Mary's (TX)	
+Men's D2	Jadyn Murray	Purdue Northwest	
+Men's D2	Jalen Brown	Cal State Dominguez Hills	
+Men's D2	Jamian Jackson	Benedict	
+Men's D2	Jayden Daisy	California (PA)	Mount Olive
+Men's D2	Jeremiah Jones	Washburn	Lamar
+Men's D2	Jeremy Moore	Southwest Baptist	
+Men's D2	Jordyn Buchanan	California (PA)	
+Men's D2	Josh Michigan	St. Thomas Aquinas	
+Men's D2	Kameron Foman	Benedict	
+Men's D2	Kobe Long	Holy Family	
+Men's D2	Kole Hanson	Minnesota–Duluth	
+Men's D2	Lincoln Palbicki	Maryville	
+Men's D2	Moussa Camara	Felician	
+Men's D2	Pablo Navarro	Saint Martin's	
+Men's D2	Parker Kroon	Alaska Anchorage	
+Men's D2	Promise Opurum	Pace	
+Men's D2	Quintero Barnett	Walsh	Middle Tennessee
+Men's D2	Rashawn Inglemon	Anderson	
+Men's D2	Ryan Paris	Thomas More	
+Men's D2	Ryder Bradley	St. Edward's	
+Men's D2	Samarion Bond	Valdosta State	
+Men's D2	Tevin Riehl	Colorado Mesa	
+Men's D2	Trey Smith	Ouachita Baptist	
+Men's D2	Wesley Isoje	New Mexico Highlands	
+Men's D2	Will Davies	Saint Anselm	
+Men's D2	Will McCrory	Delta State	
+Men's D2	Yanis Mahoundo	Colorado Mesa	
+Men's D1	Adam Olsen	South Alabama	
+Men's D1	Amir Lindsey	Albany	
+Men's D1	Andrija Bukumirović	UT Martin	
+Men's D1	Ari Fulton	NJIT	
+Men's D1	Armari Carraway	Charleston Southern	
+Men's D1	B.J. Davis	San Diego State	
+Men's D1	Belal El Shakery	New Hampshire	
+Men's D1	Ben Tweedy	Colgate	
+Men's D1	Bube Momah	Lehigh	
+Men's D1	Cardell Bailey	Southern Indiana	
+Men's D1	Christian Bliss	Delaware	
+Men's D1	Christian Harmon	Arkansas State	
+Men's D1	Christian Meeks	Morgan State	
+Men's D1	Collin Kuhl	Stetson	
+Men's D1	Comeh Emuobor	New Hampshire	
+Men's D1	Cornelius Robinson, Jr.	Monmouth	
+Men's D1	Damarion Dennis	Wyoming	
+Men's D1	Devin Dinkins	Manhattan	
+Men's D1	Drew Steffe	Southern Illinois	
+Men's D1	Dylan Diaz	Louisiana–Monroe	
+Men's D1	Emanuel Richards	Longwood	
+Men's D1	Emil Skyttä	North Dakota State	
+Men's D1	Erik Oliver-Bush	Manhattan	
+Men's D1	Garrett Sundra	Notre Dame	
+Men's D1	Izaiah Pasha	Virginia Tech	
+Men's D1	Jabri Fitzpatrick	New Haven	
+Men's D1	Jack Robison	Wisconsin	
+Men's D1	Jackson Shelstad	Oregon	
+Men's D1	Jacoi Hutchinson	Longwood	
+Men's D1	Jai Chisolm	Cal State Northridge	
+Men's D1	Jakob Blakley	Le Moyne	
+Men's D1	Jamarion Davis-Fleming	Mississippi State	
+Men's D1	James Morrow	South Carolina State	
+Men's D1	JB Frankel	Northeastern	
+Men's D1	Jordan Lowery	UT Arlington	
+Men's D1	Justin Menard	Marist	
+Men's D1	Justin Ray	Monmouth	
+Men's D1	K.J. Lewis	Georgetown	
+Men's D1	Kaden Cooper	Louisiana Tech	
+Men's D1	Kaia Berridge	Evansville	
+Men's D1	Kedar Bodie	North Alabama	
+Men's D1	Kevon Vanderhorst	Drexel	
+Men's D1	L.A. Pratt	Northeastern	
+Men's D1	Leon Nahar	Stony Brook	
+Men's D1	Luke Haertle	South Dakota State	
+Men's D1	Maguire Mitchell	IU Indy	
+Men's D1	Marshal Destremau	Texas–Rio Grande Valley	
+Men's D1	Max Majerle	North Dakota State	
+Men's D1	Melih Tunca	Penn State	
+Men's D1	Mikale Stevenson	Purdue Fort Wayne	
+Men's D1	Miles Hicks	William & Mary	
+Men's D1	Parker Friedrichsen	Davidson	
+Men's D1	Paul Djobet	Omaha	
+Men's D1	Paulius Murauskas	Saint Mary's	
+Men's D1	Prince Johnson	Eastern Illinois	
+Men's D1	R.J. Jones	TCU	
+Men's D1	Reid Cason	East Carolina	
+Men's D1	Reid Ducharme	Siena	
+Men's D1	Rikus Schulte	Fordham	
+Men's D1	Robert Davis, Jr.	Old Dominion	
+Men's D1	Sam Smith	Wagner	
+Men's D1	Sir Mohammed	Notre Dame	
+Men's D1	Sola Adebisi	The Citadel	
+Men's D1	T.J. Nadeau II	Detroit Mercy	
+Men's D1	Tyran Cook	Western Illinois	
+Men's D1	Yoav Berman	Queens (NC)	
+Men's D1	Yuval Levin	Purdue Fort Wayne	
+Men's D1	Zyier Beverly	Binghamton	
+Men's D2	Andre Walker II	LeMoyne–Owen	
+Men's D2	Anthony Magwood-Spann	Benedict	
+Men's D2	B.J. Brown, Jr.	West Alabama	
+Men's D2	Ben Averitt	Central Oklahoma	
+Men's D2	Brandon Null	Walsh	
+Men's D2	Caden Harris	Point Loma Nazarene	
+Men's D2	Caleb Evans	East Central	
+Men's D2	Christopher Nana	Mercy	
+Men's D2	Chuol Deng	Fort Lewis	
+Men's D2	Clayton Jewell	Colorado Mesa	
+Men's D2	Conrad Luczynski	Lenoir–Rhyne	
+Men's D2	Courage Agbekpornu	LeMoyne–Owen	
+Men's D2	Dallis Dillard	Indiana (PA)	
+Men's D2	Darrell Washington	Pittsburg State	
+Men's D2	Darrien Berrios Rivera	Mansfield	
+Men's D2	Deshawne Crim	Central Missouri	
+Men's D2	Devin Barksdale	Auburn–Montgomery	
+Men's D2	Dominic Commisso	Saint Leo	
+Men's D2	Enire Bowens	Slippery Rock	
+Men's D2	Ethan Sage	Pittsburg State	
+Men's D2	Henry Sandberg	Seattle Pacific	
+Men's D2	Hudson Linsenmeyer	East Central	
+Men's D2	Ibrahim Turay	California (PA)	
+Men's D2	Isaiah Griffin	Saint Anselm	
+Men's D2	Jack Medalie	Saint Anselm	
+Men's D2	Jahmire Brewer	Lincoln (PA)	
+Men's D2	Jaiden McGhee	Bowie State	
+Men's D2	Jamal Hicks, Jr.	St. Thomas Aquinas	
+Men's D2	Jameel Wesley II	Henderson State	
+Men's D2	James Livingston	Texas A&M–Kingsville	
+Men's D2	Javion Otten	Grand Valley State	
+Men's D2	John Mobley	Edinboro	
+Men's D2	Jordan Smith	Flagler	
+Men's D2	Joseph Allen	Bowie State	
+Men's D2	Julian Williams	Goldey–Beacom	
+Men's D2	Kap Laila	Colorado Mesa	
+Men's D2	Kendall Campbell	Wingate	
+Men's D2	Keylon Dorsey	Western New Mexico	
+Men's D2	Kyle Benjamin	Millersville	
+Men's D2	Lenier Pocknett	King	
+Men's D2	Liam Switzer	Fresno Pacific	
+Men's D2	Malachi Miller	Western Washington	
+Men's D2	Nate Francis	Metro State	
+Men's D2	Naz Brown	Central Missouri	
+Men's D2	Nikk Williams	New Mexico Highlands	
+Men's D2	Noah Payne	Assumption	
+Men's D2	Quentin Meza	Hawaii Pacific	
+Men's D2	R.J. Winegarner	Walsh	
+Men's D2	Ries Naugle	Bloomsburg	
+Men's D2	Ronald Bridges, Jr.	Lincoln (PA)	
+Men's D2	Sheick Samoura	Slippery Rock	
+Men's D2	Thomas Adams	Adams State	
+Men's D2	Xair Mendez	Cal State San Marcos	
+Men's D1	Akbar Waheed III	Boston College	
+Men's D1	Alex Farley	Ball State	
+Men's D1	Anthony Bates, Jr.	Louisiana Tech	
+Men's D1	Ben Roseborough	San José State	
+Men's D1	Brooklyn Hicks	Montana	
+Men's D1	Cam Tweedy	St. Francis (PA)	
+Men's D1	Christian Hammond	Santa Clara	
+Men's D1	D.J. Dudley	Louisiana Tech	
+Men's D1	Damarien Yates	Alabama State	
+Men's D1	Dayan Nessah	Cleveland State	
+Men's D1	Dedan Thomas, Jr.	LSU	
+Men's D1	Dellquan Warren	Mississippi State	
+Men's D1	Demarion Burch	Bradley	
+Men's D1	Donovan Hunter	Bellarmine	
+Men's D1	Dylan Saunders	New Hampshire	
+Men's D1	Dylan Williamson	Towson	
+Men's D1	Easton Hupp	Charleston Southern	
+Men's D1	Gavin Doty	Siena	
+Men's D1	Ilija Milijašević	DePaul	
+Men's D1	Isaac Celiscar	Yale	
+Men's D1	Jacob Brandly	Queens (NC)	
+Men's D1	Jaden Jackson	South Dakota State	
+Men's D1	Jaden Winston	Manhattan	
+Men's D1	Jaden Zimmerman	Quinnipiac	
+Men's D1	Jalen Shelley	Loyola Marymount	
+Men's D1	Jalyke Gaines-Wyatt	Hampton	
+Men's D1	Jayden Cooper	South Alabama	
+Men's D1	Joel Foxwell	Portland	
+Men's D1	Justin Page	Niagara	
+Men's D1	K.J. Windham	Northwestern	
+Men's D1	Khalil Farmer	UMass Lowell	
+Men's D1	Kobi Williams	Missouri State	
+Men's D1	Kolton Mitchell	Idaho	
+Men's D1	Lateef Patrick, Jr.	Stephen F. Austin	
+Men's D1	Linus Holmström	VMI	
+Men's D1	Logan Suber	Lipscomb	
+Men's D1	Luca Soroa Schaller	Northeastern	
+Men's D1	Maban Jabriel	Queens (NC)	
+Men's D1	Makaih Williams	GCU	
+Men's D1	Malik Olafioye	Eastern Illinois	
+Men's D1	Meechie White	Eastern Illinois	
+Men's D1	Mekhi Cooper	Lindenwood	
+Men's D1	Michael Wilson, Jr.	Bellarmine	
+Men's D1	Mikey Lewis	Saint Mary's	
+Men's D1	P.J. James	Delaware State	
+Men's D1	Rich Barron	Providence	
+Men's D1	Roberts Blūms	Davidson	
+Men's D1	Rodney Brown	Loyola Marymount	
+Men's D1	Ryan Prather, Jr.	Robert Morris	
+Men's D1	Ryder Frost	Notre Dame	
+Men's D1	Seth Hubbard	Milwaukee	
+Men's D1	Tanner Thomas	Loyola Marymount	
+Men's D1	Trevian Carson	North Dakota State	
+Men's D1	Trevon Payton	Arkansas–Pine Bluff	
+Men's D2	A.J. Wright, Jr.	Anderson	
+Men's D2	Abou Camara	Winston-Salem State	
+Men's D2	C.J. Vaughn	Elizabeth City State	
+Men's D2	Camden Cowgill	West Texas A&M	
+Men's D2	Casey Steadmon	Hawaii Pacific	
+Men's D2	Charles McClennahan, Jr.	Midwestern State	
+Men's D2	Christian Moore	Indiana (PA)	
+Men's D2	Cody Lechlider	Missouri Southern	
+Men's D2	DeAndrae Seeden	Lock Haven	
+Men's D2	DeMarreya Lewis-Cooper	Cal Poly Pomona	
+Men's D2	Donjae’ Lindsey	Stanislaus State	
+Men's D2	Donovan Flamer	Elizabeth City State	
+Men's D2	Donovan Long	Felician	
+Men's D2	Edward Onyia	Saint Anselm	
+Men's D2	James Henderson, Jr.	Spring Hill	
+Men's D2	Jayden Cox	Western New Mexico	
+Men's D2	Josh Linder	North Greenville	
+Men's D2	Joshua Caine	Virginia Union	
+Men's D2	Ky Panda-Massey	St. Thomas Aquinas	
+Men's D2	Latavious Morris	New Mexico Highlands	
+Men's D2	Makai Coleman	Southern Connecticut State	
+Men's D2	Makeer Makeer	Missouri–St. Louis	
+Men's D2	Mike Sarden	Cal Poly Humboldt	
+Men's D2	Nathan Bunkosky	St. Cloud State	
+Men's D2	Quenton Parker	Missouri–St. Louis	
+Men's D2	R.J. Chatman	Northwest Nazarene	
+Men's D2	Ramiah Adedigba	New Mexico Highlands	
+Men's D2	Tre Crite	Winston-Salem State	
+Men's D2	Tyre Boykin	Winston-Salem State	
+Men's D2	Varun Madabhushi	Cal Poly Humboldt	
+Men's D1	Aaron Hunkin-Claytor	Hawaii	
+Men's D1	Adrian Samuels	American	
+Men's D1	Alex Mirhosseini	Arkansas–Pine Bluff	
+Men's D1	Andrell Burton, Jr.	South Dakota State	
+Men's D1	Andrew Phillips	Lafayette	
+Men's D1	Brian Griffith	Niagara	
+Men's D1	Calvin Sirmans	Stetson	
+Men's D1	Cam Christy	Winthrop	
+Men's D1	Chris Loofe	Middle Tennessee	
+Men's D1	Collin Mulholland	Chattanooga	
+Men's D1	Darrel Yepdo	UMass Lowell	
+Men's D1	David Douglas, Jr.	Fresno State	
+Men's D1	David Idada	Southeast Missouri State	
+Men's D1	Dezdrick Lindsay	Oregon	
+Men's D1	Dovydas Butka	Campbell	
+Men's D1	Eugene Alvin	Morgan State	
+Men's D1	Gestin Liberis	St. Francis (PA)	
+Men's D1	Handy Toussaint III	Bradley	
+Men's D1	Harris Dar	Stephen F. Austin	
+Men's D1	Hobert Grayson	Ole Miss	
+Men's D1	Isaac Harrell	Elon	
+Men's D1	Isaiah Washington	Northern Illinois	
+Men's D1	Jackson Holcombe	Utah Valley	
+Men's D1	Jackson Rasmussen	Idaho	
+Men's D1	Jacob Walker	Sam Houston State	
+Men's D1	Jaedyn Brown	Idaho State	
+Men's D1	Jahni Summers	Sacramento State	
+Men's D1	JaJuan Nicholls	Tennessee Tech	
+Men's D1	Jalen Reed	LSU	
+Men's D1	Jason Schofield	Marist	
+Men's D1	Jaydon Cole	Mercer	
+Men's D1	Julian Margrave	Omaha	
+Men's D1	Justin Monden	Maryland Eastern Shore	
+Men's D1	Karmani Gregory	USC Upstate	
+Men's D1	Karson Templin	Utah State	
+Men's D1	Kelcy Phipps	Portland State	
+Men's D1	Kye Dickson	Texas–Rio Grande Valley	
+Men's D1	Landyn Jumawan	Northwestern State	
+Men's D1	Magnus Entenmann	Kent State	
+Men's D1	Marqus Marion	Wake Forest	
+Men's D1	Mayar Wol	Bowling Green	
+Men's D1	Miles Goodman	UT Arlington	
+Men's D1	Milhan Charles	Arkansas–Pine Bluff	
+Men's D1	Miller McGowan	Stetson	
+Men's D1	Montavious Myrick	Eastern Kentucky	
+Men's D1	Otto Landrum	Boston University	
+Men's D1	Parker Gerrits	Washington State	
+Men's D1	Ralph Martino, Jr.	St. Francis (PA)	
+Men's D1	Ron Zipper	LSU	
+Men's D1	Sam Orme	Belmont	
+Men's D1	Shane Blakeney	Drexel	
+Men's D1	Tahlan Pettway	Western Carolina	
+Men's D1	Tajae Jones	Siena	
+Men's D1	Trevan Leonhardt	Utah Valley	
+Men's D1	Trey Thomas	Southern Indiana	
+Men's D1	Wiggy Ball	Louisiana–Monroe	
+Men's D1	Zack Davidson	Northern Arizona	
+Men's D1	Zion Russell	St. Francis (PA)	
+Men's D2	Walter Campbell	Lincoln Memorial	
+Men's D2	Tahj-Malik Campbell	Queens (NY)	
+Men's D2	Quincy Thomas	Rockhurst	
+Men's D2	P.J. Noles	Lincoln Memorial	
+Men's D2	Nic Williams	Malone	
+Men's D2	Nathan Fife	Northern Michigan	
+Men's D2	Michael Kalina	Rollins	
+Men's D2	Micah Deaver	Rockhurst	Parkside
+Men's D2	Massi Malterer	Rockhurst	
+Men's D2	Marcel Gardner	Fairmont State	
+Men's D2	London Burton	Rockhurst	
+Men's D2	Landon Jeffries	Benedict	
+Men's D2	Kyle Grill	Fort Hays State	
+Men's D2	Kennard Wyche	Virginia Union	
+Men's D2	Jon Brantley	Wayne State (MI)	
+Men's D2	Jackson Henry	Mansfield	
+Men's D2	J.J. Mitchell	Cal State Dominguez Hills	
+Men's D2	Ignacio García	Lubbock Christian	
+Men's D2	Federico Longo	St. Thomas Aquinas	
+Men's D2	Emmanuel James	Lincoln Memorial	
+Men's D2	Elliot Tulip	West Alabama	
+Men's D2	Donte Whymns	Benedict	
+Men's D2	Dillon Mong	Rockhurst	Parkside
+Men's D2	David Scariano II	Point Loma Nazarene	
+Men's D2	Dallas Kendall	Lincoln Memorial	
+Men's D2	Cristian Willis	Benedict	
+Men's D2	Cameron Walker	Chowan	
+Men's D2	Bol Kuir	Virginia Union	
+Men's D2	AuMauri Tillman	Francis Marion	
+Men's D2	Arthur Roaché	District of Columbia	
+Men's D2	Andrew Mills	Valdosta State	
+Men's D2	Alijah Curry	Pittsburg State	
+Men's D1	Azavier Robinson	Butler	
+Men's D1	Caleb Blackwell	UTEP	
+Men's D1	Clayton Jackson	Lindenwood	
+Men's D1	David Iweze	Utah State	
+Men's D1	DeMarco Johnson	Elon	
+Men's D1	Deng Garang	Le Moyne	
+Men's D1	DeShawn Harris-Smith	Georgetown	
+Men's D1	Dre Kindell	Wichita State	
+Men's D1	Dylan Faulkner	Samford	
+Men's D1	Dylan James	Georgia	
+Men's D1	Eduardo Klafke	Ole Miss	
+Men's D1	Eli Greenberg	Le Moyne	
+Men's D1	Eric Parnell	Fairleigh Dickinson	
+Men's D1	Evan Haywood	Butler	
+Men's D1	Frankie Collins	Vanderbilt	
+Men's D1	Grant Randall	Quinnipiac	
+Men's D1	Isaac Finlinson	Hawaii	
+Men's D1	Isaiah Johnson	Colorado	
+Men's D1	Jake Edwards	Western Illinois	
+Men's D1	Jake Wahlin	Clemson	
+Men's D1	Jameel Morris	Alcorn State	
+Men's D1	Jaxon Pardon	Bowling Green	
+Men's D1	Jaxson Ford	Sam Houston State	
+Men's D1	Jaylen Harrell	Providence	
+Men's D1	Juan Cranford, Jr.	Eastern Kentucky	
+Men's D1	K.J. Younger	UNCG	
+Men's D1	Kameron Taylor	UNC Asheville	
+Men's D1	Kjay Bradley, Jr.	San Diego	
+Men's D1	Kyle Evans	UC Irvine	
+Men's D1	Luke Almodovar	Southeast Missouri State	
+Men's D1	M.J. Williams	Eastern Kentucky	
+Men's D1	Malik Ferguson	Tennessee Tech	
+Men's D1	Miles Byrd	San Diego State	
+Men's D1	Miles Webb	Delaware State	
+Men's D1	Neoklis Avdalas	Virginia Tech	
+Men's D1	Rolyns Aligbe	Southern Illinois	
+Men's D1	Sebastian Hartmann	Chattanooga	
+Men's D1	Shon Tupuola	Valparaiso	
+Men's D1	Skylar Wicks	St. Francis (PA)	
+Men's D1	Tómas Þrastarson	Washington State	
+Men's D1	Trey Horton III	UTEP	
+Men's D1	Victor Valdés	Troy	
+Men's D1	William Humer	Northern Colorado	
+Men's D1	Zion Sensley	UC Santa Barbara	
+Men's D1	Zyair Greene	Indiana State	
+Men's D2	Andrew Hommes	Point Loma Nazarene	
+Men's D2	Jaden Matingou	Point Loma Nazarene	
+Men's D2	Colin Ruffin	Missouri Southern	
+Men's D1	Ashton Hardaway	Memphis	
+Men's D1	B.J. Ward	Southeast Missouri State	
+Men's D1	Daniel Zatsepin	Chicago State	
+Men's D1	Dusty Stromer	GCU	
+Men's D1	Eddie Ricks III	James Madison	
+Men's D1	Evan Anderson	South Dakota	
+Men's D1	Jaland Lowe	Kentucky	
+Men's D1	Jaylen Pazon	VMI	
+Men's D1	Josh Dalton	Loyola Marymount	
+Men's D1	Leroy Blyden, Jr.	Toledo	
+Men's D1	Mohammad Habhab	Eastern Michigan	
+Men's D1	Simon Wheeler	Jacksonville	
+Men's D1	Yancarlos Cueto	North Carolina A&T	
+Men's D1	Assane Diop	San Diego	
+Men's D1	Bangot Dak	Colorado	
+Men's D1	Braxton Jones	Southern Indiana	
+Men's D1	Brendan Rigsbee	Wofford	
+Men's D1	Damone King	Rhode Island	
+Men's D1	Daniel Kwon	Lindenwood	
+Men's D1	Devin Royal	Ohio State	
+Men's D1	Dravyn Gibbs-Lawhorn	UNLV	
+Men's D1	Eddrin Bronson	Furman	
+Men's D1	Jalen Cox	Colgate	
+Men's D1	Jesse McIntosh	South Dakota	
+Men's D1	Joah Chappelle	Georgia State	
+Men's D1	Joshua Eli	Army West Point	
+Men's D1	K.J. Tenner	Murray State	
+Men's D1	Keanu Dawes	Utah	
+Men's D1	Marcus Pigram	Western Illinois	
+Men's D1	Myles Che	UNLV	
+Men's D1	Noah Benny	Sam Houston State	
+Men's D1	Obinnaya Okafor	VCU	
+Men's D1	Phillip Kavu	Davidson	
+Men's D1	R.J. Johnson	Kennesaw State	
+Men's D1	Trey Brown	Maryland Eastern Shore	
+Men's D1	Wilson Jacques	Fresno State	
+Men's D2	Ahmed Soumahoro	Columbus State	
+Men's D2	Aric Demings	West Florida	
+Men's D2	Dallas Jones	Anderson	
+Men's D2	Domonic Turner, Jr.	Pittsburg State	
+Men's D2	Drew Fisher	Lewis	
+Men's D2	Elijah Bragg	Northwestern Oklahoma State	
+Men's D2	Harry Geng	Saint Michael's	
+Men's D2	Jabari Phillip, Jr.	Christian Brothers	
+Men's D2	Jordan Lambert	Virginia State	
+Men's D2	Ken Sallee	Concord	
+Men's D2	Kevaughn Price	USCB	
+Men's D2	Khirus Doucet	Fort Valley State	
+Men's D2	Luke Wieskamp	Menlo	
+Men's D2	Osmar Garcia-Araujo	Anderson	
+Men's D2	Rico Byrd	Saint Michael's	
+Men's D2	Thomas Allard	Alabama–Huntsville	
+Men's D2	Troy Anderson	Truman State	
+Men's D1	Adante’ Holiman	Arizona State	
+Men's D1	Albert Vargas	Robert Morris	
+Men's D1	Andrew McKeever	Saint Mary's	
+Men's D1	Anthony Robinson II	Missouri	
+Men's D1	Augustinas Kiudulas	Colorado State	
+Men's D1	Brady Dunlap	Saint Louis	
+Men's D1	Braedan Lue	Kennesaw State	
+Men's D1	Braeden Carlsen	Mercer	
+Men's D1	Brandon Benjamin	San Diego	
+Men's D1	Brett Decker, Jr.	Liberty	
+Men's D1	Caleb Pennyfeather	Little Rock	
+Men's D1	Cam Miles	Florida State	
+Men's D1	Cameron Patterson	Texas Southern	
+Men's D1	Carlsheon Young	Pacific	
+Men's D1	Christian Fermin	VCU	
+Men's D1	Colin Smith	UC Santa Barbara	
+Men's D1	Connor Amundsen	Dartmouth	
+Men's D1	Daemar Kelly	Northern Illinois	
+Men's D1	Daeshun Ruffin	Jackson State	
+Men's D1	Dasonte Bowen	St. Bonaventure	
+Men's D1	Dior Johnson	Tarleton State	
+Men's D1	Drew Fielder	Boise State	
+Men's D1	Efeosa Oliogu-Elabor	Butler	
+Men's D1	Emmanuel Callas	San Diego	
+Men's D1	Filip Radaković	UT Martin	
+Men's D1	Finley Bizjack	Butler	
+Men's D1	Franck Emmou	Texas State	
+Men's D1	Frankquon Sherman	Kennesaw State	
+Men's D1	Gabe Warren	Holy Cross	
+Men's D1	Henri Adiassa	Lehigh	
+Men's D1	Hudson Mayes	UC San Diego	
+Men's D1	Isiah Harwell	Houston	
+Men's D1	J.P. Dragas	IU Indy	
+Men's D1	Jason Fontenet II	UC Santa Barbara	
+Men's D1	Jason Rivera-Torres	Monmouth	
+Men's D1	Javan Buchanan	Boise State	
+Men's D1	Jayden Teat	Sacramento State	
+Men's D1	Jaylen Jordon	Jacksonville	
+Men's D1	Jaylin Payne	Longwood	
+Men's D1	Jeremiah Wilkinson	Georgia	
+Men's D1	Jerquarius Stanback	Alabama State	
+Men's D1	John Broom	South Alabama	
+Men's D1	Justin Neely	UNCG	
+Men's D1	K.J. Thomas	UTEP	
+Men's D1	Kachi Nzeh	Little Rock	
+Men's D1	Kalu Anya	Saint Louis	
+Men's D1	Kevin Pazmino	Nicholls	
+Men's D1	Khalil London	Tennessee State	
+Men's D1	K'Jei Parker	Massachusetts	
+Men's D1	Kory Mincy	George Mason	
+Men's D1	Lewis Walker	North Carolina A&T	
+Men's D1	Marley Zeller	Loyola Marymount	
+Men's D1	Marlon Barnes, Jr.	Evansville	
+Men's D1	Mazi Mosley	LSU	
+Men's D1	Michael Cooper	Wright State	
+Men's D1	Michael Eley	Hampton	
+Men's D1	Money Williams	Montana	
+Men's D1	Nate Fouts	Le Moyne	
+Men's D1	Nils Cooper	UC Davis	
+Men's D1	Noah Boyde	Western Kentucky	
+Men's D1	Noah Nørgaard	UNCG	
+Men's D1	Nyle Ralph-Beyer	Sacred Heart	
+Men's D1	Sadiku Ibine Ayo	St. John's	
+Men's D1	Sananda Fru	Louisville	
+Men's D1	Sebastian Akins	Wake Forest	
+Men's D1	Sebastian Rančík	Colorado	
+Men's D1	Shelton Williams-Dryden	West Georgia	
+Men's D1	Stephen Osei	Kansas State	
+Men's D1	T.J. Burch	Wright State	
+Men's D1	T.J. Johnson	VMI	
+Men's D1	T.J. Robinson	Saint Peter's	
+Men's D1	Tijan Saine	Weber State	
+Men's D1	Trent Mosquera	Le Moyne	
+Men's D1	Tybo Bailey	East Carolina	
+Men's D1	Tyler Tejada	Towson	
+Men's D1	Tylik Weeks	Southern Miss	
+Men's D1	Waqo Tessema	Cleveland State	
+Men's D1	Will Underwood	Wake Forest	
+Men's D1	Xander Alarie	Northeastern	
+Men's D1	Zaon Collins	Fresno State	
+Men's D2	Bela Clobes	Southeastern Oklahoma State	
+Men's D2	Benjamin Bill	Daemen	
+Men's D2	Caileb Parham	New Mexico Highlands	
+Men's D2	Darnell Evans	Clark Atlanta	
+Men's D2	Ja'Bryant Hill	Nebraska–Kearney	
+Men's D2	Jayce Tillman	Southern Arkansas	
+Men's D2	Joel Speckman II	Black Hills State	
+Men's D2	Jordan Mitchell	Columbus State	
+Men's D2	Josh Haskell	Daemen	
+Men's D2	Josiah Rickards	Concord	
+Men's D2	Josiah Rickards	Concord	
+Men's D2	Kendrick Gilbert	Nebraska–Kearney	
+Men's D2	Luke Murphy	Saint Martin's	
+Men's D2	Marcus Zeigler, Jr.	Central Oklahoma	
+Men's D2	Matthew Elderkin	Grand Valley State	
+Men's D2	Matthew Schmainda	Michigan Tech	
+Men's D2	Ronnie Williams	Daemen	
+Men's D2	Ryan Heath	Daemen	
+Men's D2	Saif Saleh	Pace	
+Men's D2	Santana Sinvilcin	Daemen	
+Men's D2	Shahar Lazar	West Florida	
+Men's D2	Zach Philipkoski	Daemen	
+Men's D2	Zaylan Chaney	Eastern New Mexico	
+Men's D1	Alex Wilkins	Furman	
+Men's D1	Avery Thomas II	Louisiana Tech	
+Men's D1	Baraka Okojie	Mercer	
+Men's D1	Baye Ndongo	Georgia Tech	
+Men's D1	Blake Barkley	ETSU	
+Men's D1	Blake Smith	Northwestern	
+Men's D1	Bradley Land	Radford	
+Men's D1	Brandin Cummings	Pittsburgh	
+Men's D1	Brandon Benjamin	Fairfield	
+Men's D1	Brant Byers	Miami (OH)	
+Men's D1	Bubu Benjamin	George Washington	
+Men's D1	Cade Lomas	Georgia Southern	
+Men's D1	Cam Estevez	Fairfield	
+Men's D1	Camren Hunter	Central Arkansas	
+Men's D1	Carson Schwieger	Queens (NC)	
+Men's D1	Chase Mayo Harmon	California Baptist	
+Men's D1	Christian Gurdak	Virginia Tech	
+Men's D1	Cobi Campbell	Troy	
+Men's D1	Cooper Schwieger	Wake Forest	
+Men's D1	Courtland Muldrew	Washington	
+Men's D1	Daniel Freitag	Buffalo	
+Men's D1	Daniel Guetta	Oklahoma State	
+Men's D1	Dante Kearse	The Citadel	
+Men's D1	Darryl Simmons II	St. Bonaventure	
+Men's D1	DeAndre Jones	Kent State	
+Men's D1	Denver Anglin	Iona	
+Men's D1	Francis Folefac	Siena	
+Men's D1	Gašper Kočevar	Fresno State	
+Men's D1	Hudson Ward	Western Michigan	
+Men's D1	Isaiah Elohim	Florida Atlantic	
+Men's D1	Jace Posey	TCU	
+Men's D1	Jaden Johnson	Maryland Eastern Shore	
+Men's D1	Jah’Kim Payne	Tennessee Tech	
+Men's D1	Jake Harbatkin	Stony Brook	
+Men's D1	Javen Colbert	Troy	
+Men's D1	Javoy Thompson	Maryland Eastern Shore	
+Men's D1	Jaxson Bell	Army West Point	
+Men's D1	Jaylen Cross	Wake Forest	
+Men's D1	Jelani Hamilton	Georgia State	
+Men's D1	Jimma James	Queens (NC)	
+Men's D1	Jordan Crawford	South Dakota	
+Men's D1	Jordan Leaks	Norfolk State	
+Men's D1	Jordan Marsh	USC	
+Men's D1	Josh Hill	Robert Morris	
+Men's D1	Kareem Thomas	Dartmouth	
+Men's D1	Keiveon Hunt	Jackson State	
+Men's D1	Khani Rooths	Louisville	
+Men's D1	Lamine Niang	UT Martin	
+Men's D1	Larry Hughes, Jr.	Cal State Northridge	
+Men's D1	Legend Smiley	San Francisco	
+Men's D1	Luke Wilson	Appalachian State	
+Men's D1	Malachi Douyon	Santa Clara	
+Men's D1	Malik Mack	Georgetown	
+Men's D1	Martin Somerville	Florida State	
+Men's D1	Mouhamed Sylla	Georgia Tech	
+Men's D1	Naas Cunningham	UNLV	
+Men's D1	ND Okafor	Washington State	
+Men's D1	Noam Dovrat	Miami	
+Men's D1	Olivier Rioux	Florida	
+Men's D1	Peyton Marshall	Georgia Tech	
+Men's D1	R.J. Kennedy	New Hampshire	
+Men's D1	Rayvon Griffith	Kent State	
+Men's D1	Redd Thompson, Jr.	Longwood	
+Men's D1	Rihards Vāvers	Washington State	
+Men's D1	Riley Allenspach	George Mason	
+Men's D1	Roman Siulepa	Pittsburgh	
+Men's D1	Sean Jones	Marquette	
+Men's D1	Shahid Muhammad	Florida State	
+Men's D1	Somtochukwu Cyril	Georgia	
+Men's D1	Sonny Wilson	Toledo	
+Men's D1	Stevie Elam	Milwaukee	
+Men's D1	Thomas Dowd	Troy	
+Men's D1	Travonne Jackson	Little Rock	
+Men's D1	Tré Norman	Marquette	
+Men's D1	Truman Byrne	Central Arkansas	
+Men's D1	Tyler Boston	Holy Cross	
+Men's D1	Tyler Smith	USC Upstate	
+Men's D1	Tyrone Riley IV	San Francisco	
+Men's D1	Wes Enis	South Florida	
+Men's D1	Zaide Lowery	Marquette	
+Men's D2	Alex Henry	Walsh	
+Men's D2	Anthony Daley	St. Thomas Aquinas	
+Men's D2	Aurrion Harris	Wayne State (NE)	
+Men's D2	Benjamin Guy	Daemen	
+Men's D2	Blaise Vespe	Nova Southeastern	
+Men's D2	Daniel Figueira	Dallas Baptist	
+Men's D2	Darik Dissette	Minot State	
+Men's D2	Efe Tahmaz	Mississippi College	
+Men's D2	Inslee Carroll	West Alabama	
+Men's D2	Isaiah Jones	Miles	
+Men's D2	Jackson Connor	Lewis	
+Men's D2	Jahshawne Joseph	Southern New Hampshire	
+Men's D2	Jaiden Harrison	Daemen	
+Men's D2	Jalen Robinson	Goldey–Beacom	
+Men's D2	James McCallum	Western New Mexico	
+Men's D2	Jason Clark	Oklahoma Christian	
+Men's D2	Joevonn McCottry	Winona State	
+Men's D2	Jordan Clayton	California (PA)	
+Men's D2	Josiah Lawson	Morehouse	
+Men's D2	Nakyhi Harris	Daemen	
+Men's D2	Robert Jackson	West Texas A&M	
+Men's D2	Ross Reeves	Nova Southeastern	
+Men's D2	Stephen Ransom	Dominican (CA)	
+Men's D2	Stone Bureau	North Georgia	
+Men's D2	Terry Coner, Jr.	Oklahoma Baptist	
+Men's D2	Trae Clayton	Newman	
+Men's D2	Trevor Frank	Dallas Baptist	
+Men's D2	Trey Brandt	Minot State	
+Men's D2	Tyrese Elliott	West Alabama	
+Men's D2	Zach Ibbetson	Alaska Anchorage	
+Men's D2	Zakari McQueen	Adelphi	
+Men's D1	Aaron Powell	Rice	
+Men's D1	Adam Harakow	Wyoming	
+Men's D1	Akiva McBirney-Griffin	UC Irvine	
+Men's D1	Andrej Shoshkikj	Stony Brook	
+Men's D1	Arop Arop	Memphis	
+Men's D1	Brandon Stores, Jr.	Georgia Tech	
+Men's D1	Brendan Johnson	Merrimack	
+Men's D1	Brent Bland	Saint Peter's	
+Men's D1	Brody Robinson	Oakland	
+Men's D1	Bryce Heard	Dayton	
+Men's D1	Bryson McGlothin	Richmond	
+Men's D1	Cade Orness	Gonzaga	
+Men's D1	Carson Vis	Western Michigan	
+Men's D1	Chase Henderson	Montana	
+Men's D1	Chris Dockery	Kansas City	
+Men's D1	Cian Medley	Kent State	
+Men's D1	Collin Clark	Missouri State	
+Men's D1	Cooper Campbell	Troy	
+Men's D1	Corey Caulker	East Carolina	
+Men's D1	Curtis Givens III	Memphis	
+Men's D1	Curtis Williams, Jr.	Tulane	
+Men's D1	Dallas Washington	Long Beach State	
+Men's D1	Daniel Egbuniwe	St. Bonaventure	
+Men's D1	Dillan Shaw	Saint Mary's	
+Men's D1	Dwayne Pierce	North Carolina A&T	
+Men's D1	Elijah Ryans	Western Michigan	
+Men's D1	Ernest Shelton	Merrimack	
+Men's D1	Ethan Meuser	Stonehill	
+Men's D1	Ewan Steele	Idaho	
+Men's D1	Freddie Dilione V	Penn State	
+Men's D1	Gage Lattimore	North Carolina Central	
+Men's D1	Isaiah Johnson-Arigu	St. Thomas	
+Men's D1	Ismail Habib	Southern Indiana	
+Men's D1	Jackson McVey	Georgia	
+Men's D1	Ja'Corey Robinson	Austin Peay	
+Men's D1	Jakai Sanders	Le Moyne	
+Men's D1	Jan Vide	Loyola Marymount	
+Men's D1	Jason Drake	Indiana	
+Men's D1	Jayden Fort	Georgetown	
+Men's D1	Jerry Easter II	USC	
+Men's D1	Justin McBride	James Madison	
+Men's D1	Kevair Kennedy	Merrimack	
+Men's D1	Kevin de Kovachich	North Alabama	
+Men's D1	Khaman Maker	DePaul	
+Men's D1	Landen Joseph	Marshall	
+Men's D1	Leon Horner III	Texas Tech	
+Men's D1	Liam Campbell	Saint Mary's	
+Men's D1	Logan Duncomb	Winthrop	
+Men's D1	Luka Toews	Boston College	
+Men's D1	Marqui Worthy, Jr.	UC Riverside	
+Men's D1	Matthew Gilhool	LSU	
+Men's D1	Mbaye N'Diaye	Eastern Michigan	
+Men's D1	Michael Jacobs	Southern	
+Men's D1	Michelangelo Oberti	Penn	
+Men's D1	Mikkel Tyne	Richmond	
+Men's D1	Mookie Cook	San Francisco	
+Men's D1	Quaran McPherson	UAB	
+Men's D1	Quel'Ron House	Southern Illinois	
+Men's D1	R.J. Greer	Davidson	
+Men's D1	Ramone Seals	Kennesaw State	
+Men's D1	Ronald Jessamy	Cal State Bakersfield	
+Men's D1	Ryan Sabol	Buffalo	
+Men's D1	Sean Blake	Vermont	
+Men's D1	Sebastian Mack	Missouri	
+Men's D1	T.J. Cope	New Orleans	
+Men's D1	Tahj Staveskie	Incarnate Word	
+Men's D1	Travelle Bryson	Howard	
+Men's D1	Ty Bevins	George Washington	
+Men's D1	Vasilije Serafimoski	Robert Morris	
+Men's D1	Wylee Delorme	North Dakota	
+Men's D1	Youri Fritz	Northeastern	
+Men's D2	Alex Sessoms	Nova Southeastern	
+Men's D2	Barron Silsby	Southwest Baptist	
+Men's D2	Demar Anderson	UNC Pembroke	
+Men's D2	Drew Barrie	Michigan Tech	
+Men's D2	Gavin Davis	Cal State San Bernardino	
+Men's D2	Hiram Alexander	Wilmington	
+Men's D2	Jaryn Bull	Caldwell	
+Men's D2	Jax Wilson	Harding	
+Men's D2	Jefferson Neary	Black Hills State	
+Men's D2	John Solomon	Cal State Dominguez Hills	
+Men's D2	Justin Asi	Ferris State	
+Men's D2	Marcus Pierce	New Mexico Highlands	
+Men's D2	Max Cain	Christian Brothers	
+Men's D2	Raph Dumont	Saint Michael's	
+Men's D2	Tay Dzingou	Saint Michael's	
+Men's D2	Travon Williams	St. Edward's	
+Men's D2	Xavier Glenn	Northeastern State	
+Men's D1	Akai Fleming	Georgia Tech	
+Men's D1	Alex Bruskotter	Wright State	
+Men's D1	Amadou Doumbia	North Carolina A&T	
+Men's D1	Andrew Meadow	Boise State	
+Men's D1	Antoni Vlogianitis	Marist	
+Men's D1	Ari Gooch	UAB	
+Men's D1	Asa Thomas	Furman	
+Men's D1	Austin Nunez	UTSA	
+Men's D1	Baboucarr Njie	UTSA	
+Men's D1	Ben Roy	Boston University	
+Men's D1	Brandon Morgan	Hofstra	
+Men's D1	Brock Vice	Murray State	
+Men's D1	Cade Bennett	Saint Mary's	
+Men's D1	Cayden Vasko	Wofford	
+Men's D1	Chancellor White	Northern Colorado	
+Men's D1	Cooper Bowser	Furman	
+Men's D1	Daniel Johnson	Hampton	
+Men's D1	Darnez Slater	Colorado State	
+Men's D1	David Castillo	Kansas State	
+Men's D1	David Simon	Vermont	
+Men's D1	Dennis Evans	GCU	
+Men's D1	Devin Vanterpool	Florida Atlantic	
+Men's D1	Drew Bessette	Vermont	
+Men's D1	Drew McKenna	Old Dominion	
+Men's D1	Elijah Duval	Southern Utah	
+Men's D1	Erhunmwunse Oswin	Providence	
+Men's D1	Eric Mahaffey	Akron	
+Men's D1	Flory Bidunga	Kansas	
+Men's D1	Gabe Sisk	ETSU	
+Men's D1	Gavin Marrs	Oregon State	
+Men's D1	George Marshall	Morehead State	
+Men's D1	Henry Sisemore	ETSU	
+Men's D1	Ice Emery	Cleveland State	
+Men's D1	IJ Ezuma	Southern Miss	
+Men's D1	J.J. Kelly	Ohio	
+Men's D1	Jack Edelen	Western Kentucky	
+Men's D1	Jah'Likai King	UMBC	
+Men's D1	Jakel Powell	UNC Asheville	
+Men's D1	Jalen Haralson	Notre Dame	
+Men's D1	Jalen Stokes	UC Davis	
+Men's D1	Jamil Miller	Kennesaw State	
+Men's D1	Jimmie Williams	Duquesne	
+Men's D1	Johan Munch	Oregon State	
+Men's D1	Kaelin Thomas	Le Moyne	
+Men's D1	Kaleb Smith	GCU	
+Men's D1	Kamari Jones	Cleveland State	
+Men's D1	Kamrin Oriol	North Florida	
+Men's D1	Kash Polk	Arizona State	
+Men's D1	Kody Frey	Fairleigh Dickinson	
+Men's D1	Kody Williams	Hampton	
+Men's D1	Kyle Layton	Eastern Illinois	
+Men's D1	Layne Taylor	Murray State	
+Men's D1	Mark Lavrenov	Sacramento State	
+Men's D1	Markus Navarra	Youngstown State	
+Men's D1	Mason Porter-Brown	LIU	
+Men's D1	Mekhi Conner	Sacred Heart	
+Men's D1	Nasir Whitlock	Lehigh	
+Men's D1	Quante Berry	Memphis	
+Men's D1	R.J. Keene	Boise State	
+Men's D1	Rich Rolf	Youngstown State	
+Men's D1	Ryan Beasley	San Francisco	
+Men's D1	Sam Walters	SMU	
+Men's D1	Shaheed Solebo	Youngstown State	
+Men's D1	Tae Blackshear	Youngstown State	
+Men's D1	Tajuan Simpkins	Seton Hall	
+Men's D1	Tiefing Diawara	Syracuse	
+Men's D1	Tre Singleton	Northwestern	
+Men's D1	Trey Perry	Miami (OH)	
+Men's D1	Tyler Lee	Central Arkansas	
+Men's D1	Tyler Mason	Alabama State	
+Men's D1	Tyrique Brooks	Missouri State	
+Men's D1	Walker Timme	Northern Arizona	
+Men's D1	Zion Stanford	Villanova	
+Men's D2	Andre Harris	Western New Mexico	
+Men's D2	B.J. Comer	New Mexico Highlands	
+Men's D2	Billy Durkin	Lewis	
+Men's D2	Blaise Beauchamp	Missouri S&T	
+Men's D2	Cam Lowe	Black Hills State	
+Men's D2	Chris Crudup	Lenoir–Rhyne	
+Men's D2	Creed Williamson	Henderson State	
+Men's D2	Donovan Santoro	St. Edward's	
+Men's D2	Elem Shelby	Arkansas–Monticello	
+Men's D2	George Mangas	Fairmont State	
+Men's D2	Jadyn Shider	Clark Atlanta	
+Men's D2	Preston Sherburne	Northwest Nazarene	
+Men's D2	Tim Hall, Jr.	West Florida	
+Men's D2	Traven Norwood	Young Harris	
