@@ -647,5 +647,9 @@
   { "transfer_name": "Brandon Stores, Jr.", "previous_school": "Georgia Tech", "player_id": "52_brandon_storesjr." },
   { "transfer_name": "Elijah Ryans", "previous_school": "Western Michigan", "player_id": "1876_ej_ryans" },
   { "transfer_name": "Leon Horner III", "previous_school": "Texas Tech", "player_id": "628_leon_horner" },
-  { "transfer_name": "T.J. Cope", "previous_school": "New Orleans", "player_id": "2604_tavaj_cope" }
+  { "transfer_name": "T.J. Cope", "previous_school": "New Orleans", "player_id": "2604_tavaj_cope" },
+  { "transfer_name": "Erhunmwunse Oswin", "previous_school": "Providence", "player_id": "932_oswin_erhunmwunse" },
+  { "transfer_name": "Ice Emery", "previous_school": "Cleveland State", "player_id": "1778_chevalier_emery" },
+  { "transfer_name": "Tae Blackshear", "previous_school": "Youngstown State", "player_id": "2557_rontavious_blackshear" },
+  { "transfer_name": "Tim Hall, Jr.", "previous_school": "West Florida", "player_id": "1431_tim_halljr." }
 ]
