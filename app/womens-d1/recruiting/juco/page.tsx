@@ -188,6 +188,7 @@ type Player = {
   name: string;
   season: string;
   division: string | null;
+  year: string | null;
   games: number | null;
   minutes: number | null;
   cleanGames: number | null;
@@ -675,6 +676,7 @@ export default function NjcaaWomensDivisionPage() {
                     <SortableHeader label="Player" sk="name" align="left" />
                     <SortableHeader label="Team" sk="teamName" align="left" />
                     <th style={{ padding: '4px 5px', textAlign: 'center', fontWeight: 700, fontSize: 10, whiteSpace: 'nowrap', color: MUTED }}>DIV</th>
+                    <th style={{ padding: '4px 5px', textAlign: 'center', fontWeight: 700, fontSize: 10, whiteSpace: 'nowrap', color: MUTED }}>YR</th>
                     <SortableHeader label="G" sk="games" />
                     <SortableHeader label="MIN" sk="totalMin" />
                     {activeCols.map(col => <SortableHeader key={col.key} label={col.label} sk={col.key} />)}
@@ -700,6 +702,9 @@ export default function NjcaaWomensDivisionPage() {
                               {p.division === 'njcaa-womens-d1' ? 'JUCO-D1' : 'JUCO-D2'}
                             </span>
                           </div>
+                        </td>
+                        <td style={{ padding: '4px 5px', textAlign: 'center', fontSize: 11 }}>
+                          {p.year ?? '—'}
                         </td>
                         <td style={{ padding: '5px 8px', textAlign: 'right' }}>
                           {statMode === 'perGame' ? (p.games ?? '—') : (p.cleanGames ?? '—')}
