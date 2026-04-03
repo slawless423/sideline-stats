@@ -487,6 +487,7 @@ export default function NjcaaWomensDivisionPage() {
   const [loading, setLoading]     = useState(true);
   const [statMode, setStatMode]   = useState<StatMode>('advanced');
   const [divFilter, setDivFilter]   = useState<'all' | 'njcaa-womens-d1' | 'njcaa-womens-d2'>('all');
+  const [yearFilter, setYearFilter]  = useState<'all' | 'Fr' | 'So'>('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [minMinutes, setMinMinutes] = useState(0);
   const [sortKey, setSortKey]     = useState<SortKey>('totalMin');
@@ -515,6 +516,7 @@ export default function NjcaaWomensDivisionPage() {
   const filtered = useMemo(() => players.filter(p => {
     if (!hasStats(p)) return false;
     if (divFilter !== 'all' && p.division !== divFilter) return false;
+    if (yearFilter !== 'all' && p.year !== yearFilter) return false;
     // Minimum game threshold by mode
     if (statMode === 'perGame') {
       if ((p.games ?? 0) < 5) return false;
@@ -529,7 +531,7 @@ export default function NjcaaWomensDivisionPage() {
           !p.teamName.toLowerCase().includes(q)) return false;
     }
     return true;
-  }), [players, statMode, divFilter, searchTerm, minMinutes]);
+  }), [players, statMode, divFilter, yearFilter, searchTerm, minMinutes]);
 
   const sorted = useMemo(() => [...filtered].sort((a, b) => {
     if (sortKey === 'name') return sortOrder === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
@@ -617,6 +619,20 @@ export default function NjcaaWomensDivisionPage() {
                   padding: '7px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
                   fontFamily: "'Outfit', sans-serif", border: 'none', outline: 'none',
                   background: divFilter===key ? NAVY : '#fff', color: divFilter===key ? '#fff' : MUTED,
+                  transition: 'background 0.15s, color 0.15s',
+                }}>{label}</button>
+              ))}
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <span style={{ fontSize: 10, color: MUTED, fontFamily: "'Outfit', sans-serif", fontWeight: 600 }}>Year</span>
+            <div style={{ display: 'flex', borderRadius: 6, overflow: 'hidden', border: `1px solid ${ICE}` }}>
+              {([{key:'all',label:'All'},{key:'Fr',label:'Fr'},{key:'So',label:'So'}] as {key:'all'|'Fr'|'So';label:string}[]).map(({key,label}) => (
+                <button key={key} onClick={() => setYearFilter(key)} style={{
+                  padding: '7px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
+                  fontFamily: "'Outfit', sans-serif", border: 'none', outline: 'none',
+                  background: yearFilter===key ? NAVY : '#fff', color: yearFilter===key ? '#fff' : MUTED,
                   transition: 'background 0.15s, color 0.15s',
                 }}>{label}</button>
               ))}
