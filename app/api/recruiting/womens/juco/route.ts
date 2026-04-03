@@ -8,6 +8,7 @@ const pool = new Pool({
 
 const PLAYER_COLS = `
   player_id                      AS "playerId",
+  year,
   team_name                      AS "teamName",
   jersey,
   name,
