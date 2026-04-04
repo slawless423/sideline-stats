@@ -1,16 +1,174 @@
 player_id,division,team_name,first_name,last_name,height,year
-1813_brandon_morgan,mens-d1,Hofstra,Brandon,Morgan,"6'4""",Sr
-677_elem_shelby,mens-d2,Ark.-Monticello,Elem,Shelby,"6'4""",Fr
-16400_cam_lowe,mens-d2,Black Hills St.,Cam,Lowe,"6'6""",So
-362_jadyn_shider,mens-d2,Clark Atlanta,Jadyn,Shider,"6'7""",Sr
-1906_george_mangas,mens-d2,Fairmont St.,George,Mangas,"6'4""",Sr
-1228_creed_williamson,mens-d2,Henderson St.,Creed,Williamson,"6'8""",Jr
-880_chris_crudup,mens-d2,Lenoir-Rhyne,Chris,Crudup,"6'2""",Fr
-2491_billy_durkin,mens-d2,Lewis,Billy,Durkin,"6'4""",Jr
-2520_blaise_beauchamp,mens-d2,Missouri S&T,Blaise,Beauchamp,"6'3""",Sr
-2727_bj_comer,mens-d2,N.M. Highlands,BJ,Comer,"6'4""",Sr
-534_preston_sherburne,mens-d2,Northwest Nazarene,Preston,Sherburne,"6'2""",So
-1242_donovan_santoro,mens-d2,St. Edward's,Donovan,Santoro,"6'8""",Jr
-1431_tim_halljr.,mens-d2,West Florida,Tim,Hall Jr.,"6'7""",Jr
-1251_andre_harris,mens-d2,Western N.M.,Andre,Harris,"6'8""",Jr
-18501_traven_norwood,mens-d2,Young Harris,Traven,Norwood,"6'9""",Jr
+2521_clearia_peterson,womens-d1,Alabama St.,Clearia,Peterson,"5'9""",So
+2521_jacqueline_osei,womens-d1,Alabama St.,Jacqueline,Osei,"6'3""",Fr
+363_jada_leonard,womens-d1,Cleveland St.,Jada,Leonard,"5'8""",Jr
+19_anne_bair,womens-d1,Colgate,Anne,Bair,"5'8""",Sr
+19_grace_klag,womens-d1,Colgate,Grace,Klag,"6'2""",Sr
+19_lara_cook,womens-d1,Colgate,Lara,Cook,"5'10""",Sr
+726_faith_okorie,womens-d1,DePaul,Faith,Okorie,"6'0""",So
+1219_maraja_pass,womens-d1,Elon,Maraja,Pass,"5'4""",Jr
+47_solè_williams,womens-d1,Florida St.,Sole,Williams,"5'9""",So
+405_maddie_pounds,womens-d1,Hofstra,Maddie,Pounds,"5'8""",So
+405_syniya_barton,womens-d1,Hofstra,Syniya,Barton,"5'7""",Fr
+2155_grace_booth,womens-d1,Houston Christian,Grace,Booth,"5'10""",So
+69_amaya_blake,womens-d1,Indiana St.,Amaya,Blake,"5'8""",Jr
+69_clemisha_prackett,womens-d1,Indiana St.,Clemisha,Prackett,"6'1""",Jr
+69_tierney_kelsey,womens-d1,Indiana St.,Tierney,Kelsey,"5'6""",So
+2165_addison_deal,womens-d1,Iowa,Addison,Deal,"6'0""",Fr
+2477_mackenzie_hare,womens-d1,Iowa St.,Mackenzie,Hare,"5'9""",Jr
+669_alyssa_febres,womens-d1,Kansas City,Alyssa,Febres,"5'5""",So
+669_elauni_bennett,womens-d1,Kansas City,Elauni,Bennett,"5'9""",Jr
+669_emani_bennett,womens-d1,Kansas City,Emani,Bennett,"5'11""",Jr
+1522_avery_mills,womens-d1,Liberty,Avery,Mills,"5'9""",So
+826_jarahle_daniels,womens-d1,Little Rock,Jarahle,Daniels,"5'6""",Jr
+2413_christy_reynoso,womens-d1,Long Beach St.,Christy,Reynoso,"5'4""",So
+2413_haley_wright,womens-d1,Long Beach St.,Haley,Wright,"6'3""",So
+429_amor_harris,womens-d1,Longwood,Amor,Harris,"5'9""",Jr
+429_frances_ulysse,womens-d1,Longwood,Frances,Ulysse,"6'1""",Jr
+429_olivia_bowes,womens-d1,Longwood,Olivia,Bowes,"6'0""",So
+100_jahnaesia_spiers,womens-d1,Memphis,JahNaesia,Spiers,"6'1""",Fr
+2508_denae_skelton,womens-d1,Merrimack,Denae,Skelton,"5'7""",So
+2508_kylee_fears,womens-d1,Merrimack,Kylee,Fears,"6'1""",So
+1162_ines_sotelo,womens-d1,Michigan St.,Ines,Sotelo,"6'3""",So
+2199_rocío_jiménez,womens-d1,Mississippi St.,Rocio,Jimenez,"6'7""",So
+1850_jaeda_murphy,womens-d1,Mississippi Val.,Jaeda,Murphy,"5'3""",So
+548_divine_dibula,womens-d1,Monmouth,Divine,Dibula,"6'1""",Jr
+548_gigi_gamble,womens-d1,Monmouth,GiGi,Gamble,"5'5""",Jr
+1259_amber_bullard,womens-d1,Mount St. Mary's,Amber,Bullard,"6'4""",Jr
+1259_gabrielle_kennerly,womens-d1,Mount St. Mary's,Gabrielle,Kennerly,"5'9""",So
+1259_kayla_lindsey,womens-d1,Mount St. Mary's,Kayla,Lindsey,"5'9""",Jr
+1276_lorena_awou,womens-d1,NC State,Lorena,Awou,"6'5""",Fr
+2606_anjanae_richardson,womens-d1,Norfolk St.,Anjanae,Richardson,"5'8""",Jr
+565_maria_sánchezpitarch,womens-d1,Northeastern,Maria,Sanchez Pitarch,"5'8""",So
+923_alisha_nunley,womens-d1,Old Dominion,Alisha,Nunley,"5'5""",Jr
+2298_theresa_hagans,womens-d1,Pittsburgh,Theresa,Hagans,"5'9""",Fr
+1930_allie_sykes,womens-d1,Presbyterian,Allie,Sykes,"5'3""",Fr
+1930_ja'cia_cunningham,womens-d1,Presbyterian,Ja'Cia,Cunningham,"5'9""",Sr
+2624_anna_foley,womens-d1,Quinnipiac,Anna,Foley,"6'3""",Jr
+2624_bri_bowen,womens-d1,Quinnipiac,Bri,Bowen,"5'10""",Sr
+2624_ella_ryan,womens-d1,Quinnipiac,Ella,Ryan,"5'8""",Fr
+2309_dania_mcclain,womens-d1,Robert Morris,Dania,McClain,"6'2""",Fr
+2309_layke_fields,womens-d1,Robert Morris,Layke,Fields,"6'0""",Fr
+2309_markeli_jones-tynes,womens-d1,Robert Morris,Markeli,Jones-Tynes,"5'8""",Fr
+1310_dianne_crespolópez,womens-d1,Sacred Heart,Dianne,Crespo Lopez,"5'10""",So
+1310_taaliyah_porter,womens-d1,Sacred Heart,Taaliyah,Porter,"5'9""",Fr
+1320_de'naya_rippey,womens-d1,Saint Peter's,De'Naya,Rippey,"5'10""",So
+1320_layla_laws,womens-d1,Saint Peter's,Layla,Laws,"6'1""",Sr
+1320_reilly_sunday,womens-d1,Saint Peter's,Reilly,Sunday,"5'9""",Sr
+604_aubrey_blankenship,womens-d1,Samford,Aubrey,Blankenship,"6'0""",So
+1935_lucy_larson,womens-d1,Seattle U,Lucy,Larson,"5'10""",So
+1692_lihi_azouri,womens-d1,Southeastern La.,Lihi,Azouri,"5'8""",Fr
+2591_alexis_rynders,womens-d1,Tarleton St.,Alexis,Rynders,"5'11""",Fr
+2591_allie_myers,womens-d1,Tarleton St.,Allie,Myers,"6'1""",Jr
+2591_shadasia_brackens,womens-d1,Tarleton St.,Shadasia,Brackens,"5'11""",Jr
+2591_tessa_engelman,womens-d1,Tarleton St.,Tessa,Engelman,"6'3""",Jr
+2668_chloe_larry,womens-d1,Tennessee Tech,Chloe,Larry,"5'8""",So
+2668_reagan_hurst,womens-d1,Tennessee Tech,Reagan,Hurst,"5'10""",Sr
+1706_jaymee_wadey,womens-d1,Towson,Jaymee,Wadey,"6'2""",Fr
+1706_shariah_baynes,womens-d1,Towson,Shariah,Baynes,"5'6""",So
+2096_hannah_wickstrom,womens-d1,UC Riverside,Hannah,Wickstrom,"5'10""",So
+2096_makayla_minshall,womens-d1,UC Riverside,Makayla,Minshall,"5'9""",So
+2096_maya_chocano,womens-d1,UC Riverside,Maya,Chocano,"6'1""",Jr
+2096_shelley_duchemin,womens-d1,UC Riverside,Shelley,Duchemin,"6'0""",Sr
+1414_brynn_lusby,womens-d1,UIW,Brynn,Lusby,"5'10""",So
+1414_izzy_majarucon,womens-d1,UIW,Izzy,Majarucon,"5'6""",So
+1414_raimi_mccrary,womens-d1,UIW,Raimi,McCrary,"6'0""",Jr
+97_candela_sabatersanchez,womens-d1,UMES,Candela,Sabater Sanchez,"6'0""",So
+1405_calyn_dallas,womens-d1,Utah Tech,Calyn,Dallas,"6'1""",Jr
+658_kj_carlyle,womens-d1,Utah Valley,KJ,Carlyle,"6'2""",So
+2683_mary-anna_asare,womens-d1,VCU,Mary-Anna,Asare,"5'8""",Sr
+979_klea_kaci,womens-d1,Wagner,Klea,Kaci,"5'11""",Jr
+303_makenna_shaffer,womens-d1,Weber St.,Makenna,Shaffer,"6'1""",Jr
+650_salma_khedr,womens-d1,Western Ky.,Salma,Khedr,"6'1""",So
+847_d'myjah_bolds,womens-d1,Western Mich.,D'Myjah,Bolds,"6'3""",So
+497_amourie_porter,womens-d1,Winthrop,Amourie,Porter,"5'10""",Jr
+497_persais_williams,womens-d1,Winthrop,Persais,Williams,"5'9""",So
+1885_mackenzie_givens,womens-d1,Xavier,MacKenzie,Givens,"6'0""",So
+1885_mariyah_noel,womens-d1,Xavier,Mariyah,Noel,"5'11""",Jr
+1885_phoebe_holmes,womens-d1,Xavier,Phoebe,Holmes,"5'7""",So
+1888_ashlynn_vantassell,womens-d1,Youngstown St.,Ashlynn,Van Tassell,"6'3""",Fr
+1888_bella_samz,womens-d1,Youngstown St.,Bella,Samz,"5'8""",Jr
+17524_noel_warrior,womens-d2,AUM,Noel,Warrior,"5'6""",Jr
+1580_brya_brooklynarroyo-gillcrese,womens-d2,Adams St.,Brya,Brooklyn Arroyo-Gillcrese,"5'8""",Jr
+1387967_peighton_jambor,womens-d2,Allen,Peighton,Jambor,"6'0""",Jr
+2403_jena_warden,womens-d2,Ark.-Monticello,Jena,Warden,"5'10""",Fr
+863_mackenzie_heeke,womens-d2,Arkansas Tech,Mackenzie,Heeke,"5'8""",Jr
+2529_greta_dillinger,womens-d2,Augustana (SD),Greta,Dillinger,"5'10""",Fr
+2529_mia_donald,womens-d2,Augustana (SD),Mia,Donald,"6'0""",So
+2541_jaelyn_choi,womens-d2,Bridgeport,Jaelyn,Choi,"5'7""",Fr
+64_jordyn_smith,womens-d2,Cal Poly Humboldt,Jordyn,Smith,"6'2""",Fr
+1439_nivea_campbell,womens-d2,Cal St. East Bay,Nivea,Campbell,"5'4""",Jr
+1583_emerie_adams,womens-d2,Central Okla.,Emerie,Adams,"5'10""",Fr
+683_aniyah_rainey,womens-d2,Chowan,Aniyah,Rainey,"5'7""",So
+1899_alice_conrad,womens-d2,Christian Brothers,Alice,Conrad,"5'7""",Jr
+1899_hanne_alvarezverdaguer,womens-d2,Christian Brothers,Hanne,Alvarez Verdaguer,"5'10""",Jr
+361_atreonia_garner,womens-d2,Clark Atlanta,Atreonia,Garner,"5'10""",Jr
+1779_kenzie_wyman,womens-d2,Columbus St.,Kenzie,Wyman,"5'8""",Fr
+1589_savannah_kroener,womens-d2,D'Youville,Savannah,Kroener,"5'9""",Fr
+58604_nevaeh_williams,womens-d2,Davenport,Nevaeh,Williams,"5'5""",Jr
+2406_kylie_ross,womens-d2,East Central,Kylie,Ross,"5'5""",Fr
+2406_rylie_burnett,womens-d2,East Central,Rylie,Burnett,"5'9""",Fr
+2444_jaz_salon,womens-d2,Eastern N.M.,Jaz,Salon,"5'3""",Jr
+2444_tonka_jaksic,womens-d2,Eastern N.M.,Tonka,Jaksic,"5'8""",So
+1477_jada_clark,womens-d2,Elizabeth City St.,Jada,Clark,"5'6""",So
+521_makenzie_mcdaniel,womens-d2,Emporia St.,Makenzie,McDaniel,"6'1""",So
+1905_ryan_davis,womens-d2,Fairmont St.,Ryan,Davis,"6'0""",Fr
+387_dezariyah_clark,womens-d2,Ferrum,Dezariyah,Clark,"5'6""",Fr
+1750_talexa_weeter,womens-d2,Fort Hays St.,Talexa,Weeter,"6'0""",Jr
+1749_maria_stanescu,womens-d2,Georgian Court,Maria,Stanescu,"5'6""",So
+17532_vanessa_nankwenya,womens-d2,Glenville St.,Vanessa,Nankwenya,"5'5""",Fr
+1007_tatianna_mclaren,womens-d2,Ill. Springfield,Tatianna,McLaren,"5'10""",Jr
+2172_clare_conzelmann,womens-d2,Lake Superior St.,Clare,Conzelmann,"5'10""",Fr
+529_lauryn_hunt,womens-d2,Lander,Lauryn,Hunt,"6'0""",Jr
+529_sabri_mitchell,womens-d2,Lander,Sabri,Mitchell,"5'10""",Fr
+202138_keira_leffew,womens-d2,Lee,Keira,Leffew,"6'1""",So
+1521_gabi_hoover,womens-d2,Lewis,Gabi,Hoover,"6'2""",Jr
+1521_mercy_lasu,womens-d2,Lewis,Mercy,Lasu,"6'1""",Jr
+1521_samantha_campanelli,womens-d2,Lewis,Samantha,Campanelli,"5'9""",Jr
+2695_alana_francis,womens-d2,Lynn,Alana,Francis,"6'2""",Jr
+2695_danigzy_mantilla,womens-d2,Lynn,Danigzy,Mantilla,"5'4""",So
+2695_kennedi_neale,womens-d2,Lynn,Kennedi,Neale,"5'10""",Fr
+1402_bergen_kinnebrew,womens-d2,Mary,Bergen,Kinnebrew,"5'11""",Jr
+1165_rachel_boehm,womens-d2,Millersville,Rachel,Boehm,"5'9""",Fr
+202143_tiyahna_trottier,womens-d2,Minot St.,Tiyahna,Trottier,"6'1""",So
+2516_nia_coleman,womens-d2,Mississippi Col.,Nia,Coleman,"5'8""",Jr
+178_alani_owens,womens-d2,Montevallo,Alani,Owens,"5'8""",So
+178_lia_edwards,womens-d2,Montevallo,Lia,Edwards,"5'9""",Jr
+2726_adrianna_torrez,womens-d2,N.M. Highlands,Adrianna,Torrez,"6'1""",So
+2726_aspen_salazar,womens-d2,N.M. Highlands,Aspen,Salazar,"5'9""",Jr
+2726_kimora_mcclure,womens-d2,N.M. Highlands,Kimora,McClure,"5'4""",Jr
+2726_melika_samia,womens-d2,N.M. Highlands,Melika,Samia,"5'9""",So
+2572_emma_rowan,womens-d2,Neb.-Kearney,Emma,Rowan,"5'9""",Fr
+2583_lucy_moore,womens-d2,Northern St.,Lucy,Moore,"5'7""",Fr
+576_anisa_akinola,womens-d2,Pace,Anisa,Akinola,"5'10""",Fr
+1388966_teshaya_anderson,womens-d2,Point Park,Teshaya,Anderson,"5'9""",Fr
+58605_bryn_leonard,womens-d2,Purdue Northwest,Bryn,Leonard,"5'7""",Fr
+1388726_emma_yurich,womens-d2,Roosevelt,Emma,Yurich,"5'8""",So
+1388726_marie_outlay,womens-d2,Roosevelt,Marie,Outlay,"5'9""",Jr
+2637_macie_mcnece,womens-d2,Saint Leo,Macie,McNece,"5'7""",Fr
+598_jasmine_becotte,womens-d2,Saint Michael's,Jasmine,Becotte,"5'9""",Fr
+951_jazmin_thornton,womens-d2,Savannah St.,Jazmin,Thornton,"6'0""",So
+952_zaria_spann,womens-d2,Shippensburg,Zaria,Spann,"5'9""",Fr
+202134_amiya_redus,womens-d2,Shorter,Amiya,Redus,"5'9""",So
+202134_chelsy_singleton,womens-d2,Shorter,Chelsy,Singleton,"5'7""",Jr
+202145_dani_coleman,womens-d2,Sioux Falls,Dani,Coleman,"6'0""",Fr
+51542_lexie_ransom,womens-d2,Southern Wesleyan,Lexie,Ransom,"5'5""",So
+2073_wrigley_adkisson,womens-d2,Southwestern Okla.,Wrigley,Adkisson,"6'1""",Fr
+1430_mia_dipuccio,womens-d2,UCCS,Mia,DiPuccio,"6'0""",Fr
+691_makaylei_snyder,womens-d2,USC Aiken,Makaylei,Snyder,"5'7""",So
+202127_caroline_mullins,womens-d2,UVA Wise,Caroline,Mullins,"5'10""",So
+972_chardae_rumph,womens-d2,Valdosta St.,Chardae,Rumph,"5'6""",Fr
+1028_brooke_gomez,womens-d2,Washburn,Brooke,Gomez,"5'7""",So
+1028_cloie_jansky,womens-d2,Washburn,Cloie,Jansky,"6'2""",So
+1028_kennadi_jackson,womens-d2,Washburn,Kennadi,Jackson,"5'9""",Fr
+1028_kylin_shipman,womens-d2,Washburn,Kylin,Shipman,"5'8""",So
+1028_nia_mckenzie,womens-d2,Washburn,Nia,McKenzie,"5'11""",Jr
+1028_willow_gideon,womens-d2,Washburn,Willow,Gideon,"5'10""",So
+988_tierra_owens,womens-d2,West Tex. A&M,Tierra,Owens,"5'6""",Fr
+894_ciona_wells,womens-d2,Western Ore.,Ciona,Wells,"5'7""",So
+894_kylani_rookstool,womens-d2,Western Ore.,Kylani,Rookstool,"5'9""",Jr
+202141_mandi_pham,womens-d2,William Jewell,Mandi,Pham,"5'9""",So
+1196_bria_stenstrom,womens-d2,Winona St.,Bria,Stenstrom,"5'4""",So
+202135_chassidy_fedd,womens-d2,Young Harris,Chassidy,Fedd,"5'8""",Jr
+202135_hannah_dunn,womens-d2,Young Harris,Hannah,Dunn,"6'5""",So
+202135_marina_sippola,womens-d2,Young Harris,Marina,Sippola,"5'8""",So
