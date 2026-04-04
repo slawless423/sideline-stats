@@ -651,5 +651,10 @@
   { "transfer_name": "Erhunmwunse Oswin", "previous_school": "Providence", "player_id": "932_oswin_erhunmwunse" },
   { "transfer_name": "Ice Emery", "previous_school": "Cleveland State", "player_id": "1778_chevalier_emery" },
   { "transfer_name": "Tae Blackshear", "previous_school": "Youngstown State", "player_id": "2557_rontavious_blackshear" },
-  { "transfer_name": "Tim Hall, Jr.", "previous_school": "West Florida", "player_id": "1431_tim_halljr." }
+  { "transfer_name": "Tim Hall, Jr.", "previous_school": "West Florida", "player_id": "1431_tim_halljr." },
+  { "transfer_name": "Terrence Hill, Jr.", "previous_school": "VCU", "player_id": "1362_terrence_hilljr." },
+  { "transfer_name": "Marko Pavlović", "previous_school": "Missouri Western", "player_id": "1428_marko_pavlovic" },
+  { "transfer_name": "Tre Lockett", "previous_school": "Morehouse", "player_id": "1618_richard_lockett" },
+  { "transfer_name": "Ace Glass", "previous_school": "Washington State", "player_id": "2359_ace_glasslll" },
+  { "transfer_name": "Vazoumana Diallo", "previous_school": "Washington", "player_id": "2033_zoom_diallo" }
 ]
