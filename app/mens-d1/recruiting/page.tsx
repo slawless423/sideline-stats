@@ -561,6 +561,7 @@ export default function MensRecruitingPage() {
         {/* Sub-nav tabs */}
         <div style={{ display: 'flex', gap: 0, borderBottom: `2px solid ${FROST}`, marginBottom: 24 }}>
           <button style={tabStyle('transfers')} onClick={() => setActiveTab('transfers')}>Transfers</button>
+          <a href="/mens-d1/recruiting/juco" style={{ textDecoration: 'none', fontSize: 13, fontWeight: 600, padding: '8px 4px', cursor: 'pointer', color: MUTED, borderBottom: '3px solid transparent' }}>JUCO</a>
           <button style={tabStyle('highschool')} onClick={() => setActiveTab('highschool')}>High School</button>
         </div>
 
