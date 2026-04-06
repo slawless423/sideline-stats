@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-04-05T11:23:34.996Z",
+  "generated_at_utc": "2026-04-06T11:42:32.962Z",
   "season_start": "2025-11-04",
   "rows": [
     {
@@ -163,16 +163,6 @@
       "adjT": 67.49652777777777
     },
     {
-      "teamId": "1354",
-      "team": "Tulsa",
-      "conference": "american",
-      "games": 37,
-      "adjO": 121.71020826484636,
-      "adjD": 104.52746404093058,
-      "adjEM": 17.182744223915776,
-      "adjT": 69.88243243243244
-    },
-    {
       "teamId": "1361",
       "team": "Utah St.",
       "conference": "mountain-west",
@@ -201,6 +191,16 @@
       "adjD": 107.97762731822196,
       "adjEM": 16.574957421739313,
       "adjT": 65.54743589743589
+    },
+    {
+      "teamId": "1354",
+      "team": "Tulsa",
+      "conference": "american",
+      "games": 38,
+      "adjO": 121.13831800213575,
+      "adjD": 104.82949757495177,
+      "adjEM": 16.308820427183974,
+      "adjT": 70.2328947368421
     },
     {
       "teamId": "1143",
@@ -993,16 +993,6 @@
       "adjT": 69.49545454545455
     },
     {
-      "teamId": "2290",
-      "team": "Oklahoma",
-      "conference": "sec",
-      "games": 36,
-      "adjO": 119.28786940276142,
-      "adjD": 111.54978250605268,
-      "adjEM": 7.738086896708737,
-      "adjT": 69.50972222222222
-    },
-    {
       "teamId": "1326",
       "team": "South Alabama",
       "conference": "sun-belt",
@@ -1083,6 +1073,16 @@
       "adjT": 69.82941176470588
     },
     {
+      "teamId": "2290",
+      "team": "Oklahoma",
+      "conference": "sec",
+      "games": 37,
+      "adjO": 119.10448340808915,
+      "adjD": 111.9359249853487,
+      "adjEM": 7.168558422740446,
+      "adjT": 69.59594594594596
+    },
+    {
       "teamId": "263",
       "team": "Seton Hall",
       "conference": "big-east",
@@ -1091,6 +1091,16 @@
       "adjD": 98.48009044089937,
       "adjEM": 7.11350388134079,
       "adjT": 66.60757575757576
+    },
+    {
+      "teamId": "989",
+      "team": "West Virginia",
+      "conference": "big-12",
+      "games": 35,
+      "adjO": 107.99711658183884,
+      "adjD": 100.95315396343135,
+      "adjEM": 7.043962618407491,
+      "adjT": 65.39857142857143
     },
     {
       "teamId": "608",
@@ -1153,16 +1163,6 @@
       "adjT": 68.29107142857143
     },
     {
-      "teamId": "989",
-      "team": "West Virginia",
-      "conference": "big-12",
-      "games": 34,
-      "adjO": 107.43792337777978,
-      "adjD": 100.56308985645175,
-      "adjEM": 6.8748335213280285,
-      "adjT": 65.2360294117647
-    },
-    {
       "teamId": "1505",
       "team": "UIC",
       "conference": "mvc",
@@ -1193,6 +1193,16 @@
       "adjT": 65.92651515151515
     },
     {
+      "teamId": "460",
+      "team": "Auburn",
+      "conference": "sec",
+      "games": 38,
+      "adjO": 119.34199199719997,
+      "adjD": 112.72326682798686,
+      "adjEM": 6.618725169213107,
+      "adjT": 69.54802631578947
+    },
+    {
       "teamId": "1628",
       "team": "Nevada",
       "conference": "mountain-west",
@@ -1211,16 +1221,6 @@
       "adjD": 105.02148453955682,
       "adjEM": 6.572444549176737,
       "adjT": 70.05441176470588
-    },
-    {
-      "teamId": "460",
-      "team": "Auburn",
-      "conference": "sec",
-      "games": 37,
-      "adjO": 119.49151715593018,
-      "adjD": 113.02598197882949,
-      "adjEM": 6.465535177100691,
-      "adjT": 69.25743243243244
     },
     {
       "teamId": "291",
