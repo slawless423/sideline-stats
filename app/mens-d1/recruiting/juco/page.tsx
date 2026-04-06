@@ -456,7 +456,7 @@ const ADVANCED_COLS: { label: string; key: SortKey }[] = [
 ];
 
 const PER_GAME_COLS: { label: string; key: SortKey }[] = [
-  { label: 'MPG',  key: 'mpg'      }, { label: 'PPG',  key: 'ppg'      },
+  { label: 'PPG',  key: 'ppg'      },
   { label: 'RPG',  key: 'rpg'      }, { label: 'ORB',  key: 'orbpg'    },
   { label: 'DRB',  key: 'drbpg'    }, { label: 'APG',  key: 'apg'      },
   { label: 'TOV',  key: 'tovpg'   }, { label: 'SPG',  key: 'spg'      }, { label: 'BPG',  key: 'bpg'      },
@@ -612,7 +612,7 @@ export default function NjcaaWomensDivisionPage() {
             style={{ padding: '8px 12px', border: `1px solid ${ICE}`, borderRadius: 6, fontSize: 13, flex: 1, minWidth: 200, outline: 'none', fontFamily: "'Outfit', sans-serif" }} />
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-            <span style={{ fontSize: 10, color: MUTED, fontFamily: "'Outfit', sans-serif", fontWeight: 600 }}>Division</span>
+            <span style={{ fontSize: 10, color: MUTED, fontFamily: "'Outfit', sans-serif", fontWeight: 600 }}>JUCO Division</span>
             <div style={{ display: 'flex', borderRadius: 6, overflow: 'hidden', border: `1px solid ${ICE}` }}>
               {([{key:'all',label:'All'},{key:'njcaa-mens-d1',label:'D1'}] as {key:'all'|'njcaa-mens-d1';label:string}[]).map(({key,label}) => (
                 <button key={key} onClick={() => setDivFilter(key)} style={{
@@ -694,7 +694,7 @@ export default function NjcaaWomensDivisionPage() {
                     <th style={{ padding: '4px 5px', textAlign: 'center', fontWeight: 700, fontSize: 10, whiteSpace: 'nowrap', color: MUTED }}>DIV</th>
                     <th style={{ padding: '4px 5px', textAlign: 'center', fontWeight: 700, fontSize: 10, whiteSpace: 'nowrap', color: MUTED }}>YR</th>
                     <SortableHeader label="G" sk="games" />
-                    <SortableHeader label="MIN" sk="totalMin" />
+                    {statMode !== 'perGame' && <SortableHeader label="MIN" sk="totalMin" />}
                     {activeCols.map(col => <SortableHeader key={col.key} label={col.label} sk={col.key} />)}
                   </tr>
                 </thead>
@@ -725,9 +725,9 @@ export default function NjcaaWomensDivisionPage() {
                         <td style={{ padding: '5px 8px', textAlign: 'right' }}>
                           {statMode === 'perGame' ? (p.games ?? '—') : (p.cleanGames ?? '—')}
                         </td>
-                        <td style={{ padding: '5px 8px', textAlign: 'right', fontWeight: sortKey === 'totalMin' ? 600 : 400 }}>
-                          {statMode === 'perGame' ? (p.minutes ?? 0) : (p.cleanMin ?? 0)}
-                        </td>
+                        {statMode !== 'perGame' && <td style={{ padding: '5px 8px', textAlign: 'right', fontWeight: sortKey === 'totalMin' ? 600 : 400 }}>
+                          {p.cleanMin ?? 0}
+                        </td>}
                         {activeCols.map(col => {
                           let val: number | undefined;
                           if (col.key === 'totalMin') {
