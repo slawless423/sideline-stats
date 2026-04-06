@@ -561,7 +561,7 @@ export default function MensRecruitingPage() {
         {/* Sub-nav tabs */}
         <div style={{ display: 'flex', gap: 0, borderBottom: `2px solid ${FROST}`, marginBottom: 24 }}>
           <button style={tabStyle('transfers')} onClick={() => setActiveTab('transfers')}>Transfers</button>
-          <button style={{ fontSize: 13, fontWeight: 600, padding: '8px 4px', cursor: 'pointer', background: 'none', border: 'none', color: MUTED, borderBottom: '3px solid transparent' }} onClick={() => window.location.href='/mens-d1/recruiting/juco'}>JUCO</button>
+          <a href="/mens-d1/recruiting/juco" style={{ padding: '10px 20px', fontFamily: "'Outfit', sans-serif", fontSize: 14, fontWeight: 700, color: MUTED, borderBottom: '3px solid transparent', marginBottom: -2, letterSpacing: '0.01em', textDecoration: 'none', display: 'inline-block', cursor: 'pointer' }}>JUCO</a>
           <button style={tabStyle('highschool')} onClick={() => setActiveTab('highschool')}>High School</button>
         </div>
 
