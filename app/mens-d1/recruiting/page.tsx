@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useMemo } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import SiteNavigation from '@/components/SiteNavigation';
 
@@ -346,7 +347,10 @@ const INTEGER_KEYS = new Set(['twopm','twopa','tpm','tpa','fg3m','fg3a','ftm','f
 // ── Main component ────────────────────────────────────────────────────────────
 
 export default function MensRecruitingPage() {
-  const [activeTab, setActiveTab] = useState<ActiveTab>('transfers');
+  const searchParams = useSearchParams();
+  const [activeTab, setActiveTab] = useState<ActiveTab>(
+    (searchParams.get('tab') as ActiveTab) ?? 'transfers'
+  );
 
   // Transfer state
   const [transfers, setTransfers]   = useState<Transfer[]>([]);
@@ -369,7 +373,7 @@ export default function MensRecruitingPage() {
   const [hsSortOrder, setHsSortOrder] = useState<'asc' | 'desc'>('desc');
 
   // Shared state
-  const [statMode, setStatMode]     = useState<StatMode>('perGame');
+  const [statMode, setStatMode]     = useState<StatMode>('advanced');
   const [searchTerm, setSearchTerm] = useState('');
   const [minMinutes, setMinMinutes] = useState(0);
   const [transferSortKey, setTransferSortKey] = useState<TransferSortKey>('minPct');
