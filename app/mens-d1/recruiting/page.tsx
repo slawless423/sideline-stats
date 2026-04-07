@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import SiteNavigation from '@/components/SiteNavigation';
@@ -346,7 +346,7 @@ const INTEGER_KEYS = new Set(['twopm','twopa','tpm','tpa','fg3m','fg3a','ftm','f
 
 // ── Main component ────────────────────────────────────────────────────────────
 
-export default function MensRecruitingPage() {
+function MensRecruitingPageInner() {
   const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState<ActiveTab>(
     (searchParams.get('tab') as ActiveTab) ?? 'transfers'
@@ -943,5 +943,13 @@ export default function MensRecruitingPage() {
         )}
       </main>
     </>
+  );
+}
+
+export default function MensRecruitingPage() {
+  return (
+    <Suspense>
+      <MensRecruitingPageInner />
+    </Suspense>
   );
 }
