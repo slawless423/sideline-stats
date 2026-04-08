@@ -486,7 +486,7 @@ export default function NjcaaWomensDivisionPage() {
   const [teamMap, setTeamMap]     = useState<Map<string, TeamRow>>(new Map());
   const [loading, setLoading]     = useState(true);
   const [statMode, setStatMode]   = useState<StatMode>('advanced');
-  const [divFilter, setDivFilter]   = useState<'all' | 'njcaa-mens-d1'>('all');
+  const [divFilter, setDivFilter]   = useState<'all' | 'njcaa-mens-d1' | 'njcaa-mens-d2'>('all');
   const [yearFilter, setYearFilter]  = useState<'all' | 'Fr' | 'So'>('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [minMinutes, setMinMinutes] = useState(0);
@@ -593,7 +593,7 @@ export default function NjcaaWomensDivisionPage() {
       <main style={{ maxWidth: '100%', margin: '0 auto', padding: 20 }}>
         <div style={{ display: 'flex', gap: 0, borderBottom: `2px solid ${FROST}`, marginBottom: 24 }}>
           {['Transfers', 'JUCO', 'High School'].map(tab => (
-            <a key={tab} href={tab === 'Transfers' ? '/mens-d1/recruiting' : tab === 'JUCO' ? '/mens-d1/recruiting/juco' : '/mens-d1/recruiting?tab=highschool'}
+            <a key={tab} href={tab === 'Transfers' ? '/mens-d1/recruiting' : tab === 'JUCO' ? '/mens-d1/recruiting/juco' : '/mens-d1/recruiting'}
               style={{
                 padding: '10px 20px', fontFamily: "'Outfit', sans-serif", fontSize: 14, fontWeight: 700,
                 color: tab === 'JUCO' ? SKY : MUTED,
@@ -614,7 +614,7 @@ export default function NjcaaWomensDivisionPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
             <span style={{ fontSize: 10, color: MUTED, fontFamily: "'Outfit', sans-serif", fontWeight: 600 }}>JUCO Division</span>
             <div style={{ display: 'flex', borderRadius: 6, overflow: 'hidden', border: `1px solid ${ICE}` }}>
-              {([{key:'all',label:'All'},{key:'njcaa-mens-d1',label:'D1'}] as {key:'all'|'njcaa-mens-d1';label:string}[]).map(({key,label}) => (
+              {([{key:'all',label:'All'},{key:'njcaa-mens-d1',label:'D1'},{key:'njcaa-mens-d2',label:'D2'}] as {key:'all'|'njcaa-mens-d1'|'njcaa-mens-d2';label:string}[]).map(({key,label}) => (
                 <button key={key} onClick={() => setDivFilter(key)} style={{
                   padding: '7px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
                   fontFamily: "'Outfit', sans-serif", border: 'none', outline: 'none',
@@ -712,10 +712,10 @@ export default function NjcaaWomensDivisionPage() {
                         </td>
                         <td style={{ padding: '4px 5px', textAlign: 'center' }}>
                           <div style={{ display: 'inline-flex', alignItems: 'center',
-                            background: D1_COLOR,
+                            background: p.division === 'mens-d2' ? D2_COLOR : D1_COLOR,
                             borderRadius: 4, padding: '2px 6px' }}>
                             <span style={{ fontSize: 9, fontWeight: 800, color: '#fff', letterSpacing: '0.03em', whiteSpace: 'nowrap' }}>
-                              {'JUCO-D1'}
+                              {p.division === 'mens-d2' ? 'JUCO-D2' : 'JUCO-D1'}
                             </span>
                           </div>
                         </td>
