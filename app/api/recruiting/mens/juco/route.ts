@@ -89,11 +89,15 @@ export async function GET() {
   try {
     const playersResult = await pool.query(`
       SELECT ${PLAYER_COLS} FROM njcaa_mens_d1_players
+      UNION ALL
+      SELECT ${PLAYER_COLS} FROM njcaa_mens_d2_players
       ORDER BY "teamName", name
     `);
 
     const teamsResult = await pool.query(`
       SELECT ${TEAM_COLS} FROM njcaa_mens_d1_team_totals
+      UNION ALL
+      SELECT ${TEAM_COLS} FROM njcaa_mens_d2_team_totals
     `);
 
     return NextResponse.json({
