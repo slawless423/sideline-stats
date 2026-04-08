@@ -3,7 +3,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import SiteNavigation from '@/components/SiteNavigation';
 
-const ACCENT   = "#3B9EFF"; 
+const ACCENT   = "#3B9EFF";
 const NAVY     = "#0D1F3C";
 const D1_COLOR = "#1a6b3c";
 const D2_COLOR = "#7b3f00";
@@ -712,10 +712,10 @@ export default function NjcaaWomensDivisionPage() {
                         </td>
                         <td style={{ padding: '4px 5px', textAlign: 'center' }}>
                           <div style={{ display: 'inline-flex', alignItems: 'center',
-                            background: p.division === 'mens-d2' ? D2_COLOR : D1_COLOR,
+                            background: p.division === 'njcaa-mens-d2' ? D2_COLOR : D1_COLOR,
                             borderRadius: 4, padding: '2px 6px' }}>
                             <span style={{ fontSize: 9, fontWeight: 800, color: '#fff', letterSpacing: '0.03em', whiteSpace: 'nowrap' }}>
-                              {p.division === 'mens-d2' ? 'JUCO-D2' : 'JUCO-D1'}
+                              {p.division === 'njcaa-mens-d2' ? 'JUCO-D2' : 'JUCO-D1'}
                             </span>
                           </div>
                         </td>
