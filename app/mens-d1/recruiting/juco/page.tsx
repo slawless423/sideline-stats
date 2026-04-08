@@ -3,7 +3,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import SiteNavigation from '@/components/SiteNavigation';
 
-const ACCENT   = "#3B9EFF";
+const ACCENT   = "#3B9EFF"; 
 const NAVY     = "#0D1F3C";
 const D1_COLOR = "#1a6b3c";
 const D2_COLOR = "#7b3f00";
