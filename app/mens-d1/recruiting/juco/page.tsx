@@ -593,7 +593,7 @@ export default function NjcaaWomensDivisionPage() {
       <main style={{ maxWidth: '100%', margin: '0 auto', padding: 20 }}>
         <div style={{ display: 'flex', gap: 0, borderBottom: `2px solid ${FROST}`, marginBottom: 24 }}>
           {['Transfers', 'JUCO', 'High School'].map(tab => (
-            <a key={tab} href={tab === 'Transfers' ? '/mens-d1/recruiting' : tab === 'JUCO' ? '/mens-d1/recruiting/juco' : '/mens-d1/recruiting/highschool'}
+            <a key={tab} href={tab === 'Transfers' ? '/mens-d1/recruiting' : tab === 'JUCO' ? '/mens-d1/recruiting/juco' : '/mens-d1/recruiting?tab=highschool'}
               style={{
                 padding: '10px 20px', fontFamily: "'Outfit', sans-serif", fontSize: 14, fontWeight: 700,
                 color: tab === 'JUCO' ? SKY : MUTED,
