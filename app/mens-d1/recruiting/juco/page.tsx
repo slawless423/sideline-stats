@@ -26,7 +26,7 @@ const TEAM_STATES: Record<string, string> = {
   'Central Community College': 'NE', 'Central Georgia Technical College': 'GA',
   'Central Wyoming College': 'WY', 'Chandler-Gilbert Community College': 'AZ',
   'Chattahoochee Valley Community College': 'AL', 'Chattanooga State Community College': 'TN',
-  'Chesapeake College': 'MD', 'Chipola College': 'FL', 'Cisco College': 'TX',
+  'Chesapeake College': 'MD', 'Chipola College': 'FL', 'Chipola  College': 'FL', 'Cisco College': 'TX',
   'Clarendon College': 'TX', 'Clark State College': 'OH',
   'Cleveland Community College': 'TN', 'Coastal Alabama - North': 'AL',
   'Coastal Alabama - South': 'AL', 'Coastal Bend College': 'TX',
@@ -524,7 +524,7 @@ export default function NjcaaWomensDivisionPage() {
       // Advanced and Per 40 require clean games
       if ((p.cleanGames ?? 0) < 5) return false;
     }
-    if (minMinutes > 0 && (p.minutes ?? 0) < minMinutes) return false;
+    if (minMinutes > 0 && (statMode === 'perGame' ? (p.minutes ?? 0) : (p.cleanMin ?? 0)) < minMinutes) return false;
     if (searchTerm) {
       const q = searchTerm.toLowerCase();
       if (!p.name.toLowerCase().includes(q) &&
