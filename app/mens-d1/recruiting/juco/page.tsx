@@ -488,7 +488,7 @@ export default function NjcaaWomensDivisionPage() {
   const [statMode, setStatMode]   = useState<StatMode>('advanced');
   const [divFilter, setDivFilter]   = useState<'all' | 'njcaa-mens-d1' | 'njcaa-mens-d2'>('all');
   const [yearFilter, setYearFilter]  = useState<'all' | 'Fr' | 'So'>('all');
-  const [stateFilter, setStateFilter] = useState<string>('all');
+  const [stateFilter, setStateFilter] = useState<Set<string>>(new Set());
   const [searchTerm, setSearchTerm] = useState('');
   const [minMinutes, setMinMinutes] = useState(0);
   const [sortKey, setSortKey]     = useState<SortKey>('totalMin');
@@ -519,7 +519,7 @@ export default function NjcaaWomensDivisionPage() {
     if (!hasStats(p)) return false;
     if (divFilter !== 'all' && p.division !== divFilter) return false;
     if (yearFilter !== 'all' && p.year !== yearFilter) return false;
-    if (stateFilter !== 'all' && TEAM_STATES[p.teamName] !== stateFilter) return false;
+    if (stateFilter.size > 0 && !stateFilter.has(TEAM_STATES[p.teamName] ?? '')) return false;
     // Minimum game threshold by mode
     if (statMode === 'perGame') {
       if ((p.games ?? 0) < 5) return false;
@@ -656,24 +656,35 @@ export default function NjcaaWomensDivisionPage() {
                 </div>
               </div>
 
-              {/* State */}
+              {/* JUCO Location */}
               <div style={{ marginBottom: 24 }}>
-                <div style={{ fontSize: 11, fontWeight: 700, color: MUTED, marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.05em' }}>State</div>
+                <div style={{ fontSize: 11, fontWeight: 700, color: MUTED, marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  JUCO Location {stateFilter.size > 0 && <span style={{ color: ACCENT }}>({stateFilter.size} selected)</span>}
+                </div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                  {['all','AK','AL','AR','AZ','CA','CO','CT','DE','FL','GA','HI','IA','ID','IL','IN','KS','KY','LA','MA','MD','ME','MI','MN','MO','MS','MT','NC','ND','NE','NH','NJ','NM','NV','NY','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VA','VT','WA','WI','WV','WY'].map(st => (
-                    <button key={st} onClick={() => setStateFilter(st)} style={{
-                      padding: '5px 10px', fontSize: 11, fontWeight: 600, cursor: 'pointer', borderRadius: 6,
-                      fontFamily: "'Outfit', sans-serif", border: `1px solid ${stateFilter===st ? ACCENT : ICE}`,
-                      background: stateFilter===st ? ACCENT : '#fff', color: stateFilter===st ? '#fff' : MUTED,
-                      transition: 'all 0.15s', minWidth: 40, textAlign: 'center',
-                    }}>{st === 'all' ? 'All' : st}</button>
-                  ))}
+                  {['AK','AL','AR','AZ','CA','CO','CT','DE','FL','GA','HI','IA','ID','IL','IN','KS','KY','LA','MA','MD','ME','MI','MN','MO','MS','MT','NC','ND','NE','NH','NJ','NM','NV','NY','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VA','VT','WA','WI','WV','WY'].map(st => {
+                    const active = stateFilter.has(st);
+                    return (
+                      <button key={st} onClick={() => {
+                        setStateFilter(prev => {
+                          const next = new Set(prev);
+                          if (next.has(st)) next.delete(st); else next.add(st);
+                          return next;
+                        });
+                      }} style={{
+                        padding: '5px 10px', fontSize: 11, fontWeight: 600, cursor: 'pointer', borderRadius: 6,
+                        fontFamily: "'Outfit', sans-serif", border: `1px solid ${active ? ACCENT : ICE}`,
+                        background: active ? ACCENT : '#fff', color: active ? '#fff' : MUTED,
+                        transition: 'all 0.15s', minWidth: 40, textAlign: 'center',
+                      }}>{st}</button>
+                    );
+                  })}
                 </div>
               </div>
 
               {/* Footer buttons */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: `1px solid ${FROST}`, paddingTop: 16 }}>
-                <button onClick={() => { setDivFilter('all'); setYearFilter('all'); setStateFilter('all'); }} style={{
+                <button onClick={() => { setDivFilter('all'); setYearFilter('all'); setStateFilter(new Set()); }} style={{
                   padding: '7px 16px', fontSize: 12, fontWeight: 600, cursor: 'pointer', borderRadius: 6,
                   fontFamily: "'Outfit', sans-serif", border: `1px solid ${ICE}`, background: '#fff', color: MUTED,
                 }}>Clear All</button>
@@ -694,13 +705,13 @@ export default function NjcaaWomensDivisionPage() {
 
           <button onClick={() => setFilterOpen(true)} style={{
             padding: '8px 16px', fontSize: 12, fontWeight: 600, cursor: 'pointer', borderRadius: 6,
-            fontFamily: "'Outfit', sans-serif", border: `1px solid ${(divFilter !== 'all' || yearFilter !== 'all' || stateFilter !== 'all') ? ACCENT : ICE}`,
-            background: (divFilter !== 'all' || yearFilter !== 'all' || stateFilter !== 'all') ? ACCENT : '#fff',
-            color: (divFilter !== 'all' || yearFilter !== 'all' || stateFilter !== 'all') ? '#fff' : MUTED,
+            fontFamily: "'Outfit', sans-serif", border: `1px solid ${(divFilter !== 'all' || yearFilter !== 'all' || stateFilter.size > 0) ? ACCENT : ICE}`,
+            background: (divFilter !== 'all' || yearFilter !== 'all' || stateFilter.size > 0) ? ACCENT : '#fff',
+            color: (divFilter !== 'all' || yearFilter !== 'all' || stateFilter.size > 0) ? '#fff' : MUTED,
             display: 'flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap',
           }}>
             <span>⚙</span>
-            Filters{(divFilter !== 'all' || yearFilter !== 'all' || stateFilter !== 'all') ? ' ●' : ''}
+            Filters{(divFilter !== 'all' || yearFilter !== 'all' || stateFilter.size > 0) ? ' ●' : ''}
           </button>
 
           <div style={{ display: 'flex', borderRadius: 6, overflow: 'hidden', border: `1px solid ${ICE}` }}>
