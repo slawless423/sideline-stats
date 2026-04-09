@@ -26,7 +26,7 @@ const TEAM_STATES: Record<string, string> = {
   'Central Community College': 'NE', 'Central Georgia Technical College': 'GA',
   'Central Wyoming College': 'WY', 'Chandler-Gilbert Community College': 'AZ',
   'Chattahoochee Valley Community College': 'AL', 'Chattanooga State Community College': 'TN',
-  'Chesapeake College': 'MD', 'Chipola College': 'FL', 'Cisco College': 'TX',
+  'Chesapeake College': 'MD', 'Chipola College': 'FL', 'Chipola  College': 'FL', 'Cisco College': 'TX',
   'Clarendon College': 'TX', 'Clark State College': 'OH',
   'Cleveland Community College': 'TN', 'Coastal Alabama - North': 'AL',
   'Coastal Alabama - South': 'AL', 'Coastal Bend College': 'TX',
