@@ -488,10 +488,12 @@ export default function NjcaaWomensDivisionPage() {
   const [statMode, setStatMode]   = useState<StatMode>('advanced');
   const [divFilter, setDivFilter]   = useState<'all' | 'njcaa-mens-d1' | 'njcaa-mens-d2'>('all');
   const [yearFilter, setYearFilter]  = useState<'all' | 'Fr' | 'So'>('all');
+  const [stateFilter, setStateFilter] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [minMinutes, setMinMinutes] = useState(0);
   const [sortKey, setSortKey]     = useState<SortKey>('totalMin');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+  const [filterOpen, setFilterOpen] = useState(false);
 
   useEffect(() => {
     fetch('/api/recruiting/mens/juco')
@@ -517,6 +519,7 @@ export default function NjcaaWomensDivisionPage() {
     if (!hasStats(p)) return false;
     if (divFilter !== 'all' && p.division !== divFilter) return false;
     if (yearFilter !== 'all' && p.year !== yearFilter) return false;
+    if (stateFilter !== 'all' && TEAM_STATES[p.teamName] !== stateFilter) return false;
     // Minimum game threshold by mode
     if (statMode === 'perGame') {
       if ((p.games ?? 0) < 5) return false;
@@ -531,7 +534,7 @@ export default function NjcaaWomensDivisionPage() {
           !p.teamName.toLowerCase().includes(q)) return false;
     }
     return true;
-  }), [players, statMode, divFilter, yearFilter, searchTerm, minMinutes]);
+  }), [players, statMode, divFilter, yearFilter, stateFilter, searchTerm, minMinutes]);
 
   const sorted = useMemo(() => [...filtered].sort((a, b) => {
     if (sortKey === 'name') return sortOrder === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
@@ -605,52 +608,110 @@ export default function NjcaaWomensDivisionPage() {
           ))}
         </div>
 
-        {/* Row 1: Search + Stat mode toggle */}
-        <div style={{ display: 'flex', gap: 12, marginBottom: 8, flexWrap: 'wrap', alignItems: 'flex-end' }}>
+        {/* Filter popup overlay */}
+        {filterOpen && (
+          <div style={{
+            position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.3)', zIndex: 1000,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }} onClick={() => setFilterOpen(false)}>
+            <div style={{
+              background: '#fff', borderRadius: 12, padding: 28, width: 520, maxWidth: '95vw',
+              boxShadow: '0 8px 40px rgba(0,0,0,0.18)', fontFamily: "'Outfit', sans-serif",
+              maxHeight: '90vh', overflowY: 'auto',
+            }} onClick={e => e.stopPropagation()}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+                <span style={{ fontSize: 16, fontWeight: 700, color: NAVY }}>Filters</span>
+                <button onClick={() => setFilterOpen(false)} style={{
+                  background: 'none', border: 'none', cursor: 'pointer', fontSize: 20, color: MUTED, lineHeight: 1,
+                }}>✕</button>
+              </div>
+
+              {/* JUCO Division */}
+              <div style={{ marginBottom: 20 }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: MUTED, marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.05em' }}>JUCO Division</div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                  {([{key:'all',label:'All'},{key:'njcaa-mens-d1',label:'D1'},{key:'njcaa-mens-d2',label:'D2'}] as {key:'all'|'njcaa-mens-d1'|'njcaa-mens-d2';label:string}[]).map(({key,label}) => (
+                    <button key={key} onClick={() => setDivFilter(key)} style={{
+                      padding: '6px 16px', fontSize: 12, fontWeight: 600, cursor: 'pointer', borderRadius: 6,
+                      fontFamily: "'Outfit', sans-serif", border: `1px solid ${divFilter===key ? NAVY : ICE}`,
+                      background: divFilter===key ? NAVY : '#fff', color: divFilter===key ? '#fff' : MUTED,
+                      transition: 'all 0.15s',
+                    }}>{label}</button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Year */}
+              <div style={{ marginBottom: 20 }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: MUTED, marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Year</div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                  {([{key:'all',label:'All'},{key:'Fr',label:'Freshman'},{key:'So',label:'Sophomore'}] as {key:'all'|'Fr'|'So';label:string}[]).map(({key,label}) => (
+                    <button key={key} onClick={() => setYearFilter(key)} style={{
+                      padding: '6px 16px', fontSize: 12, fontWeight: 600, cursor: 'pointer', borderRadius: 6,
+                      fontFamily: "'Outfit', sans-serif", border: `1px solid ${yearFilter===key ? NAVY : ICE}`,
+                      background: yearFilter===key ? NAVY : '#fff', color: yearFilter===key ? '#fff' : MUTED,
+                      transition: 'all 0.15s',
+                    }}>{label}</button>
+                  ))}
+                </div>
+              </div>
+
+              {/* State */}
+              <div style={{ marginBottom: 24 }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: MUTED, marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.05em' }}>State</div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                  {['all','AK','AL','AR','AZ','CA','CO','CT','DE','FL','GA','HI','IA','ID','IL','IN','KS','KY','LA','MA','MD','ME','MI','MN','MO','MS','MT','NC','ND','NE','NH','NJ','NM','NV','NY','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VA','VT','WA','WI','WV','WY'].map(st => (
+                    <button key={st} onClick={() => setStateFilter(st)} style={{
+                      padding: '5px 10px', fontSize: 11, fontWeight: 600, cursor: 'pointer', borderRadius: 6,
+                      fontFamily: "'Outfit', sans-serif", border: `1px solid ${stateFilter===st ? ACCENT : ICE}`,
+                      background: stateFilter===st ? ACCENT : '#fff', color: stateFilter===st ? '#fff' : MUTED,
+                      transition: 'all 0.15s', minWidth: 40, textAlign: 'center',
+                    }}>{st === 'all' ? 'All' : st}</button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Footer buttons */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: `1px solid ${FROST}`, paddingTop: 16 }}>
+                <button onClick={() => { setDivFilter('all'); setYearFilter('all'); setStateFilter('all'); }} style={{
+                  padding: '7px 16px', fontSize: 12, fontWeight: 600, cursor: 'pointer', borderRadius: 6,
+                  fontFamily: "'Outfit', sans-serif", border: `1px solid ${ICE}`, background: '#fff', color: MUTED,
+                }}>Clear All</button>
+                <button onClick={() => setFilterOpen(false)} style={{
+                  padding: '7px 20px', fontSize: 12, fontWeight: 600, cursor: 'pointer', borderRadius: 6,
+                  fontFamily: "'Outfit', sans-serif", border: 'none', background: NAVY, color: '#fff',
+                }}>Apply</button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Row 1: Search + Filter button + Stat mode */}
+        <div style={{ display: 'flex', gap: 12, marginBottom: 8, flexWrap: 'wrap', alignItems: 'center' }}>
           <input type="text" placeholder="Search player or team..." value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
             style={{ padding: '8px 12px', border: `1px solid ${ICE}`, borderRadius: 6, fontSize: 13, flex: 1, minWidth: 200, outline: 'none', fontFamily: "'Outfit', sans-serif" }} />
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-            <span style={{ fontSize: 10, color: MUTED, fontFamily: "'Outfit', sans-serif", fontWeight: 600 }}>JUCO Division</span>
-            <div style={{ display: 'flex', borderRadius: 6, overflow: 'hidden', border: `1px solid ${ICE}` }}>
-              {([{key:'all',label:'All'},{key:'njcaa-mens-d1',label:'D1'},{key:'njcaa-mens-d2',label:'D2'}] as {key:'all'|'njcaa-mens-d1'|'njcaa-mens-d2';label:string}[]).map(({key,label}) => (
-                <button key={key} onClick={() => setDivFilter(key)} style={{
-                  padding: '7px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
-                  fontFamily: "'Outfit', sans-serif", border: 'none', outline: 'none',
-                  background: divFilter===key ? NAVY : '#fff', color: divFilter===key ? '#fff' : MUTED,
-                  transition: 'background 0.15s, color 0.15s',
-                }}>{label}</button>
-              ))}
-            </div>
-          </div>
+          <button onClick={() => setFilterOpen(true)} style={{
+            padding: '8px 16px', fontSize: 12, fontWeight: 600, cursor: 'pointer', borderRadius: 6,
+            fontFamily: "'Outfit', sans-serif", border: `1px solid ${(divFilter !== 'all' || yearFilter !== 'all' || stateFilter !== 'all') ? ACCENT : ICE}`,
+            background: (divFilter !== 'all' || yearFilter !== 'all' || stateFilter !== 'all') ? ACCENT : '#fff',
+            color: (divFilter !== 'all' || yearFilter !== 'all' || stateFilter !== 'all') ? '#fff' : MUTED,
+            display: 'flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap',
+          }}>
+            <span>⚙</span>
+            Filters{(divFilter !== 'all' || yearFilter !== 'all' || stateFilter !== 'all') ? ' ●' : ''}
+          </button>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-            <span style={{ fontSize: 10, color: MUTED, fontFamily: "'Outfit', sans-serif", fontWeight: 600 }}>Year</span>
-            <div style={{ display: 'flex', borderRadius: 6, overflow: 'hidden', border: `1px solid ${ICE}` }}>
-              {([{key:'all',label:'All'},{key:'Fr',label:'Fr'},{key:'So',label:'So'}] as {key:'all'|'Fr'|'So';label:string}[]).map(({key,label}) => (
-                <button key={key} onClick={() => setYearFilter(key)} style={{
-                  padding: '7px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
-                  fontFamily: "'Outfit', sans-serif", border: 'none', outline: 'none',
-                  background: yearFilter===key ? NAVY : '#fff', color: yearFilter===key ? '#fff' : MUTED,
-                  transition: 'background 0.15s, color 0.15s',
-                }}>{label}</button>
-              ))}
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-            <span style={{ fontSize: 10, color: MUTED, fontFamily: "'Outfit', sans-serif", fontWeight: 600 }}>Stat Mode</span>
-            <div style={{ display: 'flex', borderRadius: 6, overflow: 'hidden', border: `1px solid ${ICE}` }}>
-              {([{ key: 'advanced', label: 'Advanced' }, { key: 'perGame', label: 'Per Game' }, { key: 'per40', label: 'Per 40' }] as { key: StatMode; label: string }[]).map(({ key, label }) => (
-                <button key={key} onClick={() => setStatMode(key)} style={{
-                  padding: '7px 16px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
-                  fontFamily: "'Outfit', sans-serif", border: 'none', outline: 'none',
-                  background: statMode === key ? ACCENT : '#fff', color: statMode === key ? '#fff' : MUTED,
-                  transition: 'background 0.15s, color 0.15s',
-                }}>{label}</button>
-              ))}
-            </div>
+          <div style={{ display: 'flex', borderRadius: 6, overflow: 'hidden', border: `1px solid ${ICE}` }}>
+            {([{ key: 'advanced', label: 'Advanced' }, { key: 'perGame', label: 'Per Game' }, { key: 'per40', label: 'Per 40' }] as { key: StatMode; label: string }[]).map(({ key, label }) => (
+              <button key={key} onClick={() => setStatMode(key)} style={{
+                padding: '7px 16px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
+                fontFamily: "'Outfit', sans-serif", border: 'none', outline: 'none',
+                background: statMode === key ? ACCENT : '#fff', color: statMode === key ? '#fff' : MUTED,
+                transition: 'background 0.15s, color 0.15s',
+              }}>{label}</button>
+            ))}
           </div>
         </div>
 
