@@ -27,8 +27,19 @@ type PlayerLine = {
   tov: number; pf: number; pts: number;
 };
 
+type TeamTotals = {
+  mp: number;
+  fgm: number; fga: number;
+  fg3m: number; fg3a: number;
+  ftm: number; fta: number;
+  oreb: number; dreb: number; reb: number;
+  ast: number; stl: number; blk: number;
+  tov: number; pf: number; pts: number;
+};
+
 type TeamBlock = {
   team: string;
+  team_totals: TeamTotals;
   players: PlayerLine[];
 };
 
@@ -50,15 +61,6 @@ type BoxScorePayload = {
 
 const STAT_FIELDS = ['mp','fgm','fga','fg3m','fg3a','ftm','fta','oreb','dreb','reb','ast','stl','blk','tov','pf','pts'] as const;
 const OPP_FIELDS  = ['fgm','fga','fg3m','fg3a','ftm','fta','oreb','dreb','reb','ast','stl','blk','tov','pf','pts'] as const;
-
-function sumTeamTotals(players: PlayerLine[]) {
-  const totals: Record<string, number> = {};
-  for (const f of STAT_FIELDS) totals[f] = 0;
-  for (const p of players) {
-    for (const f of STAT_FIELDS) totals[f] += Number(p[f] ?? 0);
-  }
-  return totals;
-}
 
 function splitName(fullName: string): { first_name: string; last_name: string } {
   const parts = fullName.trim().split(/\s+/);
@@ -84,6 +86,13 @@ function validatePayload(body: unknown): ValidationResult {
   if (!Array.isArray(b.teams) || b.teams.length !== 2) return { ok: false, error: 'teams must be an array of exactly 2 entries' };
   for (const t of b.teams) {
     if (!t.team || typeof t.team !== 'string') return { ok: false, error: 'Each team needs a team name' };
+    if (!t.team_totals || typeof t.team_totals !== 'object') return { ok: false, error: `Team ${t.team} is missing team_totals` };
+    for (const f of STAT_FIELDS) {
+      const v = (t.team_totals as any)[f];
+      if (v === undefined || v === null || typeof v !== 'number' || !Number.isFinite(v)) {
+        return { ok: false, error: `Team ${t.team} has invalid team_totals.${f}` };
+      }
+    }
     if (!Array.isArray(t.players) || t.players.length === 0) return { ok: false, error: `Team ${t.team} has no players` };
     for (const p of t.players) {
       if (!p.name || typeof p.name !== 'string') return { ok: false, error: `Team ${t.team} has a player missing a name` };
@@ -124,8 +133,9 @@ export async function POST(req: NextRequest) {
   }
   const { league, season, teams } = v.payload;
 
-  // Sum totals per team — needed for team-level upsert + opponent cross-write
-  const teamTotals = teams.map(t => ({ team: t.team, totals: sumTeamTotals(t.players) }));
+  // Team stats come directly from the payload (authoritative totals from the PDF).
+  // Each team's totals are also written as their opponent's opp_* stats.
+  const byTeam = teams.map(t => ({ team: t.team, totals: t.team_totals }));
 
   const summary = {
     league,
@@ -139,8 +149,8 @@ export async function POST(req: NextRequest) {
 
     // ── Team stats: additive upsert, including opponent cross-write ──
     for (let i = 0; i < teams.length; i++) {
-      const self = teamTotals[i];
-      const opp  = teamTotals[1 - i];
+      const self = byTeam[i];
+      const opp  = byTeam[1 - i];
 
       await client.query(`
         INSERT INTO hs_team_stats_womens
