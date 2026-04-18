@@ -72,7 +72,11 @@ function splitName(fullName: string): { first_name: string; last_name: string } 
   return { first_name: first_name || parts[0], last_name: last };
 }
 
-function validatePayload(body: unknown): { ok: true; payload: BoxScorePayload } | { ok: false; error: string } {
+type ValidationResult =
+  | { ok: true; payload: BoxScorePayload }
+  | { ok: false; error: string };
+
+function validatePayload(body: unknown): ValidationResult {
   if (!body || typeof body !== 'object') return { ok: false, error: 'Body must be an object' };
   const b = body as Partial<BoxScorePayload>;
   if (!b.league || typeof b.league !== 'string') return { ok: false, error: 'Missing/invalid league' };
@@ -115,7 +119,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
   }
   const v = validatePayload(body);
-  if (!v.ok) return NextResponse.json({ error: v.error }, { status: 400 });
+  if (v.ok === false) {
+    return NextResponse.json({ error: v.error }, { status: 400 });
+  }
   const { league, season, teams } = v.payload;
 
   // Sum totals per team — needed for team-level upsert + opponent cross-write
