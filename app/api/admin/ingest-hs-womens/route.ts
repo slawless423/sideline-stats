@@ -3,6 +3,8 @@
 // Ingests a single box score (2 teams, ~20 players) into the women's HS tables.
 // Additive upserts: each call adds to running totals in hs_player_stats_womens
 // and hs_team_stats_womens, and inserts/updates identity rows in hs_players_womens.
+// Also inserts the game record into hs_games_womens for schedule tracking
+// (ON CONFLICT DO NOTHING — re-submitting the same game won't duplicate).
 //
 // Auth: Bearer token in Authorization header, matched against INGEST_TOKEN env var.
 
@@ -43,17 +45,20 @@ type TeamBlock = {
   players: PlayerLine[];
 };
 
+type GameBlock = {
+  date: string;
+  time?: string;
+  home_team: string;
+  away_team: string;
+  home_score: number;
+  away_score: number;
+  overtime?: boolean;
+};
+
 type BoxScorePayload = {
   league: string;
   season: string;
-  game?: {
-    date?: string;
-    time?: string;
-    home_team?: string;
-    away_team?: string;
-    home_score?: number;
-    away_score?: number;
-  };
+  game: GameBlock;
   teams: TeamBlock[];
 };
 
@@ -83,6 +88,16 @@ function validatePayload(body: unknown): ValidationResult {
   const b = body as Partial<BoxScorePayload>;
   if (!b.league || typeof b.league !== 'string') return { ok: false, error: 'Missing/invalid league' };
   if (!b.season || typeof b.season !== 'string') return { ok: false, error: 'Missing/invalid season' };
+
+  // Validate game block (required for schedule tracking)
+  if (!b.game || typeof b.game !== 'object') return { ok: false, error: 'Missing game block' };
+  const g = b.game as Partial<GameBlock>;
+  if (!g.date || typeof g.date !== 'string') return { ok: false, error: 'Missing/invalid game.date' };
+  if (!g.home_team || typeof g.home_team !== 'string') return { ok: false, error: 'Missing/invalid game.home_team' };
+  if (!g.away_team || typeof g.away_team !== 'string') return { ok: false, error: 'Missing/invalid game.away_team' };
+  if (typeof g.home_score !== 'number' || !Number.isFinite(g.home_score)) return { ok: false, error: 'Missing/invalid game.home_score' };
+  if (typeof g.away_score !== 'number' || !Number.isFinite(g.away_score)) return { ok: false, error: 'Missing/invalid game.away_score' };
+
   if (!Array.isArray(b.teams) || b.teams.length !== 2) return { ok: false, error: 'teams must be an array of exactly 2 entries' };
   for (const t of b.teams) {
     if (!t.team || typeof t.team !== 'string') return { ok: false, error: 'Each team needs a team name' };
@@ -131,7 +146,7 @@ export async function POST(req: NextRequest) {
   if (v.ok === false) {
     return NextResponse.json({ error: v.error }, { status: 400 });
   }
-  const { league, season, teams } = v.payload;
+  const { league, season, game, teams } = v.payload;
 
   // Team stats come directly from the payload (authoritative totals from the PDF).
   // Each team's totals are also written as their opponent's opp_* stats.
@@ -146,6 +161,28 @@ export async function POST(req: NextRequest) {
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
+
+    // ── Schedule tracking: insert game record ──
+    // ON CONFLICT DO NOTHING means re-submitting the same game won't create
+    // a duplicate schedule row, even though stats upserts will double-count.
+    await client.query(`
+      INSERT INTO hs_games_womens
+        (league, season, game_date, game_time,
+         home_team, away_team, home_score, away_score, overtime)
+      VALUES ($1, $2, $3::date, $4, $5, $6, $7, $8, $9)
+      ON CONFLICT (league, season, game_date, game_time, home_team, away_team)
+      DO NOTHING
+    `, [
+      league,
+      season,
+      game.date,
+      game.time ?? null,
+      game.home_team,
+      game.away_team,
+      game.home_score,
+      game.away_score,
+      game.overtime ?? false,
+    ]);
 
     // ── Team stats: additive upsert, including opponent cross-write ──
     for (let i = 0; i < teams.length; i++) {
