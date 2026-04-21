@@ -9,17 +9,30 @@
  *   --file <path>    path to filled CSV (required)
  *   --dry-run        preview changes without writing to DB
  *
- * CSV FORMAT (must match output of generate_missing_roster_csv.mjs):
- *   division,team_name,first_name,last_name,height,year
+ * SUPPORTED CSV FORMATS (auto-detected from header):
  *
- * HEIGHT FORMATS ACCEPTED:
+ * 1) COLLEGE / TRANSFERS:
+ *    division,team_name,first_name,last_name,height,year
+ *    Writes to: players table. Height stored as int inches. Year as text.
+ *
+ * 2) WOMENS HS (detected by 'grad_year' column):
+ *    player_id,league,team,season,first_name,last_name,full_name,height,grad_year
+ *    Writes to: hs_players_womens table. Height stored as "6'3\"" text. Grad year as int.
+ *
+ * HEIGHT FORMATS ACCEPTED (college):
  *   72          → 72 inches (stored as-is)
  *   6-0         → 72 inches
  *   6'0"        → 72 inches
  *   6'0         → 72 inches
  *   6 0         → 72 inches
  *
- * YEAR FORMATS ACCEPTED:
+ * HEIGHT FORMATS ACCEPTED (HS — normalized to "6'3\"" format):
+ *   6'3"        → 6'3"
+ *   6-3         → 6'3"
+ *   6 3         → 6'3"
+ *   75          → 6'3" (inches converted to ft'in" format)
+ *
+ * YEAR FORMATS ACCEPTED (college):
  *   Fr, Freshman, 1         → Fr
  *   So, Sophomore, 2        → So
  *   Jr, Junior, 3           → Jr
@@ -27,6 +40,9 @@
  *   Grad, Graduate, 5       → Grad
  *   RS Fr, Redshirt Fr, etc → RS Fr
  *   RS So, Redshirt So, etc → RS So
+ *
+ * GRAD YEAR FORMAT (HS):
+ *   Integer between 2025 and 2035 (e.g. 2028)
  */
 import pg from 'pg';
 import fs from 'fs';
@@ -88,6 +104,44 @@ function parseYear(raw) {
   if (/^(grad|graduate|5th|5|gr)$/.test(s)) return 'Grad';
   return null;
 }
+
+// HS height parser — normalizes various input formats to canonical "6'3\"" string.
+// Returns a string like 6'3" or null if unparseable.
+function parseHSHeight(raw) {
+  if (!raw || raw.trim() === '') return null;
+  const s = raw.trim();
+
+  // Plain integer — treat as inches, convert to ft'in"
+  if (/^\d+$/.test(s)) {
+    const n = parseInt(s, 10);
+    if (n >= 48 && n <= 96) {
+      const feet = Math.floor(n / 12);
+      const inches = n % 12;
+      return `${feet}'${inches}"`;
+    }
+    return null;
+  }
+
+  // Formats: 6-0, 6'0", 6'0, 6 0, 6ft 0in, etc.
+  const match = s.match(/(\d+)['\-\s](\d+)/);
+  if (match) {
+    const feet = parseInt(match[1], 10);
+    const inches = parseInt(match[2], 10);
+    if (feet >= 4 && feet <= 8 && inches >= 0 && inches <= 11) {
+      return `${feet}'${inches}"`;
+    }
+  }
+  return null;
+}
+
+// HS grad_year parser — integer between 2025 and 2035.
+function parseGradYear(raw) {
+  if (!raw || raw.trim() === '') return null;
+  const s = raw.trim();
+  if (!/^\d+$/.test(s)) return null;
+  const n = parseInt(s, 10);
+  return n >= 2025 && n <= 2035 ? n : null;
+}
 // ─── NAME NORMALIZER ───────────────────────────────────────────────────────────
 function normalizeName(name) {
   if (!name) return '';
@@ -97,8 +151,16 @@ function normalizeName(name) {
 // ─── CSV PARSER ────────────────────────────────────────────────────────────────
 function parseCSV(content) {
   const lines = content.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
-  if (lines.length < 2) return [];
+  if (lines.length < 2) return { format: 'college', rows: [] };
   const header = lines[0].split(',').map(h => h.trim().toLowerCase());
+
+  // Auto-detect format: HS has 'grad_year' column, college has 'year'
+  const isHS = header.includes('grad_year');
+  if (isHS) {
+    return parseHSCSV(lines, header);
+  }
+
+  // ── College / transfers format ──
   const pidIdx  = header.indexOf('player_id');
   const divIdx   = header.indexOf('division');
   const teamIdx  = header.indexOf('team_name');
@@ -127,7 +189,44 @@ function parseCSV(content) {
       year_raw:   fields[yrIdx]?.trim()   ?? '',
     });
   }
-  return rows;
+  return { format: 'college', rows };
+}
+
+function parseHSCSV(lines, header) {
+  const pidIdx    = header.indexOf('player_id');
+  const leagueIdx = header.indexOf('league');
+  const teamIdx   = header.indexOf('team');
+  const seasonIdx = header.indexOf('season');
+  const fIdx      = header.indexOf('first_name');
+  const lIdx      = header.indexOf('last_name');
+  const fnIdx     = header.indexOf('full_name');
+  const htIdx     = header.indexOf('height');
+  const gyIdx     = header.indexOf('grad_year');
+
+  if ([pidIdx, leagueIdx, teamIdx, fnIdx, htIdx, gyIdx].some(i => i === -1)) {
+    console.error('❌ HS CSV is missing required columns. Expected: player_id,league,team,season,first_name,last_name,full_name,height,grad_year');
+    process.exit(1);
+  }
+
+  const rows = [];
+  for (let i = 1; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (!line) continue;
+    const fields = splitCSVLine(line);
+    if (fields.length < 9) continue;
+    rows.push({
+      player_id:     fields[pidIdx]?.trim()    ?? '',
+      league:        fields[leagueIdx]?.trim() ?? '',
+      team:          fields[teamIdx]?.trim()   ?? '',
+      season:        fields[seasonIdx]?.trim() ?? '',
+      first_name:    fIdx  !== -1 ? (fields[fIdx]?.trim()  ?? '') : '',
+      last_name:     lIdx  !== -1 ? (fields[lIdx]?.trim()  ?? '') : '',
+      full_name:     fields[fnIdx]?.trim()     ?? '',
+      height_raw:    fields[htIdx]?.trim()     ?? '',
+      grad_year_raw: fields[gyIdx]?.trim()     ?? '',
+    });
+  }
+  return { format: 'hs', rows };
 }
 function splitCSVLine(line) {
   const fields = [];
@@ -160,8 +259,19 @@ async function run() {
     content = fs.readFileSync(FILE, 'latin1');
   }
 
-  const rawRows = parseCSV(content);
-  console.log(`📄 Parsed ${rawRows.length} rows from ${FILE}`);
+  const parsed = parseCSV(content);
+  console.log(`📄 Parsed ${parsed.rows.length} rows from ${FILE} (format: ${parsed.format})`);
+
+  if (parsed.format === 'hs') {
+    await runHSImport(parsed.rows);
+  } else {
+    await runCollegeImport(parsed.rows);
+  }
+
+  await pool.end();
+}
+
+async function runCollegeImport(rawRows) {
   let updated = 0;
   let skipped = 0;
   let noMatch = 0;
@@ -240,8 +350,73 @@ async function run() {
     console.log(`\n⚠️  No DB match found for:`);
     noMatchRows.forEach(r => console.log(`   ${r}`));
   }
-  await pool.end();
 }
+
+async function runHSImport(rawRows) {
+  let updated = 0;
+  let skipped = 0;
+  let noMatch = 0;
+  let parseErrors = 0;
+  const noMatchRows = [];
+
+  for (const row of rawRows) {
+    const height    = parseHSHeight(row.height_raw);
+    const gradYear  = parseGradYear(row.grad_year_raw);
+
+    if (height === null && gradYear === null) {
+      skipped++;
+      continue;
+    }
+
+    if (row.height_raw && height === null) {
+      console.warn(`  ⚠️  Could not parse height: "${row.height_raw}" for ${row.full_name} (${row.team}, ${row.league})`);
+      parseErrors++;
+    }
+    if (row.grad_year_raw && gradYear === null) {
+      console.warn(`  ⚠️  Could not parse grad_year: "${row.grad_year_raw}" for ${row.full_name} (${row.team}, ${row.league})`);
+      parseErrors++;
+    }
+
+    if (!row.player_id) {
+      console.warn(`  ⚠️  Row missing player_id: ${row.full_name} (${row.team}, ${row.league}) — skipping`);
+      noMatch++;
+      noMatchRows.push(`${row.league} | ${row.team} | ${row.full_name} (no player_id)`);
+      continue;
+    }
+
+    if (DRY_RUN) {
+      console.log(`  [DRY RUN] ${row.league} | ${row.team} | ${row.full_name} → height=${height ?? '(unchanged)'} grad_year=${gradYear ?? '(unchanged)'}`);
+      updated++;
+      continue;
+    }
+
+    const res = await pool.query(`
+      UPDATE hs_players_womens
+      SET
+        height    = CASE WHEN $1::text IS NOT NULL THEN $1::text ELSE height    END,
+        grad_year = CASE WHEN $2::int  IS NOT NULL THEN $2::int  ELSE grad_year END
+      WHERE id = $3
+      RETURNING id
+    `, [height, gradYear, parseInt(row.player_id, 10)]);
+
+    if (res.rowCount === 0) {
+      noMatch++;
+      noMatchRows.push(`${row.league} | ${row.team} | ${row.full_name} (id=${row.player_id} not found)`);
+    } else {
+      updated++;
+    }
+  }
+  console.log(`\n✅ Complete.`);
+  console.log(`   Updated:      ${updated}`);
+  console.log(`   Skipped:      ${skipped} (no height or grad_year provided)`);
+  console.log(`   No DB match:  ${noMatch}`);
+  if (parseErrors > 0) console.log(`   Parse errors: ${parseErrors}`);
+  if (noMatchRows.length > 0) {
+    console.log(`\n⚠️  No DB match found for:`);
+    noMatchRows.forEach(r => console.log(`   ${r}`));
+  }
+}
+
 run().catch(err => {
   console.error('Error:', err.message);
   process.exit(1);
