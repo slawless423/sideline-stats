@@ -70,28 +70,35 @@ function fmt(val: number | null | undefined, dec = 1): string {
   return val.toFixed(dec);
 }
 
-// League average: minutes-weighted mean of each player's advanced stats.
-// For every stat key, weighted_avg = SUM(player.stat * player.mp) / SUM(player.mp).
-// This matches the player-row methodology (each row is one player's Dean Oliver
-// advanced stats), so the league-average row is directly comparable.
-// %Min is excluded — mathematically meaningless at the league level.
-function avgStats(playersWithAdv: any[]): Record<string, number> {
-  const weightedSums: Record<string, number> = {};
-  const weightTotals: Record<string, number> = {};
+// League average: aggregate all player counting stats and all team counting stats,
+// then run calcAdv once on the aggregates. ORtg is overridden with a minutes-weighted
+// mean of per-player Dean Oliver ORtgs (the team-aggregate approach produces a number
+// that doesn't account for offensive-rebound production the way Dean Oliver does).
+// %Min is excluded — mathematically forced to 500 at the league level, not meaningful.
+function avgStats(playersWithAdv: any[], allTeams: any[]): Record<string, number> {
+  // 1) Aggregate approach for everything (Option B).
+  const totPlayer: any = { gp:0,mp:0,pts:0,fgm:0,fga:0,fg3m:0,fg3a:0,ftm:0,fta:0,oreb:0,dreb:0,reb:0,ast:0,stl:0,blk:0,tov:0 };
+  for (const p of playersWithAdv) for (const k of Object.keys(totPlayer)) totPlayer[k] += Number(p[k]) || 0;
+
+  const totTeam: any = { gp:0,mp:0,fgm:0,fga:0,fg3m:0,fg3a:0,ftm:0,fta:0,oreb:0,dreb:0,reb:0,ast:0,stl:0,blk:0,tov:0,pts:0,opp_fga:0,opp_fg3a:0,opp_ftm:0,opp_fta:0,opp_oreb:0,opp_dreb:0,opp_reb:0,opp_tov:0 };
+  for (const t of allTeams) for (const k of Object.keys(totTeam)) totTeam[k] += Number(t[k]) || 0;
+
+  const result: Record<string, number> = calcAdv(totPlayer, totTeam) || {};
+
+  // 2) Override ORtg only: minutes-weighted mean of each player's Dean Oliver ORtg.
+  let ortgNum = 0, ortgDen = 0;
   for (const p of playersWithAdv) {
     if (!p.adv || !p.mp || p.mp <= 0) continue;
-    for (const [key, val] of Object.entries(p.adv)) {
-      if (typeof val !== 'number' || !isFinite(val)) continue;
-      weightedSums[key] = (weightedSums[key] ?? 0) + val * p.mp;
-      weightTotals[key] = (weightTotals[key] ?? 0) + p.mp;
-    }
+    const o = (p.adv as any).ortg;
+    if (typeof o !== 'number' || !isFinite(o)) continue;
+    ortgNum += o * p.mp;
+    ortgDen += p.mp;
   }
-  const result: Record<string, number> = {};
-  for (const key of Object.keys(weightedSums)) {
-    if (weightTotals[key] > 0) result[key] = weightedSums[key] / weightTotals[key];
-  }
-  // %Min isn't meaningful at the league-aggregate level — blank it.
+  if (ortgDen > 0) result.ortg = ortgNum / ortgDen;
+
+  // %Min isn't meaningful at the league level — blank it.
   delete result.minPct;
+
   return result;
 }
 
@@ -139,8 +146,8 @@ export async function GET(req: NextRequest) {
     const teamMap = new Map(teamsRes.rows.map((t: any) => [t.team, t]));
     const teams = [...new Set(players.map((p: any) => p.team))].sort() as string[];
     const playerStats = players.map((p: any) => ({ ...p, adv: calcAdv(p, teamMap.get(p.team)) }));
-    // League average = minutes-weighted mean of each player's Dean Oliver advanced stats.
-    const leagueAvg = avgStats(playerStats);
+    // League average: counting-stat aggregates, with ORtg overridden to minutes-weighted Dean Oliver mean.
+    const leagueAvg = avgStats(playerStats, teamsRes.rows);
 
     const NAVY  = '#0D1F3C';
     const FROST = '#E8F2FC';
