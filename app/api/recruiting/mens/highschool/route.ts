@@ -32,7 +32,7 @@ export async function GET() {
         `),
         client.query(`
           SELECT
-            team, league, season, gp,
+            team, league, season, gp, mp,
             fgm, fga, fg3m, fg3a, ftm, fta,
             oreb, dreb, reb, ast, stl, blk, tov, pts,
             opp_fgm, opp_fga, opp_fg3m, opp_fg3a, opp_ftm, opp_fta,
