@@ -76,6 +76,7 @@ type HSTeamStats = {
   league: string;
   season: string;
   gp: number;
+  mp: number;
   fgm: number; fga: number;
   fg3m: number; fg3a: number;
   ftm: number; fta: number;
@@ -209,7 +210,8 @@ function calcStats(t: Transfer, team: TeamRow | undefined) {
 
 function calcHSStats(p: HSPlayer, team: HSTeamStats | undefined) {
   if (!team || p.gp === 0 || p.mp === 0) return null;
-  const teamMinutes = team.gp * 200;
+  // Use actual team minutes from DB (handles OT correctly).
+  const teamMinutes = team.mp;
   const opp_drb = team.opp_reb - team.opp_oreb;
   const drb = team.reb - team.oreb;
   const Team_ORB_pct = team.oreb / (team.oreb + opp_drb);
