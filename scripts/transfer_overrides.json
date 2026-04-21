@@ -809,5 +809,17 @@
 { "transfer_name": "Luka Vudragović", "previous_school": "Pepperdine", "player_id": "2620_luka_vudragovic" },
 { "transfer_name": "Jordi Rodríguez", "previous_school": "Cincinnati", "player_id": "718_jordi_rodriguez" },
 { "transfer_name": "Filip Borovićanin", "previous_school": "Xavier", "player_id": "507_filip_borovicanin" },
-{ "transfer_name": "Zachary Davis", "previous_school": "Memphis", "player_id": "99_zach_davis" }
+{ "transfer_name": "Zachary Davis", "previous_school": "Memphis", "player_id": "99_zach_davis" },
+{ "transfer_name": "Vince Iwuchukwu", "previous_school": "Georgetown", "player_id": "1802_vincent_iwuchukwu" },
+{ "transfer_name": "Veljko Ilić", "previous_school": "Sam Houston State", "player_id": "1322_veljko_ilic" },
+{ "transfer_name": "Vasilije Kuridža", "previous_school": "Tulane", "player_id": "2023_vasilije_kuridza" },
+{ "transfer_name": "Tibor Mirtič", "previous_school": "Penn State", "player_id": "1967_tibor_mirtic" },
+{ "transfer_name": "Rickey Mitchell, Jr.", "previous_school": "Bethune-Cookman", "player_id": "839_rickey_mitchelljr." },
+{ "transfer_name": "Pavle Stošić", "previous_school": "Pepperdine", "player_id": "2620_pavle_stosic" },
+{ "transfer_name": "Nordin Kapić", "previous_school": "South Carolina", "player_id": "953_nordin_kapic" },
+{ "transfer_name": "Damon Nicholas, Jr.", "previous_school": "Sam Houston State", "player_id": "1322_damon_nicholasjr." },
+{ "transfer_name": "Andrija Grbović", "previous_school": "Arizona State", "player_id": "2213_andrija_grbovic" },
+{ "transfer_name": "Carl Daughtery, Jr.", "previous_school": "UC Davis", "player_id": "1770_carl_daughteryjr." },
+{ "transfer_name": "Dan Skillings, Jr.", "previous_school": "Baylor", "player_id": "2218_dan_skillingsjr." },
+{ "transfer_name": "Rob Whaley, Jr.", "previous_school": "Kent State", "player_id": "1825_rob_whaleyjr." }
 ]
