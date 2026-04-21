@@ -14,6 +14,7 @@ on:
           - womens-d2
           - mens-transfers
           - womens-transfers
+          - womens-hs
       team:
         description: 'Team name to export (leave blank for all teams in division)'
         required: false
