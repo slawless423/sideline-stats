@@ -29,7 +29,7 @@ type HSPlayer = {
 };
 
 type HSTeamStats = {
-  team: string; league: string; season: string; gp: number;
+  team: string; league: string; season: string; gp: number; mp: number;
   fgm: number; fga: number; fg3m: number; fg3a: number;
   ftm: number; fta: number; oreb: number; dreb: number; reb: number;
   ast: number; stl: number; blk: number; tov: number; pts: number;
@@ -94,7 +94,7 @@ export default function HSPlayerProfile() {
   // Usage
   let usagePct = '—';
   if (team && player.mp > 0) {
-    const teamMinutes = team.gp * 200;
+    const teamMinutes = team.mp;
     const teamPoss = team.fga + 0.44 * team.fta + team.tov;
     const u = 100 * (player.fga + 0.44 * player.fta + player.tov) / (teamPoss / teamMinutes * player.mp) / 5;
     usagePct = u.toFixed(1);
@@ -151,7 +151,7 @@ export default function HSPlayerProfile() {
         <h2 style={{ fontSize: 14, fontWeight: 700, color: NAVY, fontFamily: "'Outfit', sans-serif", borderBottom: `2px solid ${FROST}`, paddingBottom: 8, marginBottom: 16 }}>Advanced</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: 10, marginBottom: 28 }}>
           <StatBox label="%Usg" value={usagePct} />
-          <StatBox label="OR%" value={player.oreb > 0 && player.mp > 0 ? ((player.oreb / player.mp) * (team ? team.gp * 200 / 5 : 1) / Math.max(1, (team?.oreb ?? 1) + (team?.dreb ?? 0))).toFixed(1) + '%' : '—'} />
+          <StatBox label="OR%" value={player.oreb > 0 && player.mp > 0 ? ((player.oreb / player.mp) * (team ? team.mp / 5 : 1) / Math.max(1, (team?.oreb ?? 1) + (team?.dreb ?? 0))).toFixed(1) + '%' : '—'} />
           <StatBox label="TOV/G" value={(player.tov / g).toFixed(1)} />
         </div>
 
