@@ -70,20 +70,17 @@ function fmt(val: number | null | undefined, dec = 1): string {
   return val.toFixed(dec);
 }
 
-function avgStats(rawPlayers: any[], teamMap: Map<string, any>): Record<string, number> {
-  const tot: any = { gp:0,mp:0,pts:0,fgm:0,fga:0,fg3m:0,fg3a:0,ftm:0,fta:0,oreb:0,dreb:0,reb:0,ast:0,stl:0,blk:0,tov:0 };
-  for (const p of rawPlayers) for (const k of Object.keys(tot)) tot[k] += Number(p[k]) || 0;
-  const teamsInAvg = new Set(rawPlayers.map((p: any) => p.team));
-  const aggTeam: any = { gp:0,mp:0,fgm:0,fga:0,fg3m:0,fg3a:0,ftm:0,fta:0,oreb:0,dreb:0,reb:0,ast:0,stl:0,blk:0,tov:0,pts:0,opp_fga:0,opp_fg3a:0,opp_ftm:0,opp_fta:0,opp_oreb:0,opp_dreb:0,opp_reb:0,opp_tov:0 };
-  for (const teamName of teamsInAvg) {
-    const t = teamMap.get(teamName as string);
-    if (t) for (const k of Object.keys(aggTeam)) aggTeam[k] += Number(t[k]) || 0;
-  }
-  const n = rawPlayers.length;
-  const nt = teamsInAvg.size;
-  const avgPlayer = Object.fromEntries(Object.keys(tot).map(k => [k, k === 'gp' ? n : tot[k] / n]));
-  const scaledTeam = Object.fromEntries(Object.keys(aggTeam).map(k => [k, aggTeam[k] / nt]));
-  return calcAdv(avgPlayer, scaledTeam) || {};
+// League average: sum ALL player stats and ALL team stats (no min-games filter),
+// then run calcAdv once on the aggregated totals. This gives the true league-wide
+// per-possession / per-minute averages (e.g., league %Usg will be ~20 by construction).
+function avgStats(allPlayers: any[], allTeams: any[]): Record<string, number> {
+  const totPlayer: any = { gp:0,mp:0,pts:0,fgm:0,fga:0,fg3m:0,fg3a:0,ftm:0,fta:0,oreb:0,dreb:0,reb:0,ast:0,stl:0,blk:0,tov:0 };
+  for (const p of allPlayers) for (const k of Object.keys(totPlayer)) totPlayer[k] += Number(p[k]) || 0;
+
+  const totTeam: any = { gp:0,mp:0,fgm:0,fga:0,fg3m:0,fg3a:0,ftm:0,fta:0,oreb:0,dreb:0,reb:0,ast:0,stl:0,blk:0,tov:0,pts:0,opp_fga:0,opp_fg3a:0,opp_ftm:0,opp_fta:0,opp_oreb:0,opp_dreb:0,opp_reb:0,opp_tov:0 };
+  for (const t of allTeams) for (const k of Object.keys(totTeam)) totTeam[k] += Number(t[k]) || 0;
+
+  return calcAdv(totPlayer, totTeam) || {};
 }
 
 const COLS = [
@@ -130,9 +127,8 @@ export async function GET(req: NextRequest) {
     const teamMap = new Map(teamsRes.rows.map((t: any) => [t.team, t]));
     const teams = [...new Set(players.map((p: any) => p.team))].sort() as string[];
     const playerStats = players.map((p: any) => ({ ...p, adv: calcAdv(p, teamMap.get(p.team)) }));
-    // HS minimum is 5 games (matches frontend threshold)
-    const qualifiedRaw = playerStats.filter((p: any) => p.adv && p.gp >= 5);
-    const leagueAvg = avgStats(qualifiedRaw, teamMap as Map<string, any>);
+    // League average aggregates ALL players and ALL teams (no min-games filter).
+    const leagueAvg = avgStats(players, teamsRes.rows);
 
     const NAVY  = '#0D1F3C';
     const FROST = '#E8F2FC';
