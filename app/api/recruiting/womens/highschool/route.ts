@@ -14,17 +14,19 @@ export async function GET() {
             -- COALESCE(canonical_player_id, id) means: if this row IS the canonical
             -- (canonical_player_id IS NULL), group it by its own id; if it's a dupe,
             -- group it under the row it points at.
+            -- ::int casts required because SUM() returns bigint, which node-postgres
+            -- returns as a STRING, breaking all arithmetic in the frontend.
             SELECT
               COALESCE(p.canonical_player_id, p.id) AS canon_id,
-              SUM(s.gp)   AS gp,
-              SUM(s.mp)   AS mp,
-              SUM(s.pts)  AS pts,
-              SUM(s.fgm)  AS fgm,  SUM(s.fga)  AS fga,
-              SUM(s.fg3m) AS fg3m, SUM(s.fg3a) AS fg3a,
-              SUM(s.ftm)  AS ftm,  SUM(s.fta)  AS fta,
-              SUM(s.oreb) AS oreb, SUM(s.dreb) AS dreb, SUM(s.reb) AS reb,
-              SUM(s.ast)  AS ast,  SUM(s.stl)  AS stl,
-              SUM(s.blk)  AS blk,  SUM(s.tov)  AS tov
+              SUM(s.gp)::int   AS gp,
+              SUM(s.mp)::int   AS mp,
+              SUM(s.pts)::int  AS pts,
+              SUM(s.fgm)::int  AS fgm,  SUM(s.fga)::int  AS fga,
+              SUM(s.fg3m)::int AS fg3m, SUM(s.fg3a)::int AS fg3a,
+              SUM(s.ftm)::int  AS ftm,  SUM(s.fta)::int  AS fta,
+              SUM(s.oreb)::int AS oreb, SUM(s.dreb)::int AS dreb, SUM(s.reb)::int AS reb,
+              SUM(s.ast)::int  AS ast,  SUM(s.stl)::int  AS stl,
+              SUM(s.blk)::int  AS blk,  SUM(s.tov)::int  AS tov
             FROM hs_players_womens p
             JOIN hs_player_stats_womens s ON s.player_id = p.id
             GROUP BY COALESCE(p.canonical_player_id, p.id)
