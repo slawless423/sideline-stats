@@ -72,7 +72,12 @@ function fmt(val: number | null | undefined, dec = 1): string {
 
 // League average: sum ALL player stats and ALL team stats (no min-games filter),
 // then run calcAdv once on the aggregated totals. This gives the true league-wide
-// per-possession / per-minute averages (e.g., league %Usg will be ~20 by construction).
+// per-possession / per-minute averages.
+// Note: Dean Oliver ORtg can't be computed from league aggregates (the formula
+// has (team - player) denominators that go to zero when player = all players).
+// We override ORtg with direct points-per-100-possessions instead.
+// %Min is mathematically forced to 500 when aggregating (summed player minutes
+// = team minutes * 5), so we omit it from the league-average display.
 function avgStats(allPlayers: any[], allTeams: any[]): Record<string, number> {
   const totPlayer: any = { gp:0,mp:0,pts:0,fgm:0,fga:0,fg3m:0,fg3a:0,ftm:0,fta:0,oreb:0,dreb:0,reb:0,ast:0,stl:0,blk:0,tov:0 };
   for (const p of allPlayers) for (const k of Object.keys(totPlayer)) totPlayer[k] += Number(p[k]) || 0;
@@ -80,7 +85,16 @@ function avgStats(allPlayers: any[], allTeams: any[]): Record<string, number> {
   const totTeam: any = { gp:0,mp:0,fgm:0,fga:0,fg3m:0,fg3a:0,ftm:0,fta:0,oreb:0,dreb:0,reb:0,ast:0,stl:0,blk:0,tov:0,pts:0,opp_fga:0,opp_fg3a:0,opp_ftm:0,opp_fta:0,opp_oreb:0,opp_dreb:0,opp_reb:0,opp_tov:0 };
   for (const t of allTeams) for (const k of Object.keys(totTeam)) totTeam[k] += Number(t[k]) || 0;
 
-  return calcAdv(totPlayer, totTeam) || {};
+  const result: Record<string, number> = calcAdv(totPlayer, totTeam) || {};
+
+  // Override ORtg: direct points-per-100-possessions from team aggregates.
+  const leaguePoss = totTeam.fga + 0.44 * totTeam.fta + totTeam.tov;
+  if (leaguePoss > 0) result.ortg = 100 * totTeam.pts / leaguePoss;
+
+  // %Min isn't meaningful at the league-aggregate level — blank it.
+  delete result.minPct;
+
+  return result;
 }
 
 const COLS = [
