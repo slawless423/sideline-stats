@@ -205,7 +205,7 @@ export default function WomensHighSchoolPage() {
       .then(({ players, teams }) => {
         setHsPlayers(players ?? []);
         const map = new Map<string, HSTeamStats>();
-        for (const t of (teams ?? [])) map.set(`${t.team}|||${t.season}`, t);
+        for (const t of (teams ?? [])) map.set(`${t.team}|||${t.league}|||${t.season}`, t);
         setHsTeamMap(map);
         setLoading(false);
       })
@@ -256,8 +256,8 @@ export default function WomensHighSchoolPage() {
       const ah = heightToInches(a.height??''), bh = heightToInches(b.height??'');
       return hsSortOrder==='asc'?ah-bh:bh-ah;
     }
-    const as_ = calcHSStats(a, hsTeamMap.get(`${a.team}|||${a.season}`));
-    const bs_ = calcHSStats(b, hsTeamMap.get(`${b.team}|||${b.season}`));
+    const as_ = calcHSStats(a, hsTeamMap.get(`${a.team}|||${a.league}|||${a.season}`));
+    const bs_ = calcHSStats(b, hsTeamMap.get(`${b.team}|||${b.league}|||${b.season}`));
     if (!as_ && !bs_) return 0; if (!as_) return 1; if (!bs_) return -1;
     const av = (as_ as Record<string,number>)[hsSortKey]??0;
     const bv = (bs_ as Record<string,number>)[hsSortKey]??0;
@@ -267,7 +267,7 @@ export default function WomensHighSchoolPage() {
   const exportCSV = () => {
     const headers = ['Name','Team','League','Season','Grad Year','G','MP',...hsActiveCols.map(c=>c.label)];
     const rows = sortedHs.map(p => {
-      const stats = calcHSStats(p, hsTeamMap.get(`${p.team}|||${p.season}`));
+      const stats = calcHSStats(p, hsTeamMap.get(`${p.team}|||${p.league}|||${p.season}`));
       return [csvField(p.full_name),csvField(p.team),csvField(p.league),csvField(p.season),
         csvField(p.grad_year??''),csvField(p.gp),csvField(p.mp),
         ...hsActiveCols.map(c => { const v=stats?(stats as Record<string,number>)[c.key]:undefined; if(v==null)return''; return INTEGER_KEYS.has(c.key)?String(Math.round(v)):v.toFixed(1); })];
@@ -501,7 +501,7 @@ export default function WomensHighSchoolPage() {
                 </thead>
                 <tbody>
                   {sortedHs.map((p, idx) => {
-                    const stats = calcHSStats(p, hsTeamMap.get(`${p.team}|||${p.season}`));
+                    const stats = calcHSStats(p, hsTeamMap.get(`${p.team}|||${p.league}|||${p.season}`));
                     const bg = idx%2===0 ? '#fff' : '#fafafa';
                     return (
                       <tr key={`${p.id}`} style={{ borderBottom: '1px solid #f0f0f0', background: bg }}>
