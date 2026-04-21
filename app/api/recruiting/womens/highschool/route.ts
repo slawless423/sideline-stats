@@ -9,6 +9,26 @@ export async function GET() {
     try {
       const [playersRes, teamsRes] = await Promise.all([
         client.query(`
+          WITH aggregated AS (
+            -- Sum stats across every player row that shares a canonical ID.
+            -- COALESCE(canonical_player_id, id) means: if this row IS the canonical
+            -- (canonical_player_id IS NULL), group it by its own id; if it's a dupe,
+            -- group it under the row it points at.
+            SELECT
+              COALESCE(p.canonical_player_id, p.id) AS canon_id,
+              SUM(s.gp)   AS gp,
+              SUM(s.mp)   AS mp,
+              SUM(s.pts)  AS pts,
+              SUM(s.fgm)  AS fgm,  SUM(s.fga)  AS fga,
+              SUM(s.fg3m) AS fg3m, SUM(s.fg3a) AS fg3a,
+              SUM(s.ftm)  AS ftm,  SUM(s.fta)  AS fta,
+              SUM(s.oreb) AS oreb, SUM(s.dreb) AS dreb, SUM(s.reb) AS reb,
+              SUM(s.ast)  AS ast,  SUM(s.stl)  AS stl,
+              SUM(s.blk)  AS blk,  SUM(s.tov)  AS tov
+            FROM hs_players_womens p
+            JOIN hs_player_stats_womens s ON s.player_id = p.id
+            GROUP BY COALESCE(p.canonical_player_id, p.id)
+          )
           SELECT
             p.id,
             p.full_name,
@@ -17,17 +37,18 @@ export async function GET() {
             p.season,
             p.grad_year,
             p.height,
-            s.gp,
-            s.mp,
-            s.pts,
-            s.fgm, s.fga,
-            s.fg3m, s.fg3a,
-            s.ftm, s.fta,
-            s.oreb, s.dreb, s.reb,
-            s.ast, s.stl, s.blk, s.tov
+            a.gp,
+            a.mp,
+            a.pts,
+            a.fgm, a.fga,
+            a.fg3m, a.fg3a,
+            a.ftm, a.fta,
+            a.oreb, a.dreb, a.reb,
+            a.ast, a.stl, a.blk, a.tov
           FROM hs_players_womens p
-          JOIN hs_player_stats_womens s ON s.player_id = p.id
-          WHERE s.gp > 0
+          JOIN aggregated a ON a.canon_id = p.id
+          WHERE p.canonical_player_id IS NULL
+            AND a.gp > 0
           ORDER BY p.full_name
         `),
         client.query(`
