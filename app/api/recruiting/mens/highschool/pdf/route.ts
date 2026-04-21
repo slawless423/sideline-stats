@@ -10,7 +10,8 @@ const pool = new Pool({ connectionString: process.env.POSTGRES_URL });
 
 function calcAdv(p: any, team: any) {
   if (!team || p.gp === 0 || p.mp === 0) return null;
-  const teamMinutes = team.gp * 200;
+  // Use actual team minutes from DB (handles OT correctly).
+  const teamMinutes = team.mp;
   const opp_drb = team.opp_reb - team.opp_oreb;
   const drb = team.reb - team.oreb;
   const Team_ORB_pct = team.oreb / (team.oreb + opp_drb);
@@ -73,7 +74,7 @@ function avgStats(rawPlayers: any[], teamMap: Map<string, any>): Record<string, 
   const tot: any = { gp:0,mp:0,pts:0,fgm:0,fga:0,fg3m:0,fg3a:0,ftm:0,fta:0,oreb:0,dreb:0,reb:0,ast:0,stl:0,blk:0,tov:0 };
   for (const p of rawPlayers) for (const k of Object.keys(tot)) tot[k] += Number(p[k]) || 0;
   const teamsInAvg = new Set(rawPlayers.map((p: any) => p.team));
-  const aggTeam: any = { gp:0,fgm:0,fga:0,fg3m:0,fg3a:0,ftm:0,fta:0,oreb:0,dreb:0,reb:0,ast:0,stl:0,blk:0,tov:0,pts:0,opp_fga:0,opp_fg3a:0,opp_ftm:0,opp_fta:0,opp_oreb:0,opp_dreb:0,opp_reb:0,opp_tov:0 };
+  const aggTeam: any = { gp:0,mp:0,fgm:0,fga:0,fg3m:0,fg3a:0,ftm:0,fta:0,oreb:0,dreb:0,reb:0,ast:0,stl:0,blk:0,tov:0,pts:0,opp_fga:0,opp_fg3a:0,opp_ftm:0,opp_fta:0,opp_oreb:0,opp_dreb:0,opp_reb:0,opp_tov:0 };
   for (const teamName of teamsInAvg) {
     const t = teamMap.get(teamName as string);
     if (t) for (const k of Object.keys(aggTeam)) aggTeam[k] += Number(t[k]) || 0;
@@ -117,7 +118,7 @@ export async function GET(req: NextRequest) {
         ORDER BY p.team, s.mp DESC
       `, [league, season]),
       client.query(`
-        SELECT team, gp, fgm, fga, fg3m, fg3a, ftm, fta,
+        SELECT team, gp, mp, fgm, fga, fg3m, fg3a, ftm, fta,
                oreb, dreb, reb, ast, stl, blk, tov, pts,
                opp_fgm, opp_fga, opp_fg3m, opp_fg3a, opp_ftm, opp_fta,
                opp_oreb, opp_dreb, opp_reb, opp_ast, opp_stl, opp_blk, opp_tov, opp_pts
