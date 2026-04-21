@@ -9,12 +9,14 @@
  *   --division womens-d1          only export one division (womens-d1, mens-d1, mens-d2, womens-d2)
  *   --division mens-transfers     export transfers table (D1 Men + D2 Men) missing height/year
  *   --division womens-transfers   export womens_transfers table (D1 Women + D2 Women) missing height/year
+ *   --division womens-hs          export women's HS (hs_players_womens, all leagues) missing height/grad_year
  *   --team "Alabama St."          only export one team (exact DB name)
  *   --out roster_missing.csv      custom output filename (default: missing_rosters_YYYY-MM-DD.csv)
  *
  * OUTPUT:
  *   CSV file with columns:
  *     division, team_name, first_name, last_name, height, year
+ *   (womens-hs uses: player_id, league, team, season, first_name, last_name, full_name, height, grad_year)
  */
 
 import pg from 'pg';
@@ -315,12 +317,81 @@ async function runPlayers() {
   console.log(`  4. Run: node scripts/import_roster_csv.mjs --file ${OUT_FILE}`);
 }
 
+// ─── HS WOMENS BRANCH ─────────────────────────────────────────────────────────
+
+async function runHSWomens() {
+  console.log('Querying hs_players_womens for players missing height or grad_year...\n');
+
+  // Note: only surface canonical rows (not merged dupes). The API aggregates dupes
+  // into their canonical, so filling in the canonical row is what matters — filling
+  // a dupe row would write to a row that never renders on the frontend.
+  let query = `
+    SELECT id, full_name, first_name, last_name, team, league, season, grad_year, height
+    FROM hs_players_womens
+    WHERE canonical_player_id IS NULL
+      AND (grad_year IS NULL OR height IS NULL OR height = '')
+    ORDER BY league, team, last_name, first_name
+  `;
+  const params = [];
+
+  if (TEAM_FILTER) {
+    query = `
+      SELECT id, full_name, first_name, last_name, team, league, season, grad_year, height
+      FROM hs_players_womens
+      WHERE canonical_player_id IS NULL
+        AND LOWER(team) = LOWER($1)
+        AND (grad_year IS NULL OR height IS NULL OR height = '')
+      ORDER BY league, last_name, first_name
+    `;
+    params.push(TEAM_FILTER);
+  }
+
+  const res = await pool.query(query, params);
+  await pool.end();
+
+  console.log(`  Found ${res.rows.length} HS women's players missing height or grad_year`);
+
+  if (res.rows.length === 0) {
+    console.log('\n✅ No HS women\'s players missing height or grad_year!');
+    return;
+  }
+
+  const header = 'player_id,league,team,season,first_name,last_name,full_name,height,grad_year';
+  const lines = res.rows.map(r => {
+    const playerId  = String(r.id);
+    const league    = r.league || '';
+    const team      = r.team || '';
+    const season    = r.season || '';
+    const firstName = normalizeName(r.first_name || '');
+    const lastName  = normalizeName(r.last_name  || '');
+    const fullName  = normalizeName(r.full_name  || '');
+    const height    = r.height || '';
+    const gradYear  = r.grad_year != null ? String(r.grad_year) : '';
+    return [
+      csvEscape(playerId), csvEscape(league), csvEscape(team), csvEscape(season),
+      csvEscape(firstName), csvEscape(lastName), csvEscape(fullName),
+      csvEscape(height), csvEscape(gradYear),
+    ].join(',');
+  });
+
+  const csv = [header, ...lines].join('\n') + '\n';
+  fs.writeFileSync(OUT_FILE, csv, 'utf8');
+
+  console.log(`\n✅ Exported ${res.rows.length} players to: ${OUT_FILE}`);
+  console.log(`\nInstructions:`);
+  console.log(`  1. Open ${OUT_FILE} in Excel or Google Sheets`);
+  console.log(`  2. Fill in the 'height' column (e.g. 6'3") and/or 'grad_year' column (e.g. 2028)`);
+  console.log(`  3. Save as CSV, commit to rosters/ folder, and re-import via the Import Roster CSV workflow`);
+}
+
 // ─── ENTRY POINT ───────────────────────────────────────────────────────────────
 
 if (DIVISION_FILTER === 'mens-transfers') {
   runTransfers().catch(err => { console.error('Error:', err.message); process.exit(1); });
 } else if (DIVISION_FILTER === 'womens-transfers') {
   runWomensTransfers().catch(err => { console.error('Error:', err.message); process.exit(1); });
+} else if (DIVISION_FILTER === 'womens-hs') {
+  runHSWomens().catch(err => { console.error('Error:', err.message); process.exit(1); });
 } else {
   runPlayers().catch(err => { console.error('Error:', err.message); process.exit(1); });
 }
