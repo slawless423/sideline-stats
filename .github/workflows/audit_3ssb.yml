@@ -1,0 +1,31 @@
+name: Audit 3SSB Possessions
+
+on:
+  workflow_dispatch:
+    inputs:
+      event_id:
+        description: 'Passport exposureEventId (Session I 2026 = 262708)'
+        required: true
+        default: '262708'
+      division:
+        description: 'Division name to audit'
+        required: true
+        default: '17U'
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run audit
+        env:
+          EVENT_ID: ${{ inputs.event_id }}
+          DIVISION: ${{ inputs.division }}
+        run: node scripts/audit_3ssb_possessions.mjs
