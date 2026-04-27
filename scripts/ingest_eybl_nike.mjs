@@ -57,8 +57,12 @@ console.log(`========================\n`);
 const TRPC_BASE = 'https://cerebro-widget.vercel.app/api/trpc';
 
 // tRPC requires the input wrapped as {"0":{"json":{...}}} and URL-encoded.
-function buildTrpcUrl(procedure, input) {
-  const wrapped = { '0': { json: input } };
+// The optional `meta` parameter is required by tRPC's superjson transformer when
+// the input contains null values (it tells the server which fields are intentionally null).
+function buildTrpcUrl(procedure, input, meta = null) {
+  const payload = { json: input };
+  if (meta) payload.meta = meta;
+  const wrapped = { '0': payload };
   const encoded = encodeURIComponent(JSON.stringify(wrapped));
   return `${TRPC_BASE}/${procedure}?batch=1&input=${encoded}`;
 }
@@ -94,6 +98,12 @@ async function fetchSchedule() {
     gameId: null,
     page: 1,
     pageSize: 1000,
+  }, {
+    values: {
+      teamId: ['undefined'],
+      gameId: ['undefined'],
+    },
+    v: 1,
   });
 
   const data = await trpcGet(url, 'Schedule');
