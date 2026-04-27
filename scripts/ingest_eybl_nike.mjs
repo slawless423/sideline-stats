@@ -121,16 +121,6 @@ async function fetchSchedule() {
 
 // Filter schedule to only completed games (have scores).
 function filterCompleted(rawGames) {
-  // DEBUG: peek at first 3 games to see actual field shape
-  if (rawGames.length > 0) {
-    console.log(`  DEBUG: first game keys = ${JSON.stringify(Object.keys(rawGames[0]))}`);
-    console.log(`  DEBUG: first AwayTeam keys = ${JSON.stringify(Object.keys(rawGames[0].AwayTeam || {}))}`);
-    console.log(`  DEBUG: first 3 games (away score / home score):`);
-    for (let i = 0; i < Math.min(3, rawGames.length); i += 1) {
-      const g = rawGames[i];
-      console.log(`    ${g.Date} ${g.AwayTeam?.Name} (${g.AwayTeam?.Score}) @ ${g.HomeTeam?.Name} (${g.HomeTeam?.Score})`);
-    }
-  }
   const completed = rawGames.filter(g =>
     g.AwayTeam?.Score != null && g.HomeTeam?.Score != null
   );
@@ -175,12 +165,13 @@ async function fetchBothTeamsStats(gameUuid, teamIdA, teamIdB) {
 // ---------- STAT NORMALIZATION ----------
 
 // Convert Nike player row to our schema field names.
+// Minutes come from the API as floats (19.7, 32.6 etc) — round to integer for our schema.
 function normalizePlayerRow(p) {
   const fga = p.fga ?? 0;
   const threePa = p.threePa ?? 0;
   return {
     playerName: p.playerName,
-    minutes: p.minutes ?? 0,
+    minutes: Math.round(p.minutes ?? 0),
     pts: p.pts ?? 0,
     reb: p.reb ?? 0,
     oreb: p.orb ?? 0,
@@ -306,7 +297,7 @@ async function processGame(scheduleRow) {
   for (const p of awayPlayerRows) {
     const agg = getPlayerAgg(p.playerName, awayName);
     agg.gp   += 1;
-    agg.mp   += Math.round(p.minutes);
+    agg.mp   += p.minutes;
     agg.fgm  += p.fgm;   agg.fga  += p.fga;
     agg.fg3m += p.fg3m;  agg.fg3a += p.fg3a;
     agg.ftm  += p.ftm;   agg.fta  += p.fta;
@@ -317,7 +308,7 @@ async function processGame(scheduleRow) {
   for (const p of homePlayerRows) {
     const agg = getPlayerAgg(p.playerName, homeName);
     agg.gp   += 1;
-    agg.mp   += Math.round(p.minutes);
+    agg.mp   += p.minutes;
     agg.fgm  += p.fgm;   agg.fga  += p.fga;
     agg.fg3m += p.fg3m;  agg.fg3a += p.fg3a;
     agg.ftm  += p.ftm;   agg.fta  += p.fta;
