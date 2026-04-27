@@ -279,14 +279,48 @@ async function processGame(scheduleRow) {
     gameUuid, teamOneUuid, teamTwoUuid
   );
 
-  // Map UUID-keyed stats back to away/home using teamOne/teamTwo names from lookup.
-  // Nike's name casing in UUID lookup may differ from schedule (e.g. "MOKAN Elite" vs "Mokan Elite").
-  // We use the schedule's casing as canonical for our DB.
-  const t1NameLower = (teamOneName || '').toLowerCase();
-  const awayNameLower = awayName.toLowerCase();
+  // Determine which roster goes with away vs home using UUID matching, NOT team name strings.
+  // The previous version compared lookup.team_one_name to schedule.AwayTeam.Name with
+  // case-insensitive matching, which failed silently for any whitespace or formatting
+  // difference and mis-attributed the entire roster to the wrong team.
+  //
+  // Each player's `teamId` in the stats response is the UUID they played for in this game.
+  // We pair that with the lookup's team_one/two name to identify which schedule team
+  // (away or home) the roster belongs to.
+  const teamAUuid = teamAStats[0]?.teamId; // UUID this array's players played for
+  const teamBUuid = teamBStats[0]?.teamId;
 
-  const awayPlayerRows = (t1NameLower === awayNameLower ? teamAStats : teamBStats).map(normalizePlayerRow);
-  const homePlayerRows = (t1NameLower === awayNameLower ? teamBStats : teamAStats).map(normalizePlayerRow);
+  // Use normalized (lowercase + whitespace-stripped) name comparison to map UUIDs
+  // to schedule away/home labels.
+  const norm = s => (s || '').toLowerCase().replace(/\s+/g, '');
+  const awayNorm = norm(awayName);
+  const homeNorm = norm(homeName);
+  const t1Norm = norm(teamOneName);
+  const t2Norm = norm(teamTwoName);
+
+  // Map team_one/two UUIDs to away/home based on names from the lookup.
+  let awayUuid, homeUuid;
+  if (t1Norm === awayNorm && t2Norm === homeNorm) {
+    awayUuid = teamOneUuid; homeUuid = teamTwoUuid;
+  } else if (t1Norm === homeNorm && t2Norm === awayNorm) {
+    awayUuid = teamTwoUuid; homeUuid = teamOneUuid;
+  } else {
+    console.warn(`    SKIP: name mismatch — schedule (${awayName} @ ${homeName}) vs lookup (${teamOneName}, ${teamTwoName})`);
+    return;
+  }
+
+  // Now assign each stats array to away/home based on its players' teamId UUID.
+  let awayPlayerRows, homePlayerRows;
+  if (teamAUuid === awayUuid && teamBUuid === homeUuid) {
+    awayPlayerRows = teamAStats.map(normalizePlayerRow);
+    homePlayerRows = teamBStats.map(normalizePlayerRow);
+  } else if (teamAUuid === homeUuid && teamBUuid === awayUuid) {
+    awayPlayerRows = teamBStats.map(normalizePlayerRow);
+    homePlayerRows = teamAStats.map(normalizePlayerRow);
+  } else {
+    console.warn(`    SKIP: stats UUID mismatch — teamA=${teamAUuid}, teamB=${teamBUuid}, away=${awayUuid}, home=${homeUuid}`);
+    return;
+  }
 
   if (awayPlayerRows.length === 0 || homePlayerRows.length === 0) {
     console.warn(`    SKIP: missing player stats (away: ${awayPlayerRows.length}, home: ${homePlayerRows.length})`);
