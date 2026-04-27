@@ -92,16 +92,9 @@ async function fetchBoxScore(gameId) {
 // ---------- STAT NORMALIZATION ----------
 
 // Convert Passport player row to our schema field names.
-// Passport gives separate twoPoint*/threePoint*/fieldGoal* objects with made/missed/attempted/percentage.
+// Passport's stats object has FLAT field names (fieldGoalsMade, threePointMade, etc.)
 function normalizePlayerRow(p) {
   const stats = p.stats || {};
-
-  // Field goals (combined 2 + 3)
-  const fg = stats.fieldGoals || {};
-  const tp = stats.threePoint || {};
-  const ft = stats.freeThrow || {};
-  const reb = stats.rebounds || {};
-
   return {
     playerNumber: String(p.playerNumber || ''),  // stable Passport ID
     playerName: p.firstName && p.lastName
@@ -109,20 +102,20 @@ function normalizePlayerRow(p) {
       : (p.firstName || p.lastName || '').trim(),
     minutes: Math.round(stats.minutes ?? 0),
     pts: stats.points ?? 0,
-    reb: reb.total ?? 0,
-    oreb: reb.offensive ?? 0,
-    dreb: reb.defensive ?? 0,
+    reb: stats.rebounds ?? 0,
+    oreb: stats.offensiveRebounds ?? 0,
+    dreb: stats.defensiveRebounds ?? 0,
     ast: stats.assists ?? 0,
     stl: stats.steals ?? 0,
     blk: stats.blocks ?? 0,
     tov: stats.turnovers ?? 0,
     pf: stats.fouls ?? 0,
-    fgm: fg.made ?? 0,
-    fga: fg.attempted ?? 0,
-    fg3m: tp.made ?? 0,
-    fg3a: tp.attempted ?? 0,
-    ftm: ft.made ?? 0,
-    fta: ft.attempted ?? 0,
+    fgm: stats.fieldGoalsMade ?? 0,
+    fga: stats.fieldGoalsAttempted ?? 0,
+    fg3m: stats.threePointMade ?? 0,
+    fg3a: stats.threePointAttempted ?? 0,
+    ftm: stats.freeThrowMade ?? 0,
+    fta: stats.freeThrowAttempted ?? 0,
     isPresent: p.isPresent !== false,
   };
 }
@@ -132,28 +125,23 @@ function normalizePlayerRow(p) {
 // row directly from Passport, not a sum of player rows.
 function normalizeTeamTotals(teamObj) {
   const stats = teamObj?.stats || {};
-  const fg = stats.fieldGoals || {};
-  const tp = stats.threePoint || {};
-  const ft = stats.freeThrow || {};
-  const reb = stats.rebounds || {};
-
   return {
-    mp: 0, // Passport doesn't expose team-level minutes; we fall back to summing players if needed
+    mp: Math.round(stats.minutes ?? 0),
     pts: stats.points ?? 0,
-    reb: reb.total ?? 0,
-    oreb: reb.offensive ?? 0,
-    dreb: reb.defensive ?? 0,
+    reb: stats.rebounds ?? 0,
+    oreb: stats.offensiveRebounds ?? 0,
+    dreb: stats.defensiveRebounds ?? 0,
     ast: stats.assists ?? 0,
     stl: stats.steals ?? 0,
     blk: stats.blocks ?? 0,
     tov: stats.turnovers ?? 0,
     pf: stats.fouls ?? 0,
-    fgm: fg.made ?? 0,
-    fga: fg.attempted ?? 0,
-    fg3m: tp.made ?? 0,
-    fg3a: tp.attempted ?? 0,
-    ftm: ft.made ?? 0,
-    fta: ft.attempted ?? 0,
+    fgm: stats.fieldGoalsMade ?? 0,
+    fga: stats.fieldGoalsAttempted ?? 0,
+    fg3m: stats.threePointMade ?? 0,
+    fg3a: stats.threePointAttempted ?? 0,
+    ftm: stats.freeThrowMade ?? 0,
+    fta: stats.freeThrowAttempted ?? 0,
   };
 }
 
@@ -197,21 +185,30 @@ function getTeamAgg(teamName) {
 // ---------- PROCESS ONE GAME ----------
 
 async function processGame(scheduleRow) {
+  // Use the schedule's team names as canonical (shorter / display-friendly).
+  // Box score sometimes uses different official names (e.g. "ETG Midwest" vs schedule's "ETG").
   const awayName = scheduleRow.awayTeam?.name;
   const homeName = scheduleRow.homeTeam?.name;
   const awayScore = scheduleRow.awayTeam?.score;
   const homeScore = scheduleRow.homeTeam?.score;
-  const gameDate = scheduleRow.gameInfo?.startTime
-    ? scheduleRow.gameInfo.startTime.slice(0, 10)
-    : null;
-
-  console.log(`  ${gameDate || '(no date)'} | ${awayName} (${awayScore}) @ ${homeName} (${homeScore})`);
 
   let box;
   try {
     box = await fetchBoxScore(scheduleRow.id);
   } catch (err) {
     console.warn(`    SKIP: box score fetch failed: ${err.message}`);
+    return;
+  }
+
+  // Date comes from the box score's gameInfo.startTime (ISO format)
+  const gameDate = box?.gameInfo?.startTime
+    ? box.gameInfo.startTime.slice(0, 10)
+    : null;
+
+  console.log(`  ${gameDate || '(no date)'} | ${awayName} (${awayScore}) @ ${homeName} (${homeScore})`);
+
+  if (!gameDate) {
+    console.warn(`    SKIP: no game date in box score`);
     return;
   }
 
@@ -223,11 +220,11 @@ async function processGame(scheduleRow) {
     return;
   }
 
-  // Roster validation: Passport's home/away in box score should match schedule
-  if (home.name !== homeName || away.name !== awayName) {
-    console.warn(`    SKIP: team name mismatch — schedule (${awayName} @ ${homeName}) vs box (${away.name} @ ${home.name})`);
-    return;
-  }
+  // NOTE: We do NOT validate that box.homeTeam.name === schedule.homeTeam.name.
+  // Passport's schedule and box score use different team-name conventions
+  // (display name vs registered name). The box score's home/away assignment is
+  // trusted to match the schedule's home/away assignment because both come from
+  // the same Passport platform. We use the schedule's names as canonical for our DB.
 
   // Player rows (filter to only those who actually played)
   const awayRoster = (away.roster || []).map(normalizePlayerRow).filter(r => r.isPresent && r.playerNumber);
@@ -266,10 +263,6 @@ async function processGame(scheduleRow) {
   // This is the standard rule, not the EYBL exception.
   const awayTeamTotals = normalizeTeamTotals(away);
   const homeTeamTotals = normalizeTeamTotals(home);
-
-  // Approximate team minutes by summing roster minutes (Passport doesn't expose team-level mp)
-  awayTeamTotals.mp = awayRoster.reduce((s, r) => s + r.minutes, 0);
-  homeTeamTotals.mp = homeRoster.reduce((s, r) => s + r.minutes, 0);
 
   const awayTeam = getTeamAgg(awayName);
   awayTeam.gp += 1;
