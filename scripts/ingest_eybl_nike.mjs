@@ -3,6 +3,16 @@
 // Nike EYBL ingest for boys divisions (17U / 16U / 15U).
 // Pulls from Cerebro/Passport tRPC APIs, writes to Neon.
 //
+// INCREMENTAL: Re-running this script does NOT delete existing data.
+// It only ingests games not yet in eybl_team_schedule.schedule_id, and
+// adds new contributions to existing player_stats / team_stats rows.
+// This preserves manual data fixes across re-runs.
+//
+// DEFENSIVE: Detects the Cerebro RelationsGameRead UUID-collision bug
+// where same-program teams (e.g. Florida Rebels 16U + 17U) playing the
+// same opponent on the same date can return the same UUID for both games.
+// Affected games are skipped and logged for manual entry.
+//
 // Usage (locally or in GitHub Action):
 //   LEAGUE=17U node scripts/ingest_eybl_nike.mjs
 //   LEAGUE=16U node scripts/ingest_eybl_nike.mjs
@@ -430,71 +440,127 @@ function parseDateMDYToISO(mdy) {
 
 // ---------- DB WRITE ----------
 
-async function writeToDb(client) {
-  console.log(`\nWriting to database...`);
-
-  // 1. Delete existing rows for this league + season
-  const delSchedule = await client.query(
-    `DELETE FROM eybl_team_schedule WHERE league = $1 AND season = $2`,
+// Fetch the set of schedule_ids already ingested for this league + season.
+// Used to skip games that have already been processed (incremental ingest).
+async function fetchExistingScheduleIds(client) {
+  const res = await client.query(
+    `SELECT DISTINCT schedule_id FROM eybl_team_schedule
+     WHERE league = $1 AND season = $2 AND schedule_id IS NOT NULL`,
     [league, SEASON]
   );
-  console.log(`  Deleted ${delSchedule.rowCount} old schedule rows`);
+  const ids = new Set(res.rows.map(r => Number(r.schedule_id)));
+  return ids;
+}
 
-  const delTeamStats = await client.query(
-    `DELETE FROM eybl_team_stats WHERE league = $1 AND season = $2`,
-    [league, SEASON]
+// Defensive check for the Cerebro RelationsGameRead bug:
+// Same-program teams playing on the same date across different age divisions
+// can return the SAME game UUID, causing roster cross-attribution.
+// If the UUID we're about to use already exists in eybl_team_schedule for a
+// different league on the same date, we have a collision — skip the game.
+async function detectUuidCollision(client, gameUuid, gameDate) {
+  const res = await client.query(
+    `SELECT league FROM eybl_team_schedule
+     WHERE game_uuid = $1 AND game_date = $2 AND season = $3 AND league <> $4
+     LIMIT 1`,
+    [gameUuid, gameDate, SEASON, league]
   );
-  console.log(`  Deleted ${delTeamStats.rowCount} old team_stats rows`);
+  return res.rowCount > 0 ? res.rows[0].league : null;
+}
 
-  // For player_stats we need to delete by joining through eybl_players.
-  const delPlayerStats = await client.query(
-    `DELETE FROM eybl_player_stats
-     WHERE season = $1 AND player_id IN (
-       SELECT id FROM eybl_players WHERE league = $2 AND season = $1
-     )`,
-    [SEASON, league]
-  );
-  console.log(`  Deleted ${delPlayerStats.rowCount} old player_stats rows`);
+// INCREMENTAL DB writer — never deletes prior data, never overwrites.
+// - Schedule rows: INSERT, ON CONFLICT skip
+// - Team stats: UPSERT — add to existing totals or insert new row
+// - Player stats: UPSERT — add to existing player's totals or insert new row
+//
+// This preserves manual fixes (e.g. fixing the Cerebro UUID bug for
+// Florida Rebels vs CP3 4/24/2026) across re-runs and incremental sessions.
+async function writeToDbIncremental(client) {
+  console.log(`\nWriting to database (incremental)...`);
 
-  // 2. Insert schedule rows
+  // 1. Insert schedule rows. ON CONFLICT skip handles re-runs of the same game.
+  let insertedSchedule = 0;
   for (const r of scheduleRows) {
-    await client.query(
+    const result = await client.query(
       `INSERT INTO eybl_team_schedule
          (team, league, season, game_date, opponent, team_score, opponent_score, is_home, game_uuid, schedule_id)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
        ON CONFLICT (team, league, season, game_date, opponent) DO NOTHING`,
       [r.team, league, SEASON, r.gameDate, r.opponent, r.teamScore, r.opponentScore, r.isHome, r.gameUuid, r.scheduleId]
     );
+    insertedSchedule += result.rowCount;
   }
-  console.log(`  Inserted ${scheduleRows.length} schedule rows`);
+  console.log(`  Inserted ${insertedSchedule} new schedule rows (${scheduleRows.length - insertedSchedule} already existed)`);
 
-  // 3. Insert team stats
+  // 2. Upsert team_stats. If team already has a row, ADD the new game's contributions.
+  let newTeamRows = 0, updatedTeamRows = 0;
   for (const t of teamAgg.values()) {
-    await client.query(
-      `INSERT INTO eybl_team_stats
-         (team, league, season, gp, mp,
-          fgm, fga, fg3m, fg3a, ftm, fta,
-          oreb, dreb, reb, ast, stl, blk, tov, pts, pf,
-          opp_fgm, opp_fga, opp_fg3m, opp_fg3a, opp_ftm, opp_fta,
-          opp_oreb, opp_dreb, opp_reb, opp_ast, opp_stl, opp_blk,
-          opp_tov, opp_pts, opp_pf)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,
-               $21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35)`,
-      [
-        t.teamName, league, SEASON, t.gp, t.mp,
-        t.fgm, t.fga, t.fg3m, t.fg3a, t.ftm, t.fta,
-        t.oreb, t.dreb, t.reb, t.ast, t.stl, t.blk, t.tov, t.pts, t.pf,
-        t.opp_fgm, t.opp_fga, t.opp_fg3m, t.opp_fg3a, t.opp_ftm, t.opp_fta,
-        t.opp_oreb, t.opp_dreb, t.opp_reb, t.opp_ast, t.opp_stl, t.opp_blk,
-        t.opp_tov, t.opp_pts, t.opp_pf,
-      ]
+    const existing = await client.query(
+      `SELECT 1 FROM eybl_team_stats
+       WHERE team = $1 AND league = $2 AND season = $3
+       LIMIT 1`,
+      [t.teamName, league, SEASON]
     );
-  }
-  console.log(`  Inserted ${teamAgg.size} team_stats rows`);
 
-  // 4. Upsert players (preserve manually-added height/grad_year)
-  let newPlayers = 0;
-  let existingPlayers = 0;
+    if (existing.rowCount === 0) {
+      await client.query(
+        `INSERT INTO eybl_team_stats
+           (team, league, season, gp, mp,
+            fgm, fga, fg3m, fg3a, ftm, fta,
+            oreb, dreb, reb, ast, stl, blk, tov, pts, pf,
+            opp_fgm, opp_fga, opp_fg3m, opp_fg3a, opp_ftm, opp_fta,
+            opp_oreb, opp_dreb, opp_reb, opp_ast, opp_stl, opp_blk,
+            opp_tov, opp_pts, opp_pf)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,
+                 $21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35)`,
+        [
+          t.teamName, league, SEASON, t.gp, t.mp,
+          t.fgm, t.fga, t.fg3m, t.fg3a, t.ftm, t.fta,
+          t.oreb, t.dreb, t.reb, t.ast, t.stl, t.blk, t.tov, t.pts, t.pf,
+          t.opp_fgm, t.opp_fga, t.opp_fg3m, t.opp_fg3a, t.opp_ftm, t.opp_fta,
+          t.opp_oreb, t.opp_dreb, t.opp_reb, t.opp_ast, t.opp_stl, t.opp_blk,
+          t.opp_tov, t.opp_pts, t.opp_pf,
+        ]
+      );
+      newTeamRows += 1;
+    } else {
+      await client.query(
+        `UPDATE eybl_team_stats SET
+           gp   = gp   + $4,  mp   = mp   + $5,
+           fgm  = fgm  + $6,  fga  = fga  + $7,
+           fg3m = fg3m + $8,  fg3a = fg3a + $9,
+           ftm  = ftm  + $10, fta  = fta  + $11,
+           oreb = oreb + $12, dreb = dreb + $13, reb = reb + $14,
+           ast  = ast  + $15, stl  = stl  + $16, blk = blk + $17,
+           tov  = tov  + $18, pts  = pts  + $19, pf  = pf  + $20,
+           opp_fgm  = opp_fgm  + $21, opp_fga  = opp_fga  + $22,
+           opp_fg3m = opp_fg3m + $23, opp_fg3a = opp_fg3a + $24,
+           opp_ftm  = opp_ftm  + $25, opp_fta  = opp_fta  + $26,
+           opp_oreb = opp_oreb + $27, opp_dreb = opp_dreb + $28,
+           opp_reb  = opp_reb  + $29, opp_ast  = opp_ast  + $30,
+           opp_stl  = opp_stl  + $31, opp_blk  = opp_blk  + $32,
+           opp_tov  = opp_tov  + $33, opp_pts  = opp_pts  + $34,
+           opp_pf   = opp_pf   + $35
+         WHERE team = $1 AND league = $2 AND season = $3`,
+        [
+          t.teamName, league, SEASON, t.gp, t.mp,
+          t.fgm, t.fga, t.fg3m, t.fg3a, t.ftm, t.fta,
+          t.oreb, t.dreb, t.reb, t.ast, t.stl, t.blk, t.tov, t.pts, t.pf,
+          t.opp_fgm, t.opp_fga, t.opp_fg3m, t.opp_fg3a, t.opp_ftm, t.opp_fta,
+          t.opp_oreb, t.opp_dreb, t.opp_reb, t.opp_ast, t.opp_stl, t.opp_blk,
+          t.opp_tov, t.opp_pts, t.opp_pf,
+        ]
+      );
+      updatedTeamRows += 1;
+    }
+  }
+  console.log(`  Team stats: ${newTeamRows} new rows, ${updatedTeamRows} updated`);
+
+  // 3. Upsert players + player_stats.
+  // For player records: preserve manually-added height/grad_year by only inserting if absent.
+  // For player_stats: ADD new game contributions to existing season totals or INSERT new row.
+  let newPlayers = 0, existingPlayers = 0;
+  let newPlayerStats = 0, updatedPlayerStats = 0;
+
   for (const p of playerAgg.values()) {
     const fullName = p.playerName;
     const [firstName, ...rest] = fullName.split(' ');
@@ -522,22 +588,48 @@ async function writeToDb(client) {
       newPlayers += 1;
     }
 
-    // Insert player_stats row
-    await client.query(
-      `INSERT INTO eybl_player_stats
-         (player_id, season, gp, mp,
-          fgm, fga, fg3m, fg3a, ftm, fta,
-          oreb, dreb, reb, ast, stl, blk, tov, pts, pf)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19)`,
-      [
-        playerId, SEASON, p.gp, p.mp,
-        p.fgm, p.fga, p.fg3m, p.fg3a, p.ftm, p.fta,
-        p.oreb, p.dreb, p.reb, p.ast, p.stl, p.blk, p.tov, p.pts, p.pf,
-      ]
+    // Check if a player_stats row already exists.
+    const statRow = await client.query(
+      `SELECT 1 FROM eybl_player_stats WHERE player_id = $1 AND season = $2 LIMIT 1`,
+      [playerId, SEASON]
     );
+
+    if (statRow.rowCount === 0) {
+      await client.query(
+        `INSERT INTO eybl_player_stats
+           (player_id, season, gp, mp,
+            fgm, fga, fg3m, fg3a, ftm, fta,
+            oreb, dreb, reb, ast, stl, blk, tov, pts, pf)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19)`,
+        [
+          playerId, SEASON, p.gp, p.mp,
+          p.fgm, p.fga, p.fg3m, p.fg3a, p.ftm, p.fta,
+          p.oreb, p.dreb, p.reb, p.ast, p.stl, p.blk, p.tov, p.pts, p.pf,
+        ]
+      );
+      newPlayerStats += 1;
+    } else {
+      await client.query(
+        `UPDATE eybl_player_stats SET
+           gp   = gp   + $3,  mp   = mp   + $4,
+           fgm  = fgm  + $5,  fga  = fga  + $6,
+           fg3m = fg3m + $7,  fg3a = fg3a + $8,
+           ftm  = ftm  + $9,  fta  = fta  + $10,
+           oreb = oreb + $11, dreb = dreb + $12, reb = reb + $13,
+           ast  = ast  + $14, stl  = stl  + $15, blk = blk + $16,
+           tov  = tov  + $17, pts  = pts  + $18, pf  = pf  + $19
+         WHERE player_id = $1 AND season = $2`,
+        [
+          playerId, SEASON, p.gp, p.mp,
+          p.fgm, p.fga, p.fg3m, p.fg3a, p.ftm, p.fta,
+          p.oreb, p.dreb, p.reb, p.ast, p.stl, p.blk, p.tov, p.pts, p.pf,
+        ]
+      );
+      updatedPlayerStats += 1;
+    }
   }
-  console.log(`  Players: ${newPlayers} new inserted, ${existingPlayers} existing preserved`);
-  console.log(`  Inserted ${playerAgg.size} player_stats rows`);
+  console.log(`  Players: ${newPlayers} new, ${existingPlayers} existing`);
+  console.log(`  Player stats: ${newPlayerStats} new rows, ${updatedPlayerStats} updated`);
 }
 
 // ---------- MAIN ----------
@@ -558,31 +650,75 @@ async function main() {
     return;
   }
 
-  // 2. Process each game (sequential, polite to API)
-  console.log(`\nProcessing ${completed.length} games...`);
-  for (let i = 0; i < completed.length; i += 1) {
-    try {
-      await processGame(completed[i]);
-    } catch (err) {
-      console.error(`  ERROR on game ${completed[i].Id}: ${err.message}`);
-    }
-  }
-
-  console.log(`\nAggregation complete:`);
-  console.log(`  ${teamAgg.size} unique teams`);
-  console.log(`  ${playerAgg.size} unique players`);
-  console.log(`  ${scheduleRows.length} schedule rows`);
-
-  // 3. Write to Neon
+  // 2. Connect to DB and filter out games we've already ingested.
+  //    This makes the ingest incremental — re-running won't re-process old games,
+  //    and manual data fixes won't be wiped.
   const client = new Client({ connectionString: dbUrl });
   await client.connect();
+
+  let newGames;
   try {
+    const existingIds = await fetchExistingScheduleIds(client);
+    console.log(`  ${existingIds.size} games already in DB for ${league}`);
+
+    newGames = completed.filter(g => !existingIds.has(Number(g.Id)));
+    console.log(`  ${newGames.length} new games to process`);
+
+    if (newGames.length === 0) {
+      console.log('\n✅ Nothing new to ingest.\n');
+      return;
+    }
+
+    // 3. Process each new game (sequential, polite to API).
+    //    Detect Cerebro UUID collision bug: if a UUID we get back is already used
+    //    in another league for the same date, that's the same-program/same-date bug.
+    //    Skip these games and log so they can be manually fixed.
+    console.log(`\nProcessing ${newGames.length} games...`);
+    const collisions = [];
+    for (let i = 0; i < newGames.length; i += 1) {
+      const g = newGames[i];
+      try {
+        // Pre-check: lookup UUID first and bail early if it collides.
+        const lookup = await lookupGameUuid(g);
+        if (!lookup) {
+          console.warn(`  SKIP: UUID lookup failed for ${g.AwayTeam.Name} @ ${g.HomeTeam.Name} ${g.Date}`);
+          continue;
+        }
+        const isoDate = parseDateMDYToISO(g.Date);
+        const collidedLeague = await detectUuidCollision(client, lookup.gameUuid, isoDate);
+        if (collidedLeague) {
+          const msg = `${g.Date} ${g.AwayTeam.Name} @ ${g.HomeTeam.Name} (uuid=${lookup.gameUuid}) collides with ${collidedLeague}`;
+          console.warn(`  SKIP (Cerebro bug): ${msg}`);
+          collisions.push(msg);
+          continue;
+        }
+
+        // Safe to process — call the regular flow. processGame() will re-do the lookup
+        // but that's a small redundant API call, not worth refactoring around.
+        await processGame(g);
+      } catch (err) {
+        console.error(`  ERROR on game ${g.Id}: ${err.message}`);
+      }
+    }
+
+    if (collisions.length > 0) {
+      console.warn(`\n⚠️  ${collisions.length} game(s) skipped due to Cerebro UUID collision bug:`);
+      for (const c of collisions) console.warn(`     ${c}`);
+      console.warn('     These games need to be manually entered from the Nike website.');
+    }
+
+    console.log(`\nAggregation complete:`);
+    console.log(`  ${teamAgg.size} unique teams`);
+    console.log(`  ${playerAgg.size} unique players`);
+    console.log(`  ${scheduleRows.length} schedule rows`);
+
+    // 4. Write to Neon (incremental — adds to existing data, never deletes).
     await client.query('BEGIN');
-    await writeToDb(client);
+    await writeToDbIncremental(client);
     await client.query('COMMIT');
     console.log('\n✅ Database write committed.');
   } catch (err) {
-    await client.query('ROLLBACK');
+    try { await client.query('ROLLBACK'); } catch (_) {}
     console.error('\n❌ Database write rolled back:', err.message);
     throw err;
   } finally {
