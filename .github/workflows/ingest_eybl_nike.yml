@@ -1,0 +1,39 @@
+name: Ingest Nike EYBL (Boys)
+
+on:
+  workflow_dispatch:
+    inputs:
+      league:
+        description: 'Which boys league to ingest'
+        required: true
+        type: choice
+        options:
+          - 17U
+          - 16U
+          - 15U
+      season:
+        description: 'Season (default 2026)'
+        required: false
+        default: '2026'
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pg
+        run: npm install pg
+
+      - name: Run Nike EYBL ingest
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          LEAGUE: ${{ inputs.league }}
+          SEASON: ${{ inputs.season }}
+        run: node scripts/ingest_eybl_nike.mjs
