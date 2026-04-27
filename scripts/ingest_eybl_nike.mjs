@@ -143,12 +143,23 @@ async function lookupGameUuid(scheduleRow) {
   const json = data?.[0]?.result?.data?.json;
   if (!json) return null;
 
+  // CRITICAL: Cerebro returns team_one_id/team_two_id (paired with scores)
+  // separately from team_game[] (which has names but is in a DIFFERENT order).
+  // We MUST look up each team's name by matching UUID, not by array index.
+  const teamGame = json.team_game || [];
+  const nameByUuid = new Map();
+  for (const tg of teamGame) {
+    if (tg?.team_id && tg?.team?.name) {
+      nameByUuid.set(tg.team_id, tg.team.name);
+    }
+  }
+
   return {
     gameUuid: json.id,
     teamOneUuid: json.team_one_id,
     teamTwoUuid: json.team_two_id,
-    teamOneName: json.team_game?.[0]?.team?.name,
-    teamTwoName: json.team_game?.[1]?.team?.name,
+    teamOneName: nameByUuid.get(json.team_one_id),
+    teamTwoName: nameByUuid.get(json.team_two_id),
   };
 }
 
