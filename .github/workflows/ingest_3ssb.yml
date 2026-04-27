@@ -1,0 +1,42 @@
+name: Ingest adidas 3SSB
+
+on:
+  workflow_dispatch:
+    inputs:
+      league:
+        description: 'Boys division to ingest'
+        required: true
+        type: choice
+        options:
+          - 17U
+      event_id:
+        description: 'Passport exposureEventId (Session I 2026 = 262708)'
+        required: true
+        default: '262708'
+      season:
+        description: 'Season (default 2026)'
+        required: false
+        default: '2026'
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pg
+        run: npm install pg
+
+      - name: Run 3SSB ingest
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          LEAGUE: ${{ inputs.league }}
+          EVENT_ID: ${{ inputs.event_id }}
+          SEASON: ${{ inputs.season }}
+        run: node scripts/ingest_3ssb.mjs
