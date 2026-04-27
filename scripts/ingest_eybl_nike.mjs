@@ -114,6 +114,16 @@ async function fetchSchedule() {
 
 // Filter schedule to only completed games (have scores).
 function filterCompleted(rawGames) {
+  // DEBUG: peek at first 3 games to see actual field shape
+  if (rawGames.length > 0) {
+    console.log(`  DEBUG: first game keys = ${JSON.stringify(Object.keys(rawGames[0]))}`);
+    console.log(`  DEBUG: first AwayTeam keys = ${JSON.stringify(Object.keys(rawGames[0].AwayTeam || {}))}`);
+    console.log(`  DEBUG: first 3 games (away score / home score):`);
+    for (let i = 0; i < Math.min(3, rawGames.length); i += 1) {
+      const g = rawGames[i];
+      console.log(`    ${g.Date} ${g.AwayTeam?.Name} (${g.AwayTeam?.Score}) @ ${g.HomeTeam?.Name} (${g.HomeTeam?.Score})`);
+    }
+  }
   const completed = rawGames.filter(g =>
     g.AwayTeam?.Score != null && g.HomeTeam?.Score != null
   );
