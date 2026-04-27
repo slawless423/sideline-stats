@@ -91,6 +91,11 @@ async function trpcGet(url, label) {
 
 async function fetchSchedule() {
   console.log('Fetching schedule...');
+
+  // Nike's API filters by relative time. We want games already played, so history='past'.
+  // 'today' is required as a reference date in YYYY-MM-DD format.
+  const today = new Date().toISOString().slice(0, 10);
+
   const url = buildTrpcUrl('RouterExposureSchedule.ScheduleList', {
     eventId: NIKE_EVENT_ID,
     divisionId,
@@ -98,6 +103,8 @@ async function fetchSchedule() {
     gameId: null,
     page: 1,
     pageSize: 1000,
+    history: 'past',
+    today,
   }, {
     values: {
       teamId: ['undefined'],
