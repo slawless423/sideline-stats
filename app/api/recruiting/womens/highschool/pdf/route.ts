@@ -15,15 +15,17 @@ function calcAdv(p: any, team: any) {
   const opp_drb = team.opp_reb - team.opp_oreb;
   const drb = team.reb - team.oreb;
   const Team_ORB_pct = team.oreb / (team.oreb + opp_drb);
-  const Team_Scoring_Poss = team.fgm + (1 - Math.pow(1 - team.ftm / team.fta, 2)) * team.fta * 0.4;
+  // Guard team-level FT division: when team.fta=0 this becomes NaN.
+  const team_ftm_fta_ratio = team.fta > 0 ? team.ftm / team.fta : 0;
+  const Team_Scoring_Poss = team.fgm + (1 - Math.pow(1 - team_ftm_fta_ratio, 2)) * team.fta * 0.4;
   const Team_Play_pct = Team_Scoring_Poss / (team.fga + team.fta * 0.4 + team.tov);
   const Team_ORB_Weight = ((1 - Team_ORB_pct) * Team_Play_pct) / ((1 - Team_ORB_pct) * Team_Play_pct + Team_ORB_pct * (1 - Team_Play_pct));
   const teamPossTotal = team.fga + 0.44 * team.fta + team.tov;
   const usagePct = 100 * (p.fga + 0.44 * p.fta + p.tov) / (teamPossTotal / teamMinutes * p.mp) / 5;
   const minPct = 100 * p.mp / teamMinutes * 5;
   const shotsPct = team.fga > 0 && p.mp > 0 ? (p.fga / team.fga) / (p.mp / teamMinutes) / 5 * 100 : 0;
-  const efg = p.fga > 0 ? ((p.fgm + 0.5 * p.fg3m) / p.fga) * 100 : 0;
-  const ts = (p.fga + 0.475 * p.fta) > 0 ? (p.pts / (2 * (p.fga + 0.475 * p.fta))) * 100 : 0;
+  const efg = p.fga > 0 ? ((p.fgm + 0.5 * p.fg3m) / p.fga) * 100 : null;
+  const ts = (p.fga + 0.475 * p.fta) > 0 ? (p.pts / (2 * (p.fga + 0.475 * p.fta))) * 100 : null;
   const orbPct = p.mp > 0 && (team.oreb + opp_drb) > 0 ? (p.oreb / p.mp) * (teamMinutes / 5) / (team.oreb + opp_drb) * 100 : 0;
   const drbPct = p.mp > 0 && (drb + team.opp_oreb) > 0 ? (p.dreb / p.mp) * (teamMinutes / 5) / (drb + team.opp_oreb) * 100 : 0;
   const aRateDenom = ((p.mp / (teamMinutes / 5)) * team.fgm) - p.fgm;
@@ -34,28 +36,52 @@ function calcAdv(p: any, team: any) {
   const opp2PA = team.opp_fga - team.opp_fg3a;
   const blkPct = (p.mp * opp2PA) > 0 ? 100 * (p.blk * (teamMinutes / 5)) / (p.mp * opp2PA) : 0;
   const stlPct = (p.mp * oppPoss) > 0 ? 100 * (p.stl * (teamMinutes / 5)) / (p.mp * oppPoss) : 0;
-  const ftRate = p.fga > 0 ? (p.fta / p.fga) * 100 : 0;
+  const ftRate = p.fga > 0 ? (p.fta / p.fga) * 100 : null;
   const twopm = p.fgm - p.fg3m; const twopa = p.fga - p.fg3a;
-  const twopPct = twopa > 0 ? (twopm / twopa) * 100 : 0;
-  const tpPct = p.fg3a > 0 ? (p.fg3m / p.fg3a) * 100 : 0;
-  const ftPct = p.fta > 0 ? (p.ftm / p.fta) * 100 : 0;
-  const qAST = ((p.mp / (teamMinutes / 5)) * (1.14 * ((team.ast - p.ast) / team.fgm))) +
-    ((((team.ast / teamMinutes) * p.mp * 5 - p.ast) / ((team.fgm / teamMinutes) * p.mp * 5 - p.fgm)) * (1 - p.mp / (teamMinutes / 5)));
-  const FG_Part = p.fgm * (1 - 0.5 * ((p.pts - p.ftm) / (2 * p.fga)) * qAST);
-  const AST_Part = 0.5 * (((team.pts - team.ftm) - (p.pts - p.ftm)) / (2 * (team.fga - p.fga))) * p.ast;
-  const FT_Part = (1 - Math.pow(1 - p.ftm / p.fta, 2)) * 0.4 * p.fta;
+  const twopPct = twopa > 0 ? (twopm / twopa) * 100 : null;
+  const tpPct = p.fg3a > 0 ? (p.fg3m / p.fg3a) * 100 : null;
+  const ftPct = p.fta > 0 ? (p.ftm / p.fta) * 100 : null;
+  // ORtg via Dean Oliver. Many sub-terms divide by quantities that can be zero
+  // for a player who didn't shoot/foul/etc. Guard each one to prevent NaN.
+  const team_fgm_minus_p_fgm = team.fgm - p.fgm;
+  const team_fga_minus_p_fga = team.fga - p.fga;
+  const qAST_term1 = team.fgm > 0
+    ? (p.mp / (teamMinutes / 5)) * (1.14 * ((team.ast - p.ast) / team.fgm))
+    : 0;
+  const qAST_denom = (team.fgm / teamMinutes) * p.mp * 5 - p.fgm;
+  const qAST_term2 = qAST_denom > 0
+    ? (((team.ast / teamMinutes) * p.mp * 5 - p.ast) / qAST_denom) * (1 - p.mp / (teamMinutes / 5))
+    : 0;
+  const qAST = qAST_term1 + qAST_term2;
+  const FG_Part = p.fga > 0
+    ? p.fgm * (1 - 0.5 * ((p.pts - p.ftm) / (2 * p.fga)) * qAST)
+    : 0;
+  const AST_Part = team_fga_minus_p_fga > 0
+    ? 0.5 * (((team.pts - team.ftm) - (p.pts - p.ftm)) / (2 * team_fga_minus_p_fga)) * p.ast
+    : 0;
+  const FT_Part = p.fta > 0
+    ? (1 - Math.pow(1 - p.ftm / p.fta, 2)) * 0.4 * p.fta
+    : 0;
   const ORB_Part = p.oreb * Team_ORB_Weight * Team_Play_pct;
   const ScPoss = (FG_Part + AST_Part + FT_Part) * (1 - (team.oreb / Team_Scoring_Poss) * Team_ORB_Weight * Team_Play_pct) + ORB_Part;
   const FGxPoss = (p.fga - p.fgm) * (1 - 1.07 * Team_ORB_pct);
-  const FTxPoss = Math.pow(1 - p.ftm / p.fta, 2) * 0.4 * p.fta;
+  const FTxPoss = p.fta > 0 ? Math.pow(1 - p.ftm / p.fta, 2) * 0.4 * p.fta : 0;
   const TotPoss = ScPoss + FGxPoss + FTxPoss + p.tov;
-  const PProd_FG = 2 * (p.fgm + 0.5 * p.fg3m) * (1 - 0.5 * ((p.pts - p.ftm) / (2 * p.fga)) * qAST);
-  const PProd_AST = 2 * ((team.fgm - p.fgm + 0.5 * (team.fg3m - p.fg3m)) / (team.fgm - p.fgm)) *
-    0.5 * (((team.pts - team.ftm) - (p.pts - p.ftm)) / (2 * (team.fga - p.fga))) * p.ast;
-  const PProd_ORB = p.oreb * Team_ORB_Weight * Team_Play_pct *
-    (team.pts / (team.fgm + (1 - Math.pow(1 - team.ftm / team.fta, 2)) * 0.4 * team.fta));
+  const PProd_FG = p.fga > 0
+    ? 2 * (p.fgm + 0.5 * p.fg3m) * (1 - 0.5 * ((p.pts - p.ftm) / (2 * p.fga)) * qAST)
+    : 0;
+  const PProd_AST = (team_fgm_minus_p_fgm > 0 && team_fga_minus_p_fga > 0)
+    ? 2 * ((team.fgm - p.fgm + 0.5 * (team.fg3m - p.fg3m)) / team_fgm_minus_p_fgm) *
+      0.5 * (((team.pts - team.ftm) - (p.pts - p.ftm)) / (2 * team_fga_minus_p_fga)) * p.ast
+    : 0;
+  const PProd_ORB_denom = team.fgm + (1 - Math.pow(1 - team_ftm_fta_ratio, 2)) * 0.4 * team.fta;
+  const PProd_ORB = PProd_ORB_denom > 0
+    ? p.oreb * Team_ORB_Weight * Team_Play_pct * (team.pts / PProd_ORB_denom)
+    : 0;
   const PProd = (PProd_FG + PProd_AST + p.ftm) * (1 - (team.oreb / Team_Scoring_Poss) * Team_ORB_Weight * Team_Play_pct) + PProd_ORB;
-  const ortg = TotPoss > 0 ? 100 * PProd / TotPoss : 0;
+  // ORtg is unstable for low-minute samples (e.g. 0.2% min, garbage time). Suppress
+  // the value when the player's share of team minutes is below 5%.
+  const ortg = (TotPoss > 0 && minPct >= 5) ? 100 * PProd / TotPoss : null;
   const g = p.gp || 1;
   return {
     ortg, minPct, usagePct, shotsPct, efg, ts, orbPct, drbPct,
