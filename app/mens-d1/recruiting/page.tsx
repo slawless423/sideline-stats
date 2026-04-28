@@ -156,8 +156,8 @@ function calcStats(t: Transfer, team: TeamRow | undefined) {
   const usagePct = 100 * (p.fga + 0.44 * p.fta + p.tov) / (teamPossTotal / teamMinutes * p.minutes) / 5;
   const minPct = 100 * p.minutes / teamMinutes * 5;
   const shotsPct = team.fga > 0 && p.minutes > 0 ? (p.fga / team.fga) / (p.minutes / teamMinutes) / 5 * 100 : 0;
-  const efg = p.fga > 0 ? ((p.fgm + 0.5 * p.tpm) / p.fga) * 100 : 0;
-  const ts = (p.fga + 0.475 * p.fta) > 0 ? (p.points / (2 * (p.fga + 0.475 * p.fta))) * 100 : 0;
+  const efg = p.fga > 0 ? ((p.fgm + 0.5 * p.tpm) / p.fga) * 100 : null;
+  const ts = (p.fga + 0.475 * p.fta) > 0 ? (p.points / (2 * (p.fga + 0.475 * p.fta))) * 100 : null;
   const orbPct = p.minutes > 0 && (team.orb + opp_drb) > 0 ? (p.orb / p.minutes) * (teamMinutes / 5) / (team.orb + opp_drb) * 100 : 0;
   const drbPct = p.minutes > 0 && (drb + team.opp_orb) > 0 ? (p.drb / p.minutes) * (teamMinutes / 5) / (drb + team.opp_orb) * 100 : 0;
   const aRateDenom = ((p.minutes / (teamMinutes / 5)) * team.fgm) - p.fgm;
@@ -168,12 +168,12 @@ function calcStats(t: Transfer, team: TeamRow | undefined) {
   const opp2PA = team.opp_fga - team.opp_tpa;
   const blkPct = (p.minutes * opp2PA) > 0 ? 100 * (p.blk * (teamMinutes / 5)) / (p.minutes * opp2PA) : 0;
   const stlPct = (p.minutes * oppPoss) > 0 ? 100 * (p.stl * (teamMinutes / 5)) / (p.minutes * oppPoss) : 0;
-  const ftRate = p.fga > 0 ? (p.fta / p.fga) * 100 : 0;
+  const ftRate = p.fga > 0 ? (p.fta / p.fga) * 100 : null;
   const twopm = p.fgm - p.tpm; const twopa = p.fga - p.tpa;
-  const twopPct = twopa > 0 ? (twopm / twopa) * 100 : 0;
-  const tpPct = p.tpa > 0 ? (p.tpm / p.tpa) * 100 : 0;
-  const ftPct = p.fta > 0 ? (p.ftm / p.fta) * 100 : 0;
-  const fgPct = p.fga > 0 ? (p.fgm / p.fga) * 100 : 0;
+  const twopPct = twopa > 0 ? (twopm / twopa) * 100 : null;
+  const tpPct = p.tpa > 0 ? (p.tpm / p.tpa) * 100 : null;
+  const ftPct = p.fta > 0 ? (p.ftm / p.fta) * 100 : null;
+  const fgPct = p.fga > 0 ? (p.fgm / p.fga) * 100 : null;
   // ORtg via Dean Oliver. Many sub-terms divide by quantities that can be zero
   // for a player who didn't shoot/foul/etc. Guard each one to prevent NaN.
   const team_fgm_minus_p_fgm = team.fgm - p.fgm;
@@ -212,7 +212,10 @@ function calcStats(t: Transfer, team: TeamRow | undefined) {
     ? p.orb * Team_ORB_Weight * Team_Play_pct * (team.points / PProd_ORB_denom)
     : 0;
   const PProd = (PProd_FG + PProd_AST + p.ftm) * (1 - (team.orb / Team_Scoring_Poss) * Team_ORB_Weight * Team_Play_pct) + PProd_ORB;
-  const ortg = TotPoss > 0 ? 100 * PProd / TotPoss : 0;
+  // ORtg is unstable for low-minute samples (e.g. 0.2% min, garbage time). Suppress
+  // the value when the player's share of team minutes is below 5%, matching how
+  // basketball-reference handles edge cases.
+  const ortg = (TotPoss > 0 && minPct >= 5) ? 100 * PProd / TotPoss : null;
   const g = p.games || 1; const m = p.minutes || 1;
   return {
     ortg, usagePct, minPct, shotsPct, efg, ts, orbPct, drbPct, aRate, toRate, blkPct, stlPct, ftRate,
@@ -248,8 +251,8 @@ function calcHSStats(p: HSPlayer, team: HSTeamStats | undefined) {
   const usagePct = 100 * (p.fga + 0.44 * p.fta + p.tov) / (teamPossTotal / teamMinutes * p.mp) / 5;
   const minPct = 100 * p.mp / teamMinutes * 5;
   const shotsPct = team.fga > 0 && p.mp > 0 ? (p.fga / team.fga) / (p.mp / teamMinutes) / 5 * 100 : 0;
-  const efg = p.fga > 0 ? ((p.fgm + 0.5 * p.fg3m) / p.fga) * 100 : 0;
-  const ts = (p.fga + 0.475 * p.fta) > 0 ? (p.pts / (2 * (p.fga + 0.475 * p.fta))) * 100 : 0;
+  const efg = p.fga > 0 ? ((p.fgm + 0.5 * p.fg3m) / p.fga) * 100 : null;
+  const ts = (p.fga + 0.475 * p.fta) > 0 ? (p.pts / (2 * (p.fga + 0.475 * p.fta))) * 100 : null;
   const orbPct = p.mp > 0 && (team.oreb + opp_drb) > 0 ? (p.oreb / p.mp) * (teamMinutes / 5) / (team.oreb + opp_drb) * 100 : 0;
   const drbPct = p.mp > 0 && (drb + team.opp_oreb) > 0 ? (p.dreb / p.mp) * (teamMinutes / 5) / (drb + team.opp_oreb) * 100 : 0;
   const aRateDenom = ((p.mp / (teamMinutes / 5)) * team.fgm) - p.fgm;
@@ -260,12 +263,12 @@ function calcHSStats(p: HSPlayer, team: HSTeamStats | undefined) {
   const opp2PA = team.opp_fga - team.opp_fg3a;
   const blkPct = (p.mp * opp2PA) > 0 ? 100 * (p.blk * (teamMinutes / 5)) / (p.mp * opp2PA) : 0;
   const stlPct = (p.mp * oppPoss) > 0 ? 100 * (p.stl * (teamMinutes / 5)) / (p.mp * oppPoss) : 0;
-  const ftRate = p.fga > 0 ? (p.fta / p.fga) * 100 : 0;
+  const ftRate = p.fga > 0 ? (p.fta / p.fga) * 100 : null;
   const twopm = p.fgm - p.fg3m; const twopa = p.fga - p.fg3a;
-  const twopPct = twopa > 0 ? (twopm / twopa) * 100 : 0;
-  const tpPct = p.fg3a > 0 ? (p.fg3m / p.fg3a) * 100 : 0;
-  const ftPct = p.fta > 0 ? (p.ftm / p.fta) * 100 : 0;
-  const fgPct = p.fga > 0 ? (p.fgm / p.fga) * 100 : 0;
+  const twopPct = twopa > 0 ? (twopm / twopa) * 100 : null;
+  const tpPct = p.fg3a > 0 ? (p.fg3m / p.fg3a) * 100 : null;
+  const ftPct = p.fta > 0 ? (p.ftm / p.fta) * 100 : null;
+  const fgPct = p.fga > 0 ? (p.fgm / p.fga) * 100 : null;
   // ORtg via Dean Oliver. Many sub-terms divide by quantities that can be zero
   // for a player who didn't shoot/foul/etc. Guard each one to prevent NaN.
   const team_fgm_minus_p_fgm = team.fgm - p.fgm;
@@ -306,7 +309,10 @@ function calcHSStats(p: HSPlayer, team: HSTeamStats | undefined) {
     ? p.oreb * Team_ORB_Weight * Team_Play_pct * (team.pts / PProd_ORB_denom)
     : 0;
   const PProd = (PProd_FG + PProd_AST + p.ftm) * (1 - (team.oreb / Team_Scoring_Poss) * Team_ORB_Weight * Team_Play_pct) + PProd_ORB;
-  const ortg = TotPoss > 0 ? 100 * PProd / TotPoss : 0;
+  // ORtg is unstable for low-minute samples (e.g. 0.2% min, garbage time). Suppress
+  // the value when the player's share of team minutes is below 5%, matching how
+  // basketball-reference handles edge cases.
+  const ortg = (TotPoss > 0 && minPct >= 5) ? 100 * PProd / TotPoss : null;
   const g = p.gp || 1; const m = p.mp || 1;
   return {
     ortg, usagePct, minPct, shotsPct, efg, ts, orbPct, drbPct, aRate, toRate, blkPct, stlPct, ftRate,
