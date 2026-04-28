@@ -384,13 +384,19 @@ function PlayerStats({ players, team }: { players: any[]; team: any }) {
   const opp_drb = team.opp_trb - team.opp_orb;
   const drb = team.trb - team.orb;
 
-  const Team_ORB_pct = team.orb / (team.orb + opp_drb);
+  // Team-level Dean Oliver factors with NaN guards
+  const Team_ORB_pct = (team.orb + opp_drb) > 0
+    ? team.orb / (team.orb + opp_drb) : 0;
+  const team_ftm_rate = team.fta > 0 ? team.ftm / team.fta : 0;
   const Team_Scoring_Poss = team.fgm +
-    (1 - Math.pow(1 - team.ftm / team.fta, 2)) * team.fta * 0.4;
-  const Team_Play_pct = Team_Scoring_Poss / (team.fga + team.fta * 0.4 + team.tov);
-  const Team_ORB_Weight =
-    ((1 - Team_ORB_pct) * Team_Play_pct) /
-    ((1 - Team_ORB_pct) * Team_Play_pct + Team_ORB_pct * (1 - Team_Play_pct));
+    (1 - Math.pow(1 - team_ftm_rate, 2)) * team.fta * 0.4;
+  const teamPlayDenom = team.fga + team.fta * 0.4 + team.tov;
+  const Team_Play_pct = teamPlayDenom > 0
+    ? Team_Scoring_Poss / teamPlayDenom : 0;
+  const orbWeightDenom =
+    (1 - Team_ORB_pct) * Team_Play_pct + Team_ORB_pct * (1 - Team_Play_pct);
+  const Team_ORB_Weight = orbWeightDenom > 0
+    ? ((1 - Team_ORB_pct) * Team_Play_pct) / orbWeightDenom : 0;
 
   const calcStats = (p: any) => {
     const pg = {
@@ -403,64 +409,111 @@ function PlayerStats({ players, team }: { players: any[]; team: any }) {
 
     const twoPA = pg.fga - pg.tpa;
     const twoPM = pg.fgm - pg.tpm;
-    const minPct = teamMinutes > 0 ? (pg.minutes / teamMinutes) * 100 * 5 : 0;
-    const teamPossTotal = team.fga + 0.44 * team.fta + team.tov;
-    const usagePct = teamPossTotal > 0 && pg.minutes > 0
-      ? 100 * (pg.fga + 0.44 * pg.fta + pg.tov) / (teamPossTotal / teamMinutes * pg.minutes) / 5
-      : 0;
-    const shotPct = team.fga > 0 && pg.minutes > 0
-      ? (pg.fga / team.fga) / (pg.minutes / teamMinutes) / 5 * 100 : 0;
-    const efg = pg.fga > 0 ? ((pg.fgm + 0.5 * pg.tpm) / pg.fga) * 100 : 0;
-    const ts = (pg.fga + 0.475 * pg.fta) > 0
-      ? (pg.points / (2 * (pg.fga + 0.475 * pg.fta))) * 100 : 0;
-    const orPct = pg.minutes > 0 && (team.orb + opp_drb) > 0
-      ? (pg.orb / pg.minutes) * (teamMinutes / 5) / (team.orb + opp_drb) * 100 : 0;
-    const drPct = pg.minutes > 0 && (drb + team.opp_orb) > 0
-      ? (pg.drb / pg.minutes) * (teamMinutes / 5) / (drb + team.opp_orb) * 100 : 0;
-    const aRateDenom = ((pg.minutes / (teamMinutes / 5)) * team.fgm) - pg.fgm;
-    const aRate = aRateDenom > 0 ? (pg.ast / aRateDenom) * 100 : 0;
-    const playerPossSimple = pg.fga + 0.44 * pg.fta + pg.tov;
-    const toRate = playerPossSimple > 0 ? (pg.tov / playerPossSimple) * 100 : 0;
-    const oppPoss = Math.max(1, team.opp_fga - team.opp_orb + team.opp_tov + 0.475 * team.opp_fta);
-    const opp2PA = team.opp_fga - team.opp_tpa;
-    const blkPct = pg.minutes > 0 && opp2PA > 0
-      ? 100 * (pg.blk * (teamMinutes / 5)) / (pg.minutes * opp2PA) : 0;
-    const stlPct = pg.minutes > 0
-      ? 100 * (pg.stl * (teamMinutes / 5)) / (pg.minutes * oppPoss) : 0;
-    const fc40 = pg.minutes > 0 ? pg.pf * (40 / pg.minutes) : 0;
-    const ftRate = pg.fga > 0 ? (pg.fta / pg.fga) * 100 : 0;
-    const ftPct = pg.fta > 0 ? (pg.ftm / pg.fta) * 100 : 0;
-    const twoPct = twoPA > 0 ? (twoPM / twoPA) * 100 : 0;
-    const threePct = pg.tpa > 0 ? (pg.tpm / pg.tpa) * 100 : 0;
 
-    let ortg = 0;
-    if (pg.fga > 0 && pg.fta > 0 && pg.minutes > 0) {
-      const qAST = ((pg.minutes / (teamMinutes / 5)) *
-        (1.14 * ((team.ast - pg.ast) / team.fgm))) +
-        ((((team.ast / teamMinutes) * pg.minutes * 5 - pg.ast) /
-          ((team.fgm / teamMinutes) * pg.minutes * 5 - pg.fgm)) *
-          (1 - pg.minutes / (teamMinutes / 5)));
-      const FG_Part = pg.fgm * (1 - 0.5 * ((pg.points - pg.ftm) / (2 * pg.fga)) * qAST);
-      const AST_Part = 0.5 *
-        (((team.points - team.ftm) - (pg.points - pg.ftm)) / (2 * (team.fga - pg.fga))) * pg.ast;
-      const FT_Part = (1 - Math.pow(1 - pg.ftm / pg.fta, 2)) * 0.4 * pg.fta;
+    // %Min — used as ORtg gate
+    const minPct = teamMinutes > 0 ? (pg.minutes / teamMinutes) * 100 * 5 : 0;
+
+    // Per-game-style rates — null when no attempts/minutes
+    const teamPossTotal = team.fga + 0.44 * team.fta + team.tov;
+    const usagePct = (teamMinutes > 0 && pg.minutes > 0 && teamPossTotal > 0)
+      ? 100 * (pg.fga + 0.44 * pg.fta + pg.tov) / (teamPossTotal / teamMinutes * pg.minutes) / 5
+      : null;
+    const shotPct = (team.fga > 0 && pg.minutes > 0 && teamMinutes > 0)
+      ? (pg.fga / team.fga) / (pg.minutes / teamMinutes) / 5 * 100 : null;
+
+    // Shooting percentages — null when no attempts
+    const efg = pg.fga > 0 ? ((pg.fgm + 0.5 * pg.tpm) / pg.fga) * 100 : null;
+    const ts = (pg.fga + 0.475 * pg.fta) > 0
+      ? (pg.points / (2 * (pg.fga + 0.475 * pg.fta))) * 100 : null;
+    const orPct = (pg.minutes > 0 && (team.orb + opp_drb) > 0)
+      ? (pg.orb / pg.minutes) * (teamMinutes / 5) / (team.orb + opp_drb) * 100 : null;
+    const drPct = (pg.minutes > 0 && (drb + team.opp_orb) > 0)
+      ? (pg.drb / pg.minutes) * (teamMinutes / 5) / (drb + team.opp_orb) * 100 : null;
+    const aRateDenom = ((pg.minutes / (teamMinutes / 5)) * team.fgm) - pg.fgm;
+    const aRate = aRateDenom > 0 ? (pg.ast / aRateDenom) * 100 : null;
+    const playerPossSimple = pg.fga + 0.44 * pg.fta + pg.tov;
+    const toRate = playerPossSimple > 0 ? (pg.tov / playerPossSimple) * 100 : null;
+    const oppPoss = team.opp_fga - team.opp_orb + team.opp_tov + 0.475 * team.opp_fta;
+    const opp2PA = team.opp_fga - team.opp_tpa;
+    const blkPct = (pg.minutes * opp2PA) > 0
+      ? 100 * (pg.blk * (teamMinutes / 5)) / (pg.minutes * opp2PA) : null;
+    const stlPct = (pg.minutes * oppPoss) > 0
+      ? 100 * (pg.stl * (teamMinutes / 5)) / (pg.minutes * oppPoss) : null;
+    const fc40 = pg.minutes > 0 ? pg.pf * (40 / pg.minutes) : null;
+    const ftRate = pg.fga > 0 ? (pg.fta / pg.fga) * 100 : null;
+    const ftPct = pg.fta > 0 ? (pg.ftm / pg.fta) * 100 : null;
+    const twoPct = twoPA > 0 ? (twoPM / twoPA) * 100 : null;
+    const threePct = pg.tpa > 0 ? (pg.tpm / pg.tpa) * 100 : null;
+
+    // ORtg — Dean Oliver with full NaN guards on every sub-term
+    let ortg: number | null = null;
+    if (
+      minPct >= 5 &&
+      pg.minutes > 0 && teamMinutes > 0 &&
+      pg.fga > 0 && team.fgm > 0 && team.fga > 0 &&
+      Team_Scoring_Poss > 0 && teamPossTotal > 0
+    ) {
+      const minShare = pg.minutes / (teamMinutes / 5); // == minPct/100
+      const teamFgmExPlayer = team.fgm - pg.fgm;
+      const teamFgaExPlayer = team.fga - pg.fga;
+      const teamPtsExPlayerNoFt = (team.points - team.ftm) - (pg.points - pg.ftm);
+      const player_ftm_rate = pg.fta > 0 ? pg.ftm / pg.fta : 0;
+
+      // qAST — both branches need their own divide guards
+      const qAstA = team.fgm > 0
+        ? minShare * (1.14 * ((team.ast - pg.ast) / team.fgm))
+        : 0;
+      const qAstBNum = (team.ast / teamMinutes) * pg.minutes * 5 - pg.ast;
+      const qAstBDen = (team.fgm / teamMinutes) * pg.minutes * 5 - pg.fgm;
+      const qAstB = qAstBDen > 0
+        ? (qAstBNum / qAstBDen) * (1 - minShare)
+        : 0;
+      const qAST = qAstA + qAstB;
+
+      // FG_Part — guarded on pg.fga
+      const FG_Part = pg.fga > 0
+        ? pg.fgm * (1 - 0.5 * ((pg.points - pg.ftm) / (2 * pg.fga)) * qAST)
+        : 0;
+      // AST_Part — guarded on (team.fga - pg.fga)
+      const AST_Part = teamFgaExPlayer > 0
+        ? 0.5 * (teamPtsExPlayerNoFt / (2 * teamFgaExPlayer)) * pg.ast
+        : 0;
+      // FT_Part — guarded on pg.fta (defaults to 0, NOT 0.7)
+      const FT_Part = pg.fta > 0
+        ? (1 - Math.pow(1 - player_ftm_rate, 2)) * 0.4 * pg.fta
+        : 0;
       const ORB_Part_sc = pg.orb * Team_ORB_Weight * Team_Play_pct;
-      const ScPoss = (FG_Part + AST_Part + FT_Part) *
-        (1 - (team.orb / Team_Scoring_Poss) * Team_ORB_Weight * Team_Play_pct) + ORB_Part_sc;
+
+      const orbScale = Team_Scoring_Poss > 0
+        ? (team.orb / Team_Scoring_Poss) * Team_ORB_Weight * Team_Play_pct
+        : 0;
+      const ScPoss = (FG_Part + AST_Part + FT_Part) * (1 - orbScale) + ORB_Part_sc;
       const FGxPoss = (pg.fga - pg.fgm) * (1 - 1.07 * Team_ORB_pct);
-      const FTxPoss = Math.pow(1 - pg.ftm / pg.fta, 2) * 0.4 * pg.fta;
+      const FTxPoss = pg.fta > 0
+        ? Math.pow(1 - player_ftm_rate, 2) * 0.4 * pg.fta
+        : 0;
       const TotPoss = ScPoss + FGxPoss + FTxPoss + pg.tov;
-      const PProd_FG_Part = 2 * (pg.fgm + 0.5 * pg.tpm) *
-        (1 - 0.5 * ((pg.points - pg.ftm) / (2 * pg.fga)) * qAST);
-      const PProd_AST_Part = 2 *
-        ((team.fgm - pg.fgm + 0.5 * (team.tpm - pg.tpm)) / (team.fgm - pg.fgm)) *
-        0.5 * (((team.points - team.ftm) - (pg.points - pg.ftm)) / (2 * (team.fga - pg.fga))) * pg.ast;
+
+      const PProd_FG_Part = pg.fga > 0
+        ? 2 * (pg.fgm + 0.5 * pg.tpm) *
+          (1 - 0.5 * ((pg.points - pg.ftm) / (2 * pg.fga)) * qAST)
+        : 0;
+      const PProd_AST_Part = (teamFgmExPlayer > 0 && teamFgaExPlayer > 0)
+        ? 2 * ((teamFgmExPlayer + 0.5 * (team.tpm - pg.tpm)) / teamFgmExPlayer) *
+          0.5 * (teamPtsExPlayerNoFt / (2 * teamFgaExPlayer)) * pg.ast
+        : 0;
+      const teamPtsPerScPoss = Team_Scoring_Poss > 0
+        ? team.points / Team_Scoring_Poss
+        : 0;
       const PProd_ORB_Part = pg.orb * Team_ORB_Weight * Team_Play_pct *
-        (team.points / (team.fgm +
-          (1 - Math.pow(1 - team.ftm / team.fta, 2)) * 0.4 * team.fta));
+        teamPtsPerScPoss;
       const PProd = (PProd_FG_Part + PProd_AST_Part + pg.ftm) *
-        (1 - (team.orb / Team_Scoring_Poss) * Team_ORB_Weight * Team_Play_pct) + PProd_ORB_Part;
-      ortg = TotPoss > 0 ? 100 * PProd / TotPoss : 0;
+        (1 - orbScale) + PProd_ORB_Part;
+
+      if (TotPoss > 0 && Number.isFinite(PProd) && Number.isFinite(TotPoss)) {
+        const computed = 100 * PProd / TotPoss;
+        if (Number.isFinite(computed)) ortg = computed;
+      }
     }
 
     return {
@@ -469,6 +522,10 @@ function PlayerStats({ players, team }: { players: any[]; team: any }) {
       twoPM, twoPA, ftm: pg.ftm, fta: pg.fta, tpm: pg.tpm, tpa: pg.tpa,
     };
   };
+
+  // Render a numeric stat — "—" when null/undefined/non-finite
+  const fmt = (v: number | null | undefined) =>
+    v != null && Number.isFinite(v) ? v.toFixed(1) : "—";
 
   return (
     <div style={{ marginBottom: 32 }}>
@@ -516,26 +573,26 @@ function PlayerStats({ players, team }: { players: any[]; team: any }) {
                   <td style={{ padding: "6px 4px", textAlign: "center" }}>{p.year || "—"}</td>
                   <td style={{ padding: "6px 4px", textAlign: "center" }}>{formatHeight(p.height)}</td>
                   <td style={{ padding: "6px 4px", textAlign: "right" }}>{p.games}</td>
-                  <td style={{ padding: "6px 4px", textAlign: "right" }}>{stats.minPct.toFixed(1)}</td>
-                  <td style={{ padding: "6px 4px", textAlign: "right" }}>{stats.ortg > 0 ? stats.ortg.toFixed(1) : "—"}</td>
-                  <td style={{ padding: "6px 4px", textAlign: "right" }}>{stats.usagePct.toFixed(1)}</td>
-                  <td style={{ padding: "6px 4px", textAlign: "right" }}>{stats.shotPct.toFixed(1)}</td>
-                  <td style={{ padding: "6px 4px", textAlign: "right" }}>{stats.efg.toFixed(1)}</td>
-                  <td style={{ padding: "6px 4px", textAlign: "right" }}>{stats.ts.toFixed(1)}</td>
-                  <td style={{ padding: "6px 4px", textAlign: "right" }}>{stats.orPct.toFixed(1)}</td>
-                  <td style={{ padding: "6px 4px", textAlign: "right" }}>{stats.drPct.toFixed(1)}</td>
-                  <td style={{ padding: "6px 4px", textAlign: "right" }}>{stats.aRate.toFixed(1)}</td>
-                  <td style={{ padding: "6px 4px", textAlign: "right" }}>{stats.toRate.toFixed(1)}</td>
-                  <td style={{ padding: "6px 4px", textAlign: "right" }}>{stats.blkPct.toFixed(1)}</td>
-                  <td style={{ padding: "6px 4px", textAlign: "right" }}>{stats.stlPct.toFixed(1)}</td>
-                  <td style={{ padding: "6px 4px", textAlign: "right" }}>{stats.fc40.toFixed(1)}</td>
-                  <td style={{ padding: "6px 4px", textAlign: "right" }}>{stats.ftRate.toFixed(1)}</td>
+                  <td style={{ padding: "6px 4px", textAlign: "right" }}>{fmt(stats.minPct)}</td>
+                  <td style={{ padding: "6px 4px", textAlign: "right" }}>{fmt(stats.ortg)}</td>
+                  <td style={{ padding: "6px 4px", textAlign: "right" }}>{fmt(stats.usagePct)}</td>
+                  <td style={{ padding: "6px 4px", textAlign: "right" }}>{fmt(stats.shotPct)}</td>
+                  <td style={{ padding: "6px 4px", textAlign: "right" }}>{fmt(stats.efg)}</td>
+                  <td style={{ padding: "6px 4px", textAlign: "right" }}>{fmt(stats.ts)}</td>
+                  <td style={{ padding: "6px 4px", textAlign: "right" }}>{fmt(stats.orPct)}</td>
+                  <td style={{ padding: "6px 4px", textAlign: "right" }}>{fmt(stats.drPct)}</td>
+                  <td style={{ padding: "6px 4px", textAlign: "right" }}>{fmt(stats.aRate)}</td>
+                  <td style={{ padding: "6px 4px", textAlign: "right" }}>{fmt(stats.toRate)}</td>
+                  <td style={{ padding: "6px 4px", textAlign: "right" }}>{fmt(stats.blkPct)}</td>
+                  <td style={{ padding: "6px 4px", textAlign: "right" }}>{fmt(stats.stlPct)}</td>
+                  <td style={{ padding: "6px 4px", textAlign: "right" }}>{fmt(stats.fc40)}</td>
+                  <td style={{ padding: "6px 4px", textAlign: "right" }}>{fmt(stats.ftRate)}</td>
                   <td style={{ padding: "6px 4px", textAlign: "right" }}>{stats.ftm}-{stats.fta}</td>
-                  <td style={{ padding: "6px 4px", textAlign: "right" }}>{stats.ftPct.toFixed(1)}</td>
+                  <td style={{ padding: "6px 4px", textAlign: "right" }}>{fmt(stats.ftPct)}</td>
                   <td style={{ padding: "6px 4px", textAlign: "right" }}>{stats.twoPM}-{stats.twoPA}</td>
-                  <td style={{ padding: "6px 4px", textAlign: "right" }}>{stats.twoPct.toFixed(1)}</td>
+                  <td style={{ padding: "6px 4px", textAlign: "right" }}>{fmt(stats.twoPct)}</td>
                   <td style={{ padding: "6px 4px", textAlign: "right" }}>{stats.tpm}-{stats.tpa}</td>
-                  <td style={{ padding: "6px 4px", textAlign: "right" }}>{stats.threePct.toFixed(1)}</td>
+                  <td style={{ padding: "6px 4px", textAlign: "right" }}>{fmt(stats.threePct)}</td>
                 </tr>
               );
             })}
