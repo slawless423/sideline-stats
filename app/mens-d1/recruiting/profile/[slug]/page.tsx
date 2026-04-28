@@ -273,8 +273,6 @@ function compareRows(a: StatRow, b: StatRow): number {
 
 // ---------- Component ----------
 
-type StatMode = 'totals' | 'perGame' | 'per40' | 'advanced';
-
 export default function ProfilePage() {
   const params = useParams();
   const slug = params?.slug as string | undefined;
@@ -284,7 +282,6 @@ export default function ProfilePage() {
   const [teamRows, setTeamRows] = useState<TeamRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
-  const [mode, setMode] = useState<StatMode>('advanced');
 
   useEffect(() => {
     if (!slug) return;
@@ -351,38 +348,32 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        {/* Stat mode tabs */}
-        <div style={{ display: 'flex', borderRadius: 6, overflow: 'hidden', border: `1px solid ${ICE}`, marginBottom: 20, width: 'fit-content' }}>
-          {([
-            ['advanced', 'Advanced'],
-            ['perGame', 'Per Game'],
-            ['per40', 'Per 40'],
-            ['totals', 'Totals'],
-          ] as [StatMode, string][]).map(([key, label]) => (
-            <button
-              key={key}
-              onClick={() => setMode(key)}
-              style={{
-                padding: '8px 18px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
-                fontFamily: "'Outfit', sans-serif", border: 'none', outline: 'none',
-                background: mode === key ? NAVY : '#fff',
-                color: mode === key ? '#fff' : MUTED,
-                transition: 'background 0.15s, color 0.15s',
-              }}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
+        {/* All 4 stat tables stacked: Advanced, Per 40, Per Game, Totals */}
+        <SectionHeader>Advanced</SectionHeader>
+        <AdvancedTable rows={statRows} teamMap={teamMap} />
 
-        {/* The active table */}
-        {mode === 'advanced' && <AdvancedTable rows={statRows} teamMap={teamMap} />}
-        {mode === 'perGame' && <PerGameTable rows={statRows} teamMap={teamMap} />}
-        {mode === 'per40' && <Per40Table rows={statRows} teamMap={teamMap} />}
-        {mode === 'totals' && <TotalsTable rows={statRows} />}
+        <SectionHeader>Per 40</SectionHeader>
+        <Per40Table rows={statRows} teamMap={teamMap} />
+
+        <SectionHeader>Per Game</SectionHeader>
+        <PerGameTable rows={statRows} teamMap={teamMap} />
+
+        <SectionHeader>Totals</SectionHeader>
+        <TotalsTable rows={statRows} />
 
       </main>
     </>
+  );
+}
+
+function SectionHeader({ children }: { children: ReactNode }) {
+  return (
+    <h2 style={{
+      fontSize: 16, fontWeight: 700, color: NAVY, margin: '28px 0 10px 0',
+      borderBottom: `2px solid ${FROST}`, paddingBottom: 6,
+    }}>
+      {children}
+    </h2>
   );
 }
 
