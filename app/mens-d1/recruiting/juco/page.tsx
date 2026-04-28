@@ -291,26 +291,26 @@ function calcStats(p: Player, team: TeamRow | undefined) {
   const hasClean = cg > 0 && cm > 0;
 
   // ── Per Game (all games) ─────────────────────────────────────────────────
-  const fgPct   = fga > 0 ? (fgm / fga) * 100 : 0;
+  const fgPct   = fga > 0 ? (fgm / fga) * 100 : null;
   const twopm   = fgm - tpm;
   const twopa   = fga - tpa;
-  const twopPct = twopa > 0 ? (twopm / twopa) * 100 : 0;
-  const tpPct   = tpa > 0 ? (tpm / tpa) * 100 : 0;
-  const ftPct   = fta > 0 ? (ftm / fta) * 100 : 0;
+  const twopPct = twopa > 0 ? (twopm / twopa) * 100 : null;
+  const tpPct   = tpa > 0 ? (tpm / tpa) * 100 : null;
+  const ftPct   = fta > 0 ? (ftm / fta) * 100 : null;
 
   // ── Clean game derived ───────────────────────────────────────────────────
   const c_twopm   = cfgm - ctpm;
   const c_twopa   = cfga - ctpa;
-  const c_twopPct = c_twopa > 0 ? (c_twopm / c_twopa) * 100 : 0;
-  const c_tpPct   = ctpa > 0 ? (ctpm / ctpa) * 100 : 0;
-  const c_ftPct   = cfta > 0 ? (cftm / cfta) * 100 : 0;
-  const c_fgPct   = cfga > 0 ? (cfgm / cfga) * 100 : 0;
-  const efg       = cfga > 0 ? ((cfgm + 0.5 * ctpm) / cfga) * 100 : 0;
-  const ts        = (cfga + 0.475 * cfta) > 0 ? (cpts / (2 * (cfga + 0.475 * cfta))) * 100 : 0;
-  const ftRate    = cfga > 0 ? (cfta / cfga) * 100 : 0;
+  const c_twopPct = c_twopa > 0 ? (c_twopm / c_twopa) * 100 : null;
+  const c_tpPct   = ctpa > 0 ? (ctpm / ctpa) * 100 : null;
+  const c_ftPct   = cfta > 0 ? (cftm / cfta) * 100 : null;
+  const c_fgPct   = cfga > 0 ? (cfgm / cfga) * 100 : null;
+  const efg       = cfga > 0 ? ((cfgm + 0.5 * ctpm) / cfga) * 100 : null;
+  const ts        = (cfga + 0.475 * cfta) > 0 ? (cpts / (2 * (cfga + 0.475 * cfta))) * 100 : null;
+  const ftRate    = cfga > 0 ? (cfta / cfga) * 100 : null;
 
   // ── Advanced (clean games only) ──────────────────────────────────────────
-  let ortg = 0, usagePct = 0, minPct = 0, shotsPct = 0;
+  let ortg: number | null = 0, usagePct = 0, minPct = 0, shotsPct = 0;
   let orbPct = 0, drbPct = 0, aRate = 0, toRate = 0, blkPct = 0, stlPct = 0;
 
   if (hasClean && team.cleanGames > 0) {
@@ -318,7 +318,7 @@ function calcStats(p: Player, team: TeamRow | undefined) {
     const opp_drb       = team.cleanOppTrb - team.cleanOppOrb;
     const team_drb      = team.cleanTrb - team.cleanOrb;
     const Team_ORB_pct  = team.cleanOrb / ((team.cleanOrb + opp_drb) || 1);
-    const ftm_rate      = team.cleanFta > 0 ? team.cleanFtm / team.cleanFta : 0.7;
+    const ftm_rate      = team.cleanFta > 0 ? team.cleanFtm / team.cleanFta : 0;
     const Team_Scoring_Poss = team.cleanFga + (1 - Math.pow(1 - ftm_rate, 2)) * team.cleanFta * 0.4;
     const Team_Play_pct = Team_Scoring_Poss / ((team.cleanFga + team.cleanFta * 0.4 + team.cleanTov) || 1);
     const Team_ORB_Weight = ((1 - Team_ORB_pct) * Team_Play_pct) /
@@ -347,28 +347,51 @@ function calcStats(p: Player, team: TeamRow | undefined) {
     blkPct = (cm * opp2PA) > 0 ? 100 * (cblk * (teamCleanMin / 5)) / (cm * opp2PA) : 0;
     stlPct = (cm * oppPoss) > 0 ? 100 * (cstl * (teamCleanMin / 5)) / (cm * oppPoss) : 0;
 
-    // ORtg (Dean Oliver) - using clean stats
+    // ORtg (Dean Oliver) — using clean stats. Guard each sub-term to avoid NaN
+    // from divisions where a player attempted no FT/FG/etc.
     const teamFgm_clean = team.cleanFgm;
     const teamPts_clean = team.cleanPts;
     const teamFtm_clean = team.cleanFtm;
-    const qAST = ((cm / (teamCleanMin / 5)) * (1.14 * ((teamFgm_clean - cfgm) / (teamFgm_clean || 1)))) +
-      ((((team.cleanAst ?? 0) / teamCleanMin * cm * 5 - cast) / (((teamFgm_clean / teamCleanMin) * cm * 5 - cfgm) || 1)) * (1 - cm / (teamCleanMin / 5)));
-    const FG_Part  = cfgm * (1 - 0.5 * ((cpts - cftm) / (2 * cfga || 1)) * qAST);
-    const AST_Part = 0.5 * ((teamPts_clean - teamFtm_clean - (cpts - cftm)) / (2 * ((team.cleanFga - cfga) || 1))) * cast;
-    const FT_Part  = (1 - Math.pow(1 - (cftm / (cfta || 1)), 2)) * 0.4 * cfta;
+    const teamFga_minus_cfga = team.cleanFga - cfga;
+    const teamFgm_minus_cfgm = teamFgm_clean - cfgm;
+    const qAST_term1 = teamFgm_clean > 0
+      ? (cm / (teamCleanMin / 5)) * (1.14 * (((team.cleanAst ?? 0) - cast) / teamFgm_clean))
+      : 0;
+    const qAST_denom = (teamFgm_clean / teamCleanMin) * cm * 5 - cfgm;
+    const qAST_term2 = qAST_denom > 0
+      ? (((team.cleanAst ?? 0) / teamCleanMin * cm * 5 - cast) / qAST_denom) * (1 - cm / (teamCleanMin / 5))
+      : 0;
+    const qAST = qAST_term1 + qAST_term2;
+    const FG_Part = cfga > 0
+      ? cfgm * (1 - 0.5 * ((cpts - cftm) / (2 * cfga)) * qAST)
+      : 0;
+    const AST_Part = teamFga_minus_cfga > 0
+      ? 0.5 * ((teamPts_clean - teamFtm_clean - (cpts - cftm)) / (2 * teamFga_minus_cfga)) * cast
+      : 0;
+    const FT_Part = cfta > 0
+      ? (1 - Math.pow(1 - cftm / cfta, 2)) * 0.4 * cfta
+      : 0;
     const ORB_Part = corb * Team_ORB_Weight * Team_Play_pct;
     const ScPoss   = (FG_Part + AST_Part + FT_Part) * (1 - (team.cleanOrb / Team_Scoring_Poss) * Team_ORB_Weight * Team_Play_pct) + ORB_Part;
     const FGxPoss  = (cfga - cfgm) * (1 - 1.07 * Team_ORB_pct);
-    const FTxPoss  = Math.pow(1 - (cftm / (cfta || 1)), 2) * 0.4 * cfta;
+    const FTxPoss  = cfta > 0 ? Math.pow(1 - cftm / cfta, 2) * 0.4 * cfta : 0;
     const TotPoss  = ScPoss + FGxPoss + FTxPoss + ctov;
-    const PProd_FG  = 2 * (cfgm + 0.5 * ctpm) * (1 - 0.5 * ((cpts - cftm) / (2 * cfga || 1)) * qAST);
-    const PProd_AST = 2 * ((teamFgm_clean - cfgm + 0.5 * ((team.cleanTpm ?? 0) - ctpm)) / ((teamFgm_clean - cfgm) || 1)) *
-      0.5 * ((teamPts_clean - teamFtm_clean - (cpts - cftm)) / (2 * ((team.cleanFga - cfga) || 1))) * cast;
-    const PProd_ORB = corb * Team_ORB_Weight * Team_Play_pct *
-      (teamPts_clean / ((team.cleanFga + (1 - Math.pow(1 - ftm_rate, 2)) * 0.4 * team.cleanFta) || 1));
+    const PProd_FG = cfga > 0
+      ? 2 * (cfgm + 0.5 * ctpm) * (1 - 0.5 * ((cpts - cftm) / (2 * cfga)) * qAST)
+      : 0;
+    const PProd_AST = (teamFgm_minus_cfgm > 0 && teamFga_minus_cfga > 0)
+      ? 2 * ((teamFgm_clean - cfgm + 0.5 * ((team.cleanTpm ?? 0) - ctpm)) / teamFgm_minus_cfgm) *
+        0.5 * ((teamPts_clean - teamFtm_clean - (cpts - cftm)) / (2 * teamFga_minus_cfga)) * cast
+      : 0;
+    const PProd_ORB_denom = team.cleanFga + (1 - Math.pow(1 - ftm_rate, 2)) * 0.4 * team.cleanFta;
+    const PProd_ORB = PProd_ORB_denom > 0
+      ? corb * Team_ORB_Weight * Team_Play_pct * (teamPts_clean / PProd_ORB_denom)
+      : 0;
     const PProd = (PProd_FG + PProd_AST + cftm) *
       (1 - (team.cleanOrb / Team_Scoring_Poss) * Team_ORB_Weight * Team_Play_pct) + PProd_ORB;
-    ortg = TotPoss > 0 ? 100 * PProd / TotPoss : 0;
+    // ORtg is unstable for low-minute samples (e.g. <5% min, garbage time). Suppress
+    // the value when the player's share of team minutes is below 5%.
+    ortg = (TotPoss > 0 && minPct >= 5) ? 100 * PProd / TotPoss : null;
   }
 
   // ── Per 40 (clean games only) ────────────────────────────────────────────
