@@ -327,10 +327,10 @@ export default function ProfilePage() {
 
         {/* Back link */}
         <Link
-          href="/mens-d1/recruiting"
+          href="/mens-d1/recruiting/highschool"
           style={{ fontSize: 12, color: MUTED, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 4, marginBottom: 20 }}
         >
-          ← Back to Recruiting
+          ← Back to Recruiting Database
         </Link>
 
         {/* Header — Name, Height, Grad Year only */}
