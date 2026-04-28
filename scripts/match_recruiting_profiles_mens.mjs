@@ -33,6 +33,7 @@ import { dirname } from 'node:path';
 const SITE_URL = process.env.SITE_URL || 'https://sideline-stats.com';
 const ENDPOINT = `${SITE_URL}/api/recruiting/mens/highschool`;
 const OUTPUT_PATH = 'lib/recruiting/unified_profiles_men.json';
+const DECISIONS_CSV_PATH = 'data/profile_decisions_men.csv';
 
 // ---------- Normalization helpers ----------
 
@@ -321,6 +322,39 @@ async function main() {
   await mkdir(dirname(OUTPUT_PATH), { recursive: true });
   await writeFile(OUTPUT_PATH, JSON.stringify(output, null, 2) + '\n');
 
+  // Emit a CSV alongside the JSON for the human-review workflow.
+  // Only includes pending_review rows. Each row prefilled with what the
+  // script knows, plus blank columns for the user's decision and overrides.
+  const csvRows = [
+    ['candidate_id', 'display_name', 'reason', 'sources_summary', 'suggested_grad_year', 'suggested_height_inches', 'decision', 'grad_year_override', 'height_inches_override', 'notes'],
+  ];
+  for (const entry of pendingReview) {
+    const sourcesSummary = entry.sources.map(s =>
+      `${s.league} / ${s.team ?? '?'} (id ${s.player_id})`
+    ).join('; ');
+    csvRows.push([
+      entry.candidate_id,
+      entry.display_name,
+      entry.reason,
+      sourcesSummary,
+      entry.suggested_grad_year ?? '',
+      entry.suggested_height_inches ?? '',
+      '', // decision (APPROVE / SPLIT / SKIP)
+      '', // grad_year_override
+      '', // height_inches_override
+      '', // notes
+    ]);
+  }
+  const csv = csvRows.map(r =>
+    r.map(v => {
+      const s = String(v ?? '');
+      return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+    }).join(',')
+  ).join('\n') + '\n';
+
+  await mkdir(dirname(DECISIONS_CSV_PATH), { recursive: true });
+  await writeFile(DECISIONS_CSV_PATH, csv);
+
   console.log('');
   console.log('=== Summary ===');
   console.log(`Profiles total:        ${profiles.length}`);
@@ -330,6 +364,7 @@ async function main() {
   console.log(`Pending review:        ${pendingReview.length}`);
   console.log('');
   console.log(`Wrote ${OUTPUT_PATH}`);
+  console.log(`Wrote ${DECISIONS_CSV_PATH}`);
 }
 
 main().catch(err => {
