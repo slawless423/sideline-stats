@@ -1154,6 +1154,33 @@
       "match_confidence": "single"
     },
     {
+      "unified_id": "ater-maker-bol-2027-81",
+      "display_name": "Ater Maker Bol",
+      "grad_year": 2027,
+      "height_inches": 81,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 2962,
+          "team": "Expressions",
+          "display_name": "Ater Maker Bol",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1491,
+          "team": "CATS Academy",
+          "display_name": "Ater Maker Bol",
+          "grad_year": 2027,
+          "height": "6'9\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
+    },
+    {
       "unified_id": "atuka-bakhtadze-2026-84",
       "display_name": "Atuka Bakhtadze",
       "grad_year": 2026,
@@ -1242,6 +1269,87 @@
         }
       ],
       "match_confidence": "single"
+    },
+    {
+      "unified_id": "avery-council-2027-72",
+      "display_name": "Avery Council",
+      "grad_year": 2027,
+      "height_inches": 72,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 2883,
+          "team": "City Rocks",
+          "display_name": "Avery Council",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1490,
+          "team": "CATS Academy",
+          "display_name": "Avery Council",
+          "grad_year": 2027,
+          "height": "6'0\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
+    },
+    {
+      "unified_id": "avery-huston-2027-74",
+      "display_name": "Avery Huston",
+      "grad_year": 2027,
+      "height_inches": 74,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 2876,
+          "team": "AB Elite",
+          "display_name": "Avery Huston",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1496,
+          "team": "Iowa United",
+          "display_name": "Avery Huston",
+          "grad_year": 2027,
+          "height": "6'2\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
+    },
+    {
+      "unified_id": "avery-moses-2027-75",
+      "display_name": "Avery Moses",
+      "grad_year": 2027,
+      "height_inches": 75,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 2997,
+          "team": "Pro Skills",
+          "display_name": "Avery Moses",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1381,
+          "team": "Sunrise Christian Academy",
+          "display_name": "Avery Moses",
+          "grad_year": 2027,
+          "height": "6'3\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
     },
     {
       "unified_id": "avian-rodriguez-na-na",
@@ -2234,6 +2342,33 @@
       "match_confidence": "single"
     },
     {
+      "unified_id": "cameron-barnes-2027-79",
+      "display_name": "Cameron Barnes",
+      "grad_year": 2027,
+      "height_inches": 79,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 2894,
+          "team": "MOKAN Elite",
+          "display_name": "Cameron Barnes",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1355,
+          "team": "Link Academy",
+          "display_name": "Cameron Barnes",
+          "grad_year": 2027,
+          "height": "6'7\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
+    },
+    {
       "unified_id": "cameron-blankenberg-na-na",
       "display_name": "Cameron Blankenberg",
       "grad_year": null,
@@ -2414,6 +2549,33 @@
       "match_confidence": "single"
     },
     {
+      "unified_id": "charles-pur-2027-82",
+      "display_name": "Charles Pur",
+      "grad_year": 2027,
+      "height_inches": 82,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 3156,
+          "team": "CP3",
+          "display_name": "Charles Pur",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1335,
+          "team": "Spire",
+          "display_name": "Charles Pur",
+          "grad_year": 2027,
+          "height": "6'10\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
+    },
+    {
       "unified_id": "charles-stewart-jr-na-na",
       "display_name": "Charles Stewart Jr.",
       "grad_year": null,
@@ -2574,6 +2736,33 @@
         }
       ],
       "match_confidence": "single"
+    },
+    {
+      "unified_id": "cheick-oumar-fadiga-2027-74",
+      "display_name": "Cheick-Oumar Fadiga",
+      "grad_year": 2027,
+      "height_inches": 74,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 2964,
+          "team": "Expressions",
+          "display_name": "Cheick-Oumar Fadiga",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1485,
+          "team": "CATS Academy",
+          "display_name": "Cheick-oumar Fadiga",
+          "grad_year": 2026,
+          "height": "6'2\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
     },
     {
       "unified_id": "chidi-nwigwe-2026-78",
@@ -3530,6 +3719,33 @@
       "match_confidence": "single"
     },
     {
+      "unified_id": "david-johnson-2029-80",
+      "display_name": "David Johnson",
+      "grad_year": 2029,
+      "height_inches": 80,
+      "sources": [
+        {
+          "league": "EYBL 15U",
+          "season": "2026",
+          "player_id": 3544,
+          "team": "NY Lightning",
+          "display_name": "David Johnson",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1470,
+          "team": "Oak Hill",
+          "display_name": "David Johnson",
+          "grad_year": 2029,
+          "height": "6'8\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
+    },
+    {
       "unified_id": "david-massengo-2027-80",
       "display_name": "David Massengo",
       "grad_year": 2027,
@@ -3564,6 +3780,33 @@
         }
       ],
       "match_confidence": "single"
+    },
+    {
+      "unified_id": "davion-thompson-2027-74",
+      "display_name": "Davion Thompson",
+      "grad_year": 2027,
+      "height_inches": 74,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 3100,
+          "team": "MeanStreets",
+          "display_name": "Davion Thompson",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1349,
+          "team": "Link Academy",
+          "display_name": "Davion Thompson",
+          "grad_year": 2027,
+          "height": "6'2\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
     },
     {
       "unified_id": "davis-cochran-na-na",
@@ -3708,6 +3951,33 @@
         }
       ],
       "match_confidence": "single"
+    },
+    {
+      "unified_id": "demarcus-henry-2027-79",
+      "display_name": "DeMarcus Henry",
+      "grad_year": 2027,
+      "height_inches": 79,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 2946,
+          "team": "Vegas Elite",
+          "display_name": "DeMarcus Henry",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1317,
+          "team": "AZ Compass",
+          "display_name": "Demarcus Henry",
+          "grad_year": 2027,
+          "height": "6'7\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
     },
     {
       "unified_id": "demari-watson-na-na",
@@ -3960,6 +4230,33 @@
         }
       ],
       "match_confidence": "single"
+    },
+    {
+      "unified_id": "devin-cleveland-2027-75",
+      "display_name": "Devin Cleveland",
+      "grad_year": 2027,
+      "height_inches": 75,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 3130,
+          "team": "Brad Beal Elite",
+          "display_name": "Devin Cleveland",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1340,
+          "team": "La Lumiere",
+          "display_name": "Devin Cleveland",
+          "grad_year": 2027,
+          "height": "6'3\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
     },
     {
       "unified_id": "dhani-miller-2026-74",
@@ -4646,6 +4943,33 @@
       "match_confidence": "single"
     },
     {
+      "unified_id": "eric-jacobsen-2026-83",
+      "display_name": "Eric Jacobsen",
+      "grad_year": 2026,
+      "height_inches": 83,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 2965,
+          "team": "Expressions",
+          "display_name": "Eric Jacobsen",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1396,
+          "team": "Brewster",
+          "display_name": "Eric Jacobsen",
+          "grad_year": 2026,
+          "height": "6'11\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
+    },
+    {
       "unified_id": "erick-dampier-jr-na-na",
       "display_name": "Erick Dampier Jr.",
       "grad_year": null,
@@ -4896,6 +5220,33 @@
         }
       ],
       "match_confidence": "single"
+    },
+    {
+      "unified_id": "ferlandes-wright-2027-79",
+      "display_name": "Ferlandes Wright",
+      "grad_year": 2027,
+      "height_inches": 79,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 3041,
+          "team": "Indy Heat",
+          "display_name": "Ferlandes Wright",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1343,
+          "team": "La Lumiere",
+          "display_name": "Ferlandes Wright",
+          "grad_year": 2027,
+          "height": "6'7\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
     },
     {
       "unified_id": "filip-mozoul-na-na",
@@ -6374,6 +6725,33 @@
       "match_confidence": "single"
     },
     {
+      "unified_id": "jalen-white-2027-79",
+      "display_name": "Jalen White",
+      "grad_year": 2027,
+      "height_inches": 79,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 2922,
+          "team": "Oakland Soldiers",
+          "display_name": "Jalen White",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1312,
+          "team": "CIA Bella Vista",
+          "display_name": "Jalen White",
+          "grad_year": 2027,
+          "height": "6'7\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
+    },
+    {
       "unified_id": "jalon-brown-na-na",
       "display_name": "Jalon Brown",
       "grad_year": null,
@@ -6734,6 +7112,33 @@
       "match_confidence": "single"
     },
     {
+      "unified_id": "javion-tyndale-2027-68",
+      "display_name": "Javion Tyndale",
+      "grad_year": 2027,
+      "height_inches": 68,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 3031,
+          "team": "UPlay Canada",
+          "display_name": "Javion Tyndale",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1367,
+          "team": "Montverde Academy",
+          "display_name": "Javion Tyndale",
+          "grad_year": 2027,
+          "height": "5'8\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
+    },
+    {
       "unified_id": "jax-clark-na-na",
       "display_name": "Jax Clark",
       "grad_year": null,
@@ -6984,6 +7389,33 @@
         }
       ],
       "match_confidence": "single"
+    },
+    {
+      "unified_id": "jaylan-mitchell-2027-79",
+      "display_name": "Jaylan Mitchell",
+      "grad_year": 2027,
+      "height_inches": 79,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 3131,
+          "team": "Brad Beal Elite",
+          "display_name": "Jaylan Mitchell",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1514,
+          "team": "Spire",
+          "display_name": "Jaylan Mitchell",
+          "grad_year": 2027,
+          "height": "6'7\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
     },
     {
       "unified_id": "jaylence-byrd-na-na",
@@ -7904,6 +8336,33 @@
       "match_confidence": "single"
     },
     {
+      "unified_id": "josiah-adamson-2027-75",
+      "display_name": "Josiah Adamson",
+      "grad_year": 2027,
+      "height_inches": 75,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 2968,
+          "team": "Expressions",
+          "display_name": "Josiah Adamson",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1487,
+          "team": "CATS Academy",
+          "display_name": "Josiah Adamson",
+          "grad_year": 2027,
+          "height": "6'3\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
+    },
+    {
       "unified_id": "josiah-broko-na-na",
       "display_name": "Josiah Broko",
       "grad_year": null,
@@ -8190,6 +8649,33 @@
         }
       ],
       "match_confidence": "single"
+    },
+    {
+      "unified_id": "julius-kimani-2027-85",
+      "display_name": "Julius Kimani",
+      "grad_year": 2027,
+      "height_inches": 85,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 3080,
+          "team": "PSA Cardinals",
+          "display_name": "Julius Kimani",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1473,
+          "team": "Oak Hill",
+          "display_name": "Julius Kimani",
+          "grad_year": 2027,
+          "height": "7'1\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
     },
     {
       "unified_id": "junior-county-2026-76",
@@ -8732,6 +9218,33 @@
       "match_confidence": "single"
     },
     {
+      "unified_id": "keaundre-morris-2027-73",
+      "display_name": "Keaundre Morris",
+      "grad_year": 2027,
+      "height_inches": 73,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 3023,
+          "team": "Team Why Not",
+          "display_name": "Keaundre Morris",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1372,
+          "team": "Dream City Christian",
+          "display_name": "Keaundre Morris",
+          "grad_year": 2027,
+          "height": "6'1\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
+    },
+    {
       "unified_id": "keelyn-johnson-na-na",
       "display_name": "Keelyn Johnson",
       "grad_year": null,
@@ -8874,6 +9387,33 @@
         }
       ],
       "match_confidence": "single"
+    },
+    {
+      "unified_id": "kendyn-grant-2027-70",
+      "display_name": "Kendyn Grant",
+      "grad_year": 2027,
+      "height_inches": 70,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 2928,
+          "team": "Oakland Soldiers",
+          "display_name": "Kendyn Grant",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1377,
+          "team": "Dream City Christian",
+          "display_name": "Kendyn Grant",
+          "grad_year": 2027,
+          "height": "5'10\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
     },
     {
       "unified_id": "kenneth-lampley-na-na",
@@ -9072,6 +9612,33 @@
         }
       ],
       "match_confidence": "single"
+    },
+    {
+      "unified_id": "king-gibson-2027-76",
+      "display_name": "King Gibson",
+      "grad_year": 2027,
+      "height_inches": 76,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 3016,
+          "team": "Team United",
+          "display_name": "King Gibson",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1330,
+          "team": "Spire",
+          "display_name": "King Gibson",
+          "grad_year": 2027,
+          "height": "6'4\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
     },
     {
       "unified_id": "king-kendrick-na-na",
@@ -9506,6 +10073,42 @@
       "match_confidence": "single"
     },
     {
+      "unified_id": "lincoln-vinson-2027-73",
+      "display_name": "Lincoln Vinson",
+      "grad_year": 2027,
+      "height_inches": 73,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 2974,
+          "team": "Jet Academy",
+          "display_name": "Lincoln Vinson",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1379,
+          "team": "Sunrise Christian Academy",
+          "display_name": "Lincoln Vinson",
+          "grad_year": 2027,
+          "height": "6'1\""
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1543,
+          "team": "Tennessee Collegiate Academy",
+          "display_name": "Lincoln Vinson",
+          "grad_year": 2027,
+          "height": "6'1\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
+    },
+    {
       "unified_id": "lj-smith-2027-76",
       "display_name": "Lj Smith",
       "grad_year": 2027,
@@ -9722,6 +10325,33 @@
       "match_confidence": "single"
     },
     {
+      "unified_id": "lyris-robinson-2027-76",
+      "display_name": "Lyris Robinson",
+      "grad_year": 2027,
+      "height_inches": 76,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 3123,
+          "team": "Arizona Unity",
+          "display_name": "Lyris Robinson",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1309,
+          "team": "CIA Bella Vista",
+          "display_name": "Lyris Robinson",
+          "grad_year": 2027,
+          "height": "6'4\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
+    },
+    {
       "unified_id": "mack-welker-na-na",
       "display_name": "Mack Welker",
       "grad_year": null,
@@ -9884,6 +10514,33 @@
       "match_confidence": "single"
     },
     {
+      "unified_id": "malachi-jordan-2027-78",
+      "display_name": "Malachi Jordan",
+      "grad_year": 2027,
+      "height_inches": 78,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 2924,
+          "team": "Oakland Soldiers",
+          "display_name": "Malachi Jordan",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1371,
+          "team": "Dream City Christian",
+          "display_name": "Malachi Jordan",
+          "grad_year": 2026,
+          "height": "6'6\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
+    },
+    {
       "unified_id": "malachi-kaffey-2028-72",
       "display_name": "Malachi Kaffey",
       "grad_year": 2028,
@@ -10010,6 +10667,33 @@
       "match_confidence": "single"
     },
     {
+      "unified_id": "mana-winitana-2027-74",
+      "display_name": "Mana Winitana",
+      "grad_year": 2027,
+      "height_inches": 74,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 2938,
+          "team": "Utah Prospects",
+          "display_name": "Mana Winitana",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1328,
+          "team": "Wasatch Academy",
+          "display_name": "Mana Winitana",
+          "grad_year": 2027,
+          "height": "6'2\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
+    },
+    {
       "unified_id": "marc-johnson-na-na",
       "display_name": "Marc Johnson",
       "grad_year": null,
@@ -10082,6 +10766,33 @@
       "match_confidence": "single"
     },
     {
+      "unified_id": "mark-burns-2027-81",
+      "display_name": "Mark Burns",
+      "grad_year": 2027,
+      "height_inches": 81,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 2966,
+          "team": "Expressions",
+          "display_name": "Mark Burns",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1398,
+          "team": "Brewster",
+          "display_name": "Mark Burns",
+          "grad_year": 2027,
+          "height": "6'9\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
+    },
+    {
       "unified_id": "mark-leung-2027-71",
       "display_name": "Mark Leung",
       "grad_year": 2027,
@@ -10098,6 +10809,33 @@
         }
       ],
       "match_confidence": "single"
+    },
+    {
+      "unified_id": "markus-kerr-2027-77",
+      "display_name": "Markus Kerr",
+      "grad_year": 2027,
+      "height_inches": 77,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 3020,
+          "team": "Team United",
+          "display_name": "Markus Kerr II",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1392,
+          "team": "Brewster",
+          "display_name": "Markus Kerr",
+          "grad_year": 2027,
+          "height": "6'5\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
     },
     {
       "unified_id": "marque-johnson-jr-na-na",
@@ -10532,6 +11270,33 @@
       "match_confidence": "single"
     },
     {
+      "unified_id": "mayom-mayom-2027-79",
+      "display_name": "Mayom Mayom",
+      "grad_year": 2027,
+      "height_inches": 79,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 3120,
+          "team": "Arizona Unity",
+          "display_name": "Mayom Mayom",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1313,
+          "team": "CIA Bella Vista",
+          "display_name": "Mayom Mayom",
+          "grad_year": 2027,
+          "height": "6'7\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
+    },
+    {
       "unified_id": "maz-taylor-2028-74",
       "display_name": "Maz Taylor",
       "grad_year": 2028,
@@ -10640,6 +11405,33 @@
       "match_confidence": "single"
     },
     {
+      "unified_id": "micah-goodlow-2028-71",
+      "display_name": "Micah Goodlow",
+      "grad_year": 2028,
+      "height_inches": 71,
+      "sources": [
+        {
+          "league": "EYBL 16U",
+          "season": "2026",
+          "player_id": 3227,
+          "team": "Jet Academy",
+          "display_name": "Micah Goodlow",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1457,
+          "team": "Christ School",
+          "display_name": "Micah Goodlow",
+          "grad_year": 2028,
+          "height": "5'11\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
+    },
+    {
       "unified_id": "micah-gordon-na-na",
       "display_name": "Micah Gordon",
       "grad_year": null,
@@ -10728,6 +11520,33 @@
         }
       ],
       "match_confidence": "single"
+    },
+    {
+      "unified_id": "michai-white-2028-72",
+      "display_name": "Michai White",
+      "grad_year": 2028,
+      "height_inches": 72,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 2890,
+          "team": "City Rocks",
+          "display_name": "Michai White",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1391,
+          "team": "Brewster",
+          "display_name": "Michai White",
+          "grad_year": 2028,
+          "height": "6'0\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
     },
     {
       "unified_id": "miles-sadler-2026-70",
@@ -10836,6 +11655,33 @@
         }
       ],
       "match_confidence": "single"
+    },
+    {
+      "unified_id": "moussa-kamissoko-2027-80",
+      "display_name": "Moussa Kamissoko",
+      "grad_year": 2027,
+      "height_inches": 80,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 3083,
+          "team": "PSA Cardinals",
+          "display_name": "Moussa Kamissoko",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1399,
+          "team": "Long Island Lutheran",
+          "display_name": "Moussa Kamissoko",
+          "grad_year": 2027,
+          "height": "6'8\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
     },
     {
       "unified_id": "munir-greig-na-na",
@@ -11180,6 +12026,33 @@
       "match_confidence": "single"
     },
     {
+      "unified_id": "nikos-koulisianis-2026-81",
+      "display_name": "Nikos Koulisianis",
+      "grad_year": 2026,
+      "height_inches": 81,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 2910,
+          "team": "Nightrydas",
+          "display_name": "Nikos Koulisianis",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1368,
+          "team": "Montverde Academy",
+          "display_name": "Nikos Koulisianis",
+          "grad_year": 2026,
+          "height": "6'9\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
+    },
+    {
       "unified_id": "noah-bol-dong-na-na",
       "display_name": "Noah Bol Dong",
       "grad_year": null,
@@ -11414,6 +12287,33 @@
       "match_confidence": "single"
     },
     {
+      "unified_id": "oneal-delancy-2027-74",
+      "display_name": "Oneal Delancy",
+      "grad_year": 2027,
+      "height_inches": 74,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 3166,
+          "team": "Florida Rebels",
+          "display_name": "Oneal Delancy",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1365,
+          "team": "Montverde Academy",
+          "display_name": "Oneal Delancy",
+          "grad_year": 2027,
+          "height": "6'2\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
+    },
+    {
       "unified_id": "onie-lewis-iv-na-na",
       "display_name": "Onie Lewis IV",
       "grad_year": null,
@@ -11520,6 +12420,33 @@
         }
       ],
       "match_confidence": "single"
+    },
+    {
+      "unified_id": "paul-osaruyi-2027-82",
+      "display_name": "Paul Osaruyi",
+      "grad_year": 2027,
+      "height_inches": 82,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 3158,
+          "team": "Arizona Unity",
+          "display_name": "Paul Osaruyi",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1308,
+          "team": "CIA Bella Vista",
+          "display_name": "Paul Osaruyi",
+          "grad_year": 2027,
+          "height": "6'10\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
     },
     {
       "unified_id": "paulino-majok-2027-83",
@@ -11630,6 +12557,60 @@
       "match_confidence": "single"
     },
     {
+      "unified_id": "peyton-howell-2027-72",
+      "display_name": "Peyton Howell",
+      "grad_year": 2027,
+      "height_inches": 72,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 3086,
+          "team": "PSA Cardinals",
+          "display_name": "Peyton Howell",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1406,
+          "team": "Long Island Lutheran",
+          "display_name": "Peyton Howell",
+          "grad_year": 2027,
+          "height": "6'0\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
+    },
+    {
+      "unified_id": "peyton-kemp-2027-72",
+      "display_name": "Peyton Kemp",
+      "grad_year": 2027,
+      "height_inches": 72,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 3047,
+          "team": "Indy Heat",
+          "display_name": "Peyton Kemp",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1346,
+          "team": "La Lumiere",
+          "display_name": "Peyton Kemp",
+          "grad_year": 2027,
+          "height": "6'0\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
+    },
+    {
       "unified_id": "peyton-steele-na-na",
       "display_name": "Peyton Steele",
       "grad_year": null,
@@ -11682,6 +12663,33 @@
         }
       ],
       "match_confidence": "single"
+    },
+    {
+      "unified_id": "precious-sam-2027-82",
+      "display_name": "Precious Sam",
+      "grad_year": 2027,
+      "height_inches": 82,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 2992,
+          "team": "PG Elite",
+          "display_name": "Precious Sam",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1437,
+          "team": "Veritas",
+          "display_name": "Precious Sam",
+          "grad_year": 2027,
+          "height": "6'10\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
     },
     {
       "unified_id": "prince-lassiter-na-na",
@@ -11918,6 +12926,33 @@
       "match_confidence": "single"
     },
     {
+      "unified_id": "reece-ayala-2027-75",
+      "display_name": "Reece Ayala",
+      "grad_year": 2027,
+      "height_inches": 75,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 2961,
+          "team": "Expressions",
+          "display_name": "Reece Ayala",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1395,
+          "team": "Brewster",
+          "display_name": "Reece Ayala",
+          "grad_year": 2027,
+          "height": "6'3\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
+    },
+    {
       "unified_id": "reed-ryan-na-na",
       "display_name": "Reed Ryan",
       "grad_year": null,
@@ -11988,6 +13023,42 @@
         }
       ],
       "match_confidence": "single"
+    },
+    {
+      "unified_id": "ricky-moore-jr-na-na",
+      "display_name": "Ricky Moore Jr.",
+      "grad_year": null,
+      "height_inches": null,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 3019,
+          "team": "Team United",
+          "display_name": "Ricky Moore Jr.",
+          "grad_year": null,
+          "height": null
+        }
+      ],
+      "match_confidence": "manually_confirmed"
+    },
+    {
+      "unified_id": "ricky-moore-na-na",
+      "display_name": "Ricky Moore",
+      "grad_year": null,
+      "height_inches": null,
+      "sources": [
+        {
+          "league": "EYBL 16U",
+          "season": "2026",
+          "player_id": 3230,
+          "team": "Jet Academy",
+          "display_name": "Ricky Moore",
+          "grad_year": null,
+          "height": null
+        }
+      ],
+      "match_confidence": "manually_confirmed"
     },
     {
       "unified_id": "rico-jackson-2026-77",
@@ -12368,6 +13439,33 @@
       "match_confidence": "single"
     },
     {
+      "unified_id": "ryder-malm-2026-81",
+      "display_name": "Ryder Malm",
+      "grad_year": 2026,
+      "height_inches": 81,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 3143,
+          "team": "Vegas Elite",
+          "display_name": "Ryder Malm",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1529,
+          "team": "Tennessee Collegiate Academy",
+          "display_name": "Ryder Malm",
+          "grad_year": 2026,
+          "height": "6'9\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
+    },
+    {
       "unified_id": "rylan-maples-na-na",
       "display_name": "Rylan Maples",
       "grad_year": null,
@@ -12420,6 +13518,33 @@
         }
       ],
       "match_confidence": "single"
+    },
+    {
+      "unified_id": "sebastien-n-dour-2028-79",
+      "display_name": "Sebastien N'Dour",
+      "grad_year": 2028,
+      "height_inches": 79,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 3169,
+          "team": "UPlay Canada",
+          "display_name": "Sebastien N'Dour",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1369,
+          "team": "Montverde Academy",
+          "display_name": "Sebastien Ndour",
+          "grad_year": 2028,
+          "height": "6'7\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
     },
     {
       "unified_id": "seth-dozier-na-na",
@@ -13142,6 +14267,33 @@
       "match_confidence": "single"
     },
     {
+      "unified_id": "trace-lopez-2028-80",
+      "display_name": "Trace Lopez",
+      "grad_year": 2028,
+      "height_inches": 80,
+      "sources": [
+        {
+          "league": "EYBL 16U",
+          "season": "2026",
+          "player_id": 3222,
+          "team": "Georgia Stars",
+          "display_name": "Trace Lopez III",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1484,
+          "team": "Montverde Academy",
+          "display_name": "Trace Lopez",
+          "grad_year": 2028,
+          "height": "6'8\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
+    },
+    {
       "unified_id": "travor-frost-na-na",
       "display_name": "Travor Frost",
       "grad_year": null,
@@ -13590,6 +14742,33 @@
         }
       ],
       "match_confidence": "single"
+    },
+    {
+      "unified_id": "tyran-frazier-2027-81",
+      "display_name": "Tyran Frazier",
+      "grad_year": 2027,
+      "height_inches": 81,
+      "sources": [
+        {
+          "league": "EYBL 17U",
+          "season": "2026",
+          "player_id": 3135,
+          "team": "Brad Beal Elite",
+          "display_name": "Tyran Frazier",
+          "grad_year": null,
+          "height": null
+        },
+        {
+          "league": "EYBL Scholastic",
+          "season": "2026",
+          "player_id": 1424,
+          "team": "Iowa United",
+          "display_name": "Tyran Frazier",
+          "grad_year": 2027,
+          "height": "6'9\""
+        }
+      ],
+      "match_confidence": "manually_confirmed"
     },
     {
       "unified_id": "tyree-anthony-na-na",
@@ -14420,1176 +15599,5 @@
       "match_confidence": "single"
     }
   ],
-  "pending_review": [
-    {
-      "candidate_id": "ater-maker-bol-2027-81",
-      "display_name": "Ater Maker Bol",
-      "suggested_grad_year": 2027,
-      "suggested_height_inches": 81,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 2962,
-          "team": "Expressions",
-          "display_name": "Ater Maker Bol",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1491,
-          "team": "CATS Academy",
-          "display_name": "Ater Maker Bol",
-          "grad_year": 2027,
-          "height": "6'9\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "avery-council-2027-72",
-      "display_name": "Avery Council",
-      "suggested_grad_year": 2027,
-      "suggested_height_inches": 72,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 2883,
-          "team": "City Rocks",
-          "display_name": "Avery Council",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1490,
-          "team": "CATS Academy",
-          "display_name": "Avery Council",
-          "grad_year": 2027,
-          "height": "6'0\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "avery-huston-2027-74",
-      "display_name": "Avery Huston",
-      "suggested_grad_year": 2027,
-      "suggested_height_inches": 74,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 2876,
-          "team": "AB Elite",
-          "display_name": "Avery Huston",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1496,
-          "team": "Iowa United",
-          "display_name": "Avery Huston",
-          "grad_year": 2027,
-          "height": "6'2\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "avery-moses-2027-75",
-      "display_name": "Avery Moses",
-      "suggested_grad_year": 2027,
-      "suggested_height_inches": 75,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 2997,
-          "team": "Pro Skills",
-          "display_name": "Avery Moses",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1381,
-          "team": "Sunrise Christian Academy",
-          "display_name": "Avery Moses",
-          "grad_year": 2027,
-          "height": "6'3\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "cameron-barnes-2027-79",
-      "display_name": "Cameron Barnes",
-      "suggested_grad_year": 2027,
-      "suggested_height_inches": 79,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 2894,
-          "team": "MOKAN Elite",
-          "display_name": "Cameron Barnes",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1355,
-          "team": "Link Academy",
-          "display_name": "Cameron Barnes",
-          "grad_year": 2027,
-          "height": "6'7\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "charles-pur-2027-82",
-      "display_name": "Charles Pur",
-      "suggested_grad_year": 2027,
-      "suggested_height_inches": 82,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 3156,
-          "team": "CP3",
-          "display_name": "Charles Pur",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1335,
-          "team": "Spire",
-          "display_name": "Charles Pur",
-          "grad_year": 2027,
-          "height": "6'10\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "cheick-oumar-fadiga-2026-74",
-      "display_name": "Cheick-Oumar Fadiga",
-      "suggested_grad_year": 2026,
-      "suggested_height_inches": 74,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 2964,
-          "team": "Expressions",
-          "display_name": "Cheick-Oumar Fadiga",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1485,
-          "team": "CATS Academy",
-          "display_name": "Cheick-oumar Fadiga",
-          "grad_year": 2026,
-          "height": "6'2\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "david-johnson-2029-80",
-      "display_name": "David Johnson",
-      "suggested_grad_year": 2029,
-      "suggested_height_inches": 80,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 15U",
-          "season": "2026",
-          "player_id": 3544,
-          "team": "NY Lightning",
-          "display_name": "David Johnson",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1470,
-          "team": "Oak Hill",
-          "display_name": "David Johnson",
-          "grad_year": 2029,
-          "height": "6'8\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "davion-thompson-2027-74",
-      "display_name": "Davion Thompson",
-      "suggested_grad_year": 2027,
-      "suggested_height_inches": 74,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 3100,
-          "team": "MeanStreets",
-          "display_name": "Davion Thompson",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1349,
-          "team": "Link Academy",
-          "display_name": "Davion Thompson",
-          "grad_year": 2027,
-          "height": "6'2\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "demarcus-henry-2027-79",
-      "display_name": "DeMarcus Henry",
-      "suggested_grad_year": 2027,
-      "suggested_height_inches": 79,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 2946,
-          "team": "Vegas Elite",
-          "display_name": "DeMarcus Henry",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1317,
-          "team": "AZ Compass",
-          "display_name": "Demarcus Henry",
-          "grad_year": 2027,
-          "height": "6'7\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "devin-cleveland-2027-75",
-      "display_name": "Devin Cleveland",
-      "suggested_grad_year": 2027,
-      "suggested_height_inches": 75,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 3130,
-          "team": "Brad Beal Elite",
-          "display_name": "Devin Cleveland",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1340,
-          "team": "La Lumiere",
-          "display_name": "Devin Cleveland",
-          "grad_year": 2027,
-          "height": "6'3\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "eric-jacobsen-2026-83",
-      "display_name": "Eric Jacobsen",
-      "suggested_grad_year": 2026,
-      "suggested_height_inches": 83,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 2965,
-          "team": "Expressions",
-          "display_name": "Eric Jacobsen",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1396,
-          "team": "Brewster",
-          "display_name": "Eric Jacobsen",
-          "grad_year": 2026,
-          "height": "6'11\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "ferlandes-wright-2027-79",
-      "display_name": "Ferlandes Wright",
-      "suggested_grad_year": 2027,
-      "suggested_height_inches": 79,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 3041,
-          "team": "Indy Heat",
-          "display_name": "Ferlandes Wright",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1343,
-          "team": "La Lumiere",
-          "display_name": "Ferlandes Wright",
-          "grad_year": 2027,
-          "height": "6'7\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "jalen-white-2027-79",
-      "display_name": "Jalen White",
-      "suggested_grad_year": 2027,
-      "suggested_height_inches": 79,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 2922,
-          "team": "Oakland Soldiers",
-          "display_name": "Jalen White",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1312,
-          "team": "CIA Bella Vista",
-          "display_name": "Jalen White",
-          "grad_year": 2027,
-          "height": "6'7\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "javion-tyndale-2027-68",
-      "display_name": "Javion Tyndale",
-      "suggested_grad_year": 2027,
-      "suggested_height_inches": 68,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 3031,
-          "team": "UPlay Canada",
-          "display_name": "Javion Tyndale",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1367,
-          "team": "Montverde Academy",
-          "display_name": "Javion Tyndale",
-          "grad_year": 2027,
-          "height": "5'8\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "jaylan-mitchell-2027-79",
-      "display_name": "Jaylan Mitchell",
-      "suggested_grad_year": 2027,
-      "suggested_height_inches": 79,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 3131,
-          "team": "Brad Beal Elite",
-          "display_name": "Jaylan Mitchell",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1514,
-          "team": "Spire",
-          "display_name": "Jaylan Mitchell",
-          "grad_year": 2027,
-          "height": "6'7\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "josiah-adamson-2027-75",
-      "display_name": "Josiah Adamson",
-      "suggested_grad_year": 2027,
-      "suggested_height_inches": 75,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 2968,
-          "team": "Expressions",
-          "display_name": "Josiah Adamson",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1487,
-          "team": "CATS Academy",
-          "display_name": "Josiah Adamson",
-          "grad_year": 2027,
-          "height": "6'3\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "julius-kimani-2027-85",
-      "display_name": "Julius Kimani",
-      "suggested_grad_year": 2027,
-      "suggested_height_inches": 85,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 3080,
-          "team": "PSA Cardinals",
-          "display_name": "Julius Kimani",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1473,
-          "team": "Oak Hill",
-          "display_name": "Julius Kimani",
-          "grad_year": 2027,
-          "height": "7'1\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "keaundre-morris-2027-73",
-      "display_name": "Keaundre Morris",
-      "suggested_grad_year": 2027,
-      "suggested_height_inches": 73,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 3023,
-          "team": "Team Why Not",
-          "display_name": "Keaundre Morris",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1372,
-          "team": "Dream City Christian",
-          "display_name": "Keaundre Morris",
-          "grad_year": 2027,
-          "height": "6'1\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "kendyn-grant-2027-70",
-      "display_name": "Kendyn Grant",
-      "suggested_grad_year": 2027,
-      "suggested_height_inches": 70,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 2928,
-          "team": "Oakland Soldiers",
-          "display_name": "Kendyn Grant",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1377,
-          "team": "Dream City Christian",
-          "display_name": "Kendyn Grant",
-          "grad_year": 2027,
-          "height": "5'10\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "king-gibson-2027-76",
-      "display_name": "King Gibson",
-      "suggested_grad_year": 2027,
-      "suggested_height_inches": 76,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 3016,
-          "team": "Team United",
-          "display_name": "King Gibson",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1330,
-          "team": "Spire",
-          "display_name": "King Gibson",
-          "grad_year": 2027,
-          "height": "6'4\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "lincoln-vinson-2027-73",
-      "display_name": "Lincoln Vinson",
-      "suggested_grad_year": 2027,
-      "suggested_height_inches": 73,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 2974,
-          "team": "Jet Academy",
-          "display_name": "Lincoln Vinson",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1379,
-          "team": "Sunrise Christian Academy",
-          "display_name": "Lincoln Vinson",
-          "grad_year": 2027,
-          "height": "6'1\""
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1543,
-          "team": "Tennessee Collegiate Academy",
-          "display_name": "Lincoln Vinson",
-          "grad_year": 2027,
-          "height": "6'1\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "lyris-robinson-2027-76",
-      "display_name": "Lyris Robinson",
-      "suggested_grad_year": 2027,
-      "suggested_height_inches": 76,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 3123,
-          "team": "Arizona Unity",
-          "display_name": "Lyris Robinson",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1309,
-          "team": "CIA Bella Vista",
-          "display_name": "Lyris Robinson",
-          "grad_year": 2027,
-          "height": "6'4\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "malachi-jordan-2026-78",
-      "display_name": "Malachi Jordan",
-      "suggested_grad_year": 2026,
-      "suggested_height_inches": 78,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 2924,
-          "team": "Oakland Soldiers",
-          "display_name": "Malachi Jordan",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1371,
-          "team": "Dream City Christian",
-          "display_name": "Malachi Jordan",
-          "grad_year": 2026,
-          "height": "6'6\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "mana-winitana-2027-74",
-      "display_name": "Mana Winitana",
-      "suggested_grad_year": 2027,
-      "suggested_height_inches": 74,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 2938,
-          "team": "Utah Prospects",
-          "display_name": "Mana Winitana",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1328,
-          "team": "Wasatch Academy",
-          "display_name": "Mana Winitana",
-          "grad_year": 2027,
-          "height": "6'2\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "mark-burns-2027-81",
-      "display_name": "Mark Burns",
-      "suggested_grad_year": 2027,
-      "suggested_height_inches": 81,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 2966,
-          "team": "Expressions",
-          "display_name": "Mark Burns",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1398,
-          "team": "Brewster",
-          "display_name": "Mark Burns",
-          "grad_year": 2027,
-          "height": "6'9\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "markus-kerr-2027-77",
-      "display_name": "Markus Kerr",
-      "suggested_grad_year": 2027,
-      "suggested_height_inches": 77,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 3020,
-          "team": "Team United",
-          "display_name": "Markus Kerr II",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1392,
-          "team": "Brewster",
-          "display_name": "Markus Kerr",
-          "grad_year": 2027,
-          "height": "6'5\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "mayom-mayom-2027-79",
-      "display_name": "Mayom Mayom",
-      "suggested_grad_year": 2027,
-      "suggested_height_inches": 79,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 3120,
-          "team": "Arizona Unity",
-          "display_name": "Mayom Mayom",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1313,
-          "team": "CIA Bella Vista",
-          "display_name": "Mayom Mayom",
-          "grad_year": 2027,
-          "height": "6'7\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "micah-goodlow-2028-71",
-      "display_name": "Micah Goodlow",
-      "suggested_grad_year": 2028,
-      "suggested_height_inches": 71,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 16U",
-          "season": "2026",
-          "player_id": 3227,
-          "team": "Jet Academy",
-          "display_name": "Micah Goodlow",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1457,
-          "team": "Christ School",
-          "display_name": "Micah Goodlow",
-          "grad_year": 2028,
-          "height": "5'11\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "michai-white-2028-72",
-      "display_name": "Michai White",
-      "suggested_grad_year": 2028,
-      "suggested_height_inches": 72,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 2890,
-          "team": "City Rocks",
-          "display_name": "Michai White",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1391,
-          "team": "Brewster",
-          "display_name": "Michai White",
-          "grad_year": 2028,
-          "height": "6'0\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "moussa-kamissoko-2027-80",
-      "display_name": "Moussa Kamissoko",
-      "suggested_grad_year": 2027,
-      "suggested_height_inches": 80,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 3083,
-          "team": "PSA Cardinals",
-          "display_name": "Moussa Kamissoko",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1399,
-          "team": "Long Island Lutheran",
-          "display_name": "Moussa Kamissoko",
-          "grad_year": 2027,
-          "height": "6'8\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "nikos-koulisianis-2026-81",
-      "display_name": "Nikos Koulisianis",
-      "suggested_grad_year": 2026,
-      "suggested_height_inches": 81,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 2910,
-          "team": "Nightrydas",
-          "display_name": "Nikos Koulisianis",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1368,
-          "team": "Montverde Academy",
-          "display_name": "Nikos Koulisianis",
-          "grad_year": 2026,
-          "height": "6'9\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "oneal-delancy-2027-74",
-      "display_name": "Oneal Delancy",
-      "suggested_grad_year": 2027,
-      "suggested_height_inches": 74,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 3166,
-          "team": "Florida Rebels",
-          "display_name": "Oneal Delancy",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1365,
-          "team": "Montverde Academy",
-          "display_name": "Oneal Delancy",
-          "grad_year": 2027,
-          "height": "6'2\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "paul-osaruyi-2027-82",
-      "display_name": "Paul Osaruyi",
-      "suggested_grad_year": 2027,
-      "suggested_height_inches": 82,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 3158,
-          "team": "Arizona Unity",
-          "display_name": "Paul Osaruyi",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1308,
-          "team": "CIA Bella Vista",
-          "display_name": "Paul Osaruyi",
-          "grad_year": 2027,
-          "height": "6'10\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "peyton-howell-2027-72",
-      "display_name": "Peyton Howell",
-      "suggested_grad_year": 2027,
-      "suggested_height_inches": 72,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 3086,
-          "team": "PSA Cardinals",
-          "display_name": "Peyton Howell",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1406,
-          "team": "Long Island Lutheran",
-          "display_name": "Peyton Howell",
-          "grad_year": 2027,
-          "height": "6'0\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "peyton-kemp-2027-72",
-      "display_name": "Peyton Kemp",
-      "suggested_grad_year": 2027,
-      "suggested_height_inches": 72,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 3047,
-          "team": "Indy Heat",
-          "display_name": "Peyton Kemp",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1346,
-          "team": "La Lumiere",
-          "display_name": "Peyton Kemp",
-          "grad_year": 2027,
-          "height": "6'0\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "precious-sam-2027-82",
-      "display_name": "Precious Sam",
-      "suggested_grad_year": 2027,
-      "suggested_height_inches": 82,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 2992,
-          "team": "PG Elite",
-          "display_name": "Precious Sam",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1437,
-          "team": "Veritas",
-          "display_name": "Precious Sam",
-          "grad_year": 2027,
-          "height": "6'10\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "reece-ayala-2027-75",
-      "display_name": "Reece Ayala",
-      "suggested_grad_year": 2027,
-      "suggested_height_inches": 75,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 2961,
-          "team": "Expressions",
-          "display_name": "Reece Ayala",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1395,
-          "team": "Brewster",
-          "display_name": "Reece Ayala",
-          "grad_year": 2027,
-          "height": "6'3\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "ricky-moore-na-na",
-      "display_name": "Ricky Moore",
-      "suggested_grad_year": null,
-      "suggested_height_inches": null,
-      "reason": "grad_year missing everywhere; height missing everywhere",
-      "sources": [
-        {
-          "league": "EYBL 16U",
-          "season": "2026",
-          "player_id": 3230,
-          "team": "Jet Academy",
-          "display_name": "Ricky Moore",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 3019,
-          "team": "Team United",
-          "display_name": "Ricky Moore Jr.",
-          "grad_year": null,
-          "height": null
-        }
-      ]
-    },
-    {
-      "candidate_id": "ryder-malm-2026-81",
-      "display_name": "Ryder Malm",
-      "suggested_grad_year": 2026,
-      "suggested_height_inches": 81,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 3143,
-          "team": "Vegas Elite",
-          "display_name": "Ryder Malm",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1529,
-          "team": "Tennessee Collegiate Academy",
-          "display_name": "Ryder Malm",
-          "grad_year": 2026,
-          "height": "6'9\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "sebastien-n-dour-2028-79",
-      "display_name": "Sebastien N'Dour",
-      "suggested_grad_year": 2028,
-      "suggested_height_inches": 79,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 3169,
-          "team": "UPlay Canada",
-          "display_name": "Sebastien N'Dour",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1369,
-          "team": "Montverde Academy",
-          "display_name": "Sebastien Ndour",
-          "grad_year": 2028,
-          "height": "6'7\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "trace-lopez-2028-80",
-      "display_name": "Trace Lopez",
-      "suggested_grad_year": 2028,
-      "suggested_height_inches": 80,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 16U",
-          "season": "2026",
-          "player_id": 3222,
-          "team": "Georgia Stars",
-          "display_name": "Trace Lopez III",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1484,
-          "team": "Montverde Academy",
-          "display_name": "Trace Lopez",
-          "grad_year": 2028,
-          "height": "6'8\""
-        }
-      ]
-    },
-    {
-      "candidate_id": "tyran-frazier-2027-81",
-      "display_name": "Tyran Frazier",
-      "suggested_grad_year": 2027,
-      "suggested_height_inches": 81,
-      "reason": "grad_year missing in 1 source(s); height missing in 1 source(s)",
-      "sources": [
-        {
-          "league": "EYBL 17U",
-          "season": "2026",
-          "player_id": 3135,
-          "team": "Brad Beal Elite",
-          "display_name": "Tyran Frazier",
-          "grad_year": null,
-          "height": null
-        },
-        {
-          "league": "EYBL Scholastic",
-          "season": "2026",
-          "player_id": 1424,
-          "team": "Iowa United",
-          "display_name": "Tyran Frazier",
-          "grad_year": 2027,
-          "height": "6'9\""
-        }
-      ]
-    }
-  ]
+  "pending_review": []
 }
