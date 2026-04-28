@@ -37,8 +37,8 @@ export default async function LegacyProfileRedirect({
       <SiteNavigation currentDivision="mens-d1" currentPage="recruiting" divisionPath="/mens-d1" />
       <main style={{ padding: 40, textAlign: 'center', fontFamily: "'Outfit', sans-serif" }}>
         <p style={{ color: MUTED, marginBottom: 16 }}>Player not found.</p>
-        <Link href="/mens-d1/recruiting" style={{ color: '#3B9EFF', textDecoration: 'none' }}>
-          ← Back to Recruiting
+        <Link href="/mens-d1/recruiting/highschool" style={{ color: '#3B9EFF', textDecoration: 'none' }}>
+          ← Back to Recruiting Database
         </Link>
       </main>
     </>
