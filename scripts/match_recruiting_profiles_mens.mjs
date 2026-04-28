@@ -91,7 +91,12 @@ function slugify(name, gradYear, heightInches) {
 
 async function fetchPlayers() {
   console.log(`Fetching ${ENDPOINT}`);
-  const res = await fetch(ENDPOINT);
+  const res = await fetch(ENDPOINT, {
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (compatible; SidelineStatsMatcher/1.0)',
+      'Accept': 'application/json',
+    },
+  });
   if (!res.ok) {
     throw new Error(`Fetch failed: ${res.status} ${res.statusText}`);
   }
