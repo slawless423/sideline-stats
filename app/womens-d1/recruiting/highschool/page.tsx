@@ -532,7 +532,7 @@ export default function WomensHighSchoolPage() {
                     return (
                       <tr key={`${p.id}`} style={{ borderBottom: '1px solid #f0f0f0', background: bg }}>
                         <td title={p.full_name} style={{ padding: '5px 8px', fontWeight: 600, position: 'sticky', left: 0, background: bg, zIndex: 1, minWidth: 140, maxWidth: 140, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                          <Link href={`/womens-d1/recruiting/highschool/${p.id}`} style={{ color: NAVY, textDecoration: 'none' }}
+                          <Link href={`/womens-d1/recruiting/highschool/${p.id}`} target="_blank" rel="noopener noreferrer" style={{ color: NAVY, textDecoration: 'none' }}
                             onMouseEnter={e => (e.currentTarget.style.color = ACCENT)}
                             onMouseLeave={e => (e.currentTarget.style.color = NAVY)}>
                             {p.full_name}
