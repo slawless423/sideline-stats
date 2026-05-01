@@ -1,7 +1,7 @@
 // scripts/ingest_3ssb.mjs
 //
 // adidas 3SSB ingest for boys 17U.
-// Pulls from The Passport REST API, writes to Neon.
+// Pulls from The Passport REST API, writes to Neon at PER-GAME grain.
 //
 // Usage (locally or in GitHub Action):
 //   LEAGUE=17U EVENT_ID=262708 node scripts/ingest_3ssb.mjs
@@ -12,11 +12,23 @@
 //   EVENT_ID      - Passport exposureEventId (e.g. 262708 for Session I 2026)
 //   SEASON        - optional, defaults to '2026'
 //
+// Schema (run 01_schema.sql first):
+//   adidas_3ssb_players          identity table (preserves manually-added height/grad_year/etc.)
+//   adidas_3ssb_team_schedule    one row per team-perspective per game
+//   adidas_3ssb_team_games       NEW: per-game team box totals (Passport team-totals row, NOT summed players)
+//   adidas_3ssb_player_games     NEW: per-game player box rows
+//   adidas_3ssb_team_stats       season aggregates, DERIVED from team_games at end of ingest
+//   adidas_3ssb_player_stats     season aggregates, DERIVED from player_games at end of ingest
+//
 // Stats rule note:
 //   3SSB FOLLOWS the standard rule (no exception needed) — Passport publishes
 //   team and opponent totals directly in each box score, so we read them
 //   straight from the box score's team-totals object rather than summing
 //   player rows.
+//
+// Re-run safety:
+//   This script DELETEs everything for (league, season) at the start of writeToDb,
+//   then re-inserts. Safe to run repeatedly.
 
 import pg from 'pg';
 
@@ -74,7 +86,6 @@ async function fetchSchedule() {
 }
 
 function filterTargetGames(rawGames) {
-  // Keep only this division's completed games
   const filtered = rawGames.filter(g =>
     g.division?.name === divisionName &&
     g.homeTeam?.score != null &&
@@ -91,12 +102,10 @@ async function fetchBoxScore(gameId) {
 
 // ---------- STAT NORMALIZATION ----------
 
-// Convert Passport player row to our schema field names.
-// Passport's stats object has FLAT field names (fieldGoalsMade, threePointMade, etc.)
 function normalizePlayerRow(p) {
   const stats = p.stats || {};
   return {
-    playerNumber: String(p.playerNumber || ''),  // stable Passport ID
+    playerNumber: String(p.playerNumber || ''),
     playerName: p.firstName && p.lastName
       ? `${p.firstName} ${p.lastName}`.trim()
       : (p.firstName || p.lastName || '').trim(),
@@ -145,48 +154,19 @@ function normalizeTeamTotals(teamObj) {
   };
 }
 
-// ---------- AGGREGATION STATE ----------
+// ---------- COLLECTION STATE ----------
+//
+// Per-game rows we'll insert. No more season-aggregate accumulation in JS —
+// season totals get derived from these rows in the DB at the end.
 
-// Per-player season totals, keyed by Passport playerNumber (stable across games).
-// Each entry tracks the player's identity (name + team) and accumulated stats.
-const playerAgg = new Map();
-// Per-team season totals, keyed by team name.
-const teamAgg = new Map();
-// Schedule rows to insert (one per team-perspective per game).
-const scheduleRows = [];
-
-function getPlayerAgg(playerNumber, playerName, teamName) {
-  if (!playerAgg.has(playerNumber)) {
-    playerAgg.set(playerNumber, {
-      playerNumber, playerName, teamName,
-      gp: 0, mp: 0,
-      fgm: 0, fga: 0, fg3m: 0, fg3a: 0, ftm: 0, fta: 0,
-      oreb: 0, dreb: 0, reb: 0, ast: 0, stl: 0, blk: 0, tov: 0, pts: 0, pf: 0,
-    });
-  }
-  return playerAgg.get(playerNumber);
-}
-
-function getTeamAgg(teamName) {
-  if (!teamAgg.has(teamName)) {
-    teamAgg.set(teamName, {
-      teamName,
-      gp: 0, mp: 0,
-      fgm: 0, fga: 0, fg3m: 0, fg3a: 0, ftm: 0, fta: 0,
-      oreb: 0, dreb: 0, reb: 0, ast: 0, stl: 0, blk: 0, tov: 0, pts: 0, pf: 0,
-      opp_fgm: 0, opp_fga: 0, opp_fg3m: 0, opp_fg3a: 0, opp_ftm: 0, opp_fta: 0,
-      opp_oreb: 0, opp_dreb: 0, opp_reb: 0, opp_ast: 0, opp_stl: 0, opp_blk: 0,
-      opp_tov: 0, opp_pts: 0, opp_pf: 0,
-    });
-  }
-  return teamAgg.get(teamName);
-}
+const scheduleRows  = []; // existing schedule shape, one per team-perspective
+const teamGameRows  = []; // NEW: per-game team box totals, one per team-perspective
+const playerGameRows = []; // NEW: per-game player rows
+const playerIdentities = new Map(); // playerNumber -> { playerName, teamName } (most recent seen)
 
 // ---------- PROCESS ONE GAME ----------
 
 async function processGame(scheduleRow) {
-  // Use the schedule's team names as canonical (shorter / display-friendly).
-  // Box score sometimes uses different official names (e.g. "ETG Midwest" vs schedule's "ETG").
   const awayName = scheduleRow.awayTeam?.name;
   const homeName = scheduleRow.homeTeam?.name;
   const awayScore = scheduleRow.awayTeam?.score;
@@ -200,7 +180,6 @@ async function processGame(scheduleRow) {
     return;
   }
 
-  // Date comes from the box score's gameInfo.startTime (ISO format)
   const gameDate = box?.gameInfo?.startTime
     ? box.gameInfo.startTime.slice(0, 10)
     : null;
@@ -220,12 +199,6 @@ async function processGame(scheduleRow) {
     return;
   }
 
-  // NOTE: We do NOT validate that box.homeTeam.name === schedule.homeTeam.name.
-  // Passport's schedule and box score use different team-name conventions
-  // (display name vs registered name). The box score's home/away assignment is
-  // trusted to match the schedule's home/away assignment because both come from
-  // the same Passport platform. We use the schedule's names as canonical for our DB.
-
   // Player rows (filter to only those who actually played)
   const awayRoster = (away.roster || []).map(normalizePlayerRow).filter(r => r.isPresent && r.playerNumber);
   const homeRoster = (home.roster || []).map(normalizePlayerRow).filter(r => r.isPresent && r.playerNumber);
@@ -235,92 +208,61 @@ async function processGame(scheduleRow) {
     return;
   }
 
-  // Aggregate player stats
-  for (const p of awayRoster) {
-    const agg = getPlayerAgg(p.playerNumber, p.playerName, awayName);
-    agg.gp   += 1;
-    agg.mp   += p.minutes;
-    agg.fgm  += p.fgm;   agg.fga  += p.fga;
-    agg.fg3m += p.fg3m;  agg.fg3a += p.fg3a;
-    agg.ftm  += p.ftm;   agg.fta  += p.fta;
-    agg.oreb += p.oreb;  agg.dreb += p.dreb;  agg.reb += p.reb;
-    agg.ast  += p.ast;   agg.stl  += p.stl;   agg.blk += p.blk;
-    agg.tov  += p.tov;   agg.pts  += p.pts;   agg.pf  += p.pf;
-  }
-  for (const p of homeRoster) {
-    const agg = getPlayerAgg(p.playerNumber, p.playerName, homeName);
-    agg.gp   += 1;
-    agg.mp   += p.minutes;
-    agg.fgm  += p.fgm;   agg.fga  += p.fga;
-    agg.fg3m += p.fg3m;  agg.fg3a += p.fg3a;
-    agg.ftm  += p.ftm;   agg.fta  += p.fta;
-    agg.oreb += p.oreb;  agg.dreb += p.dreb;  agg.reb += p.reb;
-    agg.ast  += p.ast;   agg.stl  += p.stl;   agg.blk += p.blk;
-    agg.tov  += p.tov;   agg.pts  += p.pts;   agg.pf  += p.pf;
-  }
-
-  // Aggregate team totals — DIRECTLY from Passport's team.stats (NOT summed from players).
-  // This is the standard rule, not the EYBL exception.
+  // Team totals — DIRECTLY from Passport's team.stats (NOT summed from players).
   const awayTeamTotals = normalizeTeamTotals(away);
   const homeTeamTotals = normalizeTeamTotals(home);
 
-  const awayTeam = getTeamAgg(awayName);
-  awayTeam.gp += 1;
-  awayTeam.mp   += awayTeamTotals.mp;
-  awayTeam.fgm  += awayTeamTotals.fgm;   awayTeam.fga  += awayTeamTotals.fga;
-  awayTeam.fg3m += awayTeamTotals.fg3m;  awayTeam.fg3a += awayTeamTotals.fg3a;
-  awayTeam.ftm  += awayTeamTotals.ftm;   awayTeam.fta  += awayTeamTotals.fta;
-  awayTeam.oreb += awayTeamTotals.oreb;  awayTeam.dreb += awayTeamTotals.dreb;
-  awayTeam.reb  += awayTeamTotals.reb;   awayTeam.ast  += awayTeamTotals.ast;
-  awayTeam.stl  += awayTeamTotals.stl;   awayTeam.blk  += awayTeamTotals.blk;
-  awayTeam.tov  += awayTeamTotals.tov;   awayTeam.pts  += awayTeamTotals.pts;
-  awayTeam.pf   += awayTeamTotals.pf;
-  awayTeam.opp_fgm  += homeTeamTotals.fgm;   awayTeam.opp_fga  += homeTeamTotals.fga;
-  awayTeam.opp_fg3m += homeTeamTotals.fg3m;  awayTeam.opp_fg3a += homeTeamTotals.fg3a;
-  awayTeam.opp_ftm  += homeTeamTotals.ftm;   awayTeam.opp_fta  += homeTeamTotals.fta;
-  awayTeam.opp_oreb += homeTeamTotals.oreb;  awayTeam.opp_dreb += homeTeamTotals.dreb;
-  awayTeam.opp_reb  += homeTeamTotals.reb;   awayTeam.opp_ast  += homeTeamTotals.ast;
-  awayTeam.opp_stl  += homeTeamTotals.stl;   awayTeam.opp_blk  += homeTeamTotals.blk;
-  awayTeam.opp_tov  += homeTeamTotals.tov;   awayTeam.opp_pts  += homeTeamTotals.pts;
-  awayTeam.opp_pf   += homeTeamTotals.pf;
+  const gameUuid = String(box.gameNumber || '');
 
-  const homeTeam = getTeamAgg(homeName);
-  homeTeam.gp += 1;
-  homeTeam.mp   += homeTeamTotals.mp;
-  homeTeam.fgm  += homeTeamTotals.fgm;   homeTeam.fga  += homeTeamTotals.fga;
-  homeTeam.fg3m += homeTeamTotals.fg3m;  homeTeam.fg3a += homeTeamTotals.fg3a;
-  homeTeam.ftm  += homeTeamTotals.ftm;   homeTeam.fta  += homeTeamTotals.fta;
-  homeTeam.oreb += homeTeamTotals.oreb;  homeTeam.dreb += homeTeamTotals.dreb;
-  homeTeam.reb  += homeTeamTotals.reb;   homeTeam.ast  += homeTeamTotals.ast;
-  homeTeam.stl  += homeTeamTotals.stl;   homeTeam.blk  += homeTeamTotals.blk;
-  homeTeam.tov  += homeTeamTotals.tov;   homeTeam.pts  += homeTeamTotals.pts;
-  homeTeam.pf   += homeTeamTotals.pf;
-  homeTeam.opp_fgm  += awayTeamTotals.fgm;   homeTeam.opp_fga  += awayTeamTotals.fga;
-  homeTeam.opp_fg3m += awayTeamTotals.fg3m;  homeTeam.opp_fg3a += awayTeamTotals.fg3a;
-  homeTeam.opp_ftm  += awayTeamTotals.ftm;   homeTeam.opp_fta  += awayTeamTotals.fta;
-  homeTeam.opp_oreb += awayTeamTotals.oreb;  homeTeam.opp_dreb += awayTeamTotals.dreb;
-  homeTeam.opp_reb  += awayTeamTotals.reb;   homeTeam.opp_ast  += awayTeamTotals.ast;
-  homeTeam.opp_stl  += awayTeamTotals.stl;   homeTeam.opp_blk  += awayTeamTotals.blk;
-  homeTeam.opp_tov  += awayTeamTotals.tov;   homeTeam.opp_pts  += awayTeamTotals.pts;
-  homeTeam.opp_pf   += awayTeamTotals.pf;
-
-  // Schedule rows (one per perspective)
+  // ---- Schedule rows (one per perspective) ----
   scheduleRows.push({
     team: awayName, opponent: homeName,
     teamScore: awayScore, opponentScore: homeScore,
     isHome: false,
-    gameUuid: String(box.gameNumber || ''),
-    scheduleId: scheduleRow.id,
-    gameDate,
+    gameUuid, scheduleId: scheduleRow.id, gameDate,
   });
   scheduleRows.push({
     team: homeName, opponent: awayName,
     teamScore: homeScore, opponentScore: awayScore,
     isHome: true,
-    gameUuid: String(box.gameNumber || ''),
-    scheduleId: scheduleRow.id,
-    gameDate,
+    gameUuid, scheduleId: scheduleRow.id, gameDate,
   });
+
+  // ---- Team_games rows (one per perspective) ----
+  teamGameRows.push({
+    team: awayName, opponent: homeName,
+    isHome: false,
+    gameUuid, scheduleId: scheduleRow.id, gameDate,
+    self: awayTeamTotals, opp: homeTeamTotals,
+  });
+  teamGameRows.push({
+    team: homeName, opponent: awayName,
+    isHome: true,
+    gameUuid, scheduleId: scheduleRow.id, gameDate,
+    self: homeTeamTotals, opp: awayTeamTotals,
+  });
+
+  // ---- Player_games rows ----
+  for (const p of awayRoster) {
+    playerIdentities.set(p.playerNumber, { playerName: p.playerName, teamName: awayName });
+    playerGameRows.push({
+      playerNumber: p.playerNumber,
+      team: awayName, opponent: homeName,
+      isHome: false,
+      gameUuid, scheduleId: scheduleRow.id, gameDate,
+      stats: p,
+    });
+  }
+  for (const p of homeRoster) {
+    playerIdentities.set(p.playerNumber, { playerName: p.playerName, teamName: homeName });
+    playerGameRows.push({
+      playerNumber: p.playerNumber,
+      team: homeName, opponent: awayName,
+      isHome: true,
+      gameUuid, scheduleId: scheduleRow.id, gameDate,
+      stats: p,
+    });
+  }
 }
 
 // ---------- DB WRITE ----------
@@ -328,28 +270,41 @@ async function processGame(scheduleRow) {
 async function writeToDb(client) {
   console.log(`\nWriting to database...`);
 
-  const delSched = await client.query(
+  // ---- Wipe existing data for this (league, season) ----
+  // Order matters: delete dependents first.
+  // player_games and team_games key off (league, season).
+  // player_stats keys off player_id, so delete via subquery.
+  // schedule keys off (league, season).
+  // players is the identity table, deleted last.
+
+  await client.query(
+    `DELETE FROM adidas_3ssb_team_games WHERE league = $1 AND season = $2`,
+    [league, SEASON]
+  );
+  await client.query(
+    `DELETE FROM adidas_3ssb_player_games WHERE league = $1 AND season = $2`,
+    [league, SEASON]
+  );
+  await client.query(
     `DELETE FROM adidas_3ssb_team_schedule WHERE league = $1 AND season = $2`,
     [league, SEASON]
   );
-  console.log(`  Deleted ${delSched.rowCount} old schedule rows`);
-
-  const delTeam = await client.query(
+  await client.query(
     `DELETE FROM adidas_3ssb_team_stats WHERE league = $1 AND season = $2`,
     [league, SEASON]
   );
-  console.log(`  Deleted ${delTeam.rowCount} old team_stats rows`);
-
-  const delPlayer = await client.query(
+  await client.query(
     `DELETE FROM adidas_3ssb_player_stats
      WHERE season = $1 AND player_id IN (
        SELECT id FROM adidas_3ssb_players WHERE league = $2 AND season = $1
      )`,
     [SEASON, league]
   );
-  console.log(`  Deleted ${delPlayer.rowCount} old player_stats rows`);
+  // Players table — keep manually-added height/grad_year by NOT deleting if
+  // the row already exists. We only insert new ones below.
+  console.log(`  Wiped existing rows for ${league} / ${SEASON}`);
 
-  // Insert schedule rows
+  // ---- Schedule ----
   for (const r of scheduleRows) {
     await client.query(
       `INSERT INTO adidas_3ssb_team_schedule
@@ -361,36 +316,44 @@ async function writeToDb(client) {
   }
   console.log(`  Inserted ${scheduleRows.length} schedule rows`);
 
-  // Insert team stats
-  for (const t of teamAgg.values()) {
+  // ---- Team_games ----
+  for (const r of teamGameRows) {
+    const s = r.self;
+    const o = r.opp;
     await client.query(
-      `INSERT INTO adidas_3ssb_team_stats
-         (team, league, season, gp, mp,
-          fgm, fga, fg3m, fg3a, ftm, fta,
-          oreb, dreb, reb, ast, stl, blk, tov, pts, pf,
-          opp_fgm, opp_fga, opp_fg3m, opp_fg3a, opp_ftm, opp_fta,
+      `INSERT INTO adidas_3ssb_team_games
+         (team, opponent, league, season, game_date, game_uuid, schedule_id, is_home,
+          mp, fgm, fga, fg3m, fg3a, ftm, fta, oreb, dreb, reb,
+          ast, stl, blk, tov, pts, pf,
+          opp_mp, opp_fgm, opp_fga, opp_fg3m, opp_fg3a, opp_ftm, opp_fta,
           opp_oreb, opp_dreb, opp_reb, opp_ast, opp_stl, opp_blk,
           opp_tov, opp_pts, opp_pf)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,
-               $21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35)`,
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,
+               $9,$10,$11,$12,$13,$14,$15,$16,$17,$18,
+               $19,$20,$21,$22,$23,$24,
+               $25,$26,$27,$28,$29,$30,$31,
+               $32,$33,$34,$35,$36,$37,
+               $38,$39,$40)
+       ON CONFLICT (team, league, season, game_uuid) DO NOTHING`,
       [
-        t.teamName, league, SEASON, t.gp, t.mp,
-        t.fgm, t.fga, t.fg3m, t.fg3a, t.ftm, t.fta,
-        t.oreb, t.dreb, t.reb, t.ast, t.stl, t.blk, t.tov, t.pts, t.pf,
-        t.opp_fgm, t.opp_fga, t.opp_fg3m, t.opp_fg3a, t.opp_ftm, t.opp_fta,
-        t.opp_oreb, t.opp_dreb, t.opp_reb, t.opp_ast, t.opp_stl, t.opp_blk,
-        t.opp_tov, t.opp_pts, t.opp_pf,
+        r.team, r.opponent, league, SEASON, r.gameDate, r.gameUuid, r.scheduleId, r.isHome,
+        s.mp, s.fgm, s.fga, s.fg3m, s.fg3a, s.ftm, s.fta, s.oreb, s.dreb, s.reb,
+        s.ast, s.stl, s.blk, s.tov, s.pts, s.pf,
+        o.mp, o.fgm, o.fga, o.fg3m, o.fg3a, o.ftm, o.fta,
+        o.oreb, o.dreb, o.reb, o.ast, o.stl, o.blk,
+        o.tov, o.pts, o.pf,
       ]
     );
   }
-  console.log(`  Inserted ${teamAgg.size} team_stats rows`);
+  console.log(`  Inserted ${teamGameRows.length} team_games rows`);
 
-  // Upsert players (preserve manually-added height/grad_year).
-  // Identity is Passport playerNumber (stable across games).
+  // ---- Players (identity) ----
+  // Upsert by cerebro_player_id. Preserves any manually-added height/grad_year.
+  const playerNumberToId = new Map();
   let newPlayers = 0;
   let existingPlayers = 0;
-  for (const p of playerAgg.values()) {
-    const fullName = p.playerName;
+  for (const [playerNumber, identity] of playerIdentities) {
+    const fullName = identity.playerName;
     const [firstName, ...rest] = fullName.split(' ');
     const lastName = rest.join(' ');
 
@@ -398,40 +361,120 @@ async function writeToDb(client) {
       `SELECT id FROM adidas_3ssb_players
        WHERE cerebro_player_id = $1 AND league = $2 AND season = $3
        LIMIT 1`,
-      [p.playerNumber, league, SEASON]
+      [playerNumber, league, SEASON]
     );
 
     let playerId;
     if (existing.rowCount > 0) {
       playerId = existing.rows[0].id;
       existingPlayers += 1;
+      // Update team in case the player switched teams between sessions
+      await client.query(
+        `UPDATE adidas_3ssb_players SET team = $1 WHERE id = $2`,
+        [identity.teamName, playerId]
+      );
     } else {
       const inserted = await client.query(
         `INSERT INTO adidas_3ssb_players
            (full_name, first_name, last_name, team, league, season, cerebro_player_id)
          VALUES ($1,$2,$3,$4,$5,$6,$7)
          RETURNING id`,
-        [fullName, firstName, lastName, p.teamName, league, SEASON, p.playerNumber]
+        [fullName, firstName, lastName, identity.teamName, league, SEASON, playerNumber]
       );
       playerId = inserted.rows[0].id;
       newPlayers += 1;
     }
+    playerNumberToId.set(playerNumber, playerId);
+  }
+  console.log(`  Players: ${newPlayers} new inserted, ${existingPlayers} existing preserved`);
 
+  // ---- Player_games ----
+  for (const r of playerGameRows) {
+    const playerId = playerNumberToId.get(r.playerNumber);
+    if (!playerId) {
+      console.warn(`    WARN: no player id for ${r.playerNumber}, skipping player_game row`);
+      continue;
+    }
+    const s = r.stats;
     await client.query(
-      `INSERT INTO adidas_3ssb_player_stats
-         (player_id, season, gp, mp,
-          fgm, fga, fg3m, fg3a, ftm, fta,
-          oreb, dreb, reb, ast, stl, blk, tov, pts, pf)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19)`,
+      `INSERT INTO adidas_3ssb_player_games
+         (player_id, team, opponent, league, season, game_date, game_uuid, schedule_id, is_home,
+          mp, fgm, fga, fg3m, fg3a, ftm, fta, oreb, dreb, reb,
+          ast, stl, blk, tov, pts, pf)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,
+               $10,$11,$12,$13,$14,$15,$16,$17,$18,$19,
+               $20,$21,$22,$23,$24,$25)
+       ON CONFLICT (player_id, game_uuid) DO NOTHING`,
       [
-        playerId, SEASON, p.gp, p.mp,
-        p.fgm, p.fga, p.fg3m, p.fg3a, p.ftm, p.fta,
-        p.oreb, p.dreb, p.reb, p.ast, p.stl, p.blk, p.tov, p.pts, p.pf,
+        playerId, r.team, r.opponent, league, SEASON, r.gameDate, r.gameUuid, r.scheduleId, r.isHome,
+        s.minutes, s.fgm, s.fga, s.fg3m, s.fg3a, s.ftm, s.fta,
+        s.oreb, s.dreb, s.reb, s.ast, s.stl, s.blk, s.tov, s.pts, s.pf,
       ]
     );
   }
-  console.log(`  Players: ${newPlayers} new inserted, ${existingPlayers} existing preserved`);
-  console.log(`  Inserted ${playerAgg.size} player_stats rows`);
+  console.log(`  Inserted ${playerGameRows.length} player_games rows`);
+
+  // ---- Derive team_stats from team_games ----
+  // Single source of truth: aggregate per-game rows back into season totals.
+  await client.query(
+    `INSERT INTO adidas_3ssb_team_stats
+       (team, league, season, gp, mp,
+        fgm, fga, fg3m, fg3a, ftm, fta,
+        oreb, dreb, reb, ast, stl, blk, tov, pts, pf,
+        opp_fgm, opp_fga, opp_fg3m, opp_fg3a, opp_ftm, opp_fta,
+        opp_oreb, opp_dreb, opp_reb, opp_ast, opp_stl, opp_blk,
+        opp_tov, opp_pts, opp_pf)
+     SELECT
+       team, league, season,
+       COUNT(*)::int AS gp,
+       SUM(mp)::int,
+       SUM(fgm)::int, SUM(fga)::int, SUM(fg3m)::int, SUM(fg3a)::int,
+       SUM(ftm)::int, SUM(fta)::int,
+       SUM(oreb)::int, SUM(dreb)::int, SUM(reb)::int,
+       SUM(ast)::int, SUM(stl)::int, SUM(blk)::int,
+       SUM(tov)::int, SUM(pts)::int, SUM(pf)::int,
+       SUM(opp_fgm)::int, SUM(opp_fga)::int, SUM(opp_fg3m)::int, SUM(opp_fg3a)::int,
+       SUM(opp_ftm)::int, SUM(opp_fta)::int,
+       SUM(opp_oreb)::int, SUM(opp_dreb)::int, SUM(opp_reb)::int,
+       SUM(opp_ast)::int, SUM(opp_stl)::int, SUM(opp_blk)::int,
+       SUM(opp_tov)::int, SUM(opp_pts)::int, SUM(opp_pf)::int
+     FROM adidas_3ssb_team_games
+     WHERE league = $1 AND season = $2
+     GROUP BY team, league, season`,
+    [league, SEASON]
+  );
+  const teamStatsCount = await client.query(
+    `SELECT COUNT(*)::int AS c FROM adidas_3ssb_team_stats WHERE league = $1 AND season = $2`,
+    [league, SEASON]
+  );
+  console.log(`  Derived ${teamStatsCount.rows[0].c} team_stats rows from team_games`);
+
+  // ---- Derive player_stats from player_games ----
+  await client.query(
+    `INSERT INTO adidas_3ssb_player_stats
+       (player_id, season, gp, mp,
+        fgm, fga, fg3m, fg3a, ftm, fta,
+        oreb, dreb, reb, ast, stl, blk, tov, pts, pf)
+     SELECT
+       pg.player_id, pg.season,
+       COUNT(*)::int AS gp,
+       SUM(pg.mp)::int,
+       SUM(pg.fgm)::int, SUM(pg.fga)::int, SUM(pg.fg3m)::int, SUM(pg.fg3a)::int,
+       SUM(pg.ftm)::int, SUM(pg.fta)::int,
+       SUM(pg.oreb)::int, SUM(pg.dreb)::int, SUM(pg.reb)::int,
+       SUM(pg.ast)::int, SUM(pg.stl)::int, SUM(pg.blk)::int,
+       SUM(pg.tov)::int, SUM(pg.pts)::int, SUM(pg.pf)::int
+     FROM adidas_3ssb_player_games pg
+     WHERE pg.league = $1 AND pg.season = $2
+     GROUP BY pg.player_id, pg.season`,
+    [league, SEASON]
+  );
+  const playerStatsCount = await client.query(
+    `SELECT COUNT(*)::int AS c FROM adidas_3ssb_player_stats WHERE season = $1
+       AND player_id IN (SELECT id FROM adidas_3ssb_players WHERE league = $2 AND season = $1)`,
+    [SEASON, league]
+  );
+  console.log(`  Derived ${playerStatsCount.rows[0].c} player_stats rows from player_games`);
 }
 
 // ---------- MAIN ----------
@@ -460,10 +503,11 @@ async function main() {
     }
   }
 
-  console.log(`\nAggregation complete:`);
-  console.log(`  ${teamAgg.size} unique teams`);
-  console.log(`  ${playerAgg.size} unique players`);
+  console.log(`\nCollection complete:`);
   console.log(`  ${scheduleRows.length} schedule rows`);
+  console.log(`  ${teamGameRows.length} team_games rows`);
+  console.log(`  ${playerGameRows.length} player_games rows`);
+  console.log(`  ${playerIdentities.size} unique players`);
 
   const client = new Client({ connectionString: dbUrl });
   await client.connect();
