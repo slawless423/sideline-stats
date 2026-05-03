@@ -1,36 +1,36 @@
 // scripts/estimate_3ssb_dryrun.mjs
 //
-// DRY RUN: Computes estimated minutes for ONE broken game and prints a report.
-// Does NOT write to the database. Wraps everything in a transaction that
-// always ROLLBACKs at the end (no schema changes, no row changes).
+// DRY RUN: Computes estimated minutes for broken games and prints a report.
+// Does NOT write to the database.
+//
+// Default: processes ALL broken games (team_mp < 150) in one run.
+// Optional: GAME_UUID env var to drill into a single game.
+//
+// Detection rule: a game is "broken" if team_mp < 150.
+//   - At mp = 0:           HISTORICAL method (each player's avg min% across
+//                          their non-broken games × 160).
+//   - At 0 < mp < 150:     RESCALE method (each player's existing mp ×
+//                          160/team_mp, preserves the logged rotation pattern).
+//
+// Both methods produce values that sum to exactly 160 per team.
 //
 // Usage:
-//   GAME_UUID=234683 node scripts/estimate_3ssb_dryrun.mjs
-//
-// Pick any of the 4 broken games:
-//   234683 — Brookwood Lu Dort Elite vs One Time Legends (4/24)
-//   234702 — Atlanta Celtics vs Mass Rivals (4/25)
-//   234722 — ASAK Elite vs Dream Vision (4/25)
-//   235789 — MBJ Elite vs TJ Ford Elite (4/26)
+//   node scripts/estimate_3ssb_dryrun.mjs                 # all 14 games
+//   GAME_UUID=234683 node scripts/estimate_3ssb_dryrun.mjs # one game
 
 import pg from 'pg';
 const { Client } = pg;
 
 const FULL_GAME_TEAM_MP = 160;
+const BROKEN_MP_THRESHOLD = 150;
 const LEAGUE = 'adidas 3SSB 17U';
 const SEASON = '2026';
 const GAME_UUID = process.env.GAME_UUID;
 
-if (!GAME_UUID) {
-  console.error('ERROR: GAME_UUID env var is required');
-  console.error('Try one of: 234683, 234702, 234722, 235789');
-  process.exit(1);
-}
-
-async function estimateForTeam(client, gameUuid, team) {
+async function estimateForTeam(client, gameUuid, team, currentTeamMp) {
   const playersRes = await client.query(
     `SELECT pg.id AS player_game_id, pg.player_id, p.full_name,
-            pg.pts, pg.fga, pg.fta
+            pg.pts, pg.mp AS current_mp
      FROM adidas_3ssb_player_games pg
      JOIN adidas_3ssb_players p ON p.id = pg.player_id
      WHERE pg.game_uuid = $1 AND pg.team = $2
@@ -38,21 +38,34 @@ async function estimateForTeam(client, gameUuid, team) {
     [gameUuid, team]
   );
   const players = playersRes.rows;
+  if (players.length === 0) return null;
 
-  if (players.length === 0) {
-    console.log(`  No player rows found for ${team}`);
-    return null;
+  const useRescale = currentTeamMp > 0;
+
+  if (useRescale) {
+    const scale = FULL_GAME_TEAM_MP / currentTeamMp;
+    const normalized = players.map(p => ({
+      ...p,
+      rawEstimate: p.current_mp * scale,
+      finalMp: Math.round(p.current_mp * scale),
+    }));
+    const intSum = normalized.reduce((a, b) => a + b.finalMp, 0);
+    const diff = FULL_GAME_TEAM_MP - intSum;
+    if (diff !== 0) {
+      const target = [...normalized].sort((a, b) => b.finalMp - a.finalMp)[0];
+      target.finalMp += diff;
+      target.roundCorrection = diff;
+    }
+    return { players: normalized, rawSum: currentTeamMp, scale, method: 'RESCALE' };
   }
 
+  // HISTORICAL METHOD
   const estimates = [];
   const unknown = [];
 
   for (const p of players) {
     const histRes = await client.query(
-      `SELECT pg.game_uuid,
-              pg.mp AS player_mp,
-              tg.mp AS team_mp,
-              pg.mp::numeric / NULLIF(tg.mp, 0)::numeric AS min_pct
+      `SELECT pg.mp::numeric / NULLIF(tg.mp, 0)::numeric AS min_pct
        FROM adidas_3ssb_player_games pg
        JOIN adidas_3ssb_team_games tg
          ON tg.game_uuid = pg.game_uuid
@@ -62,36 +75,28 @@ async function estimateForTeam(client, gameUuid, team) {
        WHERE pg.player_id = $1
          AND pg.league = $2
          AND pg.season = $3
-         AND tg.mp > 0
-       ORDER BY pg.game_uuid`,
-      [p.player_id, LEAGUE, SEASON]
+         AND tg.mp >= $4`,
+      [p.player_id, LEAGUE, SEASON, BROKEN_MP_THRESHOLD]
     );
 
-    const validRows = histRes.rows
-      .map(r => ({
-        gameUuid: r.game_uuid,
-        playerMp: r.player_mp,
-        teamMp: r.team_mp,
-        minPct: parseFloat(r.min_pct),
-      }))
-      .filter(r => Number.isFinite(r.minPct) && r.minPct > 0);
+    const validPcts = histRes.rows
+      .map(r => parseFloat(r.min_pct))
+      .filter(v => Number.isFinite(v) && v > 0);
 
-    if (validRows.length === 0) {
+    if (validPcts.length === 0) {
       unknown.push(p);
       continue;
     }
 
-    const avgPct = validRows.reduce((a, b) => a + b.minPct, 0) / validRows.length;
+    const avgPct = validPcts.reduce((a, b) => a + b, 0) / validPcts.length;
     estimates.push({
       ...p,
-      historyGames: validRows.length,
+      historyGames: validPcts.length,
       avgPct,
       rawEstimate: avgPct * FULL_GAME_TEAM_MP,
-      historyDetail: validRows,
     });
   }
 
-  // Fallback for unknowns
   if (unknown.length > 0) {
     const knownSum = estimates.reduce((a, b) => a + b.rawEstimate, 0);
     const remaining = Math.max(0, FULL_GAME_TEAM_MP - knownSum);
@@ -102,21 +107,17 @@ async function estimateForTeam(client, gameUuid, team) {
         historyGames: 0,
         avgPct: null,
         rawEstimate: perUnknown,
-        historyDetail: [],
         fallback: true,
       });
     }
   }
 
-  // Normalize
   const rawSum = estimates.reduce((a, b) => a + b.rawEstimate, 0);
   const scale = rawSum > 0 ? FULL_GAME_TEAM_MP / rawSum : 1;
   const normalized = estimates.map(e => ({
     ...e,
     finalMp: Math.round(e.rawEstimate * scale),
   }));
-
-  // Round-off correction
   const intSum = normalized.reduce((a, b) => a + b.finalMp, 0);
   const diff = FULL_GAME_TEAM_MP - intSum;
   if (diff !== 0) {
@@ -125,7 +126,94 @@ async function estimateForTeam(client, gameUuid, team) {
     target.roundCorrection = diff;
   }
 
-  return { players: normalized, rawSum, scale };
+  return { players: normalized, rawSum, scale, method: 'HISTORICAL' };
+}
+
+function printRescaleTable(team, currentTeamMp, result) {
+  console.log(`\n--- ${team} (rescale method, ${currentTeamMp} → ${FULL_GAME_TEAM_MP}) ---`);
+  const sorted = [...result.players].sort((a, b) => b.finalMp - a.finalMp);
+  console.log(`\n  ${'Player'.padEnd(28)} ${'Pts'.padStart(4)} ${'CurrMP'.padStart(7)} ${'NewMP'.padStart(7)} Notes`);
+  console.log(`  ${'-'.repeat(28)} ${'-'.repeat(4)} ${'-'.repeat(7)} ${'-'.repeat(7)} -----`);
+  for (const p of sorted) {
+    const name = p.full_name.length > 28 ? p.full_name.slice(0,27) + '…' : p.full_name;
+    const notes = [];
+    if (p.roundCorrection) notes.push(`${p.roundCorrection > 0 ? '+' : ''}${p.roundCorrection} round-fix`);
+    console.log(`  ${name.padEnd(28)} ${String(p.pts).padStart(4)} ${String(p.current_mp).padStart(7)} ${String(p.finalMp).padStart(7)} ${notes.join(', ')}`);
+  }
+  const finalSum = sorted.reduce((a, b) => a + b.finalMp, 0);
+  console.log(`  ${'-'.repeat(28)} ${'-'.repeat(4)} ${'-'.repeat(7)} ${'-'.repeat(7)}`);
+  console.log(`  ${'TOTAL'.padEnd(28)} ${' '.repeat(4)} ${String(result.rawSum).padStart(7)} ${String(finalSum).padStart(7)}  (target: ${FULL_GAME_TEAM_MP})`);
+  console.log(`  Rescale factor: ${result.scale.toFixed(4)}x`);
+}
+
+function printHistoricalTable(team, result) {
+  console.log(`\n--- ${team} (historical method) ---`);
+  const sorted = [...result.players].sort((a, b) => b.finalMp - a.finalMp);
+  console.log(`\n  ${'Player'.padEnd(28)} ${'Pts'.padStart(4)} ${'Hist'.padStart(5)} ${'AvgMin%'.padStart(8)} ${'RawMP'.padStart(7)} ${'FinalMP'.padStart(8)} Notes`);
+  console.log(`  ${'-'.repeat(28)} ${'-'.repeat(4)} ${'-'.repeat(5)} ${'-'.repeat(8)} ${'-'.repeat(7)} ${'-'.repeat(8)} -----`);
+  for (const p of sorted) {
+    const name = p.full_name.length > 28 ? p.full_name.slice(0,27) + '…' : p.full_name;
+    const histStr = p.historyGames > 0 ? `${p.historyGames}g` : '—';
+    const pctStr = p.avgPct != null ? `${(p.avgPct * 100).toFixed(1)}%` : '(fallback)';
+    const rawStr = p.rawEstimate.toFixed(1);
+    const notes = [];
+    if (p.fallback) notes.push('NO HISTORY → fallback');
+    if (p.roundCorrection) notes.push(`${p.roundCorrection > 0 ? '+' : ''}${p.roundCorrection} round-fix`);
+    console.log(`  ${name.padEnd(28)} ${String(p.pts).padStart(4)} ${histStr.padStart(5)} ${pctStr.padStart(8)} ${rawStr.padStart(7)} ${String(p.finalMp).padStart(8)} ${notes.join(', ')}`);
+  }
+  const finalSum = sorted.reduce((a, b) => a + b.finalMp, 0);
+  console.log(`  ${'-'.repeat(28)} ${'-'.repeat(4)} ${'-'.repeat(5)} ${'-'.repeat(8)} ${'-'.repeat(7)} ${'-'.repeat(8)}`);
+  console.log(`  ${'TOTAL'.padEnd(28)} ${' '.repeat(4)} ${' '.repeat(5)} ${' '.repeat(8)} ${result.rawSum.toFixed(1).padStart(7)} ${String(finalSum).padStart(8)}  (target: ${FULL_GAME_TEAM_MP})`);
+  console.log(`  Normalization scale: ${result.scale.toFixed(4)}x`);
+}
+
+async function processGame(client, gameUuid) {
+  const gameRes = await client.query(
+    `SELECT team, opponent, game_date, pts, opp_pts, mp
+     FROM adidas_3ssb_team_games
+     WHERE league = $1 AND season = $2 AND game_uuid = $3
+     ORDER BY team`,
+    [LEAGUE, SEASON, gameUuid]
+  );
+
+  if (gameRes.rowCount === 0) {
+    console.log(`\nNo game found with uuid ${gameUuid}`);
+    return null;
+  }
+
+  const dateStr = gameRes.rows[0].game_date.toISOString().slice(0,10);
+  const matchupStr = gameRes.rows.map(g => `${g.team} (${g.pts})`).join(' vs ');
+
+  console.log(`\n${'='.repeat(80)}`);
+  console.log(`Game ${gameUuid} | ${dateStr} | ${matchupStr}`);
+  console.log(`${'='.repeat(80)}`);
+
+  const summary = { gameUuid, dateStr, teams: [] };
+
+  for (const g of gameRes.rows) {
+    const result = await estimateForTeam(client, gameUuid, g.team, g.mp);
+    if (!result) {
+      console.log(`  No player rows for ${g.team}, skipping`);
+      continue;
+    }
+
+    if (result.method === 'RESCALE') {
+      printRescaleTable(g.team, g.mp, result);
+    } else {
+      printHistoricalTable(g.team, result);
+    }
+
+    summary.teams.push({
+      team: g.team,
+      method: result.method.toLowerCase(),
+      currentMp: g.mp,
+      scale: result.scale,
+      players: result.players.length,
+      fallbacks: result.players.filter(p => p.fallback).length,
+    });
+  }
+
+  return summary;
 }
 
 async function main() {
@@ -139,70 +227,51 @@ async function main() {
   await client.connect();
 
   try {
-    // Wrap in a transaction we'll always roll back, just to be paranoid
     await client.query('BEGIN');
 
-    // Get game info
-    const gameRes = await client.query(
-      `SELECT team, opponent, game_date, pts, opp_pts, mp
-       FROM adidas_3ssb_team_games
-       WHERE league = $1 AND season = $2 AND game_uuid = $3
-       ORDER BY team`,
-      [LEAGUE, SEASON, GAME_UUID]
-    );
-
-    if (gameRes.rowCount === 0) {
-      console.log(`No game found with uuid ${GAME_UUID}`);
-      return;
+    let uuids;
+    if (GAME_UUID) {
+      uuids = [GAME_UUID];
+      console.log(`\n=== DRY RUN: single game ${GAME_UUID} ===`);
+    } else {
+      const brokenRes = await client.query(
+        `SELECT DISTINCT game_uuid, game_date
+         FROM adidas_3ssb_team_games
+         WHERE league = $1 AND season = $2 AND mp < $3
+         ORDER BY game_date, game_uuid`,
+        [LEAGUE, SEASON, BROKEN_MP_THRESHOLD]
+      );
+      uuids = brokenRes.rows.map(r => r.game_uuid);
+      console.log(`\n=== DRY RUN: all ${uuids.length} broken games (team_mp < ${BROKEN_MP_THRESHOLD}) ===`);
     }
 
-    console.log(`\n=== DRY RUN: Game ${GAME_UUID} ===`);
-    for (const g of gameRes.rows) {
-      console.log(`  ${g.game_date} | ${g.team} (${g.pts}) vs ${g.opponent} (${g.opp_pts}) — current team_mp: ${g.mp}`);
+    const summaries = [];
+    for (const uuid of uuids) {
+      const s = await processGame(client, uuid);
+      if (s) summaries.push(s);
     }
 
-    if (gameRes.rows[0].mp !== 0) {
-      console.log(`\n⚠️  This game's team_mp is NOT 0 — it doesn't need estimating.`);
-      console.log(`   Pick a broken game: 234683, 234702, 234722, or 235789.`);
-      return;
-    }
-
-    // Process each team's perspective
-    for (const g of gameRes.rows) {
-      console.log(`\n--- ${g.team} ---`);
-      const result = await estimateForTeam(client, GAME_UUID, g.team);
-      if (!result) continue;
-
-      // Sort by final mp desc for display
-      const sorted = [...result.players].sort((a, b) => b.finalMp - a.finalMp);
-
-      console.log(`\n  ${'Player'.padEnd(28)} ${'Pts'.padStart(4)} ${'Hist'.padStart(5)} ${'AvgMin%'.padStart(8)} ${'RawMP'.padStart(7)} ${'FinalMP'.padStart(8)} Notes`);
-      console.log(`  ${'-'.repeat(28)} ${'-'.repeat(4)} ${'-'.repeat(5)} ${'-'.repeat(8)} ${'-'.repeat(7)} ${'-'.repeat(8)} -----`);
-      for (const p of sorted) {
-        const name = p.full_name.length > 28 ? p.full_name.slice(0, 27) + '…' : p.full_name;
-        const histStr = p.historyGames > 0 ? `${p.historyGames}g` : '—';
-        const pctStr = p.avgPct != null ? `${(p.avgPct * 100).toFixed(1)}%` : '(fallback)';
-        const rawStr = p.rawEstimate.toFixed(1);
-        const notes = [];
-        if (p.fallback) notes.push('NO HISTORY → fallback');
-        if (p.roundCorrection) notes.push(`+${p.roundCorrection} round-fix`);
-        console.log(
-          `  ${name.padEnd(28)} ${String(p.pts).padStart(4)} ${histStr.padStart(5)} ${pctStr.padStart(8)} ${rawStr.padStart(7)} ${String(p.finalMp).padStart(8)} ${notes.join(', ')}`
-        );
+    // Final overview table
+    console.log(`\n\n${'='.repeat(80)}`);
+    console.log('SUMMARY');
+    console.log('='.repeat(80));
+    console.log(`\n  ${'UUID'.padEnd(8)} ${'Date'.padEnd(11)} ${'Team'.padEnd(32)} ${'Method'.padEnd(11)} ${'CurrMP'.padStart(7)} ${'Scale'.padStart(7)} ${'Plyrs'.padStart(6)} ${'Fbk'.padStart(4)}`);
+    console.log(`  ${'-'.repeat(8)} ${'-'.repeat(11)} ${'-'.repeat(32)} ${'-'.repeat(11)} ${'-'.repeat(7)} ${'-'.repeat(7)} ${'-'.repeat(6)} ${'-'.repeat(4)}`);
+    for (const s of summaries) {
+      for (const t of s.teams) {
+        const teamName = t.team.length > 32 ? t.team.slice(0,31) + '…' : t.team;
+        const scaleStr = t.scale != null ? t.scale.toFixed(3) : '—';
+        const fbkStr = t.fallbacks > 0 ? String(t.fallbacks) : '—';
+        console.log(`  ${s.gameUuid.padEnd(8)} ${s.dateStr.padEnd(11)} ${teamName.padEnd(32)} ${t.method.padEnd(11)} ${String(t.currentMp).padStart(7)} ${scaleStr.padStart(7)} ${String(t.players).padStart(6)} ${fbkStr.padStart(4)}`);
       }
-
-      const finalSum = sorted.reduce((a, b) => a + b.finalMp, 0);
-      console.log(`  ${'-'.repeat(28)} ${'-'.repeat(4)} ${'-'.repeat(5)} ${'-'.repeat(8)} ${'-'.repeat(7)} ${'-'.repeat(8)}`);
-      console.log(`  ${'TOTAL'.padEnd(28)} ${' '.repeat(4)} ${' '.repeat(5)} ${' '.repeat(8)} ${result.rawSum.toFixed(1).padStart(7)} ${String(finalSum).padStart(8)}  (target: ${FULL_GAME_TEAM_MP})`);
-      console.log(`  Normalization scale: ${result.scale.toFixed(4)}x`);
     }
+
+    const totalTeamRows = summaries.reduce((a, s) => a + s.teams.length, 0);
+    const totalFallbacks = summaries.reduce((a, s) => a + s.teams.reduce((b, t) => b + t.fallbacks, 0), 0);
+    console.log(`\n  Total: ${summaries.length} games, ${totalTeamRows} team rows, ${totalFallbacks} player(s) needed fallback`);
 
     console.log(`\n=== END DRY RUN — no rows modified ===\n`);
-  } catch (err) {
-    console.error('\nError:', err.message);
-    throw err;
   } finally {
-    // Always roll back — this is dry-run only
     try { await client.query('ROLLBACK'); } catch (_) {}
     await client.end();
   }
