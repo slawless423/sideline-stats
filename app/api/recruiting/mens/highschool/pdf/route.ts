@@ -1,3 +1,11 @@
+// app/api/recruiting/mens/highschool/pdf/route.ts
+//
+// Generates per-team scouting PDFs for a given league + season.
+// Sources are unioned across eybl_* and adidas_3ssb_* tables. The league
+// column on the player/team rows discriminates the source — only one
+// branch returns rows for any given (league, season) pair, so the WHERE
+// clause does the dispatch automatically.
+
 import { NextRequest, NextResponse } from 'next/server';
 import { Pool } from 'pg';
 // @ts-ignore
@@ -151,20 +159,50 @@ export async function GET(req: NextRequest) {
   try {
     const [playersRes, teamsRes] = await Promise.all([
       client.query(`
-        SELECT p.id, p.full_name, p.team, p.height, p.grad_year,
-               s.gp, s.mp, s.pts, s.fgm, s.fga, s.fg3m, s.fg3a,
-               s.ftm, s.fta, s.oreb, s.dreb, s.reb, s.ast, s.stl, s.blk, s.tov
-        FROM eybl_players p
-        JOIN eybl_player_stats s ON s.player_id = p.id
-        WHERE p.league = $1 AND p.season = $2 AND s.gp > 0
-        ORDER BY p.team, s.mp DESC
+        SELECT id, full_name, team, height, grad_year,
+               gp, mp, pts, fgm, fga, fg3m, fg3a,
+               ftm, fta, oreb, dreb, reb, ast, stl, blk, tov
+        FROM (
+          SELECT p.id, p.full_name, p.team, p.height, p.grad_year, p.league, p.season,
+                 s.gp, s.mp, s.pts, s.fgm, s.fga, s.fg3m, s.fg3a,
+                 s.ftm, s.fta, s.oreb, s.dreb, s.reb, s.ast, s.stl, s.blk, s.tov
+          FROM eybl_players p
+          JOIN eybl_player_stats s ON s.player_id = p.id
+          WHERE s.gp > 0
+
+          UNION ALL
+
+          SELECT p.id, p.full_name, p.team, p.height, p.grad_year, p.league, p.season,
+                 s.gp, s.mp, s.pts, s.fgm, s.fga, s.fg3m, s.fg3a,
+                 s.ftm, s.fta, s.oreb, s.dreb, s.reb, s.ast, s.stl, s.blk, s.tov
+          FROM adidas_3ssb_players p
+          JOIN adidas_3ssb_player_stats s ON s.player_id = p.id
+          WHERE s.gp > 0
+        ) u
+        WHERE u.league = $1 AND u.season = $2
+        ORDER BY u.team, u.mp DESC
       `, [league, season]),
       client.query(`
         SELECT team, gp, mp, fgm, fga, fg3m, fg3a, ftm, fta,
                oreb, dreb, reb, ast, stl, blk, tov, pts,
                opp_fgm, opp_fga, opp_fg3m, opp_fg3a, opp_ftm, opp_fta,
                opp_oreb, opp_dreb, opp_reb, opp_ast, opp_stl, opp_blk, opp_tov, opp_pts
-        FROM eybl_team_stats WHERE league = $1 AND season = $2
+        FROM (
+          SELECT team, league, season, gp, mp, fgm, fga, fg3m, fg3a, ftm, fta,
+                 oreb, dreb, reb, ast, stl, blk, tov, pts,
+                 opp_fgm, opp_fga, opp_fg3m, opp_fg3a, opp_ftm, opp_fta,
+                 opp_oreb, opp_dreb, opp_reb, opp_ast, opp_stl, opp_blk, opp_tov, opp_pts
+          FROM eybl_team_stats
+
+          UNION ALL
+
+          SELECT team, league, season, gp, mp, fgm, fga, fg3m, fg3a, ftm, fta,
+                 oreb, dreb, reb, ast, stl, blk, tov, pts,
+                 opp_fgm, opp_fga, opp_fg3m, opp_fg3a, opp_ftm, opp_fta,
+                 opp_oreb, opp_dreb, opp_reb, opp_ast, opp_stl, opp_blk, opp_tov, opp_pts
+          FROM adidas_3ssb_team_stats
+        ) u
+        WHERE u.league = $1 AND u.season = $2
       `, [league, season]),
     ]);
 
