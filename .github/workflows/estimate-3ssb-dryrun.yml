@@ -3,15 +3,9 @@ on:
   workflow_dispatch:
     inputs:
       game_uuid:
-        description: 'Game UUID to dry-run (try 234683, 234702, 234722, or 235789)'
-        required: true
-        type: choice
-        options:
-          - '234683'
-          - '234702'
-          - '234722'
-          - '235789'
-        default: '234683'
+        description: 'Optional: single game UUID to drill into. Leave blank to process ALL broken games.'
+        required: false
+        default: ''
 jobs:
   dryrun:
     runs-on: ubuntu-latest
