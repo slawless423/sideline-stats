@@ -1,0 +1,25 @@
+name: Estimate 3SSB Missing Minutes (REAL)
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type "yes" to confirm running the REAL estimation (writes to database)'
+        required: true
+        default: 'no'
+jobs:
+  estimate:
+    runs-on: ubuntu-latest
+    if: ${{ inputs.confirm == 'yes' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install pg
+        run: npm install pg
+      - name: Run estimation
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: node scripts/estimate_3ssb_missing_minutes.mjs
