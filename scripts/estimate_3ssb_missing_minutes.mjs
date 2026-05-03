@@ -1,20 +1,17 @@
 // scripts/estimate_3ssb_missing_minutes.mjs
 //
-// Backfill missing minutes for adidas 3SSB games where Passport's box score
-// returned broken minute tracking.
+// Backfill missing minutes for adidas 3SSB games with broken minute tracking.
 //
-// Detection rule: a game is "broken" if team_mp < 150.
-//   - At mp = 0:           HISTORICAL method (each player's avg min% across
-//                          their non-broken games × 160).
-//   - At 0 < mp < 150:     RESCALE method (each player's existing mp ×
-//                          160/team_mp, preserves the logged rotation pattern).
+// Detection: team_mp < 150 → broken.
+// Method: HISTORICAL — for each player in the broken game, compute their
+//   average min% across non-broken games (team_mp >= 150), multiply by 160,
+//   normalize so team total = 160 exactly. Players with no qualifying history
+//   get a fallback: leftover minutes split evenly among them.
 //
-// Both methods produce values that sum to exactly 160 per team and flag rows
-// as mp_estimated = TRUE.
+// All updated rows get mp_estimated = TRUE.
 //
 // Prerequisite: 02_add_mp_estimated.sql has been run.
-// Re-run safety: idempotent — re-running on already-estimated games will
-//   recompute and overwrite the same values.
+// Re-run safety: idempotent — re-running re-computes and overwrites.
 //
 // Usage:
 //   node scripts/estimate_3ssb_missing_minutes.mjs
@@ -27,9 +24,9 @@ const BROKEN_MP_THRESHOLD = 150;
 const LEAGUE = 'adidas 3SSB 17U';
 const SEASON = '2026';
 
-async function estimateForTeam(client, gameUuid, team, currentTeamMp) {
+async function estimateForTeam(client, gameUuid, team) {
   const playersRes = await client.query(
-    `SELECT pg.id AS player_game_id, pg.player_id, p.full_name, pg.mp AS current_mp
+    `SELECT pg.id AS player_game_id, pg.player_id, p.full_name
      FROM adidas_3ssb_player_games pg
      JOIN adidas_3ssb_players p ON p.id = pg.player_id
      WHERE pg.game_uuid = $1 AND pg.team = $2`,
@@ -38,24 +35,6 @@ async function estimateForTeam(client, gameUuid, team, currentTeamMp) {
   const players = playersRes.rows;
   if (players.length === 0) return null;
 
-  const useRescale = currentTeamMp > 0;
-
-  if (useRescale) {
-    const scale = FULL_GAME_TEAM_MP / currentTeamMp;
-    const normalized = players.map(p => ({
-      ...p,
-      finalMp: Math.round(p.current_mp * scale),
-    }));
-    const intSum = normalized.reduce((a, b) => a + b.finalMp, 0);
-    const diff = FULL_GAME_TEAM_MP - intSum;
-    if (diff !== 0) {
-      const target = [...normalized].sort((a, b) => b.finalMp - a.finalMp)[0];
-      target.finalMp += diff;
-    }
-    return { players: normalized, method: 'rescale', scale };
-  }
-
-  // HISTORICAL METHOD
   const estimates = [];
   const unknown = [];
 
@@ -114,7 +93,7 @@ async function estimateForTeam(client, gameUuid, team, currentTeamMp) {
     target.finalMp += diff;
   }
 
-  return { players: normalized, method: 'historical', scale: null };
+  return { players: normalized };
 }
 
 async function main() {
@@ -140,8 +119,7 @@ async function main() {
     const broken = brokenRes.rows;
     console.log(`\nFound ${broken.length} broken team-game rows (team_mp < ${BROKEN_MP_THRESHOLD}):`);
     for (const r of broken) {
-      const m = r.mp === 0 ? 'historical' : `rescale (${r.mp})`;
-      console.log(`  ${r.game_date.toISOString().slice(0,10)} | ${r.game_uuid} | ${r.team.padEnd(35)} ${m}`);
+      console.log(`  ${r.game_date.toISOString().slice(0,10)} | ${r.game_uuid} | ${r.team.padEnd(35)} (currently ${r.mp} mp)`);
     }
     if (broken.length === 0) {
       console.log('Nothing to do.');
@@ -155,7 +133,7 @@ async function main() {
     for (const game of broken) {
       console.log(`\nProcessing ${game.team} @ game ${game.game_uuid}...`);
 
-      const result = await estimateForTeam(client, game.game_uuid, game.team, game.mp);
+      const result = await estimateForTeam(client, game.game_uuid, game.team);
       if (!result) {
         console.log(`  WARN: no player rows found, skipping`);
         continue;
@@ -172,7 +150,7 @@ async function main() {
       }
 
       const checkSum = result.players.reduce((a, b) => a + b.finalMp, 0);
-      console.log(`  ${result.method}: updated ${result.players.length} player rows, sum mp = ${checkSum}`);
+      console.log(`  Updated ${result.players.length} player rows, sum mp = ${checkSum}`);
 
       await client.query(
         `UPDATE adidas_3ssb_team_games
@@ -187,7 +165,6 @@ async function main() {
       console.log(`  Top minutes: ${top}`);
     }
 
-    // Sync opp_mp on all estimated rows
     const oppSyncRes = await client.query(
       `UPDATE adidas_3ssb_team_games tg_a
        SET opp_mp = tg_b.mp
@@ -203,7 +180,6 @@ async function main() {
     );
     console.log(`\nSynced opp_mp on ${oppSyncRes.rowCount} estimated team_games rows`);
 
-    // Recompute season aggregates
     console.log(`\nRecomputing team_stats and player_stats from per-game tables...`);
 
     await client.query(
